@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="delivery_to">Delivery to</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="pay">Pay</string>
+    <string name="remove">Remove</string>
+</resources>

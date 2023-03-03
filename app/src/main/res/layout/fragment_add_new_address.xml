@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_surface_color">
+
+    <EditText
+        android:id="@+id/pinCodeEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_gray_border_8dp"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/montserrat_medium"
+        android:hint="Pincode*"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:singleLine="true"
+        android:textColor="@color/black_3"
+        app:layout_constraintEnd_toStartOf="@+id/useCurrentLocationTag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/useCurrentLocationTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/light_green"
+        android:drawableStart="@drawable/ic_baseline_my_location_24"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center_horizontal"
+        android:includeFontPadding="false"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="Use current location"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/pinCodeEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pinCodeEditText"
+        app:layout_constraintTop_toTopOf="@+id/pinCodeEditText" />
+
+    <EditText
+        android:id="@+id/houseNumEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_gray_border_8dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:hint="House No., Building Name*"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/black_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pinCodeEditText" />
+
+    <EditText
+        android:id="@+id/areaColony"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_gray_border_8dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:hint="RoadName, Area, Colony*"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/black_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/houseNumEditText" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveAddressButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_new_material_12dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
+        android:paddingVertical="12dp"
+        android:text="Save Address"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:cornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/areaColony" />
+
+    <TextView
+        android:id="@+id/tagSeeAlreadySavedAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_rounded_8dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:text="See saved address"
+        android:textColor="@color/app_black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveAddressButton" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tagSeeAlreadySavedAddress" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

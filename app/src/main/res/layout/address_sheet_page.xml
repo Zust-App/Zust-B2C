@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <ImageView
+        android:id="@+id/cancelSheet"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/white_circle"
+        android:padding="8dp"
+        android:src="@drawable/cross_red_outline"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginTop="60dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/top_right_left_8dp_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cancelSheet">
+
+        <TextView
+            android:id="@+id/locationTitleTag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/okra_semibold"
+            android:text="@string/select_a_location"
+            android:textColor="@color/light_black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/searchPlacesEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/searchPlacesEditText"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_gray_border_8dp"
+            android:drawableStart="@drawable/ic_outline_search_24"
+            android:drawablePadding="4dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/okra_regular"
+            android:gravity="center_vertical"
+            android:hint="@string/start_typing_to_search_location"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="6dp"
+            android:singleLine="true"
+            android:textColor="@color/grey_color_2"
+            android:textColorHint="#999999"
+            app:layout_constraintBottom_toTopOf="@+id/useCurrentLocationTag"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locationTitleTag" />
+
+        <ImageView
+            android:id="@+id/clearEditText"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/white_circle"
+            android:src="@drawable/ic_baseline_close_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/searchPlacesEditText"
+            app:layout_constraintEnd_toEndOf="@+id/searchPlacesEditText"
+            app:layout_constraintTop_toTopOf="@+id/searchPlacesEditText" />
+
+        <TextView
+            android:id="@+id/useCurrentLocationTag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:drawableStart="@drawable/ic_baseline_my_location_24"
+            android:drawableEnd="@drawable/ic_baseline_navigate_next_24"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/okra_medium"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp"
+            android:text="Use current location"
+            android:textColor="@color/red_secondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchPlacesEditText" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#D8D8D8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/useCurrentLocationTag" />
+
+
+        <TextView
+            android:id="@+id/saveLocationTitleTag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/okra_medium"
+            android:text="Saved address"
+            android:textColor="@color/light_black"
+            android:textSize="16sp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/savedLocationRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/saveLocationTitleTag" />
+
+        <TextView
+            android:id="@+id/searchLocationTitleTag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/okra_medium"
+            android:text="@string/search_results"
+            android:textColor="@color/app_black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchLocationRecycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchLocationTitleTag" />
+
+        <TextView
+            android:id="@+id/noSavedAddressFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/okra_light"
+            android:gravity="center_horizontal"
+            android:text="No saved address found"
+            android:textColor="@color/light_black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

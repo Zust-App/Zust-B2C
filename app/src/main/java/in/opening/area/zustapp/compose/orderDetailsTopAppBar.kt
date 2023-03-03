@@ -1,0 +1,123 @@
+package `in`.opening.area.zustapp.compose
+
+import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
+import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.locationManager.UserLocationDetails
+import `in`.opening.area.zustapp.ui.theme.*
+import `in`.opening.area.zustapp.viewmodels.HomeViewModel
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+
+@Composable
+fun CustomTopBar(
+    modifier: Modifier,
+    viewModel:HomeViewModel,
+    callback: (ACTION) -> Unit,
+) {
+    val userAddress by viewModel.userLocationFlow.collectAsStateLifecycleAware(initial = UserLocationDetails())
+
+    ConstraintLayout(modifier = modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
+        .background(color = colorResource(id = R.color.new_material_primary))
+        .padding(vertical = 12.dp, horizontal = 20.dp)
+    ) {
+        val (
+            locationTag, locationSubTitle,
+            locationIcon, changeLanguageIcon, profileIcon, changeLocationIcon,
+        ) = createRefs()
+
+        Icon(painter = painterResource(id = R.drawable.simple_location_icon),
+            contentDescription = "location", tint = colorResource(id = R.color.white),
+            modifier = Modifier
+                .height(17.dp)
+                .width(12.dp)
+                .constrainAs(locationIcon) {
+                    top.linkTo(locationTag.top)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(locationTag.bottom)
+                }
+                .clickable {
+                    callback.invoke(ACTION.OPEN_LOCATION)
+                })
+
+        Text(text = "Patna", color = colorResource(id = R.color.white),
+            modifier = modifier
+                .constrainAs(locationTag) {
+                    top.linkTo(parent.top)
+                    start.linkTo(locationIcon.end, dp_8)
+                }
+                .clickable {
+                    callback.invoke(ACTION.OPEN_LOCATION)
+                }, style = Typography_Montserrat.body1)
+
+        Icon(painter = painterResource(id = R.drawable.down_arrow),
+            contentDescription = "location", tint = colorResource(id = R.color.white),
+            modifier = Modifier
+                .height(10.dp)
+                .width(12.dp)
+                .constrainAs(changeLocationIcon) {
+                    top.linkTo(locationTag.top, dp_4)
+                    start.linkTo(locationTag.end, dp_6)
+                    bottom.linkTo(locationTag.bottom)
+                }
+                .clickable {
+                    callback.invoke(ACTION.OPEN_LOCATION)
+                })
+        Text(
+            text = userAddress.fullAddress?:"Delivery in Patna",
+            style = Typography_Montserrat.subtitle1,
+            color = colorResource(id = R.color.white),
+            modifier = modifier.constrainAs(locationSubTitle) {
+                top.linkTo(locationTag.bottom, dp_4)
+                start.linkTo(parent.start)
+                end.linkTo(profileIcon.start, dp_8)
+                width = Dimension.fillToConstraints
+            },
+            maxLines = 1,overflow= TextOverflow.Ellipsis
+        )
+
+        if (false) {
+            Icon(painter = painterResource(id = R.drawable.language_icon),
+                tint = colorResource(id = R.color.white),
+                contentDescription = "language", modifier = modifier
+                    .constrainAs(changeLanguageIcon) {
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(profileIcon.start, dp_12)
+                    }
+                    .clickable {
+                        callback.invoke(ACTION.LANGUAGE_DIALOG)
+                    }
+                    .clip(shape = RoundedCornerShape(8.dp)))
+        }
+        Icon(painter = painterResource(id = R.drawable.new_profile_icon),
+            tint = colorResource(id = R.color.white),
+            contentDescription = "profile", modifier = modifier
+                .constrainAs(profileIcon) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                }
+                .clickable {
+                    callback.invoke(ACTION.OPEN_PROFILE)
+                }
+                .clip(shape = RoundedCornerShape(8.dp)))
+    }
+}
+

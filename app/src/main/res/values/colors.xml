@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red_primary">#FF0E0E</color>
+    <color name="red_secondary">#B80C09</color>
+    <color name="container_light_silver">#f4f9f1</color>
+    <color name="app_black">#1E1E1E</color>
+    <color name="grey_color_2">#4e4e4f</color>
+    <color name="grey_color_3">#666666</color>
+    <color name="purple">#7B29FB</color>
+    <color name="light_blue">#645cb0</color>
+    <color name="light_black">#242c5a</color>
+    <color name="logout_bg">#fee5dc</color>
+    <color name="green">#0C831F</color>
+
+    <color name="new_material_primary">#6750A4</color>
+    <color name="screen_surface_color">#F8F4FF</color>
+    <color name="new_hint_color">#6C6C6C</color>
+    <color name="indicator_color">#D9D9D9</color>
+    <color name="yellow">#E9F0D5</color>
+    <color name="nobel">#A0A0A0</color>
+    <color name="light_green">#8DA450</color>
+    <color name="black_2">#323232</color>
+    <color name="black_3">#333333</color>
+    <color name="black_4">#969696</color>
+    <color name="language_default">#991A1A1A</color>
+</resources>

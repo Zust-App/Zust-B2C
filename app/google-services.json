@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "927491627059",
+    "project_id": "greenboyz-pk",
+    "storage_bucket": "greenboyz-pk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927491627059:android:7cfb8af0eaa9c895182b46",
+        "android_client_info": {
+          "package_name": "in.opening.area.greenboyz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927491627059-c2t4rq1pfkogcivohshc2jpd9ukpn0ed.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.opening.area.greenboyz",
+            "certificate_hash": "ed522a22ec38e6cb9bbaf60db019c67c5cc8695b"
+          }
+        },
+        {
+          "client_id": "927491627059-7hl4s8jg9gl638kq471kr668g6kcdmsp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0mWOPPocwHDmPaW90EuaarhNpw0BvflU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927491627059-7hl4s8jg9gl638kq471kr668g6kcdmsp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
