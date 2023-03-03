@@ -13,9 +13,9 @@ import `in`.opening.area.zustapp.storage.db.dao.AddToCartDao
     ],
     version = 1
 )
-abstract class GreenBoyzDatabase : RoomDatabase() {
+abstract class ZustAppDatabase : RoomDatabase() {
     companion object {
-        const val DB_NAME = "green_boyz_db"
+        const val DB_NAME = "zust_app_db"
     }
 
     abstract fun userDao(): UserDao

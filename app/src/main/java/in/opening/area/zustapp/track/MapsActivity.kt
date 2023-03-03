@@ -1,6 +1,6 @@
-package `in`.opening.area.zustapp.tracking.track
+package `in`.opening.area.zustapp.track
 
-import `in`.opening.area.zustapp.tracking.track.manager.RealtimeTrackingManager
+import `in`.opening.area.zustapp.track.manager.RealtimeTrackingManager
 import `in`.opening.area.zustapp.tracking.track.model.TrackingDataModel
 import `in`.opening.area.zustapp.tracking.track.utils.AnimationUtils
 import `in`.opening.area.zustapp.tracking.track.utils.MapUtils

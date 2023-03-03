@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Zust</string>
-    <string name="notif_channel">fcm_notif_channel</string>
+    <string name="notif_channel" translatable="false">fcm_notif_channel</string>
     <!-- Strings used for fragments for navigation -->
 
     <string name="label_back">Back Arrow</string>

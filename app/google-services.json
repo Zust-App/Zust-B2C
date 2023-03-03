@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "927491627059",
-    "project_id": "greenboyz-pk",
-    "storage_bucket": "greenboyz-pk.appspot.com"
+    "project_number": "2804514526",
+    "project_id": "zust-b2c-420a6",
+    "storage_bucket": "zust-b2c-420a6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:927491627059:android:7cfb8af0eaa9c895182b46",
+        "mobilesdk_app_id": "1:2804514526:android:bb8e1848bd1bced08e8c4f",
         "android_client_info": {
-          "package_name": "in.opening.area.greenboyz"
+          "package_name": "in.opening.area.zustapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "927491627059-c2t4rq1pfkogcivohshc2jpd9ukpn0ed.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "in.opening.area.greenboyz",
-            "certificate_hash": "ed522a22ec38e6cb9bbaf60db019c67c5cc8695b"
-          }
-        },
-        {
-          "client_id": "927491627059-7hl4s8jg9gl638kq471kr668g6kcdmsp.apps.googleusercontent.com",
+          "client_id": "2804514526-8p6f9b1uj6uha2gmlhpa203d0f9amdhp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC0mWOPPocwHDmPaW90EuaarhNpw0BvflU"
+          "current_key": "AIzaSyC67kZBwLnjmvBWt0Hwdpk_PDGtJ_k9fzc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "927491627059-7hl4s8jg9gl638kq471kr668g6kcdmsp.apps.googleusercontent.com",
+              "client_id": "2804514526-8p6f9b1uj6uha2gmlhpa203d0f9amdhp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

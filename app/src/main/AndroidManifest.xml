@@ -94,7 +94,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".tracking.track.MapsActivity"
+            android:name=".track.MapsActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <meta-data

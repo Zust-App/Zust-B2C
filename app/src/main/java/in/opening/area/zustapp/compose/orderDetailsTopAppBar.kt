@@ -1,7 +1,9 @@
 package `in`.opening.area.zustapp.compose
 
+import `in`.opening.area.zustapp.R.*
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
 import `in`.opening.area.zustapp.home.ACTION
+
 import `in`.opening.area.zustapp.locationManager.UserLocationDetails
 import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.viewmodels.HomeViewModel
@@ -35,7 +37,7 @@ fun CustomTopBar(
         .wrapContentHeight()
         .fillMaxWidth()
         .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-        .background(color = colorResource(id = R.color.new_material_primary))
+        .background(color = colorResource(id = color.new_material_primary))
         .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
         val (
@@ -43,8 +45,8 @@ fun CustomTopBar(
             locationIcon, changeLanguageIcon, profileIcon, changeLocationIcon,
         ) = createRefs()
 
-        Icon(painter = painterResource(id = R.drawable.simple_location_icon),
-            contentDescription = "location", tint = colorResource(id = R.color.white),
+        Icon(painter = painterResource(id = drawable.simple_location_icon),
+            contentDescription = "location", tint = colorResource(id = color.white),
             modifier = Modifier
                 .height(17.dp)
                 .width(12.dp)
@@ -57,7 +59,7 @@ fun CustomTopBar(
                     callback.invoke(ACTION.OPEN_LOCATION)
                 })
 
-        Text(text = "Patna", color = colorResource(id = R.color.white),
+        Text(text = "Patna", color = colorResource(id = color.white),
             modifier = modifier
                 .constrainAs(locationTag) {
                     top.linkTo(parent.top)
@@ -67,8 +69,8 @@ fun CustomTopBar(
                     callback.invoke(ACTION.OPEN_LOCATION)
                 }, style = Typography_Montserrat.body1)
 
-        Icon(painter = painterResource(id = R.drawable.down_arrow),
-            contentDescription = "location", tint = colorResource(id = R.color.white),
+        Icon(painter = painterResource(id = drawable.down_arrow),
+            contentDescription = "location", tint = colorResource(id = color.white),
             modifier = Modifier
                 .height(10.dp)
                 .width(12.dp)
@@ -83,7 +85,7 @@ fun CustomTopBar(
         Text(
             text = userAddress.fullAddress?:"Delivery in Patna",
             style = Typography_Montserrat.subtitle1,
-            color = colorResource(id = R.color.white),
+            color = colorResource(id = color.white),
             modifier = modifier.constrainAs(locationSubTitle) {
                 top.linkTo(locationTag.bottom, dp_4)
                 start.linkTo(parent.start)
@@ -94,8 +96,8 @@ fun CustomTopBar(
         )
 
         if (false) {
-            Icon(painter = painterResource(id = R.drawable.language_icon),
-                tint = colorResource(id = R.color.white),
+            Icon(painter = painterResource(id = drawable.language_icon),
+                tint = colorResource(id =color.white),
                 contentDescription = "language", modifier = modifier
                     .constrainAs(changeLanguageIcon) {
                         bottom.linkTo(parent.bottom)
@@ -106,8 +108,8 @@ fun CustomTopBar(
                     }
                     .clip(shape = RoundedCornerShape(8.dp)))
         }
-        Icon(painter = painterResource(id = R.drawable.new_profile_icon),
-            tint = colorResource(id = R.color.white),
+        Icon(painter = painterResource(id = drawable.new_profile_icon),
+            tint = colorResource(id = color.white),
             contentDescription = "profile", modifier = modifier
                 .constrainAs(profileIcon) {
                     top.linkTo(parent.top)

@@ -3,8 +3,8 @@ package `in`.opening.area.zustapp.di
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import android.content.Context
 import androidx.room.Room
-import `in`.opening.area.zustapp.storage.db.GreenBoyzDatabase
-import `in`.opening.area.zustapp.storage.db.GreenBoyzDatabase.Companion.DB_NAME
+import `in`.opening.area.zustapp.storage.db.ZustAppDatabase
+import `in`.opening.area.zustapp.storage.db.ZustAppDatabase.Companion.DB_NAME
 import `in`.opening.area.zustapp.storage.db.UserDao
 import `in`.opening.area.zustapp.storage.db.dao.AddToCartDao
 import android.content.SharedPreferences
@@ -36,17 +36,17 @@ object AppModule {
     @Singleton
     fun provideBlogDatabase(
         @ApplicationContext context: Context
-    ): GreenBoyzDatabase =
-        Room.databaseBuilder(context, GreenBoyzDatabase::class.java, DB_NAME).fallbackToDestructiveMigration()
+    ): ZustAppDatabase =
+        Room.databaseBuilder(context, ZustAppDatabase::class.java, DB_NAME).fallbackToDestructiveMigration()
             .build()
 
     @Provides
     @Singleton
-    fun provideUserDao(database: GreenBoyzDatabase): UserDao = database.userDao()
+    fun provideUserDao(database: ZustAppDatabase): UserDao = database.userDao()
 
     @Provides
     @Singleton
-    fun provideAddToCartDao(database: GreenBoyzDatabase): AddToCartDao = database.addToCartDao()
+    fun provideAddToCartDao(database: ZustAppDatabase): AddToCartDao = database.addToCartDao()
 
 
     @Singleton
