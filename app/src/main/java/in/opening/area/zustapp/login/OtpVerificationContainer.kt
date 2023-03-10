@@ -7,6 +7,7 @@ import `in`.opening.area.zustapp.ui.generic.CustomUpBtn
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.primaryColor
+import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi
 import `in`.opening.area.zustapp.uiModels.login.VerifyOtpUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
@@ -14,7 +15,9 @@ import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,12 +41,35 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
     val user by loginViewModel.userLoginModelFlow.collectAsState(UserLoginModel())
     val verifyOtpUiState by loginViewModel.verifyOtpUiState.collectAsState(VerifyOtpUi.InitialUi(false))
     val resendOtpTimeLeft by loginViewModel.timerTextFlow.collectAsState(initial = "")
+    val resendOtpUiState by loginViewModel.resendOtpUiState.collectAsState(initial = GetOtpLoginUi.InitialUi(false))
+
 
     var canShowProgressbar by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var canShowErrorMsg by remember {
+    when (val resendOtpData = resendOtpUiState) {
+        is GetOtpLoginUi.InitialUi -> {
+            canShowProgressbar = resendOtpData.isLoading
+        }
+        is GetOtpLoginUi.OtpGetSuccess -> {
+            if (resendOtpData.data.isNotificationSent == true) {
+                AppUtility.showToast(context, "Otp send to your mobile number")
+                loginViewModel.startResendOtpTimer()
+            } else {
+                AppUtility.showToast(context, "Something went wrong")
+            }
+        }
+        is GetOtpLoginUi.ErrorUi -> {
+            if (!resendOtpData.errors.isNullOrEmpty()) {
+                AppUtility.showToast(context, resendOtpData.errors.getTextMsg())
+            } else {
+                AppUtility.showToast(context, resendOtpData.errorMsg)
+            }
+        }
+    }
+
+    val canShowErrorMsg by remember {
         mutableStateOf(false)
     }
 
@@ -82,7 +108,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
     }
 
     Column(modifier = Modifier
-        .fillMaxHeight()
+        .fillMaxHeight().verticalScroll(rememberScrollState())
         .background(color = colorResource(id = R.color.white))
         .padding(horizontal = 20.dp)
         .fillMaxWidth()) {
@@ -146,7 +172,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                         bottom.linkTo(parent.bottom)
                     }
                     .clickable {
-                        loginViewModel.makeLoginRequestForGetOtp(user.mobileNum)
+                        loginViewModel.makeResendOtp(user.mobileNum)
                     }, fontWeight = FontWeight.W500, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
             }
         }

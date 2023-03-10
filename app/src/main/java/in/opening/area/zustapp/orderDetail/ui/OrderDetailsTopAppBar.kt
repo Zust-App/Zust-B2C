@@ -4,6 +4,7 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.dp_12
+import `in`.opening.area.zustapp.ui.theme.dp_4
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,13 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+
 
 @Composable
 fun OrderDetailsTopAppBar(
     modifier: Modifier,
+    orderId: Int?,
     callback: (ACTION) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier
@@ -34,14 +39,28 @@ fun OrderDetailsTopAppBar(
         .background(color = colorResource(id = R.color.new_material_primary))
         .padding(vertical = 16.dp, horizontal = 16.dp)
     ) {
-        val (locationTag, navIcon) = createRefs()
-        Text(text = "Order status", color = colorResource(id = R.color.white), modifier = modifier.constrainAs(locationTag) {
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            start.linkTo(navIcon.end, dp_12)
-            end.linkTo(parent.end)
-            width = Dimension.fillToConstraints
-        }, style = Typography_Montserrat.body1)
+        val (locationTag, navIcon, subTitle) = createRefs()
+
+        Text(text = "Order status", color = colorResource(id = R.color.white),
+            modifier = modifier.constrainAs(locationTag) {
+                top.linkTo(parent.top)
+                start.linkTo(navIcon.end, dp_12)
+                end.linkTo(parent.end)
+                bottom.linkTo(subTitle.top)
+                width = Dimension.fillToConstraints
+            }, style = Typography_Montserrat.body1,
+            fontSize = 16.sp)
+
+        Text(text = "Order number - $PREFIX_ORDER_ID$orderId",
+            color = colorResource(id = R.color.white),
+            modifier = modifier.constrainAs(subTitle) {
+                top.linkTo(locationTag.bottom, dp_4)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(navIcon.end, dp_12)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+            }, style = Typography_Montserrat.subtitle1,
+            fontWeight = FontWeight.W500)
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = colorResource(id = R.color.white),

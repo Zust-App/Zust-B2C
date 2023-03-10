@@ -35,9 +35,9 @@ class OrderDetailActivity : ComponentActivity() {
             Scaffold(
                 backgroundColor = screenBgColor,
                 topBar = {
-                    OrderDetailsTopAppBar(modifier = Modifier, callback = {
+                    OrderDetailsTopAppBar(modifier = Modifier, orderId = orderId) {
                         handleAction(it)
-                    })
+                    }
                 }) {
                 ConstraintLayout(modifier = Modifier
                     .padding(it)

@@ -29,11 +29,22 @@ class HelplineBtmSheet : BottomSheetDialogFragment() {
 
     private fun setUpComposeView() {
         binding?.composeView?.setContent {
-            HelplineContainer(profileViewModel)
+            HelplineContainer(profileViewModel) {
+                handleAction(it)
+            }
         }
     }
-    companion object{
-        fun newInstance(): HelplineBtmSheet{
+
+    private fun handleAction(data: Any) {
+        if (data is String) {
+            if (data == "close") {
+                dialog?.dismiss()
+            }
+        }
+    }
+
+    companion object {
+        fun newInstance(): HelplineBtmSheet {
             val args = Bundle()
             val fragment = HelplineBtmSheet()
             fragment.arguments = args

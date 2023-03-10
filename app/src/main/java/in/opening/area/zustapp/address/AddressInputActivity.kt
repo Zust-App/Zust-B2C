@@ -5,6 +5,7 @@ import `in`.opening.area.zustapp.address.model.SaveAddressPostModel
 import `in`.opening.area.zustapp.address.model.SearchAddressModel
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.uiModels.SaveUserAddressUi
+import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.ShowToast
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import androidx.appcompat.app.AppCompatActivity
@@ -61,7 +62,7 @@ class AddressInputActivity : AppCompatActivity(), ShowToast {
             if (saveAddressPostModel != null) {
                 saveAddressPostModel.longitude = searchAddressModel?.longitude
                 saveAddressPostModel.latitude = searchAddressModel?.lat
-                saveAddressPostModel.pinCode = searchAddressModel?.postalCode?:"800013"
+                saveAddressPostModel.pinCode = searchAddressModel?.postalCode ?: "800013"
                 saveAddressPostModel.description = searchAddressModel?.addressDesc
                 showHidePgBar(true)
                 viewModel.saveAddressUserAddress(saveAddressPostModel)
@@ -101,11 +102,11 @@ class AddressInputActivity : AppCompatActivity(), ShowToast {
         }
         if (searchAddressModel?.postalCode == null) {
             if (binding?.pinCodeEditText?.text.isNullOrEmpty()) {
-                Toast.makeText(this, "Please enter Pincode", Toast.LENGTH_SHORT).show()
+                AppUtility.showToast(this, "Please enter Pincode")
                 return null
             }
             if (binding?.pinCodeEditText?.text?.length != 6) {
-                Toast.makeText(this, "Please enter valid pincode", Toast.LENGTH_SHORT).show()
+                AppUtility.showToast(this, "Please enter valid pincode")
                 return null
             }
             val pinCode = binding?.pinCodeEditText?.text

@@ -9,7 +9,9 @@ import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -62,7 +64,8 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
     }
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight()) {
+        .fillMaxHeight()
+        .verticalScroll(rememberScrollState())) {
         val (container) = createRefs()
         Column(modifier = Modifier
             .wrapContentHeight()
@@ -104,19 +107,9 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
                 colors = setTextFiledColors(), shape = RoundedCornerShape(12.dp),
                 singleLine = true)
 
-            Spacer(modifier = Modifier.height(dp_32))
+            Spacer(modifier = Modifier.height(dp_20))
 
-            Text(text = "Have a Referral code?",
-                style = Typography_Montserrat.body1,
-                color = colorResource(id = R.color.app_black))
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(text = "Kindly enter your referral code, if available.",
-                style = Typography_Montserrat.body2,
-                fontWeight = FontWeight.W400,
-                color = colorResource(id = R.color.app_black))
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(text = "Referral code",
+            Text(text = "Referral code (if available)",
                 style = Typography_Montserrat.subtitle1,
                 fontWeight = FontWeight.W500,
                 color = colorResource(id = R.color.app_black))

@@ -12,13 +12,13 @@ import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.product.others.OtherCategoryUi
 import `in`.opening.area.zustapp.productDetails.ProductDetailsBtmSheet
 import `in`.opening.area.zustapp.productDetails.ProductDetailsCallback
-import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
 import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
 import `in`.opening.area.zustapp.search.SearchProductActivity
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
 import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
 import `in`.opening.area.zustapp.uiModels.VALUE
 import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.startProductDetailPage
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
 import android.content.Intent
@@ -90,7 +90,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
             categoryName = intent.getStringExtra(CATEGORY_NAME)
             productListingViewModel.updateHeaderData(categoryName)
         }
-        if (categoryId == null || categoryName == null) {
+        if (categoryId == null) {
             finish()
         }
     }
@@ -125,7 +125,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
         if (productSingleItem == null) {
             return
         }
-        startProductDetailPage(productSingleItem)
+        this.startProductDetailPage(productSingleItem)
     }
 
     private fun startOrderSummaryActivity(createCartData: CreateCartData) {
@@ -158,12 +158,6 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
     override fun startOrderSummary(cartData: CreateCartData) {
         productDetailsBottomSheet?.dismiss()
         startOrderSummaryActivity(cartData)
-    }
-
-    private fun startProductDetailPage(productSingleItem: ProductSingleItem) {
-        val productDetailIntent = Intent(this, ProductDetailsActivity::class.java)
-        productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_KEY, productSingleItem)
-        startActivity(productDetailIntent)
     }
 
     override fun openSuggestProduct() {

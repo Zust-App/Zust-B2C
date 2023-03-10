@@ -7,6 +7,7 @@ import `in`.opening.area.zustapp.const.MOBILE_NUM_THRESHOLD
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.extensions.getNumberKeyboardOptions
 import `in`.opening.area.zustapp.login.model.UserLoginModel
+import `in`.opening.area.zustapp.onboarding.compose.TypewriterText
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.primaryColor
 import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi
@@ -18,8 +19,10 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -78,26 +81,18 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
+        .verticalScroll(rememberScrollState())
         .background(color = Color.White)
         .padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(60.dp))
-        Image(painter = painterResource(id = R.drawable.grinzy_black),
+        Image(painter = painterResource(id = R.drawable.zust_app_black_text),
             contentDescription = "Zust Logo", modifier = Modifier
-                .align(CenterHorizontally)
-                .width(80.dp)
-                .height(46.dp))
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(text = "Welcome!", style = Typography_Montserrat.body1,
-            modifier = Modifier.align(CenterHorizontally),
-            fontSize = 24.sp, color = colorResource(id = R.color.app_black))
+                .width(140.dp)
+                .height(60.dp))
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Enter your phone number to get started.",
-            style = Typography_Montserrat.body1,
-            modifier = Modifier.align(CenterHorizontally),
-            fontSize = 16.sp, color = colorResource(id = R.color.app_black))
-        Spacer(modifier = Modifier.height(48.dp))
-
-
+        TypewriterText(text = "Just in 45 Minutes delivery",
+            modifier = Modifier.fillMaxWidth(), textSize = 16.sp)
+        Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(R.string.enter_your_mobile_number),
             style = Typography_Montserrat.subtitle1,
             color = colorResource(id = R.color.app_black))

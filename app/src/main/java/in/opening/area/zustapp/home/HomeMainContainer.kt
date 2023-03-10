@@ -21,7 +21,7 @@ fun HomeMainContainer(homeViewModel: HomeViewModel, paddingValues: PaddingValues
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxSize()
+        .fillMaxHeight()
         .padding(paddingValues)) {
         val (searchField, notDeliverHere, pgBar) = createRefs()
 
@@ -49,7 +49,9 @@ fun HomeMainContainer(homeViewModel: HomeViewModel, paddingValues: PaddingValues
                 } else {
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
-                HomePageErrorUi(searchField, notDeliverHere, this)
+                HomePageErrorUi(searchField, notDeliverHere, this) {
+                    homeViewModel.getHomePageData(0.0, 0.0)
+                }
             }
             is HomePageResUi.InitialUi -> {
                 if (response.isLoading) {

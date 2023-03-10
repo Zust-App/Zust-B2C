@@ -17,6 +17,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -40,16 +41,15 @@ class OfflineActivity : AppCompatActivity() {
                         })
                 Text(text = "No internet connection",
                     modifier = Modifier.constrainAs(titleText) {
-                    bottom.linkTo(noInternetLottie.bottom)
-                    start.linkTo(parent.start, dp_16)
-                    end.linkTo(parent.end, dp_16)
-                    width = Dimension.fillToConstraints
-                })
+                        bottom.linkTo(noInternetLottie.bottom)
+                        start.linkTo(parent.start, dp_16)
+                        end.linkTo(parent.end, dp_16)
+                        width = Dimension.fillToConstraints
+                    }, textAlign = TextAlign.Center, style = Typography_Montserrat.body1)
                 Button(modifier = Modifier.constrainAs(settingBtn) {
-                    top.linkTo(noInternetLottie.bottom)
+                    top.linkTo(noInternetLottie.bottom, dp_16)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-
                 }, onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         val panelIntent = Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY)
@@ -59,7 +59,7 @@ class OfflineActivity : AppCompatActivity() {
                     }
                 }) {
                     Text(text = "Open settings", style = Typography_Montserrat.body1,
-                        color = colorResource(id = R.color.app_black))
+                        color = colorResource(id = R.color.white))
                 }
             }
         }

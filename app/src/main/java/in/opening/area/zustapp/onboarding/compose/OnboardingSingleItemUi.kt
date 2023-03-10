@@ -25,16 +25,5 @@ fun OnBoardingSingleItemUi(index: Int) {
             style = Typography_Montserrat.body1,
             textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(16.dp))
-        when (index) {
-            0 -> {
-                ComposeLottie(R.raw.onboarding_0)
-            }
-            1 -> {
-                ComposeLottie(R.raw.onboarding_1)
-            }
-            else -> {
-                ComposeLottie(R.raw.onboarding_0)
-            }
-        }
     }
 }

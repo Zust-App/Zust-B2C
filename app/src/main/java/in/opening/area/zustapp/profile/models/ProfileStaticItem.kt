@@ -34,8 +34,6 @@ fun getProfileStaticItems(): ArrayList<ProfileStaticItem> {
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Suggest product", iconRes = R.drawable.ic_outline_feedback_24, eventCode = SUGGEST_PRODUCT))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
-    staticItems.add(ProfileStaticItem("Rate us on PlayStore", iconRes = R.drawable.ic_round_star_border_24, eventCode = ProfileActionCallback.RATE_US_PLAY_STORE))
-    staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Terms & Conditions", iconRes = R.drawable.page_icon, eventCode = ProfileActionCallback.TC))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Privacy Policy", iconRes = R.drawable.privacy_policy, eventCode = ProfileActionCallback.PRIVACY_POLICY))

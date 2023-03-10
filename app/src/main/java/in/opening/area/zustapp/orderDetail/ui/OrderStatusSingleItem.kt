@@ -18,7 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -124,8 +126,8 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
 
 @Composable
 fun CircleInCircle(modifier: Modifier) {
-    val outerCircleColor = MaterialTheme.colors.primary
-    val innerCircleColor = MaterialTheme.colors.primaryVariant
+    val outerCircleColor = Color(0xff8DA450)
+    val innerCircleColor = outerCircleColor.copy(0.77f)
     val strokeWidth = 8.dp.value
 
     Canvas(
@@ -136,7 +138,7 @@ fun CircleInCircle(modifier: Modifier) {
 
         drawCircle(
             brush = Brush.linearGradient(
-                colors = listOf(outerCircleColor, Color.Transparent),
+                colors = listOf(outerCircleColor, outerCircleColor),
                 start = Offset(0f, 0f),
                 end = Offset(0f, size.height)
             ),
@@ -147,7 +149,7 @@ fun CircleInCircle(modifier: Modifier) {
 
         drawCircle(
             brush = Brush.linearGradient(
-                colors = listOf(innerCircleColor, Color.Transparent),
+                colors = listOf(innerCircleColor, innerCircleColor),
                 start = Offset(0f, 0f),
                 end = Offset(0f, size.height)
             ),
@@ -158,21 +160,20 @@ fun CircleInCircle(modifier: Modifier) {
     }
 }
 
+val materialColor = Color(0xff6750A4)
+
 @Composable
 fun OutlineCircle(modifier: Modifier) {
-    val strokeWidth = 4.dp.value
-
     Canvas(
         modifier = modifier
     ) {
-        val radius = size.minDimension / 2 - strokeWidth / 2
+        val radius = size.minDimension / 4
         val center = Offset(size.width / 2, size.height / 2)
-
         drawCircle(
-            color = Color.Blue,
+            color = materialColor,
             radius = radius,
             center = center,
-            style = Stroke(strokeWidth)
+            style = Fill
         )
     }
 }

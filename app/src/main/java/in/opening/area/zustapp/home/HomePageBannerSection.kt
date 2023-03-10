@@ -1,6 +1,8 @@
 package `in`.opening.area.zustapp.home
 
 import `in`.opening.area.zustapp.home.models.HomePageGenericData
+import `in`.opening.area.zustapp.utility.AppDeepLinkHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -14,32 +16,25 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun HomePageBannerSection(sectionList: List<Any>?) {
-    if (sectionList.isNullOrEmpty()) {
+fun HomePageBannerSection(bannerItem: Any?) {
+    if (bannerItem == null) {
         return
     }
-    LazyRow(modifier = Modifier
-        .fillMaxWidth()
-        .height(150.dp)) {
-        items(sectionList) {
-            if (it is HomePageGenericData) {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp), verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(it.imageUrl)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .fillParentMaxWidth()
-                            .height(145.dp)
-                    )
+    val context = LocalContext.current
+    if (bannerItem is HomePageGenericData) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(bannerItem.imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(145.dp)
+                .clickable {
+                    AppDeepLinkHandler.handleOfferLink(context, bannerItem)
                 }
-            }
-        }
+        )
     }
 }

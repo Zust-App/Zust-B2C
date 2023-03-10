@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -53,7 +54,7 @@ fun ConstraintLayoutScope.OtherCategoryUi(
                     .padding(horizontal = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                     items(data.data ?: arrayListOf()) { categoryItems ->
-                        OptionalCategoryItem(categoryItems, data.selectedCategoryId, modifier = Modifier) { clickedCategory ->
+                        OptionalCategoryItem(categoryItems, data.selectedCategoryId) { clickedCategory ->
                             productListingViewModel.updateHeaderData(clickedCategory.name)
                             productListingViewModel.updateCategoryIdBasedOnSelection(clickedCategory.id)
                         }
@@ -78,7 +79,7 @@ fun ConstraintLayoutScope.OtherCategoryUi(
 }
 
 @Composable
-fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: Int?, modifier: Modifier, clickCallback: (SingleCategoryData) -> Unit) {
+fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: Int?, clickCallback: (SingleCategoryData) -> Unit) {
     if (categoryItem.name.isEmpty()) {
         return
     }
@@ -87,11 +88,11 @@ fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: I
         clickCallback.invoke(categoryItem)
     }) {
         val (image, title) = createRefs()
-        val combinedModifier = modifier
+        val combinedModifier = imageModifier
             .background(color = colorResource(id = R.color.white), shape = CircleShape)
             .then(if (isSelectedItem) {
                 Modifier.border(
-                    width = 2.dp,
+                    width = 3.dp,
                     color = colorResource(id = R.color.new_material_primary),
                     shape = CircleShape
                 )
@@ -116,7 +117,11 @@ fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: I
         )
         Text(
             fontSize = 12.sp, fontFamily = montserrat,
-            fontWeight = FontWeight.W500,
+            fontWeight = if (isSelectedItem) {
+                FontWeight.W600
+            } else {
+                FontWeight.W500
+            },
             text = categoryItem.name,
             textAlign = TextAlign.Center,
             color = colorResource(id = R.color.app_black),
@@ -129,3 +134,7 @@ fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: I
         )
     }
 }
+
+private val imageModifier = Modifier
+    .size(60.dp)
+    .clip(CircleShape)

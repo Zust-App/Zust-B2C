@@ -38,7 +38,7 @@ fun prefixFilter(number: AnnotatedString, prefix: String): TransformedText {
         }
 
         override fun transformedToOriginal(offset: Int): Int {
-            if (offset <= prefixOffset - 1) return prefixOffset
+            if (offset <= prefixOffset) return 0
             return offset - prefixOffset
         }
     }

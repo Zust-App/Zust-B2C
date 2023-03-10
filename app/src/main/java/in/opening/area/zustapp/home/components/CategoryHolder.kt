@@ -7,6 +7,7 @@ import `in`.opening.area.zustapp.product.ProductListingActivity.Companion.CATEGO
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.utility.navigateToProductListing
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.clickable
@@ -63,7 +64,7 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
             horizontal = 8.dp)
         .clip(RoundedCornerShape(12.dp))
         .clickable {
-            startProductListingActivity(context, categoryItem)
+            context.navigateToProductListing(categoryItem.id, categoryItem.name)
         }
         .fillMaxWidth()) {
         val (categoryImage, categoryTitle) = createRefs()
@@ -89,21 +90,12 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
             modifier = Modifier.constrainAs(categoryTitle) {
                 start.linkTo(parent.start, dp_8)
                 end.linkTo(parent.end, dp_8)
-                top.linkTo(categoryImage.bottom)
+                top.linkTo(categoryImage.bottom, dp_8)
                 bottom.linkTo(parent.bottom, dp_8)
                 width = Dimension.fillToConstraints
             }, style = Typography_Montserrat.body2,
             textAlign = TextAlign.Center,
-            fontSize=12.sp,
+            fontSize = 12.sp,
             color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black))
     }
-}
-
-private fun startProductListingActivity(context: Context, categoryItem: HomePageGenericData) {
-    val productListingActivity = Intent(context, ProductListingActivity::class.java)
-    productListingActivity.apply {
-        putExtra(CATEGORY_ID, categoryItem.id)
-        putExtra(CATEGORY_NAME, categoryItem.name)
-    }
-    context.startActivity(productListingActivity)
 }

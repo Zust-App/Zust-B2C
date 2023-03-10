@@ -7,6 +7,7 @@ import `in`.opening.area.zustapp.viewmodels.OnBoardingViewModel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextSwitcher
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -24,7 +25,7 @@ class OnBoardingActivity : AppCompatActivity() {
             if (doesOnBoardingShown) {
                 proceedToLogin()
             } else {
-                OnBoardingContainer() {
+                OnBoardingContainer {
                     handleClickAction(it)
                 }
             }

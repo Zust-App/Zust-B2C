@@ -3,5 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">gpapi.grinzy.in</domain>
         <domain includeSubdomains="true">gcapi.grinzy.in</domain>
+        <domain includeSubdomains="true">zcapi.zutapp.com</domain>
+        <domain includeSubdomains="true">zcapi.zustapp.com</domain>
     </domain-config>
 </network-security-config>

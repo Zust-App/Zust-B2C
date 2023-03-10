@@ -142,9 +142,9 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                     }
                 } else {
                     validateCouponUiState.update {
-                        if(!response.value.errors.isNullOrEmpty()){
+                        if (!response.value.errors.isNullOrEmpty()) {
                             ValidateCouponUi.ErrorUi(false, errors = response.value.errors)
-                        }else{
+                        } else {
                             ValidateCouponUi.ErrorUi(false, message = response.value.message)
                         }
                     }
@@ -169,13 +169,15 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
-    internal fun getLatestAddress() =sharedPrefManager.getUserAddress()
+    internal fun getLatestAddress() = sharedPrefManager.getUserAddress()
 
     internal fun clearCartItems() = viewModelScope.launch {
         dbAddToCartRepository.deleteAllCartItem()
     }
 
-    internal fun getUserMobileNumber():String = sharedPrefManager.getUserMobileNumber()
+    internal fun getUserMobileNumber(): String = sharedPrefManager.getUserMobileNumber()
 
-
+    internal fun isCreatePaymentOnGoing(): Boolean {
+        return createPaymentUiState.value.isLoading
+    }
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
 
 @Composable
-fun ColumnScope.ComposeLottie(@RawRes rawId: Int, modifier: Modifier? = Modifier) {
+fun ComposeLottie(@RawRes rawId: Int, modifier: Modifier? = Modifier) {
     val isLottiePlaying by remember {
         mutableStateOf(true)
     }
@@ -30,17 +30,7 @@ fun ColumnScope.ComposeLottie(@RawRes rawId: Int, modifier: Modifier? = Modifier
         speed = animationSpeed,
         restartOnPlay = false
     )
-
-    if (modifier == null) {
-        LottieAnimation(
-            composition,
-            lottieAnimation,
-            modifier = Modifier
-                .size(250.dp)
-                .align(Alignment.CenterHorizontally)
-
-        )
-    } else {
+    if (modifier != null) {
         LottieAnimation(
             composition,
             lottieAnimation,
@@ -63,7 +53,7 @@ fun ComposeLottieWithoutScope(@RawRes rawId: Int, modifier: Modifier? = Modifier
 
     val lottieAnimation by animateLottieCompositionAsState(
         composition,
-        iterations = LottieConstants.IterateForever,
+        iterations = 5,
         isPlaying = isLottiePlaying,
         speed = animationSpeed,
         restartOnPlay = false

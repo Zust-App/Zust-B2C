@@ -22,6 +22,7 @@ data class HomeGrid(
 data class HomePageGenericData(
     val bannerType: String? = null,
     val category: String? = null,
+    val categoryName: String? = null,
     val deepLink: String? = null,
     val description: String? = null,
     val id: Int? = null,

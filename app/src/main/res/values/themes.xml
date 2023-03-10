@@ -2,7 +2,10 @@
 <resources>
 
     <style name="Theme.GreenBoyz" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="backgroundColor">@color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
@@ -16,28 +19,15 @@
         <item name="android:windowIsFloating">true</item>
     </style>
 
-    <style name="Theme.SplashScreenAndroid12" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/new_material_primary</item>
-        <item name="colorPrimaryVariant">@color/new_material_primary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/new_material_primary</item>
-        <item name="colorSecondaryVariant">@color/new_material_primary</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/zust_app_circle_logo</item>
+        <item name="windowSplashScreenAnimationDuration">600</item>
+        <item name="postSplashScreenTheme">@style/Theme.OnBoardingCompose</item>
     </style>
 
-    <style name="Theme.SplashScreenAndroid12.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Theme.OnBoardingCompose" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/white</item>
     </style>
 
-    <style name="Theme.SplashScreenAndroid12.AppBarOverlay"
-        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.SplashScreenAndroid12.PopupOverlay"
-        parent="ThemeOverlay.AppCompat.Light" />
 </resources>

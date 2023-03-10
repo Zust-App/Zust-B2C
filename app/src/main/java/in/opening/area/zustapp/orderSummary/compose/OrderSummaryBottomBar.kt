@@ -50,12 +50,11 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                     .background(shape = RoundedCornerShape(12.dp),
                         color = colorResource(id = R.color.white))
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                    .wrapContentHeight()
-                    .padding(start = 20.dp, end = 20.dp)) {
-                if (!addressLine.isNullOrEmpty()) {
+                    .wrapContentHeight()) {
+                if (addressLine.isNotEmpty()) {
                     ConstraintLayout(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.dp)
+                        .padding(top = 12.dp, start = 20.dp, end = 20.dp)
                         .wrapContentHeight()) {
                         val (locationIcon, locationTag, savedLocationText, changeLocationTag) = createRefs()
                         Icon(painter = painterResource(id = R.drawable.custom_location_icon),
@@ -95,7 +94,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                 } else {
                     ConstraintLayout(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.dp)
+                        .padding(top = 12.dp, start = 20.dp, end = 20.dp)
                         .wrapContentHeight()) {
                         val (locationIcon, selectAddressTag) = createRefs()
 
@@ -130,7 +129,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                     val (button, progressBar) = createRefs()
                     OutlinedButton(onClick = { updateOrderCallback.invoke(OrderSummaryAction.UpdateOrder) },
                         border = BorderStroke(1.dp, colorResource(id = R.color.new_material_primary)),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
                         modifier = Modifier
                             .wrapContentHeight()
                             .constrainAs(button) {
@@ -145,7 +144,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                             Text(text = "Pay", style = Typography_Montserrat.subtitle1,
                                 color = colorResource(id = R.color.white))
                             Text(text = stringResource(id = R.string.ruppes) +
-                                    ProductUtils.roundTo1DecimalPlaces(cartData.data.totalCurrentPrice+
+                                    ProductUtils.roundTo1DecimalPlaces(cartData.data.totalCurrentPrice +
                                             cartData.data.deliveryPartnerTip),
                                 style = Typography_Montserrat.body1,
                                 color = colorResource(id = R.color.white))

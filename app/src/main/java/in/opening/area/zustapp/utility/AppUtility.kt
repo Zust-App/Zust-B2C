@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.text.Html
 import android.widget.Toast
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
@@ -24,8 +25,15 @@ class AppUtility {
     companion object {
         const val WA_PACKAGE_NAME = "com.whatsapp"
         const val BUSINESS_WA_PACKAGE_NAME = "com.whatsapp.w4b"
-        fun getSharableTextOfReferralCode(playStoreUrl: String, referralCode: String): String {
-            return "Hey please use my Referral Code <b>$referralCode</b> to download ring app and get upto 60% off on your Order\n Download app $playStoreUrl"
+        private val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=" + getPackageName()
+
+        private fun getPackageName(): String {
+            return MyApplication.getApplication().packageName ?: "in.opening.area.zustapp"
+        }
+
+        fun getSharableTextOfReferralCode(referralCode: String): String {
+            val referralText = "Hey please use my Referral Code <b>$referralCode</b> to download <b>Zust</b> app and get upto 60% off on your Order\n Download app $PLAY_STORE_URL"
+            return Html.fromHtml(referralText).toString()
         }
 
         @JvmStatic
@@ -113,6 +121,7 @@ class AppUtility {
         fun getWhatsappHelpUrl(): String {
             return "https://api.whatsapp.com/send?phone=" + "7564062907"
         }
+
         fun showNoInternetActivity(context: Context?) {
             if (context == null) {
                 return

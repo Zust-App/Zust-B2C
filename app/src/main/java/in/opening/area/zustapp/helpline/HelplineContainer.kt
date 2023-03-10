@@ -20,21 +20,22 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
+
 @Composable
-fun HelplineContainer(profileViewModel: ProfileViewModel) {
+fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallback: (Any) -> Unit) {
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp)) {
         val (closeIcon, helplineColumn) = createRefs()
         Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24),
             contentDescription = stringResource(id = R.string.close), modifier = Modifier
-            .clickable {
-
-            }
-            .constrainAs(closeIcon) {
-                end.linkTo(parent.end)
-                top.linkTo(parent.top, dp_16)
-            })
+                .clickable {
+                    supportBtmSheetCallback.invoke("close")
+                }
+                .constrainAs(closeIcon) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top, dp_16)
+                })
 
         Column(modifier = Modifier.constrainAs(helplineColumn) {
             top.linkTo(closeIcon.top, dp_8)

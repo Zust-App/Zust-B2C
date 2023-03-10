@@ -88,7 +88,7 @@ fun ProfileReferralSection(refer: Refer?) {
                         top.linkTo(parent.top, dp_12)
                     }
                     .clickable {
-                        val getText = AppUtility.getSharableTextOfReferralCode("www.grinzy.in", refer.code)
+                        val getText = AppUtility.getSharableTextOfReferralCode(refer.code)
                         AppUtility.showShareIntent(context, getText)
                     }
                     .size(30.dp))

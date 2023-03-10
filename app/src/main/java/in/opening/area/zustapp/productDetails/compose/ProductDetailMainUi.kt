@@ -12,7 +12,9 @@ import `in`.opening.area.zustapp.viewmodels.ProductDetailsViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -43,18 +45,18 @@ import java.util.*
 fun ProductDetailMainUi(
     viewModel: ProductDetailsViewModel,
     paddingValue: PaddingValues,
-    productSingleItem: ProductSingleItem?, callback: ProductSelectionListener,
+    productSingleItem: ProductSingleItem?,
+    callback: ProductSelectionListener,
 ) {
     if (productSingleItem == null) {
         return
     }
     val productDetailsUiState by viewModel.singleItemUiState.collectAsState(ProductDetailsUiState.InitialUi(false))
-    val context = LocalContext.current
     when (val data = productDetailsUiState) {
         is ProductDetailsUiState.Success -> {
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxHeight().verticalScroll(rememberScrollState())
                 .background(color = colorResource(id = R.color.screen_surface_color))
                 .padding(paddingValue)) {
                 ConstraintLayout(modifier = Modifier

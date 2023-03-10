@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-const val oneHalfMinute = (60 * 1000L)
+const val halfMinutes = (10 * 1000L)
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) : ViewModel() {
@@ -31,10 +31,12 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
     internal val userLoginModelFlow = MutableStateFlow(UserLoginModel())//locally needed only
 
     internal var getOtpUiState = MutableStateFlow<GetOtpLoginUi>(GetOtpLoginUi.InitialUi(false))
+    internal var resendOtpUiState = MutableStateFlow<GetOtpLoginUi>(GetOtpLoginUi.InitialUi(false))
+
     internal var verifyOtpUiState = MutableStateFlow<VerifyOtpUi>(VerifyOtpUi.InitialUi(false))
     internal var userProfileUiState = MutableStateFlow<UpdateUserProfileUi>(UpdateUserProfileUi.InitialUi(false))
 
-    private val tmCountDownTimer: TmCountDownTimer? by lazy { TmCountDownTimer(oneHalfMinute, callback, stopped) }
+    private val tmCountDownTimer: TmCountDownTimer? by lazy { TmCountDownTimer(halfMinutes, callback, stopped) }
     internal val timerTextFlow by lazy { MutableSharedFlow<String?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST) }
 
 
@@ -50,7 +52,6 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
             }
             is ResultWrapper.UserTokenNotFound -> {
                 getOtpUiState.update { GetOtpLoginUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }
-
             }
             is ResultWrapper.GenericError -> {
                 getOtpUiState.update { GetOtpLoginUi.ErrorUi(false, errorMsg = response.error?.error ?: "Something went wrong") }
@@ -61,6 +62,27 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
         }
     }
 
+    internal infix fun makeResendOtp(inputMobileNumber: String) = viewModelScope.launch {
+        resendOtpUiState.update { GetOtpLoginUi.InitialUi(true) }
+        when (val response = apiRequestManager.makeLoginRequestForGetOtp(inputMobileNumber)) {
+            is ResultWrapper.Success -> {
+                if (response.value.data != null) {
+                    resendOtpUiState.update { GetOtpLoginUi.OtpGetSuccess(false, response.value.data) }
+                } else {
+                    resendOtpUiState.update { GetOtpLoginUi.ErrorUi(false, errors = response.value.errors, errorMsg = response.value.message) }
+                }
+            }
+            is ResultWrapper.UserTokenNotFound -> {
+                resendOtpUiState.update { GetOtpLoginUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }
+            }
+            is ResultWrapper.GenericError -> {
+                resendOtpUiState.update { GetOtpLoginUi.ErrorUi(false, errorMsg = response.error?.error ?: "Something went wrong") }
+            }
+            is ResultWrapper.NetworkError -> {
+                resendOtpUiState.update { GetOtpLoginUi.ErrorUi(false, errorMsg = "Something went wrong") }
+            }
+        }
+    }
     internal fun loginVerifyUserOTP(mobileNum: String, otp: String) = viewModelScope.launch {
         verifyOtpUiState.update { VerifyOtpUi.InitialUi(true) }
         when (val response = apiRequestManager.postAuthVerification(mobileNumber = mobileNum, otp = otp)) {

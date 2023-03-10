@@ -1,7 +1,12 @@
 package `in`.opening.area.zustapp.home.components
 
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.CustomHorizontalIndicator
 import `in`.opening.area.zustapp.home.HomePageBannerSection
 import `in`.opening.area.zustapp.home.models.HomePageGenericData
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -9,7 +14,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -17,35 +26,44 @@ val randomBlackIndicator = Color(0xFF2E2E2E)
 val randomGreyIndicator = Color(0xFFD9D9D9)
 const val scrollingDelay = 3000L
 const val KEY_BANNER = "banner"
+
+@OptIn(ExperimentalPagerApi::class)
 fun LazyListScope.customAutoScrollImageUi(imageList: List<HomePageGenericData>?) {
     if (imageList == null) {
         return
     }
 
     item(key = KEY_BANNER) {
-        var selectedPosition by remember {
-            mutableStateOf(0)
-        }
-        val coroutineScope = rememberCoroutineScope()
-        LaunchedEffect(key1 = Unit, block = {
-            coroutineScope.launch {
-                delay(scrollingDelay)
-                if (selectedPosition == 5) {
-                    selectedPosition = 0
-                } else {
-                    selectedPosition += 1
+        val pagerState = rememberPagerState()
+        LaunchedEffect(key1 = pagerState.currentPage) {
+            launch {
+                delay(4000)
+                with(pagerState) {
+                    val target = if (currentPage < pageCount - 1) currentPage + 1 else 0
+                    animateScrollToPage(
+                        page = target,
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearEasing
+                        )
+                    )
                 }
             }
-        })
+        }
+
         Column(modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)) {
-            HomePageBannerSection(imageList)
+
+            HorizontalPager(count = imageList.size, state = pagerState) {
+                HomePageBannerSection(imageList[pagerState.currentPage])
+            }
+
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                (0..5).forEach { index ->
-                    if (selectedPosition == index) {
+                (imageList.indices).forEach { index ->
+                    if (pagerState.currentPage == index) {
                         CustomIndicator(randomBlackIndicator)
                     } else {
                         CustomIndicator(randomGreyIndicator)

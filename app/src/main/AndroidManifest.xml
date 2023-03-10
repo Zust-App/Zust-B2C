@@ -22,6 +22,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -30,18 +33,18 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/grinzy"
+        android:icon="@mipmap/zust_app_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/grinzy"
+        android:roundIcon="@mipmap/zust_app_circle_logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GreenBoyz"
+        android:theme="@style/Theme.CustomSplashScreenTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".address.AddressAddSelectActivity"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.Material3.Light.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -49,7 +52,7 @@
         <activity
             android:name=".onboarding.OnBoardingActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.CustomSplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -136,6 +139,7 @@
         <activity
             android:name=".payment.PaymentActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"

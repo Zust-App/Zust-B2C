@@ -4,13 +4,10 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
 import `in`.opening.area.zustapp.orderSummary.OrderItemsClickListeners
-import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.uiModels.orderSummary.OrderSummaryUi
+import `in`.opening.area.zustapp.utility.startProductDetailPage
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -65,7 +62,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
                             }, {
                                 listeners.didTapOnDecreaseProductItemAmount(it)
                             }) {
-                                startProductDetailPage(it, context)
+                               context.startProductDetailPage(it)
                             }
                             if (index < cartResponse.data.productsAlreadyInCart.lastIndex) {
                                 Divider(modifier = Modifier
@@ -114,10 +111,4 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
             }
         }
     }
-}
-
-private fun startProductDetailPage(productSingleItem: ProductSingleItem, context: Context) {
-    val productDetailIntent = Intent(context, ProductDetailsActivity::class.java)
-    productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_KEY, productSingleItem)
-    context.startActivity(productDetailIntent)
 }

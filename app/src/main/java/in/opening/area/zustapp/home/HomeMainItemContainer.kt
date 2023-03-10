@@ -49,7 +49,9 @@ fun HomeMainItemContainer(
                         }
                         homePageBrandTagUi()
                         homePageSectionTitleUi(homeData.title)
-                        customAutoScrollImageUi(homeData.data)
+                        if (!homeData.data.isNullOrEmpty()) {
+                            customAutoScrollImageUi(homeData.data)
+                        }
                     }
                     if (homeData.type == "CATEGORY") {
                         homePageSectionTitleUi(homeData.title)

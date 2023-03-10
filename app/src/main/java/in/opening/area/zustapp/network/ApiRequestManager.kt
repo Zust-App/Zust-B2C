@@ -33,13 +33,25 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 const val BASE_URL = "https://gcapi.grinzy.in/"
-const val PROD_BASE_URL="https://gc-production.grinzy.in/"
+const val PROD_BASE_URL = "https://zcapi.zustapp.com/"
+const val PROD_PAYMENT_URL = "https://paymentapi.zustapp.com/api/v1"
 const val END_POINT_REGISTER = "/auth/register-send-otp"
 const val END_POINT_AUTH_VERIFICATION = "/auth/register-verify-otp"
 const val END_POINT_UPDATE_PROFILE = "/users/update-profile"
 const val END_POINT_SED_FCM = "/users/save-fcm-token"
-const val COMPLETE_BASE_URL = PROD_BASE_URL + "greenboys-api/api/v1"
+const val COMPLETE_BASE_URL = BASE_URL + "greenboys-api/api/v1"
 const val TRENDING_PRODUCTS = "$COMPLETE_BASE_URL/products/trend-product"
+const val SUB_CATEGORY = "/products/sub-category"
+const val PRODUCT_LIST_BY_CATEGORY = "/products/category-by-product"
+const val ORDERS_CART = "/orders/cart"
+const val COUPONS = "/coupons/user-coupons"
+const val PRODUCT_SEARCH = "/products/search"
+const val PAYMENT_METHOD = "/orders/payment-methods"
+const val CREATE_PAYMENT = "/orders/create-payment"
+const val VERIFY_PAYMENT = "/payment/verify"
+const val TIME_SLOT = "/orders/time-slot"
+const val APPLY_COUPON = "/coupons/apply-coupon"
+const val UPSELLING_PRODUCTS = "/products/suggestions/upselling-products"
 
 @Singleton
 class ApiRequestManager @Inject constructor() {
@@ -125,7 +137,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getSubCategoryFromServer(categoryId: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<SubCategoryApiResponse>("$COMPLETE_BASE_URL/products/sub-category") {
+        ktorHttpClient.get<SubCategoryApiResponse>("$COMPLETE_BASE_URL$SUB_CATEGORY") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -136,7 +148,7 @@ class ApiRequestManager @Inject constructor() {
     suspend fun productListFromServer(categoryId: Int) = flow {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
-            val value = ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL/products/category-by-product") {
+            val value = ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL$PRODUCT_LIST_BY_CATEGORY") {
                 headers {
                     this.append(Authorization, "Bearer $authToken")
                 }
@@ -152,7 +164,7 @@ class ApiRequestManager @Inject constructor() {
     //TODO()
     suspend fun createCartWithServer(orderRequestBody: CreateCartReqModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<CreateCartResponseModel>("$COMPLETE_BASE_URL/orders/cart") {
+        ktorHttpClient.post<CreateCartResponseModel>("$COMPLETE_BASE_URL$ORDERS_CART") {
             headers(fun HeadersBuilder.() {
                 this.append(Authorization, "Bearer $authToken")
             })
@@ -163,7 +175,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getCouponsFromServer() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<CouponModel>("$COMPLETE_BASE_URL/coupons/user-coupons") {
+        ktorHttpClient.get<CouponModel>("$COMPLETE_BASE_URL$COUPONS") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -173,7 +185,7 @@ class ApiRequestManager @Inject constructor() {
     suspend fun productSearchApi(searchText: String) = flow {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
-            val value = ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL/products/search") {
+            val value = ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL$PRODUCT_SEARCH") {
                 parameter("merchantId", 1)
                 parameter("searchText", searchText)
                 headers {
@@ -188,7 +200,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getPaymentMethods() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<PaymentMethodResponseModel>("$COMPLETE_BASE_URL/orders/payment-methods") {
+        ktorHttpClient.get<PaymentMethodResponseModel>("$COMPLETE_BASE_URL$PAYMENT_METHOD") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -197,7 +209,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun invokePaymentToGetId(createPayment: CreatePaymentReqBodyModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<CreatePaymentResponseModel>("$COMPLETE_BASE_URL/orders/create-payment") {
+        ktorHttpClient.post<CreatePaymentResponseModel>("$COMPLETE_BASE_URL$CREATE_PAYMENT") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -206,7 +218,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun verifyPaymentWithServer(paymentBody: Payment) = universalApiRequestManager {
-        ktorHttpClient.post<String>("https://paymentapi.grinzy.in/api/v1/payment/verify") {
+        ktorHttpClient.post<String>("$PROD_PAYMENT_URL$VERIFY_PAYMENT") {
             headers {
                 this.append(Authorization, "Basic e7rc0cb7ffdbYlHQlvgUAw==")
             }
@@ -216,7 +228,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getAvailableTimeSlots() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<AvailTimeSlotsResponse>("$COMPLETE_BASE_URL/orders/time-slot") {
+        ktorHttpClient.get<AvailTimeSlotsResponse>("$COMPLETE_BASE_URL$TIME_SLOT") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -225,7 +237,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun validateCoupon(couponBody: ApplyCouponReqBody) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<AppliedCouponResponse>("$COMPLETE_BASE_URL/coupons/apply-coupon") {
+        ktorHttpClient.post<AppliedCouponResponse>("$COMPLETE_BASE_URL$APPLY_COUPON") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -367,9 +379,16 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun getUpsellingProducts(params: String) = universalApiRequestManager {
-        ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL/products/suggestions/upselling-products") {
+        ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL$UPSELLING_PRODUCTS") {
             parameter("items", params)
         }
     }
+
+    suspend fun getMetaData() = universalApiRequestManager {
+        ktorHttpClient.get<String>("$COMPLETE_BASE_URL/greenboys-api/api/v1/metadata") {
+
+        }
+    }
+
 
 }

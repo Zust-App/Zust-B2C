@@ -10,7 +10,6 @@ import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.ProductSelectionListener
 import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
 import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
 import `in`.opening.area.zustapp.search.compose.SearchBarUi
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
@@ -22,6 +21,7 @@ import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
 import `in`.opening.area.zustapp.uiModels.VALUE
 import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
 import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.startProductDetailPage
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import `in`.opening.area.zustapp.viewmodels.SearchProductViewModel
 import android.content.Intent
@@ -128,7 +128,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                                     }, { product ->
                                         didTapOnDecrementCount(product)
                                     }) { product ->
-                                        startProductDetailPage(product)
+                                        context.startProductDetailPage(product)
                                     }
                                 }
                             }
@@ -173,14 +173,8 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
 
     override fun didTapOnContainerClick(productSingleItem: ProductSingleItem?) {
         if (productSingleItem != null) {
-            startProductDetailPage(productSingleItem)
+            this.startProductDetailPage(productSingleItem)
         }
-    }
-
-    private fun startProductDetailPage(productSingleItem: ProductSingleItem) {
-        val productDetailIntent = Intent(this, ProductDetailsActivity::class.java)
-        productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_KEY, productSingleItem)
-        startActivity(productDetailIntent)
     }
 
 
@@ -200,7 +194,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
     }
 
     companion object {
-        const val SEARCH_THRESHOLD = 2
+        const val SEARCH_THRESHOLD = 1
     }
 
     private fun showSuggestProductSheet() {

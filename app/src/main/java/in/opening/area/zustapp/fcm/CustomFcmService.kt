@@ -38,7 +38,7 @@ class CustomFcmService : FirebaseMessagingService() {
         const val FCM_KEY_BODY_TEXT = "bodyText"
         const val FCM_KEY_DEEP_LINK = "deep_link"
         const val FCM_IMAGE_URL_KEY = "image_url"
-        const val ORDER_ID = "order_id"
+        const val ORDER_ID = "orderId"
         const val KEY_ORDER_DETAIL = "order_detail"
         const val KEY = "key"
         const val DEEP_LINK_DATA = "fcm_data"
@@ -81,8 +81,12 @@ class CustomFcmService : FirebaseMessagingService() {
                 if (data.containsKey(ORDER_ID)) {
                     orderId = data[ORDER_ID]
                 }
-                createFcmNotification(title, body, imageUrl, orderId)
+                createFcmNotification(title, body, imageUrl, orderId, key)
+            } else {
+                createFcmNotification(title, body, imageUrl, null, key)
             }
+        } else {
+            createFcmNotification(title, body, imageUrl, null, null)
         }
     }
 
@@ -90,11 +94,14 @@ class CustomFcmService : FirebaseMessagingService() {
         title: String?, body: String?,
         imageUrl: String?,
         orderId: String?,
+        key: String?,
     ) {
         if (title != null && body != null) {
             val notificationId = System.currentTimeMillis().toInt()
             val intent = Intent(this, HomeLandingActivity::class.java)
-            intent.putExtra(DEEP_LINK_DATA, OrderDetailDeepLinkModel(orderId,KEY_ORDER_DETAIL))
+            if (orderId != null && key.equals(KEY_ORDER_DETAIL, true)) {
+                intent.putExtra(DEEP_LINK_DATA, OrderDetailDeepLinkModel(orderId, KEY_ORDER_DETAIL))
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             val flag = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             val pendingIntent = PendingIntent.getActivity(this, notificationId, intent, flag)
@@ -106,7 +113,7 @@ class CustomFcmService : FirebaseMessagingService() {
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(this, notificationId.toString())
-                    .setSmallIcon(R.drawable.grinzy)
+                    .setSmallIcon(R.drawable.zust_app_logo)
                     .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)

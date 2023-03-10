@@ -30,6 +30,12 @@ import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 
+import androidx.compose.animation.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.ui.text.TextStyle
+
 @Composable
 fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProductViewModel) {
     var searchInput by rememberSaveable {
@@ -67,7 +73,7 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
                 ) {
                     if (searchInput.isEmpty()) {
                         Text(
-                            text = "Search products",
+                            text = "Search products...",
                             style = Typography_Montserrat.body2,
                             color = colorResource(id = R.color.new_hint_color)
                         )
@@ -106,13 +112,20 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
         }
 
         LaunchedEffect(key1 = searchInput) {
-            // this check is optional if you want the value to emit from the start
-            if (searchInput.isEmpty() && searchInput.length <= SearchProductActivity.SEARCH_THRESHOLD) {
+            if (searchInput.isEmpty()) {
+                viewModel.productListUiState.update {
+                    ProductListUi.InitialUi(false)
+                }
                 return@LaunchedEffect
-            } else {
-                delay(500)
-                viewModel.searchProduct(searchInput)
             }
+            if (searchInput.length <= SearchProductActivity.SEARCH_THRESHOLD) {
+                viewModel.productListUiState.update {
+                    ProductListUi.InitialUi(false)
+                }
+                return@LaunchedEffect
+            }
+            delay(500)
+            viewModel.searchProduct(searchInput.trim())
         }
     }
 }
@@ -127,3 +140,44 @@ fun setSearchTextFiledColors(): TextFieldColors {
         unfocusedIndicatorColor = Color.White,
         backgroundColor = Color(0xffffffff))
 }
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun AnimatedTextHint(
+    value: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.body1,
+) {
+    var oldCount by remember {
+        mutableStateOf(value)
+    }
+    SideEffect {
+        oldCount = value
+    }
+    Row(modifier = modifier) {
+        val oldCountString = oldCount
+        for (i in value.indices) {
+            val oldChar = oldCountString.getOrNull(i)
+            val newChar = value[i]
+            val char = if (oldChar == newChar) {
+                oldCountString[i]
+            } else {
+                value[i]
+            }
+            AnimatedContent(
+                targetState = char,
+                transitionSpec = {
+                    slideInVertically { it } with slideOutVertically { -it }
+                }
+            ) { char ->
+                Text(
+                    text = char.toString(),
+                    style = style,
+                    softWrap = false
+                )
+            }
+        }
+    }
+}
+

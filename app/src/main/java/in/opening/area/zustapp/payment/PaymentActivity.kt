@@ -24,6 +24,7 @@ import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.utility.ShowToast
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
 import `in`.opening.area.zustapp.databinding.ActivityPaymentBinding
+import `in`.opening.area.zustapp.utility.AppUtility
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -63,7 +64,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
     private var couponHolder: CouponHolder? = null
     private var deliveryAddressHolder: DeliveryAddressHolder? = null
     private var timingSavingHolder: TimingSavingHolder? = null
-    private var cartItemCount:Int=0;
+    private var cartItemCount: Int = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,8 +91,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             if (intent.hasExtra(PAYMENT_MODEL_KEY)) {
                 paymentActivityReqData = intent.getParcelableExtra(PAYMENT_MODEL_KEY)
             }
-            if (intent.hasExtra(TOTAL_ITEMS_IN_CART)){
-                cartItemCount=intent.getIntExtra(TOTAL_ITEMS_IN_CART,0)
+            if (intent.hasExtra(TOTAL_ITEMS_IN_CART)) {
+                cartItemCount = intent.getIntExtra(TOTAL_ITEMS_IN_CART, 0)
             }
         }
     }
@@ -137,6 +138,10 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
 
     private fun proceedToPaymentFirstApiCall() {
         if (paymentMethod?.key != null && paymentActivityReqData?.totalAmount != null) {
+            if (paymentViewModel.isCreatePaymentOnGoing()) {
+                AppUtility.showToast(this, "Please wait")
+                return
+            }
             showHidePgBar(true)
             val createPayment = CreatePaymentReqBodyModel(
                 paymentActivityReqData?.totalAmount,
@@ -298,7 +303,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             val options = JSONObject()
             options.put("name", "Zust")
             options.put("description", "Payment")
-            options.put("image", R.drawable.grinzy_black)
+            options.put("image", R.drawable.zust_app_black_text)
             options.put("order_id", id)
             options.put("theme.color", getColor(R.color.new_material_primary))
             options.put("prefill.email", "info@grinzy.in")
@@ -310,7 +315,9 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             retryObj.put("enabled", true)
             retryObj.put("max_count", 2)
             options.put("retry", retryObj)
-            checkout?.open(activity, options)
+            if (!activity.isFinishing) {
+                checkout?.open(activity, options)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -427,7 +434,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
     }
 
     private fun setUpTitleBar() {
-        binding?.navTvNumberOfItemsInCart?.text= buildString {
+        binding?.navTvNumberOfItemsInCart?.text = buildString {
             append(cartItemCount)
             append(" items")
         }
@@ -435,7 +442,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             finish()
         }
     }
-
 
 
     companion object {
