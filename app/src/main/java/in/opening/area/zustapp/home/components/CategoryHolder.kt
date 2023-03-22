@@ -53,13 +53,58 @@ fun LazyListScope.categoryHolder(dataList: List<HomePageGenericData>?) {
     }
 }
 
-
 @Composable
 private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier
         .height(120.dp)
         .weight(1f)
+        .padding(vertical = 6.dp,
+            horizontal = 8.dp)
+        .clip(RoundedCornerShape(12.dp))
+        .clickable {
+            context.navigateToProductListing(categoryItem.id, categoryItem.name)
+        }
+        .fillMaxWidth()) {
+        val (categoryImage, categoryTitle) = createRefs()
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(categoryItem.imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.medium)
+                .constrainAs(categoryImage) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top, dp_6)
+                    bottom.linkTo(categoryTitle.top)
+                    height = Dimension.fillToConstraints
+                }
+        )
+
+        Text(text = categoryItem.name ?: "",
+            modifier = Modifier.constrainAs(categoryTitle) {
+                start.linkTo(parent.start, dp_8)
+                end.linkTo(parent.end, dp_8)
+                top.linkTo(categoryImage.bottom, dp_8)
+                bottom.linkTo(parent.bottom, dp_8)
+                width = Dimension.fillToConstraints
+            }, style = Typography_Montserrat.body2,
+            textAlign = TextAlign.Center,
+            fontSize = 12.sp,
+            color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black))
+    }
+}
+
+
+@Composable
+ fun SingleCategoryItem(categoryItem: HomePageGenericData) {
+    val context = LocalContext.current
+    ConstraintLayout(modifier = Modifier
+        .height(120.dp)
         .padding(vertical = 6.dp,
             horizontal = 8.dp)
         .clip(RoundedCornerShape(12.dp))

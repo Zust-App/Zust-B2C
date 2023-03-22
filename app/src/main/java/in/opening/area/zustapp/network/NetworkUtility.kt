@@ -1,7 +1,27 @@
 package `in`.opening.area.zustapp.network
 
 class NetworkUtility {
+
     companion object {
+
+        private const val isProd = false
+
+        private fun getCompleteBaseUrl(): String {
+            return if (isProd) {
+                "https://zcapi.zustapp.com/" + "greenboys-api/api/v1"
+            } else {
+                "https://gcapi.grinzy.in/" + "greenboys-api/api/v1"
+            }
+        }
+
+        private fun getPaymentUrl(): String {
+            return if (isProd) {
+                "https://paymentapi.zustapp.com/api/v1"
+            } else {
+                "https://paymentapi.grinzy.in/api/v1"
+            }
+        }
+
         private val baseUrl = getCompleteBaseUrl()
 
         private val paymentBaseUrl = getPaymentUrl()
@@ -33,23 +53,5 @@ class NetworkUtility {
         val HOME_PAGE_V1 = "$baseUrl/products/home-page1"
         val USER_ORDERS = "$baseUrl/orders"
 
-
-        private const val isProd = true
-
-        private fun getCompleteBaseUrl(): String {
-            return if (isProd) {
-                "https://zcapi.zustapp.com/" + "greenboys-api/api/v1"
-            } else {
-                "https://gcapi.grinzy.in/" + "greenboys-api/api/v1"
-            }
-        }
-
-        private fun getPaymentUrl(): String {
-            return if (isProd) {
-                "https://paymentapi.zustapp.com/api/v1"
-            } else {
-                "https://paymentapi.grinzy.in/api/v1"
-            }
-        }
     }
 }

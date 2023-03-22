@@ -56,6 +56,13 @@ fun HomeMainItemContainer(
                     if (homeData.type == "CATEGORY") {
                         homePageSectionTitleUi(homeData.title)
                         categoryHolder(homeData.data)
+//                        item {
+//                            VerticalGrid(columns = 3) {
+//                                homeData.data?.forEach {
+//                                    SingleCategoryItem(it)
+//                                }
+//                            }
+//                        }
                     }
                 }
                 if (!trendingItemList.isNullOrEmpty()) {
@@ -74,5 +81,6 @@ fun HomeMainItemContainer(
         }
     }
 }
+
 
 

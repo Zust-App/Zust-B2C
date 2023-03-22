@@ -15,7 +15,14 @@ fun LazyListScope.trendingProductsUi(
     if (productItems == null) {
         return
     }
-
+//
+//    item {
+//        VerticalGrid(columns = 2) {
+//            productItems.forEach {item->
+//                TrendingProductsSingleItem(item, productItemClick)
+//            }
+//        }
+//    }
     val numberOfRows = ceil(productItems.size.toFloat() / trendingProductsRowCount).toInt()
     for (rowIndex in 0 until numberOfRows) {
         item(key = trendingItemsKey + rowIndex) {
