@@ -10,6 +10,7 @@ import `in`.opening.area.zustapp.home.models.HomePageApiResponse
 import `in`.opening.area.zustapp.login.model.UpdateUserProfileResponse
 import `in`.opening.area.zustapp.login.model.GetOtpResponseModel
 import `in`.opening.area.zustapp.login.model.VerifyOtpResponseModel
+import `in`.opening.area.zustapp.network.NetworkUtility.Companion.UPSELLING_PRODUCTS
 import `in`.opening.area.zustapp.network.requestBody.AuthVerificationBody
 import `in`.opening.area.zustapp.network.requestBody.UserProfileUpdateBody
 import `in`.opening.area.zustapp.orderDetail.models.OrderDetailModel
@@ -24,7 +25,6 @@ import `in`.opening.area.zustapp.product.model.*
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.profile.models.UserProfileResponse
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -32,26 +32,6 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-const val BASE_URL = "https://gcapi.grinzy.in/"
-const val PROD_BASE_URL = "https://zcapi.zustapp.com/"
-const val PROD_PAYMENT_URL = "https://paymentapi.zustapp.com/api/v1"
-const val END_POINT_REGISTER = "/auth/register-send-otp"
-const val END_POINT_AUTH_VERIFICATION = "/auth/register-verify-otp"
-const val END_POINT_UPDATE_PROFILE = "/users/update-profile"
-const val END_POINT_SED_FCM = "/users/save-fcm-token"
-const val COMPLETE_BASE_URL = BASE_URL + "greenboys-api/api/v1"
-const val TRENDING_PRODUCTS = "$COMPLETE_BASE_URL/products/trend-product"
-const val SUB_CATEGORY = "/products/sub-category"
-const val PRODUCT_LIST_BY_CATEGORY = "/products/category-by-product"
-const val ORDERS_CART = "/orders/cart"
-const val COUPONS = "/coupons/user-coupons"
-const val PRODUCT_SEARCH = "/products/search"
-const val PAYMENT_METHOD = "/orders/payment-methods"
-const val CREATE_PAYMENT = "/orders/create-payment"
-const val VERIFY_PAYMENT = "/payment/verify"
-const val TIME_SLOT = "/orders/time-slot"
-const val APPLY_COUPON = "/coupons/apply-coupon"
-const val UPSELLING_PRODUCTS = "/products/suggestions/upselling-products"
 
 @Singleton
 class ApiRequestManager @Inject constructor() {
@@ -63,15 +43,14 @@ class ApiRequestManager @Inject constructor() {
     lateinit var sharedPrefManager: SharedPrefManager
 
     suspend inline fun makeLoginRequestForGetOtp(mobileNumber: String) = universalApiRequestManager {
-        Log.e("url", "$COMPLETE_BASE_URL$END_POINT_REGISTER")
-        ktorHttpClient.get<GetOtpResponseModel>("$COMPLETE_BASE_URL$END_POINT_REGISTER") {
+        ktorHttpClient.get<GetOtpResponseModel>(NetworkUtility.END_POINT_REGISTER) {
             parameter("phoneNo", mobileNumber)
         }
     }
 
     suspend inline fun postAuthVerification(mobileNumber: String, otp: String) = universalApiRequestManager {
         val authVerificationBody = AuthVerificationBody(deviceId = "123", otp = otp, phoneNo = mobileNumber)
-        ktorHttpClient.post<VerifyOtpResponseModel>("$COMPLETE_BASE_URL$END_POINT_AUTH_VERIFICATION") {
+        ktorHttpClient.post<VerifyOtpResponseModel>(NetworkUtility.END_POINT_AUTH_VERIFICATION) {
             contentType(ContentType.Application.Json)
             body = authVerificationBody
         }
@@ -81,7 +60,7 @@ class ApiRequestManager @Inject constructor() {
         val userProfileUpdateBody = UserProfileUpdateBody(name = userName, userEmail = userEmail, referCode = referralCode)
         val token = sharedPrefManager.getUserAuthToken()
 
-        ktorHttpClient.put<UpdateUserProfileResponse>("$COMPLETE_BASE_URL$END_POINT_UPDATE_PROFILE") {
+        ktorHttpClient.put<UpdateUserProfileResponse>(NetworkUtility.END_POINT_UPDATE_PROFILE) {
             headers {
                 this.append(Authorization, "Bearer $token")
             }
@@ -95,7 +74,7 @@ class ApiRequestManager @Inject constructor() {
         val token = sharedPrefManager.getUserAuthToken()
         if (!token.isNullOrEmpty()) {
             val fcmReqBodyModel = FcmReqBodyModel(fcmToken = fcmToken)
-            ktorHttpClient.put<String>("$COMPLETE_BASE_URL$END_POINT_SED_FCM") {
+            ktorHttpClient.put<String>(NetworkUtility.END_POINT_SED_FCM) {
                 try {
                     headers {
                         this.append(Authorization, "Bearer $token")
@@ -114,8 +93,7 @@ class ApiRequestManager @Inject constructor() {
 
     private suspend fun getHomePageDataFromServer(lat: Double, lng: Double) = universalApiRequestManager {
         val token = sharedPrefManager.getUserAuthToken()
-        val url = "$COMPLETE_BASE_URL/products/home-page1"
-        val value = ktorHttpClient.get<HomePageApiResponse>(url) {
+        val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE_V1) {
             headers {
                 this.append(Authorization, "Bearer $token")
             }
@@ -128,7 +106,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     private suspend fun getTrendingProducts() = universalApiRequestManager {
-        val value = ktorHttpClient.get<ProductApiResponse>(TRENDING_PRODUCTS) {
+        val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.TRENDING_PRODUCTS) {
 
         }
         value
@@ -137,7 +115,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getSubCategoryFromServer(categoryId: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<SubCategoryApiResponse>("$COMPLETE_BASE_URL$SUB_CATEGORY") {
+        ktorHttpClient.get<SubCategoryApiResponse>(NetworkUtility.SUB_CATEGORY) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -148,7 +126,7 @@ class ApiRequestManager @Inject constructor() {
     suspend fun productListFromServer(categoryId: Int) = flow {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
-            val value = ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL$PRODUCT_LIST_BY_CATEGORY") {
+            val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.PRODUCT_LIST_BY_CATEGORY) {
                 headers {
                     this.append(Authorization, "Bearer $authToken")
                 }
@@ -164,7 +142,7 @@ class ApiRequestManager @Inject constructor() {
     //TODO()
     suspend fun createCartWithServer(orderRequestBody: CreateCartReqModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<CreateCartResponseModel>("$COMPLETE_BASE_URL$ORDERS_CART") {
+        ktorHttpClient.post<CreateCartResponseModel>(NetworkUtility.ORDERS_CART) {
             headers(fun HeadersBuilder.() {
                 this.append(Authorization, "Bearer $authToken")
             })
@@ -175,7 +153,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getCouponsFromServer() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<CouponModel>("$COMPLETE_BASE_URL$COUPONS") {
+        ktorHttpClient.get<CouponModel>(NetworkUtility.COUPONS) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -185,7 +163,7 @@ class ApiRequestManager @Inject constructor() {
     suspend fun productSearchApi(searchText: String) = flow {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
-            val value = ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL$PRODUCT_SEARCH") {
+            val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.PRODUCT_SEARCH) {
                 parameter("merchantId", 1)
                 parameter("searchText", searchText)
                 headers {
@@ -200,7 +178,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getPaymentMethods() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<PaymentMethodResponseModel>("$COMPLETE_BASE_URL$PAYMENT_METHOD") {
+        ktorHttpClient.get<PaymentMethodResponseModel>(NetworkUtility.PAYMENT_METHOD) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -209,7 +187,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun invokePaymentToGetId(createPayment: CreatePaymentReqBodyModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<CreatePaymentResponseModel>("$COMPLETE_BASE_URL$CREATE_PAYMENT") {
+        ktorHttpClient.post<CreatePaymentResponseModel>(NetworkUtility.CREATE_PAYMENT) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -218,7 +196,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun verifyPaymentWithServer(paymentBody: Payment) = universalApiRequestManager {
-        ktorHttpClient.post<String>("$PROD_PAYMENT_URL$VERIFY_PAYMENT") {
+        ktorHttpClient.post<String>(NetworkUtility.VERIFY_PAYMENT) {
             headers {
                 this.append(Authorization, "Basic e7rc0cb7ffdbYlHQlvgUAw==")
             }
@@ -228,7 +206,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getAvailableTimeSlots() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<AvailTimeSlotsResponse>("$COMPLETE_BASE_URL$TIME_SLOT") {
+        ktorHttpClient.get<AvailTimeSlotsResponse>(NetworkUtility.TIME_SLOT) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -237,7 +215,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun validateCoupon(couponBody: ApplyCouponReqBody) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<AppliedCouponResponse>("$COMPLETE_BASE_URL$APPLY_COUPON") {
+        ktorHttpClient.post<AppliedCouponResponse>(NetworkUtility.APPLY_COUPON) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -247,7 +225,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getUserBookings(pageNumber: Int): UserOrderHistoryModel {
         val authToken = sharedPrefManager.getUserAuthToken()
-        return ktorHttpClient.get("$COMPLETE_BASE_URL/orders") {
+        return ktorHttpClient.get(NetworkUtility.USER_ORDERS) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -258,7 +236,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getOrderDetails(orderId: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<OrderDetailModel>("$COMPLETE_BASE_URL/orders/$orderId") {
+        ktorHttpClient.get<OrderDetailModel>(NetworkUtility.USER_ORDERS+"/$orderId") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -267,7 +245,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getAllAddress() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<GetUserAddressModel>("$COMPLETE_BASE_URL/addresses") {
+        ktorHttpClient.get<GetUserAddressModel>(NetworkUtility.ADDRESS) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -276,7 +254,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun saveUserAddress(saveAddressPostModel: SaveAddressPostModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<SaveAddressPostResponse>("$COMPLETE_BASE_URL/addresses") {
+        ktorHttpClient.post<SaveAddressPostResponse>(NetworkUtility.ADDRESS) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -286,7 +264,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun deleteAddress(id: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.delete<String>("$COMPLETE_BASE_URL/addresses/$id") {
+        ktorHttpClient.delete<String>(NetworkUtility.ADDRESS + "/$id") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -299,7 +277,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun checkIsServiceAvail(lat: Double, lng: Double) = universalApiRequestManager {
-        ktorHttpClient.get<String>("$COMPLETE_BASE_URL/dashboard/warehouses/verify-address") {
+        ktorHttpClient.get<String>(NetworkUtility.VERIFY_DELIVERABLE_ADDRESS) {
             parameter("latitude", lat)
             parameter("longitude", lng)
         }
@@ -307,7 +285,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getUserProfileDetails() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<UserProfileResponse>("$COMPLETE_BASE_URL/users/profile-page") {
+        ktorHttpClient.get<UserProfileResponse>(NetworkUtility.USER_PROFILE_PAGE) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -316,7 +294,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun sendSuggestProductResponse(suggestProductReqModel: SuggestProductReqModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<String>("$COMPLETE_BASE_URL/products/suggest-product") {
+        ktorHttpClient.post<String>(NetworkUtility.SUGGEST_PRODUCT) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -326,7 +304,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getLatestOrderWhichNotDelivered() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<OrderDetailModel>("$COMPLETE_BASE_URL/orders/delivery") {
+        ktorHttpClient.get<OrderDetailModel>(NetworkUtility.ORDER_HISTORY) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -335,7 +313,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun syncUserCartWithServerAndLock(lockOrderSummary: LockOrderSummaryModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<LockOrderResponseModel>("$COMPLETE_BASE_URL/orders/cart") {
+        ktorHttpClient.post<LockOrderResponseModel>(NetworkUtility.USER_CART) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
@@ -362,7 +340,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun getAllCategory() = universalApiRequestManager {
-        ktorHttpClient.get<AllCategoryResponse>("$COMPLETE_BASE_URL/dashboard/categories/allcategory") {
+        ktorHttpClient.get<AllCategoryResponse>(NetworkUtility.ALL_CATEGORY) {
 
         }
     }
@@ -373,19 +351,19 @@ class ApiRequestManager @Inject constructor() {
         lng: Double? = null,
     ) = universalApiRequestManager {
         val deliverablePinCodeModel = DeliverablePinCodeModel(inputPinCode, lat, lng)
-        ktorHttpClient.post<DeliverableAddressResponse>("$COMPLETE_BASE_URL/addresses/checkdeliverable") {
+        ktorHttpClient.post<DeliverableAddressResponse>(NetworkUtility.CHECK_DELIVERABLE_ADDRESS) {
             body = deliverablePinCodeModel
         }
     }
 
     suspend fun getUpsellingProducts(params: String) = universalApiRequestManager {
-        ktorHttpClient.get<ProductApiResponse>("$COMPLETE_BASE_URL$UPSELLING_PRODUCTS") {
+        ktorHttpClient.get<ProductApiResponse>(UPSELLING_PRODUCTS) {
             parameter("items", params)
         }
     }
 
     suspend fun getMetaData() = universalApiRequestManager {
-        ktorHttpClient.get<String>("$COMPLETE_BASE_URL/greenboys-api/api/v1/metadata") {
+        ktorHttpClient.get<String>(NetworkUtility.META_DATA) {
 
         }
     }

@@ -26,6 +26,7 @@
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_SMS"/>
 
     <application
         android:name=".MyApplication"
@@ -33,10 +34,10 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/zust_app_logo"
+        android:icon="@mipmap/zust_app_square_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/zust_app_circle_logo"
+        android:roundIcon="@mipmap/zust_app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.CustomSplashScreenTheme"
         android:usesCleartextTraffic="true"

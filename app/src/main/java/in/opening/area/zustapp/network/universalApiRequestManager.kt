@@ -9,7 +9,6 @@ import java.io.IOException
 suspend fun <T> universalApiRequestManager(apiCall: suspend () -> T): ResultWrapper<T> {
     return withContext(Dispatchers.IO) {
         try {
-            System.out.println("name-->" + Thread.currentThread().name)
             ResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {

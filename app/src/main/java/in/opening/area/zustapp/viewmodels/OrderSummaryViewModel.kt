@@ -230,7 +230,7 @@ class OrderSummaryViewModel @Inject constructor(
 
 }
 
-interface DeliveryPartnerTipUiState {
+sealed interface DeliveryPartnerTipUiState {
     val isLoading: Boolean
 
     data class Success(

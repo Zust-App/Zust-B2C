@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-const val halfMinutes = (10 * 1000L)
+const val halfMinutes = (30 * 1000L)
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) : ViewModel() {

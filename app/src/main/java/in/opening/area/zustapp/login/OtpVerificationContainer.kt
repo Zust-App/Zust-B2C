@@ -163,7 +163,8 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                }, fontWeight = FontWeight.W500, style = Typography_Montserrat.subtitle1, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
+                }, fontWeight = FontWeight.W500,
+                    style = Typography_Montserrat.subtitle1, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
             } else {
                 Text(text = "Resend OTP", modifier = Modifier
                     .constrainAs(resendTimer) {
@@ -173,7 +174,9 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     }
                     .clickable {
                         loginViewModel.makeResendOtp(user.mobileNum)
-                    }, fontWeight = FontWeight.W500, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
+                    }, fontWeight = FontWeight.W500,
+                    color = colorResource(id = R.color.new_material_primary),
+                    fontSize = 12.sp,style = Typography_Montserrat.subtitle1)
             }
         }
 

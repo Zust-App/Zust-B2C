@@ -11,4 +11,5 @@ class OnBoardingViewModel @Inject constructor(private val sharedPrefManager: Sha
     internal fun doesOnBoardingShown() = sharedPrefManager.doesOnBoardingShown()
     internal fun updateOnBoardingShown(isShown:Boolean) = sharedPrefManager.saveOnBoardingShown(isShown)
 
+//    internal fun updateToken()=sharedPrefManager.saveAuthToken("ama")
 }

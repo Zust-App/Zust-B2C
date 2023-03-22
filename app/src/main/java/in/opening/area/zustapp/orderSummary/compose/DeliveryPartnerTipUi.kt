@@ -50,7 +50,7 @@ fun DeliveryPartnerTipUi(orderSummaryViewModel: OrderSummaryViewModel) {
                         start.linkTo(parent.start)
                         bottom.linkTo(parent.bottom)
                     })
-            Image(painter = painterResource(id = R.drawable.zust_app_logo),
+            Image(painter = painterResource(id = R.drawable.zust_white_text),
                 contentDescription = "fresh", modifier = Modifier
                     .width(95.dp)
                     .height(45.dp)

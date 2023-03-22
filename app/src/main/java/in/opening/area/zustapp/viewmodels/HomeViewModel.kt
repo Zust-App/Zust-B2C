@@ -84,7 +84,7 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = homePageResponse.error?.error) }
             }
             is ResultWrapper.NetworkError -> {
-                homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Something went wrong") }
+                homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Something went wrong",) }
             }
             is ResultWrapper.UserTokenNotFound -> {
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }

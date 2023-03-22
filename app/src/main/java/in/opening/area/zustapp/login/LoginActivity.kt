@@ -3,13 +3,17 @@ package `in`.opening.area.zustapp.login
 import `in`.opening.area.zustapp.HomeLandingActivity
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import `in`.opening.area.zustapp.databinding.ActivityLoginBinding
+import `in`.opening.area.zustapp.services.SMSReceiver
+import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,6 +22,9 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
     private var onBoardingFragmentManager: OnBoardingFragmentManager? = null
     private var binding: ActivityLoginBinding? = null
     private var currentFragmentTag = LoginNav.MOVE_TO_PHONE
+
+    private var intentFilter: IntentFilter? = null
+    private var smsReceiver: SMSReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +40,9 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
                 action(LoginNav.MOVE_TO_PROFILE)
             }
         }
+
+        initSmsListener()
+        initializeSmsBroadcast()
     }
 
     private fun setUpFragmentManager() {
@@ -85,5 +95,36 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
             e.printStackTrace()
         }
     }
+
+    private fun initializeSmsBroadcast() {
+        intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+        smsReceiver = SMSReceiver()
+        smsReceiver?.setOTPListener(object : SMSReceiver.OTPReceiveListener {
+            override fun onOTPReceived(otp: String?) {
+                showToast(this@LoginActivity, otp)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(smsReceiver, intentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(smsReceiver)
+    }
+
+    private fun initSmsListener() {
+        val client = SmsRetriever.getClient(this)
+        client.startSmsRetriever()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        smsReceiver = null
+    }
+
 }
 

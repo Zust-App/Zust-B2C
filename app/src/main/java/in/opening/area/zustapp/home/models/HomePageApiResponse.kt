@@ -5,7 +5,7 @@ import `in`.opening.area.zustapp.utility.UserCustomError
 data class HomePageApiResponse(
     val `data`: HomeData? = null,
     val errors: List<UserCustomError>? = arrayListOf(),
-    val message: String,
+    val message: String
 )
 
 data class HomeData(

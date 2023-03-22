@@ -113,7 +113,7 @@ class CustomFcmService : FirebaseMessagingService() {
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(this, notificationId.toString())
-                    .setSmallIcon(R.drawable.zust_app_logo)
+                    .setSmallIcon(R.mipmap.zust_app_logo)
                     .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)

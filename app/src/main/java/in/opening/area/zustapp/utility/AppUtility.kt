@@ -3,13 +3,11 @@ package `in`.opening.area.zustapp.utility
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.MyApplication
 import `in`.opening.area.zustapp.offline.OfflineActivity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.text.Html
 import android.widget.Toast
 import androidx.compose.material.AlertDialog
@@ -128,6 +126,22 @@ class AppUtility {
             }
             val intent = Intent(context, OfflineActivity::class.java)
             context.startActivity(intent)
+        }
+
+        fun openPlayStore(context: Context?) {
+            if (context == null) {
+                return
+            }
+            val appPackageName = getPackageName() // replace with your app package name
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            try {
+                context.startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                // Play Store app is not installed, open the link in a browser
+                intent.data = Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
+                context.startActivity(intent)
+            }
         }
     }
 }

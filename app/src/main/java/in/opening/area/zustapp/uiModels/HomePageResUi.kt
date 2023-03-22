@@ -9,7 +9,7 @@ sealed interface HomePageResUi {
 
     data class ErrorUi(override val isLoading: Boolean,
                        val errorMsg: String? = "",
-                       val errors: List<UserCustomError> = arrayListOf()) : HomePageResUi
+                       val errors: List<UserCustomError> = arrayListOf(),val errorCode:String?=null) : HomePageResUi
 
     data class HomeSuccess(val homePageGrids: HomeData?=null,
                            val trendingProducts: ProductItemResponse?=null,
