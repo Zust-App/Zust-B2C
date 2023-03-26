@@ -136,6 +136,9 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
             AppUtility.showToast(this, "Something went wrong")
             return
         }
+        val itemCount = data.items.sumOf {
+            it.numberOfItem
+        }
         orderSummaryViewModel.lockedCartUiState.update { LockOrderCartUi.InitialUi(false) }
         val reqData = PaymentActivityReqData()
         reqData.apply {
@@ -150,7 +153,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
         }
         val paymentIntent = Intent(this, PaymentActivity::class.java)
         paymentIntent.putExtra(PAYMENT_MODEL_KEY, reqData)
-        paymentIntent.putExtra(TOTAL_ITEMS_IN_CART,data.items.size)
+        paymentIntent.putExtra(TOTAL_ITEMS_IN_CART,itemCount)
         startActivity(paymentIntent)
     }
 

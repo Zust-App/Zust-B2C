@@ -64,7 +64,7 @@ fun OrderedItemSingleUnit(item: Item) {
         Text(text = buildString {
             append(ProductUtils.getNumberDisplayValue(item.quantity))
             append(" ")
-            append(item.unit)
+            append(item.unit.lowercase())
         }, modifier = Modifier.constrainAs(productQuantity) {
             top.linkTo(productName.bottom, dp_8)
             start.linkTo(productImage.end, dp_12)

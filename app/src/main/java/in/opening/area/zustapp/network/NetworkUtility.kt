@@ -4,7 +4,7 @@ class NetworkUtility {
 
     companion object {
 
-        private const val isProd = false
+        private const val isProd = true
 
         private fun getCompleteBaseUrl(): String {
             return if (isProd) {

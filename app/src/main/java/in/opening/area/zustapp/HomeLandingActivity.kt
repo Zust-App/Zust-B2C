@@ -1,7 +1,5 @@
 package `in`.opening.area.zustapp
 
-import `in`.opening.area.zustapp.R
-
 import `in`.opening.area.zustapp.address.AddressAddSelectActivity
 import `in`.opening.area.zustapp.address.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
@@ -9,6 +7,7 @@ import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.compose.CustomTopBar
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
 import `in`.opening.area.zustapp.fcm.CustomFcmService
+import `in`.opening.area.zustapp.helper.InAppUpdateManager
 import `in`.opening.area.zustapp.helper.SelectLanguageFragment
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.home.HomeMainContainer
@@ -50,6 +49,7 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
 
     private val homeViewModel: HomeViewModel by viewModels()
     private var backPressedCount: Int = 0
+    private var inAppUpdateManager: InAppUpdateManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,8 +90,8 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
                 AppUtility.showNoInternetActivity(this)
             }
         }
-
         handleDeepLinkIntent(intent = intent)
+        inAppUpdateManager = InAppUpdateManager(this, inAppUpdateCallback);
     }
 
     private fun initialDataManagement() {
@@ -228,6 +228,7 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
     override fun onResume() {
         super.onResume()
         backPressedCount = 0
+        inAppUpdateManager?.onResume()
     }
 
     override fun onBackPressed() {
@@ -244,6 +245,11 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         backPressedCount = 0
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        inAppUpdateManager?.onDestroy()
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         handleDeepLinkIntent(intent)
@@ -255,6 +261,18 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         }
         if (intent.hasExtra(CustomFcmService.DEEP_LINK_DATA)) {
             AppDeepLinkHandler.handleDeepLink(intent, this)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        inAppUpdateManager?.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private val inAppUpdateCallback = fun() {
+        AppUtility.showAppUpdateDialog(context = this, false) {
+            inAppUpdateManager?.completeUpdate()
         }
     }
 }

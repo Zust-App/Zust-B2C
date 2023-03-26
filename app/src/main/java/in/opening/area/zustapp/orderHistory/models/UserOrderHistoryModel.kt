@@ -19,7 +19,7 @@ data class OrderHistoryData(
 
 @Keep
 data class OrderHistoryItem(
-    val dateAndTime: String,
+    val orderedDateAndTime: String,
     val itemText: String,
     val orderId: Int,
     val orderStatusType: String,

@@ -188,6 +188,10 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
     } else if (mobileNumber.length != 10) {
         Toast.makeText(context, INVALID_MOBILE_NUM, Toast.LENGTH_SHORT).show()
     } else {
+        if (loginViewModel.isGetOtpRequestOnGoing()) {
+            Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show()
+            return
+        }
         loginViewModel.userLoginModelFlow.update { UserLoginModel(otp = "", userName = "", userEmail = "", mobileNum = mobileNumber) }
         loginViewModel.makeLoginRequestForGetOtp(mobileNumber)
     }

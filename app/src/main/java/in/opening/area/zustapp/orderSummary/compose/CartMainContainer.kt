@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: OrderItemsClickListeners, paddingValue: PaddingValues) {
     val cartItemData by orderSummaryViewModel.addedCartUiState.collectAsStateLifecycleAware(initial = OrderSummaryUi.InitialUi(false))
 
-
     val context = LocalContext.current
     var isLoading by remember {
         mutableStateOf(false)
@@ -39,7 +38,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
         .padding(horizontal = 20.dp)) {
         when (val cartResponse = cartItemData) {
             is OrderSummaryUi.SummarySuccess -> {
-                if (cartResponse.data.productsAlreadyInCart.isNotEmpty()) {
+                if (cartResponse.data.productsAlreadyInCart.isNotEmpty() || cartResponse.data.totalItemCount>0) {
                     item {
                         ExpectedDeliveryTimeTag(orderSummaryViewModel)
                         Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +61,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
                             }, {
                                 listeners.didTapOnDecreaseProductItemAmount(it)
                             }) {
-                               context.startProductDetailPage(it)
+                                context.startProductDetailPage(it)
                             }
                             if (index < cartResponse.data.productsAlreadyInCart.lastIndex) {
                                 Divider(modifier = Modifier
@@ -90,11 +89,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
                         Spacer(modifier = Modifier.height(24.dp))
                         CartBillingDetails(orderSummaryViewModel)
                     }
-
-                    item {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        DeliveryPartnerTipUi(orderSummaryViewModel)
-                    }
+                    //removed delivery partner tip ui
                     item {
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(text = "Cancellation Policy",
@@ -112,3 +107,8 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
         }
     }
 }
+
+//                    item {
+//                        Spacer(modifier = Modifier.height(24.dp))
+//                        DeliveryPartnerTipUi(orderSummaryViewModel)
+//                    }

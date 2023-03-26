@@ -175,6 +175,10 @@ private fun updateUserProfile(
             } else {
                 referralCode
             }
+            if (loginViewModel.userProfileUiState.value.isLoading) {
+                AppUtility.showToast(context, "Please wait")
+                return
+            }
             loginViewModel.updateUserProfile(userName = userName, userEmail = userEmailId, referralCodeByUser)
         }
 

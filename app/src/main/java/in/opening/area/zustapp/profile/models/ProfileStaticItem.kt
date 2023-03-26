@@ -38,6 +38,8 @@ fun getProfileStaticItems(): ArrayList<ProfileStaticItem> {
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Privacy Policy", iconRes = R.drawable.privacy_policy, eventCode = ProfileActionCallback.PRIVACY_POLICY))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
+    staticItems.add(ProfileStaticItem("About us", iconRes = R.drawable.ic_outline_info_24, eventCode = ProfileActionCallback.ABOUT_US))
+    staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Logout", iconRes = R.drawable.logout_icon, eventCode = ProfileActionCallback.LOGOUT))
 
     return staticItems

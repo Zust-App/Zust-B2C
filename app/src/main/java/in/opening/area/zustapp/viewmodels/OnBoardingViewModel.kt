@@ -9,7 +9,15 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(private val sharedPrefManager: SharedPrefManager) : ViewModel() {
 
     internal fun doesOnBoardingShown() = sharedPrefManager.doesOnBoardingShown()
-    internal fun updateOnBoardingShown(isShown:Boolean) = sharedPrefManager.saveOnBoardingShown(isShown)
+    internal fun updateOnBoardingShown(isShown: Boolean) = sharedPrefManager.saveOnBoardingShown(isShown)
 
-//    internal fun updateToken()=sharedPrefManager.saveAuthToken("ama")
+    fun isProfileCreated(): Boolean {
+        return sharedPrefManager.checkIsProfileCreate()
+    }
+
+    fun isAuthTokenFound(): Boolean {
+        return !sharedPrefManager.getUserAuthToken().isNullOrEmpty()
+    }
+
+
 }

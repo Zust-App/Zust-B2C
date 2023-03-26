@@ -3,7 +3,7 @@ package `in`.opening.area.zustapp.orderSummary.model
 import com.google.gson.annotations.SerializedName
 
 data class LockOrderSummaryModel(
-    val addressId: Int = 8,
+    val addressId: Int = -1,
     @SerializedName("items")
     val lockOrderSummaryItems: List<LockOrderSummaryItem> = arrayListOf(),
     val merchantId: Int = 0,

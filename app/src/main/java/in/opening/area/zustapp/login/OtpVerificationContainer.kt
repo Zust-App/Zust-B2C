@@ -57,6 +57,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                 AppUtility.showToast(context, "Otp send to your mobile number")
                 loginViewModel.startResendOtpTimer()
             } else {
+                loginViewModel.resendOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
@@ -101,6 +102,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
             } else {
                 AppUtility.showToast(context, response.errors?.getTextMsg())
             }
+            loginViewModel.verifyOtpUiState.update { VerifyOtpUi.InitialUi(false) }
         }
         is VerifyOtpUi.InitialUi -> {
             canShowProgressbar = response.isLoading
@@ -108,7 +110,8 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
     }
 
     Column(modifier = Modifier
-        .fillMaxHeight().verticalScroll(rememberScrollState())
+        .fillMaxHeight()
+        .verticalScroll(rememberScrollState())
         .background(color = colorResource(id = R.color.white))
         .padding(horizontal = 20.dp)
         .fillMaxWidth()) {
@@ -173,10 +176,14 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                         bottom.linkTo(parent.bottom)
                     }
                     .clickable {
-                        loginViewModel.makeResendOtp(user.mobileNum)
+                        if (!loginViewModel.resendOtpUiState.value.isLoading) {
+                            loginViewModel.makeResendOtp(user.mobileNum)
+                        } else {
+                            AppUtility.showToast(context, "Please wait")
+                        }
                     }, fontWeight = FontWeight.W500,
                     color = colorResource(id = R.color.new_material_primary),
-                    fontSize = 12.sp,style = Typography_Montserrat.subtitle1)
+                    fontSize = 12.sp, style = Typography_Montserrat.subtitle1)
             }
         }
 
@@ -227,6 +234,10 @@ fun verificationOfUserOtp(enteredOtpText: String?, loginViewModel: LoginViewMode
         val mobileNumber = loginViewModel?.userLoginModelFlow?.value?.mobileNum
         if (mobileNumber != null) {
             with(loginViewModel) {
+                if (verifyOtpUiState.value.isLoading) {
+                    AppUtility.run { showToast(context, "Please wait") }
+                    return
+                }
                 loginVerifyUserOTP(mobileNumber, enteredOtpText)
             }
         }

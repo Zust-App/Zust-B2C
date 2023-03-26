@@ -18,8 +18,8 @@ android {
         applicationId "in.opening.area.zustapp"
         minSdk 23
         targetSdk 33
-        versionCode 5
-        versionName "2023.3.10"
+        versionCode 7
+        versionName "2023.3.26"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -34,8 +34,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
-            shrinkResources true
+//            minifyEnabled true
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

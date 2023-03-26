@@ -175,7 +175,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                 width = Dimension.fillToConstraints
             }, fontFamily = montserrat,
             fontWeight = FontWeight.W600,
-            fontSize = 10.sp)
+            fontSize = 12.sp)
 
         Text(text = stringResource(id = string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.price), modifier = Modifier.constrainAs(priceText) {
             start.linkTo(parent.start, dp_10)
@@ -286,7 +286,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                 }, color = Color.White,
                 fontSize = 10.sp,
                 fontFamily = montserrat,
-                fontWeight = FontWeight.W500)
+                fontWeight = FontWeight.W600)
         }
     }
 

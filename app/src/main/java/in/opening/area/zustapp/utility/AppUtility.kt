@@ -1,8 +1,9 @@
 package `in`.opening.area.zustapp.utility
 
-import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.MyApplication
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.offline.OfflineActivity
+import android.app.AlertDialog
 import android.content.*
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -16,6 +17,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 
 
 class AppUtility {
@@ -52,7 +54,6 @@ class AppUtility {
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
 
-        @JvmStatic
         @Composable
         fun OfflineDialog(confirmButtonClick: () -> Unit) {
             AlertDialog(
@@ -141,6 +142,59 @@ class AppUtility {
                 // Play Store app is not installed, open the link in a browser
                 intent.data = Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
                 context.startActivity(intent)
+            }
+        }
+
+        fun showAppUpdateDialog(context: Context?, canExecutePlayStore: Boolean, positiveCallback: () -> Unit) {
+            if (context == null) {
+                return
+            }
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+            builder.setTitle("App update")
+            builder.setMessage("A new app update is available. Please use for better experience")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+                if (canExecutePlayStore) {
+                    openPlayStore(context)
+                } else {
+                    positiveCallback.invoke()
+                }
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+
+        fun openEmailIntent(context: Context?, emailId: String) {
+            try {
+                if (context == null) {
+                    return
+                }
+                val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", emailId, null))
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "This is my subject text")
+                context.startActivity(Intent.createChooser(emailIntent, "Email to us"))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun openCallIntent(context: Context?, phoneNumber: String) {
+            try {
+                if (context == null) {
+                    return
+                }
+                val phone = if (phoneNumber.contains("+91")) {
+                    phoneNumber
+                } else {
+                    "+91$phoneNumber"
+                }
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

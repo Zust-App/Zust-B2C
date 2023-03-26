@@ -109,7 +109,6 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                         NoProductFoundErrorPage(layoutScope = this, topReference = searchSection) {
                             showSuggestProductSheet()
                         }
-                        AppUtility.showToast(context, "No product found")
                     } else {
                         if (!data.data.productItems.isNullOrEmpty()) {
                             LazyColumn(modifier = modifier

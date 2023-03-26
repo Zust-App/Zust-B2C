@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.onboarding
 
+import `in`.opening.area.zustapp.HomeLandingActivity
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.onboarding.compose.LoginClick
 import `in`.opening.area.zustapp.onboarding.compose.OnBoardingContainer
@@ -23,7 +24,7 @@ class OnBoardingActivity : AppCompatActivity() {
         setContent {
             val doesOnBoardingShown = viewModel.doesOnBoardingShown()
             if (doesOnBoardingShown) {
-                proceedToLogin()
+                checkUserLoginOrNot()
             } else {
                 OnBoardingContainer {
                     handleClickAction(it)
@@ -43,5 +44,23 @@ class OnBoardingActivity : AppCompatActivity() {
         val loginActivity = Intent(this, LoginActivity::class.java)
         startActivity(loginActivity)
         finish()
+    }
+
+    private fun proceedToHomePage(){
+        val loginActivity = Intent(this, HomeLandingActivity::class.java)
+        startActivity(loginActivity)
+        finish()
+    }
+
+    private fun checkUserLoginOrNot() {
+        if (viewModel.isAuthTokenFound()) {
+            if (viewModel.isProfileCreated()) {
+                proceedToHomePage()
+            }else{
+                proceedToLogin()
+            }
+        }else{
+            proceedToLogin()
+        }
     }
 }

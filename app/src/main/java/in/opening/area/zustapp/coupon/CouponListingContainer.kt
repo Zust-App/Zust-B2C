@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.coupon
 
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.uiModels.CouponListUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.CouponListingViewModel
@@ -10,27 +11,40 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
-fun CouponListingContainer(viewModel: CouponListingViewModel,
-                           modifier: Modifier,couponItemClickListener: CouponItemClickListener) {
+fun CouponListingContainer(
+    viewModel: CouponListingViewModel,
+    modifier: Modifier, couponItemClickListener: CouponItemClickListener,
+) {
     val couponResponse = viewModel.couponListUiState.collectAsState(initial = CouponListUi.InitialUi(isLoading = true))
     val context: Context = LocalContext.current
 
     val response = couponResponse.value
     when (response) {
         is CouponListUi.CouponSuccess -> {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = modifier.fillMaxWidth()
-                    .padding(horizontal = 12.dp)) {
-                items(response.data) { item ->
-                    CouponItemView(item, Modifier,couponItemClickListener)
+            if (response.data.isEmpty()) {
+                Text(text = "No coupon available right now",
+                    style = Typography_Montserrat.body2,
+                    color = colorResource(id = `in`.opening.area.zustapp.R.color.light_black), modifier = modifier
+                        .fillMaxWidth(), textAlign = TextAlign.Center)
+            } else {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)) {
+                    items(response.data) { item ->
+                        CouponItemView(item, Modifier, couponItemClickListener)
+                    }
                 }
             }
         }

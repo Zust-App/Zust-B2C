@@ -27,6 +27,8 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:name=".MyApplication"
@@ -158,6 +160,7 @@
         <activity
             android:name=".search.SearchProductActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize|adjustPan"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"

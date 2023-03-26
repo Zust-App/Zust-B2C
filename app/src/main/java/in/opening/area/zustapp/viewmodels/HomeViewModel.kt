@@ -137,7 +137,8 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
         val orderBodyRequest = addToCartList.map {
             it.convertProductToCreateOrder()
         }
-        addToCartFlow.tryEmit(CreateCartReqModel(1, priceAndTotalItemCount.first, orderBodyRequest, priceAndTotalItemCount.second))
+        addToCartFlow.tryEmit(CreateCartReqModel(1, priceAndTotalItemCount.first,
+            orderBodyRequest, priceAndTotalItemCount.second))
     }
 
     internal fun saveLatestAddress(address: Address) = viewModelScope.launch {

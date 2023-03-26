@@ -139,14 +139,14 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    //TODO()
+
     suspend fun createCartWithServer(orderRequestBody: CreateCartReqModel) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.post<CreateCartResponseModel>(NetworkUtility.ORDERS_CART) {
             headers(fun HeadersBuilder.() {
                 this.append(Authorization, "Bearer $authToken")
             })
-            orderRequestBody.addressId = 8
+            orderRequestBody.addressId = sharedPrefManager.getUserAddress()?.id ?: -1
             body = orderRequestBody
         }
     }
@@ -236,7 +236,7 @@ class ApiRequestManager @Inject constructor() {
 
     suspend fun getOrderDetails(orderId: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.get<OrderDetailModel>(NetworkUtility.USER_ORDERS+"/$orderId") {
+        ktorHttpClient.get<OrderDetailModel>(NetworkUtility.USER_ORDERS + "/$orderId") {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }

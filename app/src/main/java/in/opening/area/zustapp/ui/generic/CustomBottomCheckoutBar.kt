@@ -12,9 +12,13 @@ import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryNetworkVM
 import android.content.Context
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,13 +34,17 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModel
 
-
+// var isBottomAppBarVisible by remember {
+//        mutableStateOf(false)
+//    }
+//    val bottomAppBarOffset by animateFloatAsState(targetValue = if (isBottomAppBarVisible) 0f else 50f)
 @Composable
 fun CustomBottomBarView(
     viewModel: ViewModel, type: VALUE, proceedToCartClick: () -> Unit,
     successCallback: (CreateCartData) -> Unit,
 ) {
     val context: Context = LocalContext.current
+
     if (viewModel is OrderSummaryNetworkVM) {
         val addToCart by viewModel.addToCartFlow.collectAsState(initial = CreateCartReqModel())
         val cartUiState by viewModel.createCartUiState.collectAsState(initial = CreateCartResponseUi.InitialUi(false))
@@ -60,7 +68,7 @@ fun CustomBottomBarView(
         }
 
 
-        if (addToCart.totalItemCount > 0) {
+        if (addToCart.totalItemCount>0) {
             BottomAppBar(
                 modifier = Modifier
                     .clickable {

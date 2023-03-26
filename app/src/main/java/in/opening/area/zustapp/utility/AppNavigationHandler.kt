@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.utility
 
+import `in`.opening.area.zustapp.HomeLandingActivity
 import `in`.opening.area.zustapp.product.ProductListingActivity
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
@@ -17,8 +18,14 @@ fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
         startActivity(intent)
     }
 }
- fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
+
+fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
     val productDetailIntent = Intent(this, ProductDetailsActivity::class.java)
     productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_KEY, productSingleItem)
     startActivity(productDetailIntent)
+}
+
+private fun Context.proceedToHomePage() {
+    val loginActivity = Intent(this, HomeLandingActivity::class.java)
+    startActivity(loginActivity)
 }

@@ -75,7 +75,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
             }
             ProfileActionCallback.SHARE_APP -> {
                 if (profileViewModel.playStoreUrl() != null) {
-                    val shareText = "Hey check out my app at: ${profileViewModel.playStoreUrl()}" + BuildConfig.APPLICATION_ID
+                    val shareText = "Hey check out my app at: ${profileViewModel.playStoreUrl()}"
                     AppUtility.showShareIntent(this, shareText)
                 }
             }

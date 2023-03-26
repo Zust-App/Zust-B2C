@@ -32,15 +32,29 @@ import kotlinx.coroutines.flow.update
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import kotlinx.coroutines.android.awaitFrame
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProductViewModel) {
     var searchInput by rememberSaveable {
         mutableStateOf("")
     }
+
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+
     ConstraintLayout(modifier = modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp, vertical = 16.dp)
@@ -49,10 +63,10 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
         .padding(horizontal = 12.dp)
         .clip(RoundedCornerShape(8.dp))) {
         val (searchTextField, clearIcon) = createRefs()
-
         BasicTextField(
             modifier = modifier1
                 .padding(12.dp)
+                .focusRequester(focusRequester)
                 .constrainAs(searchTextField) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
@@ -60,6 +74,12 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
                     end.linkTo(clearIcon.start, dp_4)
                     width = Dimension.fillToConstraints
                 },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                keyboard?.hide()
+            }),
             value = searchInput,
             onValueChange = { newText ->
                 searchInput = newText
@@ -110,23 +130,30 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
                 }
             )
         }
+    }
 
-        LaunchedEffect(key1 = searchInput) {
-            if (searchInput.isEmpty()) {
-                viewModel.productListUiState.update {
-                    ProductListUi.InitialUi(false)
-                }
-                return@LaunchedEffect
+    LaunchedEffect(key1 = searchInput) {
+        if (searchInput.isEmpty()) {
+            viewModel.productListUiState.update {
+                ProductListUi.InitialUi(false)
             }
-            if (searchInput.length <= SearchProductActivity.SEARCH_THRESHOLD) {
-                viewModel.productListUiState.update {
-                    ProductListUi.InitialUi(false)
-                }
-                return@LaunchedEffect
-            }
-            delay(500)
-            viewModel.searchProduct(searchInput.trim())
+            return@LaunchedEffect
         }
+        if (searchInput.length <= SearchProductActivity.SEARCH_THRESHOLD) {
+            viewModel.productListUiState.update {
+                ProductListUi.InitialUi(false)
+            }
+            return@LaunchedEffect
+        }
+        delay(500)
+        viewModel.searchProduct(searchInput.trim())
+    }
+
+    LaunchedEffect(focusRequester) {
+        delay(100)
+        awaitFrame()
+        focusRequester.requestFocus()
+        keyboard?.show()
     }
 }
 

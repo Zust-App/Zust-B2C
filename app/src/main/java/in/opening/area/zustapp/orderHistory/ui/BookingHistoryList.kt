@@ -119,7 +119,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null) {
         }, color = colorResource(id = R.color.grey_color_3),
             style = Typography_Montserrat.body2)
 
-        Text(text = userBooking.dateAndTime, modifier = Modifier.constrainAs(orderTime) {
+        Text(text = userBooking.orderedDateAndTime, modifier = Modifier.constrainAs(orderTime) {
             top.linkTo(orderId.bottom, dp_4)
             start.linkTo(parent.start, dp_12)
             bottom.linkTo(parent.bottom, dp_12)

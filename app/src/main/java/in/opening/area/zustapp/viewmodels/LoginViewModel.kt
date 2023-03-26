@@ -83,6 +83,7 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
             }
         }
     }
+
     internal fun loginVerifyUserOTP(mobileNum: String, otp: String) = viewModelScope.launch {
         verifyOtpUiState.update { VerifyOtpUi.InitialUi(true) }
         when (val response = apiRequestManager.postAuthVerification(mobileNumber = mobileNum, otp = otp)) {
@@ -170,6 +171,10 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
 
     fun isProfileCreated(): Boolean {
         return sharedPrefManager.checkIsProfileCreate()
+    }
+
+    fun isGetOtpRequestOnGoing(): Boolean {
+        return getOtpUiState.value.isLoading
     }
 
     private var callback = fun(timeLeftString: String) {
