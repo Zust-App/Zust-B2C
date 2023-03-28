@@ -48,13 +48,13 @@ fun prefixFilter(number: AnnotatedString, prefix: String): TransformedText {
 
 val annotatedStringTAndC = buildAnnotatedString {
     append("By providing my phone number, I hereby agree and accept the ")
-    pushStringAnnotation(tag = "term", annotation = "https://google.com/policy")
+    pushStringAnnotation(tag = "term", annotation = APP_PRIVACY_URL)
     withStyle(style = SpanStyle(color = primaryColor)) {
         append("Terms & Conditions")
     }
     pop()
     append(" and ")
-    pushStringAnnotation(tag = "policy", annotation = "https://google.com/terms")
+    pushStringAnnotation(tag = "policy", annotation = APP_PRIVACY_URL)
     withStyle(style = SpanStyle(color = primaryColor)) {
         append("Privacy Policy ")
     }

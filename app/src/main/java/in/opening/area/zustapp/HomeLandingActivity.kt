@@ -26,6 +26,7 @@ import `in`.opening.area.zustapp.uiModels.VALUE
 import `in`.opening.area.zustapp.utility.AppDeepLinkHandler
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.ShowToast
+import `in`.opening.area.zustapp.utility.proceedToLoginActivity
 import `in`.opening.area.zustapp.viewmodels.HomeViewModel
 import android.app.Activity
 import android.content.Intent
@@ -40,7 +41,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 
 
@@ -97,6 +101,19 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
     private fun initialDataManagement() {
         homeViewModel.getUserSavedAddress()
         homeViewModel.getHomePageData(0.0, 0.0)
+        lifecycleScope.launchWhenCreated {
+            homeViewModel.moveToLoginPage.collectLatest {
+                if (it) {
+                    homeViewModel.removeUserLocalData()
+                    moveToLoginActivity()
+                }
+            }
+        }
+    }
+
+    private fun moveToLoginActivity() {
+        this.proceedToLoginActivity()
+        finish()
     }
 
     private fun getLatestOrderWhichNotDeliver() {

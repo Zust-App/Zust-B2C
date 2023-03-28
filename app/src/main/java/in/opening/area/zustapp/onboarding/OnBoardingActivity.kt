@@ -46,7 +46,7 @@ class OnBoardingActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun proceedToHomePage(){
+    private fun proceedToHomePage() {
         val loginActivity = Intent(this, HomeLandingActivity::class.java)
         startActivity(loginActivity)
         finish()
@@ -56,10 +56,10 @@ class OnBoardingActivity : AppCompatActivity() {
         if (viewModel.isAuthTokenFound()) {
             if (viewModel.isProfileCreated()) {
                 proceedToHomePage()
-            }else{
+            } else {
                 proceedToLogin()
             }
-        }else{
+        } else {
             proceedToLogin()
         }
     }

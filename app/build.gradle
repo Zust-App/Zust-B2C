@@ -18,8 +18,8 @@ android {
         applicationId "in.opening.area.zustapp"
         minSdk 23
         targetSdk 33
-        versionCode 7
-        versionName "2023.3.26"
+        versionCode 9
+        versionName "2023.3.28"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

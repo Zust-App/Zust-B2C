@@ -40,8 +40,17 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     open fun removeAuthToken() {
         sharedPreferences.edit().remove(AUTH_TOKEN).apply()
     }
+
     open fun removeSavedAddress() {
         sharedPreferences.edit().remove(ADDRESS_KEY).apply()
+    }
+
+    open fun removeIsProfileCreated() {
+        sharedPreferences.edit().remove(PROFILE_CREATED).apply()
+    }
+
+    open fun removePhoneNumber() {
+        sharedPreferences.edit().remove(MOBILE_NUM).apply()
     }
 
     fun saveAuthToken(authToken: String?) {
@@ -99,7 +108,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     fun getUserMobileNumber(): String {
-        return sharedPreferences.getString(MOBILE_NUM, "8000012121")?:"8000012121"
+        return sharedPreferences.getString(MOBILE_NUM, "8000012121") ?: "8000012121"
     }
 
 }

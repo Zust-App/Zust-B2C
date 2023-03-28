@@ -16,6 +16,8 @@ import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.HomePageResUi
 import `in`.opening.area.zustapp.uiModels.LatestOrderUi
 import `in`.opening.area.zustapp.utility.AppUtility
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -23,7 +25,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager, private val dbAddToCartRepository: DbAddToCartRepository) : OrderSummaryNetworkVM(apiRequestManager) {
+class HomeViewModel @Inject constructor(
+    private val apiRequestManager: ApiRequestManager,
+    private val dbAddToCartRepository: DbAddToCartRepository,
+) : OrderSummaryNetworkVM(apiRequestManager) {
     internal val userLocationFlow = MutableStateFlow(UserLocationDetails())
     internal val homePageUiState = MutableStateFlow<HomePageResUi>(HomePageResUi.InitialUi(false))
     internal val latestOrderUiState = MutableStateFlow<LatestOrderUi>(LatestOrderUi.InitialUi(false))
@@ -40,9 +45,10 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
 
     private var localProductCountMap: Map<String, Int> = mapOf()
 
+    internal val moveToLoginPage = MutableStateFlow(false)
 
-    internal fun getUserSavedAddress(){
-        val address=sharedPrefManager.getUserAddress()
+    internal fun getUserSavedAddress() {
+        val address = sharedPrefManager.getUserAddress()
         updateAddressItem(address)
     }
 
@@ -65,6 +71,10 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
         homePageResponse: ResultWrapper<HomePageApiResponse>,
     ) {
         if (trendingResponse is ResultWrapper.Success) {
+            if (trendingResponse.value.statusCode == 401) {
+                moveToLoginPage.update { true }
+                return
+            }
             trendingProductsValueCache = trendingResponse.value.data
             trendingProductsValueCache?.productItems?.forEach {
                 if (localProductCountMap.containsKey(it.productPriceId)) {
@@ -73,20 +83,34 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
                     it.itemCountByUser = 0
                 }
             }
+        } else if (trendingResponse is ResultWrapper.GenericError) {
+            if (trendingResponse.code == 401) {
+                moveToLoginPage.update { true }
+                return
+            }
         }
 
         when (homePageResponse) {
             is ResultWrapper.Success -> {
+                if (homePageResponse.value.statusCode == 401) {
+                    moveToLoginPage.update { true }
+                    return
+                }
                 homePageResponseCache = homePageResponse.value.data
                 handleHomePageSuccessState(trendingProductsValueCache)
             }
             is ResultWrapper.GenericError -> {
+                if (homePageResponse.code == 401) {
+                    moveToLoginPage.update { true }
+                    return
+                }
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = homePageResponse.error?.error) }
             }
             is ResultWrapper.NetworkError -> {
-                homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Something went wrong",) }
+                homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Something went wrong") }
             }
             is ResultWrapper.UserTokenNotFound -> {
+                moveToLoginPage.update { true }
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }
             }
         }
@@ -104,7 +128,10 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
         }
         when (val response = apiRequestManager.getLatestOrderWhichNotDelivered()) {
             is ResultWrapper.Success -> {
-                if (response.value.data != null) {
+                if (response.value.statusCode == 401) {
+                    moveToLoginPage.update { true }
+                    return@launch
+                } else if (response.value.data != null) {
                     latestOrderUiState.update {
                         LatestOrderUi.LOrderSuccess(false, response.value.data)
                     }
@@ -147,7 +174,16 @@ class HomeViewModel @Inject constructor(private val apiRequestManager: ApiReques
 
     private fun updateAddressItem(address: Address?) {
         userLocationFlow.update {
-            UserLocationDetails(address?.latitude,address?.longitude, address?.getDisplayString())
+            UserLocationDetails(address?.latitude, address?.longitude, address?.getDisplayString())
+        }
+    }
+
+    internal fun removeUserLocalData() = viewModelScope.launch {
+        sharedPrefManager.apply {
+            removeAuthToken()
+            removeSavedAddress()
+            removeIsProfileCreated()
+            removePhoneNumber()
         }
     }
 }

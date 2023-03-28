@@ -12,6 +12,7 @@ import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.primaryColor
 import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi
 import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.moveToInAppWebPage
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import android.content.Context
 import android.util.Log
@@ -159,12 +160,12 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
         //term and condition
         ClickableText(text = annotatedStringTAndC, style = Typography_Montserrat.subtitle1,
             onClick = { offset ->
-                annotatedStringTAndC.getStringAnnotations(tag = "policy", start = offset, end = offset).firstOrNull()?.let {
-                    Log.d("policy URL", it.item)
+                annotatedStringTAndC.getStringAnnotations(tag = "policy",
+                    start = offset, end = offset).firstOrNull()?.let {
+                    context.moveToInAppWebPage(APP_PRIVACY_URL, "Privacy policy")
                 }
-
-                annotatedStringTAndC.getStringAnnotations(tag = "terms", start = offset, end = offset).firstOrNull()?.let {
-                    Log.d("terms URL", it.item)
+                annotatedStringTAndC.getStringAnnotations(tag = "term", start = offset, end = offset).firstOrNull()?.let {
+                    context.moveToInAppWebPage(APP_PRIVACY_URL, "Terms & Conditions")
                 }
             })
 
@@ -198,6 +199,7 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
 }
 
 
+const val APP_PRIVACY_URL = "https://zustapp.com/term-and-condition"
 
 
 

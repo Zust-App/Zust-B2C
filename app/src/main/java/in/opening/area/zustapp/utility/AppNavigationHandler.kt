@@ -1,9 +1,11 @@
 package `in`.opening.area.zustapp.utility
 
 import `in`.opening.area.zustapp.HomeLandingActivity
+import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.product.ProductListingActivity
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
+import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Context
 import android.content.Intent
 
@@ -28,4 +30,16 @@ fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
 private fun Context.proceedToHomePage() {
     val loginActivity = Intent(this, HomeLandingActivity::class.java)
     startActivity(loginActivity)
+}
+
+fun Context.proceedToLoginActivity() {
+    val loginActivity = Intent(this, LoginActivity::class.java)
+    startActivity(loginActivity)
+}
+
+fun Context.moveToInAppWebPage(url: String, title: String) {
+    val inAppWebActivity = Intent(this, InAppWebActivity::class.java)
+    inAppWebActivity.putExtra(InAppWebActivity.WEB_URL, url)
+    inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, title)
+    startActivity(inAppWebActivity)
 }
