@@ -11,6 +11,7 @@ import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.profile.components.ProfileMainContainer
 import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.navigateToReferAndEarn
 import `in`.opening.area.zustapp.viewmodels.ProfileViewModel
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Intent
@@ -74,10 +75,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
                 inAppReview.showInAppReviewDialog()
             }
             ProfileActionCallback.SHARE_APP -> {
-                if (profileViewModel.playStoreUrl() != null) {
-                    val shareText = "Hey check out my app at: ${profileViewModel.playStoreUrl()}"
-                    AppUtility.showShareIntent(this, shareText)
-                }
+                this.navigateToReferAndEarn(profileViewModel.getReferral())
             }
             //web activity start from here
             ProfileActionCallback.FAQ -> {

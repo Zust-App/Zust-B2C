@@ -3,6 +3,7 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.profile.models.CustomerSupport
+import `in`.opening.area.zustapp.profile.models.Refer
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.repository.ProductRepo
 import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
@@ -131,6 +132,13 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             productRepo.deleteAllProduct()
         }
+    }
+
+    internal fun getReferral(): Refer? {
+        if (profileUiState.value is UserProfileUi.ProfileSuccess) {
+            return (profileUiState.value as UserProfileUi.ProfileSuccess).data?.refer
+        }
+        return null
     }
 
     fun getSupportCsDetail(): CustomerSupport? {

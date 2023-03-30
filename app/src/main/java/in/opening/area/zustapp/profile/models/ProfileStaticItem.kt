@@ -23,7 +23,7 @@ fun getProfileStaticItems(): ArrayList<ProfileStaticItem> {
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Manage Address", iconRes = R.drawable.ic_outline_edit_location_alt_24, deepLink = "", eventCode = MY_ADDRESS))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
-    staticItems.add(ProfileStaticItem("Share the app", iconRes = R.drawable.share_icon, eventCode = ProfileActionCallback.SHARE_APP))
+    staticItems.add(ProfileStaticItem("Refer And Earn", iconRes = R.drawable.share_icon, eventCode = ProfileActionCallback.SHARE_APP))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Rate us on PlayStore", iconRes = R.drawable.ic_round_star_border_24, eventCode = ProfileActionCallback.RATE_US_PLAY_STORE))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))

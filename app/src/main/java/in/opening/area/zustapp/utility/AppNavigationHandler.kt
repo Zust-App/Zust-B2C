@@ -5,6 +5,8 @@ import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.product.ProductListingActivity
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
+import `in`.opening.area.zustapp.profile.models.Refer
+import `in`.opening.area.zustapp.refer.ReferAndEarnActivity
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Context
 import android.content.Intent
@@ -28,7 +30,7 @@ fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
 }
 
 
- fun Context.proceedToHomePage() {
+fun Context.proceedToHomePage() {
     val homeLandingActivity = Intent(this, HomeLandingActivity::class.java)
     startActivity(homeLandingActivity)
 }
@@ -43,4 +45,17 @@ fun Context.moveToInAppWebPage(url: String, title: String) {
     inAppWebActivity.putExtra(InAppWebActivity.WEB_URL, url)
     inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, title)
     startActivity(inAppWebActivity)
+}
+
+//if (profileViewModel.playStoreUrl() != null) {
+//        val shareText = "Hey check out my app at: ${profileViewModel.playStoreUrl()}"
+//        AppUtility.showShareIntent(this, shareText)
+//    }
+fun Context.navigateToReferAndEarn(refer: Refer?) {
+    if (refer == null) {
+        return
+    }
+    val referAndEarnActivity = Intent(this, ReferAndEarnActivity::class.java)
+    referAndEarnActivity.putExtra(ReferAndEarnActivity.REFER_DATA_KEY, refer)
+    startActivity(referAndEarnActivity)
 }

@@ -70,9 +70,6 @@ fun ProfileMainContainer(innerPadding: PaddingValues, profileViewModel: ProfileV
                 item {
                     DisplayUserInfo(userProfileData!!.user)
                 }
-                item {
-                    ProfileReferralSection(userProfileData!!.refer)
-                }
                 items(getProfileStaticItems()) { profileItem ->
                     when (profileItem.type) {
                         ProfileItemViewType.TITLE -> {
