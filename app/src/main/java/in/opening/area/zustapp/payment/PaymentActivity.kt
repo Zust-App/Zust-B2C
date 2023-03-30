@@ -264,9 +264,9 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
                 } else {
                     showToast(this, response.message)
                 }
-                paymentActivityReqData?.couponDiscount = 0.0
-                couponHolder?.setCouponData(null, null)
-                paymentBillingHolder?.setUpData(paymentActivityReqData)
+//                paymentActivityReqData?.couponDiscount = 0.0
+//                couponHolder?.setCouponData(null, null)
+               // paymentBillingHolder?.setUpData(paymentActivityReqData)
                 binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
             }
             is ValidateCouponUi.AppliedSuccessfully -> {

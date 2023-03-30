@@ -25,6 +25,13 @@ private const val BRAND = "brand"
 val ktorHttpClient = HttpClient(CIO) {
     install(JsonFeature) {
         serializer = GsonSerializer()
+
+    }
+    install(DefaultRequest) {
+        // Increase the timeout to 30 seconds
+        timeout {
+            requestTimeoutMillis = 30_000
+        }
     }
 
     install(Logging) {
