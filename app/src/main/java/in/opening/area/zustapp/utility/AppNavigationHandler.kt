@@ -27,9 +27,10 @@ fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
     startActivity(productDetailIntent)
 }
 
-private fun Context.proceedToHomePage() {
-    val loginActivity = Intent(this, HomeLandingActivity::class.java)
-    startActivity(loginActivity)
+
+ fun Context.proceedToHomePage() {
+    val homeLandingActivity = Intent(this, HomeLandingActivity::class.java)
+    startActivity(homeLandingActivity)
 }
 
 fun Context.proceedToLoginActivity() {

@@ -47,7 +47,7 @@ fun OrderDetailsTopBarUi(modifier: Modifier,
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = colorResource(id = R.color.white),
-            contentDescription = "profile", modifier = modifier
+            contentDescription = "profile", modifier = Modifier
                 .size(20.dp)
                 .constrainAs(profileIcon) {
                     bottom.linkTo(parent.bottom)

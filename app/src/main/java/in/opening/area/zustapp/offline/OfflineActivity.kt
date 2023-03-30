@@ -13,9 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,18 +49,19 @@ class OfflineActivity : AppCompatActivity() {
                         end.linkTo(parent.end, dp_16)
                         width = Dimension.fillToConstraints
                     }, textAlign = TextAlign.Center, style = Typography_Montserrat.body1)
-                Button(modifier = Modifier.constrainAs(settingBtn) {
-                    top.linkTo(noInternetLottie.bottom, dp_16)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }, onClick = {
+                Button(modifier = Modifier
+                    .constrainAs(settingBtn) {
+                        top.linkTo(noInternetLottie.bottom, dp_16)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }.clip(RoundedCornerShape(8.dp)), onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         val panelIntent = Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY)
                         startActivity(panelIntent)
                     } else {
                         startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
                     }
-                }) {
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
                     Text(text = "Open settings", style = Typography_Montserrat.body1,
                         color = colorResource(id = R.color.white))
                 }

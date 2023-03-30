@@ -14,6 +14,8 @@ import `in`.opening.area.zustapp.network.NetworkUtility.Companion.UPSELLING_PROD
 import `in`.opening.area.zustapp.network.requestBody.AuthVerificationBody
 import `in`.opening.area.zustapp.network.requestBody.UserProfileUpdateBody
 import `in`.opening.area.zustapp.orderDetail.models.OrderDetailModel
+import `in`.opening.area.zustapp.orderHistory.models.OrderRatingBody
+import `in`.opening.area.zustapp.orderHistory.models.RatingResponseModel
 import `in`.opening.area.zustapp.orderHistory.models.UserOrderHistoryModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderResponseModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryModel
@@ -365,6 +367,16 @@ class ApiRequestManager @Inject constructor() {
     suspend fun getMetaData() = universalApiRequestManager {
         ktorHttpClient.get<String>(NetworkUtility.META_DATA) {
 
+        }
+    }
+
+    suspend fun updateRating(orderRatingBody: OrderRatingBody) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.put<RatingResponseModel>(NetworkUtility.UPDATE_RATING) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = orderRatingBody
         }
     }
 

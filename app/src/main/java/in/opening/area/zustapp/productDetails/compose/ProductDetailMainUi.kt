@@ -56,7 +56,8 @@ fun ProductDetailMainUi(
         is ProductDetailsUiState.Success -> {
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight().verticalScroll(rememberScrollState())
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState())
                 .background(color = colorResource(id = R.color.screen_surface_color))
                 .padding(paddingValue)) {
                 ConstraintLayout(modifier = Modifier
@@ -102,11 +103,11 @@ fun ProductDetailMainUi(
                     .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
                     .padding(horizontal = 20.dp, vertical = 16.dp)) {
 
-                    val (title, quantityUnitText, priceText, mrpText, descTitle, descText, incDecContainer, addItemContainer) = createRefs()
+                    val (title, quantityUnitText, priceText, mrpText, descTitle, descText, incDecContainer) = createRefs()
 
                     Text(text = productSingleItem.productName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }, color = colorResource(id = R.color.app_black), modifier = Modifier.constrainAs(title) {
                         start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                        end.linkTo(incDecContainer.start, dp_12)
                         top.linkTo(parent.top, dp_8)
                         width = Dimension.fillToConstraints
                     }, fontFamily = montserrat,
@@ -180,7 +181,7 @@ fun ProductDetailMainUi(
                         }
                     } else {
                         Button(modifier = Modifier
-                            .constrainAs(addItemContainer) {
+                            .constrainAs(incDecContainer) {
                                 top.linkTo(parent.top, dp_8)
                                 end.linkTo(parent.end)
                             }

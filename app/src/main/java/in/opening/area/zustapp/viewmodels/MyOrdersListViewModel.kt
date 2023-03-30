@@ -4,6 +4,8 @@ import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.orderDetail.models.OrderStatus
 import `in`.opening.area.zustapp.orderHistory.models.OrderHistoryItem
+import `in`.opening.area.zustapp.orderHistory.models.OrderRatingBody
+import `in`.opening.area.zustapp.orderHistory.ui.RatingOrderUiState
 import `in`.opening.area.zustapp.pagination.UserBookingDataSource
 import `in`.opening.area.zustapp.uiModels.OrderDetailUi
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -22,14 +24,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) : ViewModel() {
-    val userBookingFlow: Flow<PagingData<OrderHistoryItem>> = Pager(PagingConfig(pageSize = 6)) {
+    internal var userBookingFlow: Flow<PagingData<OrderHistoryItem>> = Pager(PagingConfig(pageSize = 10, enablePlaceholders = false)) {
         UserBookingDataSource(apiRequestManager)
     }.flow.cachedIn(viewModelScope)
-
-
     internal val orderDetailFlow = MutableStateFlow<OrderDetailUi>(OrderDetailUi.InitialUi(false))
+    internal val ratingOrderFlow = MutableStateFlow<RatingOrderUiState>(RatingOrderUiState.InitialState(false))
 
-    fun getOrderDetails(orderId: Int) = viewModelScope.launch {
+    internal fun getOrderDetails(orderId: Int) = viewModelScope.launch {
         orderDetailFlow.update { OrderDetailUi.InitialUi(true) }
         when (val response = apiRequestManager.getOrderDetails(orderId)) {
             is ResultWrapper.NetworkError -> {
@@ -72,4 +73,30 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
         }
     }
 
+    internal fun updateRating(orderId: Int, rating: Int) = viewModelScope.launch {
+        ratingOrderFlow.update {
+            RatingOrderUiState.InitialState(true)
+        }
+        when (val response = apiRequestManager.updateRating(OrderRatingBody(orderId, rating))) {
+            is ResultWrapper.Success -> {
+                if (response.value.data != null) {
+                    ratingOrderFlow.update {
+                        RatingOrderUiState.SuccessState(false)
+                    }
+                    return@launch
+                }
+                ratingOrderFlow.update {
+                    RatingOrderUiState.ErrorState(false)
+                }
+            }
+            else -> {
+                ratingOrderFlow.update {
+                    RatingOrderUiState.ErrorState(false)
+                }
+            }
+        }
+
+    }
+
 }
+

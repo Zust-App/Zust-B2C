@@ -18,8 +18,8 @@ android {
         applicationId "in.opening.area.zustapp"
         minSdk 23
         targetSdk 33
-        versionCode 9
-        versionName "2023.3.28"
+        versionCode 10
+        versionName "2023.3.30"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -182,5 +182,5 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
-
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.25.1"
 }

@@ -8,7 +8,8 @@ import androidx.paging.PagingState
 class UserBookingDataSource(private val apiRequestManager: ApiRequestManager) : PagingSource<Int, OrderHistoryItem>() {
 
     override fun getRefreshKey(state: PagingState<Int, OrderHistoryItem>): Int? {
-        return state.anchorPosition
+        //state.anchorPosition
+        return null
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, OrderHistoryItem> {
@@ -23,9 +24,9 @@ class UserBookingDataSource(private val apiRequestManager: ApiRequestManager) : 
                         prevKey = if (nextPage == 1) null else nextPage - 1,
                         nextKey = metaData.currentPage + 1
                     )
-                } else if (metaData.totalPage==0) {
+                } else if (metaData.totalPage == 0) {
                     LoadResult.Error(NoPageFoundException())
-                }else{
+                } else {
                     LoadResult.Error(PageMismatchedException())
                 }
             } else {
@@ -42,12 +43,15 @@ class NoPageFoundException : Exception() {
     override val message: String
         get() = NO_PAGE
 }
-class PageMismatchedException:Exception(){
+
+class PageMismatchedException : Exception() {
     override val message: String
         get() = NO_PAGE
 }
-class NoDataFoundException:Exception(){
+
+class NoDataFoundException : Exception() {
     override val message: String
         get() = NO_PAGE
 }
+
 const val NO_PAGE = "no_page"

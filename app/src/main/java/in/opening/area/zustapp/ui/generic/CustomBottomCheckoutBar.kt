@@ -34,10 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModel
 
-// var isBottomAppBarVisible by remember {
-//        mutableStateOf(false)
-//    }
-//    val bottomAppBarOffset by animateFloatAsState(targetValue = if (isBottomAppBarVisible) 0f else 50f)
+
 @Composable
 fun CustomBottomBarView(
     viewModel: ViewModel, type: VALUE, proceedToCartClick: () -> Unit,

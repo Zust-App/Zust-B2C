@@ -11,17 +11,20 @@ data class UserOrderHistoryModel(
     val message: String? = null,
     val statusCode: Int? = -1,
 )
+
 @Keep
 data class OrderHistoryData(
     val _metadata: PagingMetadata,
-    val orderHistories: List<OrderHistoryItem>
+    val orderHistories: List<OrderHistoryItem>,
 )
 
 @Keep
 data class OrderHistoryItem(
     val orderedDateAndTime: String,
-    val itemText: String,
+    val itemText: String? = null,
+    val totalItems: Int? = -1,
     val orderId: Int,
     val orderStatusType: String,
-    val payablePrice: Double? = -1.0
+    val payablePrice: Double? = -1.0,
+    var rating: Int? = 0,
 )
