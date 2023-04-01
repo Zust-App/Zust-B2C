@@ -39,6 +39,7 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
     private val tmCountDownTimer: TmCountDownTimer? by lazy { TmCountDownTimer(halfMinutes, callback, stopped) }
     internal val timerTextFlow by lazy { MutableSharedFlow<String?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST) }
 
+    internal val autoFetchOTP = MutableStateFlow<String>("")
 
     internal infix fun makeLoginRequestForGetOtp(inputMobileNumber: String) = viewModelScope.launch {
         getOtpUiState.update { GetOtpLoginUi.InitialUi(true) }

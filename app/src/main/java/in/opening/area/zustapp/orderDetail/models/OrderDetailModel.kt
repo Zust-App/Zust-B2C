@@ -10,7 +10,7 @@ data class OrderDetailModel(
     val message: String? = null,
     val statusCode: Int? = -1,
     val timestamp: String? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
 )
 
 @Keep
@@ -27,15 +27,16 @@ data class OrderDetailData(
     val secretCode: String? = null,
     val verificationCode: String? = null,
     val expectedTimeToDelivery: String? = null,
-    val deliveryPartnerTip:Double?=null,
+    val deliveryPartnerTip: Double? = null,
     val statusSeq: String? = null,
-    var displayOrderStatus: ArrayList<OrderStatus>? = arrayListOf()
+    val reason: String? = null,
+    var displayOrderStatus: ArrayList<OrderStatus>? = arrayListOf(),
 )
 
 @Keep
 data class OrderStatus(
     val createdDateTime: String? = null,
-    val orderStatusType: String?=null
+    val orderStatusType: String? = null,
 )
 
 @Keep
@@ -47,7 +48,7 @@ data class Item(
     val productPriceId: Int,
     val thumbnail: String,
     val quantity: Double,
-    val unit: String
+    val unit: String,
 )
 
 @Keep
@@ -59,7 +60,7 @@ data class Address(
     val id: Int,
     val landmark: String?,
     val latitude: Double? = 0.0,
-    val longitude: Double? = 0.0
+    val longitude: Double? = 0.0,
 )
 
 fun Address?.convertAsStringText(): String {

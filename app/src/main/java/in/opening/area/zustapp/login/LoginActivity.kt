@@ -23,7 +23,6 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
     private var binding: ActivityLoginBinding? = null
     private var currentFragmentTag = LoginNav.MOVE_TO_PHONE
 
-    private var intentFilter: IntentFilter? = null
     private var smsReceiver: SMSReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,22 +96,32 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
     }
 
     private fun initializeSmsBroadcast() {
-        intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         smsReceiver = SMSReceiver()
         smsReceiver?.setOTPListener(object : SMSReceiver.OTPReceiveListener {
             override fun onOTPReceived(otp: String?) {
                 showToast(this@LoginActivity, otp)
+                if (otp != null) {
+                    loginViewModel.autoFetchOTP.value = otp
+                } else {
+                    loginViewModel.autoFetchOTP.value = ""
+                }
+            }
+
+            override fun otpAutoError(error: String) {
+
             }
         })
     }
 
-    override fun onResume() {
-        super.onResume()
+
+    override fun onStart() {
+        super.onStart()
+        val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         registerReceiver(smsReceiver, intentFilter)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         unregisterReceiver(smsReceiver)
     }
 

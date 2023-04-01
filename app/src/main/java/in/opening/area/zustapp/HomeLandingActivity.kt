@@ -46,6 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -102,10 +103,19 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         homeViewModel.getUserSavedAddress()
         homeViewModel.getHomePageData(0.0, 0.0)
         lifecycleScope.launchWhenCreated {
-            homeViewModel.moveToLoginPage.collectLatest {
-                if (it) {
-                    homeViewModel.removeUserLocalData()
-                    moveToLoginActivity()
+            launch {
+                homeViewModel.moveToLoginPage.collectLatest {
+                    if (it) {
+                        homeViewModel.removeUserLocalData()
+                        moveToLoginActivity()
+                    }
+                }
+            }
+            launch {
+                homeViewModel.isAppUpdateAvail.collectLatest {
+                    if (it) {
+                        AppUtility.openPlayStore(this@HomeLandingActivity)
+                    }
                 }
             }
         }
@@ -146,7 +156,7 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
                 showLanguageSelectionDialog()
             }
             ACTION.PHONE_CALL -> {
-                AppUtility.openCallIntent(this,"74564062907")
+                AppUtility.openCallIntent(this, "74564062907")
             }
             else -> {}
         }
@@ -294,5 +304,10 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         AppUtility.showAppUpdateDialog(context = this, false) {
             inAppUpdateManager?.completeUpdate()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        homeViewModel.getAppMetaData()
     }
 }

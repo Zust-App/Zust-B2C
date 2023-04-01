@@ -43,6 +43,11 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
     val resendOtpTimeLeft by loginViewModel.timerTextFlow.collectAsState(initial = "")
     val resendOtpUiState by loginViewModel.resendOtpUiState.collectAsState(initial = GetOtpLoginUi.InitialUi(false))
 
+    val autoReadOTP by loginViewModel.autoFetchOTP.collectAsState()
+
+    if (autoReadOTP.isNotEmpty()) {
+        user.otp = autoReadOTP
+    }
 
     var canShowProgressbar by rememberSaveable {
         mutableStateOf(false)
@@ -201,7 +206,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
         }
         if (canShowProgressbar) {
             Spacer(modifier = Modifier.height(16.dp))
-            CircularProgressIndicator(color = Color.Red, modifier = Modifier
+            CircularProgressIndicator(color = colorResource(id = R.color.app_black), modifier = Modifier
                 .width(30.dp)
                 .align(Alignment.CenterHorizontally)
                 .height(30.dp))
@@ -218,7 +223,7 @@ private fun obscureMobileNumber(mobileNumber: String): String {
             append(mobileNumber.subSequence(0, obscureLength).toString().replace("[a-zA-Z0-9]".toRegex(), "*"))
             append(mobileNumber.subSequence(obscureLength, mobileNumber.length))
         }
-    } catch (e: java.lang.Exception) {
+    } catch (e: Exception) {
         mobileNumber
     }
 }
@@ -226,7 +231,7 @@ private fun obscureMobileNumber(mobileNumber: String): String {
 
 fun verificationOfUserOtp(enteredOtpText: String?, loginViewModel: LoginViewModel?, context: Context) {
     if (enteredOtpText.isNullOrEmpty()) {
-        AppUtility.run { showToast(context, context.getString(`in`.opening.area.zustapp.R.string.please_enter_otp)) }
+        AppUtility.run { showToast(context, context.getString(R.string.please_enter_otp)) }
         return
     }
     if (enteredOtpText.length == 4) {

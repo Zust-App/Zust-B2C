@@ -7,9 +7,11 @@ import `in`.opening.area.zustapp.product.ProductListingActivity.Companion.CATEGO
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.navigateToProductListing
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -17,11 +19,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,27 +59,33 @@ fun LazyListScope.categoryHolder(dataList: List<HomePageGenericData>?) {
     }
 }
 
+private val categoryModifier = Modifier
+    .height(120.dp)
+    .padding(vertical = 6.dp,
+        horizontal = 16.dp)
+    .clip(RoundedCornerShape(16.dp))
+
 @Composable
 private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
     val context = LocalContext.current
-    ConstraintLayout(modifier = Modifier
-        .height(120.dp)
+    ConstraintLayout(modifier = categoryModifier
         .weight(1f)
-        .padding(vertical = 6.dp,
-            horizontal = 12.dp)
-        .clip(RoundedCornerShape(12.dp))
         .clickable {
-            context.navigateToProductListing(categoryItem.id, categoryItem.name)
+            if (categoryItem.categoryStatus == "ENABLE" || categoryItem.categoryStatus == null) {
+                context.navigateToProductListing(categoryItem.id, categoryItem.name)
+            } else {
+                AppUtility.showToast(context, "Available soon")
+            }
         }
         .fillMaxWidth()) {
-        val (categoryImage, categoryTitle) = createRefs()
+        val (categoryImage, categoryTitle, currentStatus) = createRefs()
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(categoryItem.imageUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = null,
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.FillWidth,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium)
                 .constrainAs(categoryImage) {
@@ -96,51 +108,33 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
             textAlign = TextAlign.Center,
             fontSize = 12.sp,
             color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black))
-    }
-}
-
-
-@Composable
-fun SingleCategoryItem(categoryItem: HomePageGenericData) {
-    val context = LocalContext.current
-    ConstraintLayout(modifier = Modifier
-        .height(120.dp)
-        .padding(vertical = 6.dp,
-            horizontal = 8.dp)
-        .clip(RoundedCornerShape(12.dp))
-        .clickable {
-            context.navigateToProductListing(categoryItem.id, categoryItem.name)
-        }
-        .fillMaxWidth()) {
-        val (categoryImage, categoryTitle) = createRefs()
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(categoryItem.imageUrl)
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.medium)
-                .constrainAs(categoryImage) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top, dp_6)
-                    bottom.linkTo(categoryTitle.top)
-                    height = Dimension.fillToConstraints
+        categoryItem.categoryStatus?.let {
+            if (it != "ENABLE") {
+                Box(
+                    modifier = Modifier
+                        .constrainAs(currentStatus) {
+                            top.linkTo(categoryImage.top)
+                            start.linkTo(categoryImage.start)
+                            end.linkTo(categoryImage.end)
+                            bottom.linkTo(categoryImage.bottom)
+                            width = Dimension.fillToConstraints
+                        }
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFFD6C28F),
+                                    Color(0xFFFEECBC)
+                                )
+                            ))
+                        .padding(vertical = 4.dp), contentAlignment = Alignment.Center
+                ) {
+                    Text(text = it, style = Typography_Montserrat.subtitle1,
+                        fontSize = 10.sp, fontWeight = FontWeight.W600,
+                        color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black),
+                        textAlign = TextAlign.Center)
                 }
-        )
-
-        Text(text = categoryItem.name ?: "",
-            modifier = Modifier.constrainAs(categoryTitle) {
-                start.linkTo(parent.start, dp_8)
-                end.linkTo(parent.end, dp_8)
-                top.linkTo(categoryImage.bottom, dp_8)
-                bottom.linkTo(parent.bottom, dp_8)
-                width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body2,
-            textAlign = TextAlign.Center,
-            fontSize = 12.sp,
-            color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black))
+            }
+        }
     }
 }
+

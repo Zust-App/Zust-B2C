@@ -30,4 +30,5 @@ data class HomePageGenericData(
     val imageUrl: String? = null,
     val name: String? = null,
     val subCategory: String? = null,
+    val categoryStatus:String?=null
 )

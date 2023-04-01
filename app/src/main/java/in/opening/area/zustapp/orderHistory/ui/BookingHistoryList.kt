@@ -64,7 +64,9 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
         },
         modifier = Modifier.fillMaxSize()
     ) {
-        LazyColumn(modifier = Modifier.fillMaxWidth(),
+        LazyColumn(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
             contentPadding = paddingValues, verticalArrangement = Arrangement.spacedBy(6.dp)) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))

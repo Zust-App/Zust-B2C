@@ -46,6 +46,7 @@ class HomeViewModel @Inject constructor(
     private var localProductCountMap: Map<String, Int> = mapOf()
 
     internal val moveToLoginPage = MutableStateFlow(false)
+    internal val isAppUpdateAvail = MutableStateFlow(false)
 
     internal fun getUserSavedAddress() {
         val address = sharedPrefManager.getUserAddress()
@@ -184,6 +185,21 @@ class HomeViewModel @Inject constructor(
             removeSavedAddress()
             removeIsProfileCreated()
             removePhoneNumber()
+        }
+    }
+
+    internal fun getAppMetaData() = viewModelScope.launch {
+        when (val response = apiRequestManager.getMetaData()) {
+            is ResultWrapper.Success -> {
+                response.value.data?.let {
+                    if (it.isAppUpdateAvail == true) {
+                        isAppUpdateAvail.update { true }
+                    }
+                }
+            }
+            else -> {
+
+            }
         }
     }
 }

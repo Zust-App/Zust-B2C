@@ -170,10 +170,11 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
             })
 
         if (canShowProgressbar) {
-            CircularProgressIndicator(color = Color.Red, modifier = Modifier
-                .width(30.dp)
-                .align(CenterHorizontally)
-                .height(30.dp))
+            CircularProgressIndicator(color = colorResource(id = R.color.app_black),
+                modifier = Modifier
+                    .width(30.dp)
+                    .align(CenterHorizontally)
+                    .height(30.dp))
         }
     }
 }
@@ -200,7 +201,7 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
 
 
 const val APP_TC_URL = "https://zustapp.com/term-and-condition"
-const val APP_PRIVACY_URL = "https://zustapp.com/privacy-policy"
+const val APP_PRIVACY_URL = "https://zustapp.com/policy"
 
 
 

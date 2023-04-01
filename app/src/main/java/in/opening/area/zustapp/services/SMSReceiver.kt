@@ -3,6 +3,7 @@ package `in`.opening.area.zustapp.services
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -22,33 +23,57 @@ class SMSReceiver() : BroadcastReceiver(), Parcelable {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == SmsRetriever.SMS_RETRIEVED_ACTION) {
-            val extras = intent.extras
-            val status = extras!![SmsRetriever.EXTRA_STATUS] as Status?
+        if (intent.action != null && intent.extras != null) {
+            if (SmsRetriever.SMS_RETRIEVED_ACTION == intent.action) {
+                val extras = intent.extras
+                parseOtpStatus(extras)
+            }
+        }
+    }
+
+    private fun parseOtpStatus(extras: Bundle?) {
+        if (extras != null) {
+            val status = extras[SmsRetriever.EXTRA_STATUS] as Status?
             if (status != null) {
                 when (status.statusCode) {
                     CommonStatusCodes.SUCCESS -> {
-                        val sms = extras[SmsRetriever.EXTRA_SMS_MESSAGE] as String?
-                        sms?.let {
-                            if (sms.contains("zust", ignoreCase = true) || sms.contains("grinzy", ignoreCase = true)) {
-                                val p = Pattern.compile("\\d+")
-                                val m = p.matcher(it)
-                                if (m.find()) {
-                                    val otp = m.group()
-                                    if (otpListener != null) {
-                                        otpListener!!.onOTPReceived(otp)
-                                    }
-                                }
-                            }
-                        }
+                        val message = extras[SmsRetriever.EXTRA_SMS_MESSAGE] as String?
+                        message?.let { extractOTP(it) }
+                    }
+                    CommonStatusCodes.TIMEOUT -> {
+                        //no need of this
                     }
                 }
             }
         }
     }
 
+    private fun extractOTP(msg: String) {
+
+        val message = msg.lowercase()
+        if (message.contains("account", ignoreCase = true) || message.contains("zust", ignoreCase = true) ||
+            message.contains("grinzy", ignoreCase = true) || message.contains("zust app", ignoreCase = true) ||
+            message.contains("zustapp", ignoreCase = true)
+        ) {
+            val otpMatcher = Pattern.compile("\\b\\d{4}\\b").matcher(message)
+            if (otpMatcher.find()) {
+                val otp = otpMatcher.group(0)
+                if (otp != null && otp.length == 4) {
+                    otpListener?.onOTPReceived(otp)
+                }else{
+                   //
+                }
+            }else{
+                //
+            }
+        } else {
+            //
+        }
+    }
+
     interface OTPReceiveListener {
         fun onOTPReceived(otp: String?)
+        fun otpAutoError(error: String)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

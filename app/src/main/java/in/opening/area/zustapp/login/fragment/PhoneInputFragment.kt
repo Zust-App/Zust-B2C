@@ -31,19 +31,21 @@ class PhoneInputFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = contentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         loginViewModel.getOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
+        loginViewModel.autoFetchOTP.update { "" }
         LoginMainContainer(loginViewModel = loginViewModel) {
+            loginViewModel.autoFetchOTP.update { "" }
             listener?.action(it)
         }
     }
-    companion object{
-        fun newInstance(): PhoneInputFragment{
+
+    companion object {
+        fun newInstance(): PhoneInputFragment {
             val args = Bundle()
             val fragment = PhoneInputFragment()
             fragment.arguments = args
             return fragment
         }
     }
-
 
 
 }

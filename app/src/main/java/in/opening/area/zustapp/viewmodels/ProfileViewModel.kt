@@ -41,23 +41,25 @@ class ProfileViewModel @Inject constructor(
         profileUiState.update { UserProfileUi.InitialUi(true) }
         when (val response = apiRequestManager.getUserProfileDetails()) {
             is ResultWrapper.Success -> {
-                if (response.value.statusCode == 401) {
-                    moveToLoginPage.update { true }
-                    return@launch
-                }
                 if (response.value.data != null) {
                     profileUiState.update { (UserProfileUi.ProfileSuccess(false, response.value.data)) }
                     dataStoreManager.saveUserProfileDetails(response.value.data)
                 } else {
-                    profileUiState.update { UserProfileUi.ErrorUi(false, errors = response.value.errors ?: arrayListOf()) }
+                    if (response.value.statusCode == 401) {
+                        moveToLoginPage.update { true }
+                        return@launch
+                    } else {
+                        profileUiState.update { UserProfileUi.ErrorUi(false, errors = response.value.errors ?: arrayListOf()) }
+                    }
                 }
             }
             is ResultWrapper.GenericError -> {
                 if (response.code == 401) {
                     moveToLoginPage.update { true }
                     return@launch
+                } else {
+                    profileUiState.update { UserProfileUi.ErrorUi(false, errorMsg = response.error?.error ?: "Something went wrong") }
                 }
-                profileUiState.update { UserProfileUi.ErrorUi(false, errorMsg = response.error?.error ?: "Something went wrong") }
             }
             is ResultWrapper.UserTokenNotFound -> {
                 dataStoreManager.getSavedUserProfile().collect { profile ->
@@ -156,6 +158,15 @@ class ProfileViewModel @Inject constructor(
             return (profileUiState.value as UserProfileUi.ProfileSuccess).data?.customerSupport
         }
         return null
+    }
+
+    internal fun removeUserLocalData() = viewModelScope.launch {
+        sharedPrefManager.apply {
+            removeAuthToken()
+            removeSavedAddress()
+            removeIsProfileCreated()
+            removePhoneNumber()
+        }
     }
 
 }

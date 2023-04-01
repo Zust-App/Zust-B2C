@@ -55,7 +55,11 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
     private fun setUpObserver() {
         lifecycleScope.launch {
             profileViewModel.moveToLoginPage.collectLatest {
-                this@ProfileActivity.proceedToLoginActivity()
+                if (it) {
+                    profileViewModel.removeUserLocalData()
+                    this@ProfileActivity.proceedToLoginActivity()
+                    finish()
+                }
             }
         }
     }
@@ -91,22 +95,22 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
             //web activity start from here
             ProfileActionCallback.FAQ -> {
                 if (profileViewModel.faqUrl() != null) {
-                    startInAppWebActivity(profileViewModel.faqUrl())
+                    startInAppWebActivity(profileViewModel.faqUrl(), "Faq")
                 }
             }
             ProfileActionCallback.ABOUT_US -> {
                 if (profileViewModel.getAboutUsUrl() != null) {
-                    startInAppWebActivity(profileViewModel.getAboutUsUrl())
+                    startInAppWebActivity(profileViewModel.getAboutUsUrl(), "About us")
                 }
             }
             ProfileActionCallback.OPEN_SOURCE -> {
                 if (profileViewModel.getOpenSourceUrl() != null) {
-                    startInAppWebActivity(profileViewModel.getOpenSourceUrl())
+                    startInAppWebActivity(profileViewModel.getOpenSourceUrl(), "Open source")
                 }
             }
             ProfileActionCallback.TC -> {
                 if (profileViewModel.termAndConditionUrl() != null) {
-                    startInAppWebActivity(profileViewModel.termAndConditionUrl())
+                    startInAppWebActivity(profileViewModel.termAndConditionUrl(), "Terms & Condition")
                 }
             }
             ProfileActionCallback.HELPLINE -> {
@@ -114,7 +118,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
             }
             ProfileActionCallback.PRIVACY_POLICY -> {
                 if (profileViewModel.privacyPolicyUrl() != null) {
-                    startInAppWebActivity(profileViewModel.privacyPolicyUrl())
+                    startInAppWebActivity(profileViewModel.privacyPolicyUrl(), "Privacy Policy")
                 }
             }
             ProfileActionCallback.LOGOUT -> {
@@ -138,13 +142,13 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
         suggestProductSheet.show(supportFragmentManager, "suggest_product")
     }
 
-    private fun startInAppWebActivity(url: String? = null) {
+    private fun startInAppWebActivity(url: String? = null, title: String) {
         if (url == null) {
             return
         }
         val inAppWebActivity = Intent(this, InAppWebActivity::class.java)
         inAppWebActivity.putExtra(InAppWebActivity.WEB_URL, url)
-        inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, "Terms & Conditions")
+        inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, title)
         startActivity(inAppWebActivity)
     }
 

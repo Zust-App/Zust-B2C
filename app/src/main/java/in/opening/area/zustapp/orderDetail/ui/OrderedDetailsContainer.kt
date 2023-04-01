@@ -92,6 +92,12 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                             OrderSecretCodeContainer(data = response.data)
                         }
                     }
+                    if (!response.data.reason.isNullOrEmpty()) {
+                        item {
+                            Spacer(modifier = Modifier.height(dp_20))
+                            ZustAppReason(response.data.reason)
+                        }
+                    }
                     item {
                         Spacer(modifier = Modifier.height(dp_20))
                         HelpAndSupportUi()

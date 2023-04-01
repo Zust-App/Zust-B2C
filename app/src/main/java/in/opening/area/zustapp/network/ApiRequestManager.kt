@@ -5,6 +5,7 @@ import `in`.opening.area.zustapp.coupon.model.AppliedCouponResponse
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
 import `in`.opening.area.zustapp.payment.models.Payment
 import `in`.opening.area.zustapp.coupon.model.CouponModel
+import `in`.opening.area.zustapp.data.AppMetaDataResponse
 import `in`.opening.area.zustapp.fcm.FcmReqBodyModel
 import `in`.opening.area.zustapp.home.models.HomePageApiResponse
 import `in`.opening.area.zustapp.login.model.UpdateUserProfileResponse
@@ -365,7 +366,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun getMetaData() = universalApiRequestManager {
-        ktorHttpClient.get<String>(NetworkUtility.META_DATA) {
+        ktorHttpClient.get<AppMetaDataResponse>(NetworkUtility.META_DATA) {
 
         }
     }
