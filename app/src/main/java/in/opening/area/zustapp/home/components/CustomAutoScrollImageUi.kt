@@ -44,7 +44,7 @@ fun LazyListScope.customAutoScrollImageUi(imageList: List<HomePageGenericData>?)
                         page = target,
                         animationSpec = tween(
                             durationMillis = 500,
-                            easing = LinearEasing
+                            easing = LinearOutSlowInEasing
                         )
                     )
                 }
@@ -53,6 +53,7 @@ fun LazyListScope.customAutoScrollImageUi(imageList: List<HomePageGenericData>?)
 
         Column(modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .height(150.dp)) {
 
             HorizontalPager(count = imageList.size, state = pagerState) {

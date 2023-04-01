@@ -13,8 +13,10 @@ class TimingSavingHolder(val binding: PaymentPageSavingsBinding?) {
     private fun setFreeDelivery(isFreeDelivery: Boolean) {
         if (isFreeDelivery) {
             freeDeliveryTag?.visibility = View.VISIBLE
+            savingsAmount?.visibility=View.GONE
         } else {
             freeDeliveryTag?.visibility = View.GONE
+            savingsAmount?.visibility=View.VISIBLE
         }
     }
 

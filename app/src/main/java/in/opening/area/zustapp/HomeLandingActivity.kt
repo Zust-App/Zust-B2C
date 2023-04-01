@@ -145,6 +145,9 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
             ACTION.LANGUAGE_DIALOG -> {
                 showLanguageSelectionDialog()
             }
+            ACTION.PHONE_CALL -> {
+                AppUtility.openCallIntent(this,"74564062907")
+            }
             else -> {}
         }
     }

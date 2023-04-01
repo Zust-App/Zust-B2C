@@ -15,7 +15,7 @@ fun LazyListScope.homePageBrandTagUi() {
         Image(painter = painterResource(id = R.drawable.fresh_veggies_tag),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 22.dp),
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
             contentDescription = "Discount")
     }
 }

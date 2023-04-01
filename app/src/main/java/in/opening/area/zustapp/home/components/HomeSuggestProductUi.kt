@@ -3,10 +3,7 @@ package `in`.opening.area.zustapp.home.components
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -21,7 +18,7 @@ import androidx.compose.ui.unit.sp
 const val KEY_SUGGEST_PRODUCT = "suggest"
 fun LazyListScope.homeSuggestProductUi(callback: (ACTION) -> Unit) {
     item(key = KEY_SUGGEST_PRODUCT) {
-        Column {
+        Column(modifier = padding_16Modifier) {
             Spacer(modifier = Modifier.height(70.dp))
             Text(text = "Oops, Didn't find were you\n" +
                     "are looking for?", style = Typography_Montserrat.body1,

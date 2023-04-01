@@ -60,7 +60,7 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
         .height(120.dp)
         .weight(1f)
         .padding(vertical = 6.dp,
-            horizontal = 8.dp)
+            horizontal = 12.dp)
         .clip(RoundedCornerShape(12.dp))
         .clickable {
             context.navigateToProductListing(categoryItem.id, categoryItem.name)
@@ -101,7 +101,7 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
 
 
 @Composable
- fun SingleCategoryItem(categoryItem: HomePageGenericData) {
+fun SingleCategoryItem(categoryItem: HomePageGenericData) {
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier
         .height(120.dp)

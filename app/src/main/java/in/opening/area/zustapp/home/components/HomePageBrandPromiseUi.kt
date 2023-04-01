@@ -6,6 +6,7 @@ import `in`.opening.area.zustapp.ui.theme.montserrat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -23,10 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-const val KEY_HOME_PAGE_BRAND="brand"
+const val KEY_HOME_PAGE_BRAND = "brand"
 fun LazyListScope.homePageBrandPromiseUi() {
-    item( key = KEY_HOME_PAGE_BRAND) {
-        Column() {
+    item(key = KEY_HOME_PAGE_BRAND) {
+        Column(modifier = padding_16Modifier) {
             Spacer(modifier = Modifier.height(70.dp))
             DrawDashLine()
             Spacer(modifier = Modifier.height(20.dp))

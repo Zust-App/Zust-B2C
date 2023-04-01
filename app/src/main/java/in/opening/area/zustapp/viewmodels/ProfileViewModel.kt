@@ -35,10 +35,16 @@ class ProfileViewModel @Inject constructor(
     @Inject
     lateinit var sharedPrefManager: SharedPrefManager
 
+    internal val moveToLoginPage = MutableStateFlow(false)
+
     internal fun getUserProfileResponse() = viewModelScope.launch {
         profileUiState.update { UserProfileUi.InitialUi(true) }
         when (val response = apiRequestManager.getUserProfileDetails()) {
             is ResultWrapper.Success -> {
+                if (response.value.statusCode == 401) {
+                    moveToLoginPage.update { true }
+                    return@launch
+                }
                 if (response.value.data != null) {
                     profileUiState.update { (UserProfileUi.ProfileSuccess(false, response.value.data)) }
                     dataStoreManager.saveUserProfileDetails(response.value.data)
@@ -47,6 +53,10 @@ class ProfileViewModel @Inject constructor(
                 }
             }
             is ResultWrapper.GenericError -> {
+                if (response.code == 401) {
+                    moveToLoginPage.update { true }
+                    return@launch
+                }
                 profileUiState.update { UserProfileUi.ErrorUi(false, errorMsg = response.error?.error ?: "Something went wrong") }
             }
             is ResultWrapper.UserTokenNotFound -> {

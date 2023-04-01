@@ -1,6 +1,5 @@
 package `in`.opening.area.zustapp.profile
 
-import `in`.opening.area.zustapp.BuildConfig
 import `in`.opening.area.zustapp.address.AddressBottomSheetV2
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
@@ -10,8 +9,8 @@ import `in`.opening.area.zustapp.inappreview.InAppReview
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.profile.components.ProfileMainContainer
-import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.navigateToReferAndEarn
+import `in`.opening.area.zustapp.utility.proceedToLoginActivity
 import `in`.opening.area.zustapp.viewmodels.ProfileViewModel
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Intent
@@ -22,7 +21,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
@@ -47,6 +49,15 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
             }
         }
         profileViewModel.getUserProfileResponse()
+        setUpObserver()
+    }
+
+    private fun setUpObserver() {
+        lifecycleScope.launch {
+            profileViewModel.moveToLoginPage.collectLatest {
+                this@ProfileActivity.proceedToLoginActivity()
+            }
+        }
     }
 
     override fun handleClick(code: Int, data: String?) {

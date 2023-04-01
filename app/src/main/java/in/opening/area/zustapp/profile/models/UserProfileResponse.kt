@@ -8,4 +8,5 @@ data class UserProfileResponse(
     val `data`: ProfileData? = null,
     val errors: List<UserCustomError>? = arrayListOf(),
     val message: String? = null,
+    val statusCode: Int? = -1,
 )

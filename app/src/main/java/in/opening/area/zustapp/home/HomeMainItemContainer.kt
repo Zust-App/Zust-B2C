@@ -33,7 +33,6 @@ fun HomeMainItemContainer(
             val (homeMainList) = createRefs()
             LazyColumn(modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 12.dp)
                 .constrainAs(homeMainList) {
                     height = Dimension.fillToConstraints
                     top.linkTo(parent.top, dp_8)
@@ -47,6 +46,15 @@ fun HomeMainItemContainer(
                         customHomePageSearch {
                             callback.invoke(ACTION.SEARCH_PRODUCT)
                         }
+                    }
+                    if (homeData.type == "DELIVERY_ALERT") {
+                        if (!homeData.data.isNullOrEmpty()) {
+                            homePageDeliveryAlert(homeData.data) {
+                                callback.invoke(it)
+                            }
+                        }
+                    }
+                    if (homeData.type == "BANNER") {
                         homePageBrandTagUi()
                         homePageSectionTitleUi(homeData.title)
                         if (!homeData.data.isNullOrEmpty()) {

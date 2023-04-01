@@ -15,7 +15,7 @@ fun LazyListScope.homePageSectionTitleUi(data: Any?) {
         item() {
             Text(text = data,
                 style = Typography_Montserrat.body1,
-                modifier = Modifier.padding(top = 24.dp))
+                modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp))
         }
     }
 }
