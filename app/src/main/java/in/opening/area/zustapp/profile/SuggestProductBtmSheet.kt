@@ -40,7 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
 @AndroidEntryPoint
-class SuggestProductBtmSheet : BottomSheetDialogFragment() , OnApplyWindowInsetsListener {
+class SuggestProductBtmSheet : BottomSheetDialogFragment() {
     private var binding: SuggestProductBtmSheetBinding? = null
 
     private val profileViewModel: ProfileViewModel by activityViewModels()
@@ -53,6 +53,11 @@ class SuggestProductBtmSheet : BottomSheetDialogFragment() , OnApplyWindowInsets
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.composeView?.setContent {
+            SuggestProductContainer(profileViewModel) {
+                dialog?.dismiss()
+            }
+        }
     }
 
     companion object {
@@ -65,15 +70,6 @@ class SuggestProductBtmSheet : BottomSheetDialogFragment() , OnApplyWindowInsets
         }
     }
 
-    override fun onApplyWindowInsets(v: View, insets: WindowInsetsCompat): WindowInsetsCompat {
-        val keyboardHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-        binding?.composeView?.setContent {
-            SuggestProductContainer(profileViewModel) {
-                dialog?.dismiss()
-            }
-        }
-        return insets
-    }
 
 }
 
@@ -94,7 +90,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
     }
 
     ConstraintLayout(modifier = Modifier
-        .wrapContentHeight().sizeIn(maxHeight = 400.dp)
+        .wrapContentHeight()
         .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
         .padding(horizontal = 16.dp)) {
         val (closeIcon, title1, title2, inputField, sendBtn, pgBar) = createRefs()
@@ -151,7 +147,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.screen_surface_color),
                     shape = RoundedCornerShape(8.dp))
-                .defaultMinSize(minHeight = 140.dp)
+                .defaultMinSize(minHeight = 100.dp)
                 .constrainAs(inputField) {
                     top.linkTo(title2.bottom, dp_16)
                     start.linkTo(parent.start)

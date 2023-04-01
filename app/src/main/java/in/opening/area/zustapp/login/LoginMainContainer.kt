@@ -165,7 +165,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                     context.moveToInAppWebPage(APP_PRIVACY_URL, "Privacy policy")
                 }
                 annotatedStringTAndC.getStringAnnotations(tag = "term", start = offset, end = offset).firstOrNull()?.let {
-                    context.moveToInAppWebPage(APP_PRIVACY_URL, "Terms & Conditions")
+                    context.moveToInAppWebPage(APP_TC_URL, "Terms & Conditions")
                 }
             })
 
@@ -199,7 +199,8 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
 }
 
 
-const val APP_PRIVACY_URL = "https://zustapp.com/term-and-condition"
+const val APP_TC_URL = "https://zustapp.com/term-and-condition"
+const val APP_PRIVACY_URL = "https://zustapp.com/privacy-policy"
 
 
 

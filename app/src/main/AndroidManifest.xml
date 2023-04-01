@@ -182,8 +182,7 @@
         <activity
             android:name=".login.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/Theme.Material3.Light.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -48,10 +48,6 @@ fun Context.moveToInAppWebPage(url: String, title: String) {
     startActivity(inAppWebActivity)
 }
 
-//if (profileViewModel.playStoreUrl() != null) {
-//        val shareText = "Hey check out my app at: ${profileViewModel.playStoreUrl()}"
-//        AppUtility.showShareIntent(this, shareText)
-//    }
 fun Context.navigateToReferAndEarn(refer: Refer?) {
     if (refer == null) {
         return
