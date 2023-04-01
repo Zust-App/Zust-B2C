@@ -59,7 +59,7 @@ fun NoProductFoundErrorPage(
                         .wrapContentHeight()
                         .clip(RoundedCornerShape(12.dp)),
                 ) {
-                    Text(text = "Suggest Products", style = Typography_Montserrat.body1,
+                    Text(text = "Suggest items", style = Typography_Montserrat.body1,
                         color = colorResource(id = R.color.new_material_primary))
                 }
             }

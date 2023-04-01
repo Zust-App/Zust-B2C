@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -67,21 +69,29 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
         val (orderStatusTag, orderTime, divider, statusIcon) = createRefs()
 
         if (!orderStatus.createdDateTime.isNullOrEmpty()) {
-            CircleInCircle(Modifier
-                .size(16.dp)
-                .constrainAs(statusIcon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start, dp_12)
-                    bottom.linkTo(divider.top)
-                })
+            Icon(
+                painter = painterResource(id = R.drawable.ic_outline_check_circle_outline_24),
+                tint = colorResource(id = R.color.light_green), contentDescription = "completed",
+                modifier = Modifier
+                    .size(16.dp)
+                    .constrainAs(statusIcon) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start, dp_12)
+                        bottom.linkTo(divider.top)
+                    },
+            )
         } else {
-            OutlineCircle(Modifier
-                .size(16.dp)
-                .constrainAs(statusIcon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start, dp_12)
-                    bottom.linkTo(divider.top)
-                })
+            Icon(
+                painter = painterResource(id = R.drawable.ic_outline_circle_24),
+                contentDescription = "completed",
+                modifier = Modifier
+                    .size(16.dp)
+                    .constrainAs(statusIcon) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start, dp_12)
+                        bottom.linkTo(divider.top)
+                    },
+            )
         }
 
         Text(text = orderStatus.orderStatusType?.firstLetterCapitalOtherSmall() ?: "",

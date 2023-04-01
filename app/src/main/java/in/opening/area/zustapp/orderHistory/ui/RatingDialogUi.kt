@@ -25,7 +25,7 @@ fun RatingDialog(canShowDialog: Boolean, orderId: Int, viewModel: MyOrdersListVi
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(canShowDialog) }
     var rating by remember {
-        mutableStateOf(0)
+        mutableStateOf(1)
     }
     var isLoading by remember { mutableStateOf(canShowDialog) }
     val ratingApiData by viewModel.ratingOrderFlow.collectAsStateLifecycleAware(initial = RatingOrderUiState.InitialState(false))

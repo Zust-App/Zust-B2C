@@ -10,6 +10,7 @@ import `in`.opening.area.zustapp.refer.ReferAndEarnActivity
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -58,4 +59,19 @@ fun Context.navigateToReferAndEarn(refer: Refer?) {
     val referAndEarnActivity = Intent(this, ReferAndEarnActivity::class.java)
     referAndEarnActivity.putExtra(ReferAndEarnActivity.REFER_DATA_KEY, refer)
     startActivity(referAndEarnActivity)
+}
+
+fun Context.openBrowser(url: String) {
+    try {
+        if (url.contains("https")) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } else {
+            val httpsUrl = "https://$url"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(httpsUrl))
+            startActivity(intent)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

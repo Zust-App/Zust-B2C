@@ -31,13 +31,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.internal.ViewUtils
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
 @AndroidEntryPoint
-class SuggestProductBtmSheet : BottomSheetDialogFragment() {
+class SuggestProductBtmSheet : BottomSheetDialogFragment() , OnApplyWindowInsetsListener {
     private var binding: SuggestProductBtmSheetBinding? = null
 
     private val profileViewModel: ProfileViewModel by activityViewModels()
@@ -50,11 +53,6 @@ class SuggestProductBtmSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.composeView?.setContent {
-            SuggestProductContainer(profileViewModel) {
-                dialog?.dismiss()
-            }
-        }
     }
 
     companion object {
@@ -65,6 +63,16 @@ class SuggestProductBtmSheet : BottomSheetDialogFragment() {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    override fun onApplyWindowInsets(v: View, insets: WindowInsetsCompat): WindowInsetsCompat {
+        val keyboardHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+        binding?.composeView?.setContent {
+            SuggestProductContainer(profileViewModel) {
+                dialog?.dismiss()
+            }
+        }
+        return insets
     }
 
 }
@@ -86,7 +94,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
     }
 
     ConstraintLayout(modifier = Modifier
-        .wrapContentHeight()
+        .wrapContentHeight().sizeIn(maxHeight = 400.dp)
         .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
         .padding(horizontal = 16.dp)) {
         val (closeIcon, title1, title2, inputField, sendBtn, pgBar) = createRefs()
@@ -101,7 +109,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
                 })
 
         Text(
-            text = "Suggest Products",
+            text = "Suggest items",
             modifier = Modifier.constrainAs(title1) {
                 top.linkTo(closeIcon.bottom, dp_8)
                 start.linkTo(parent.start, dp_16)
@@ -127,7 +135,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
 
         TextField(
             placeholder = {
-                Text(text = "Type products...")
+                Text(text = "Type items...", style = Typography_Montserrat.body2)
             },
             value = inputText,
             onValueChange = {
@@ -157,8 +165,8 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
                 if (inputText.isNotEmpty()) {
                     rememberLoadingState = true
                     profileViewModel.sendUserSuggestProduct(SuggestProductReqModel(inputText))
-                }else{
-                    AppUtility.showToast(context,"Please write Any products")
+                } else {
+                    AppUtility.showToast(context, "Please write Any products")
                 }
             }, modifier = Modifier.constrainAs(sendBtn) {
                 top.linkTo(inputField.bottom, dp_16)

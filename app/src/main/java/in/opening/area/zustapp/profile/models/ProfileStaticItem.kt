@@ -32,7 +32,7 @@ fun getProfileStaticItems(): ArrayList<ProfileStaticItem> {
 
     staticItems.add(ProfileStaticItem("Other Information", deepLink = "", iconRes = null, type = ProfileItemViewType.TITLE))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
-    staticItems.add(ProfileStaticItem("Suggest product", iconRes = R.drawable.ic_outline_feedback_24, eventCode = SUGGEST_PRODUCT))
+    staticItems.add(ProfileStaticItem("Suggest items", iconRes = R.drawable.ic_outline_feedback_24, eventCode = SUGGEST_PRODUCT))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))
     staticItems.add(ProfileStaticItem("Terms & Conditions", iconRes = R.drawable.page_icon, eventCode = ProfileActionCallback.TC))
     staticItems.add(ProfileStaticItem("", type = ProfileItemViewType.DIVIDER))

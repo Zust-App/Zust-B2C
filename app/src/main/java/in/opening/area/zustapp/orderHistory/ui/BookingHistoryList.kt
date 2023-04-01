@@ -119,7 +119,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
 
     if (canShowRatingDialog) {
         RatingDialog(canShowDialog = true, orderId = userBooking.orderId, viewModel) {
-            AppUtility.showToast(context, "Thanks for your rating")
+            AppUtility.showToast(context, "Thanks for your rating It will updated soon")
             userBooking.rating = it
             canShowRatingDialog = false
         }
@@ -284,5 +284,5 @@ private fun getColorBasedOnStatus(status: String): Pair<Color, String> {
     } else if (status.contains("cancel", ignoreCase = true)) {
         return Pair(colorResource(id = R.color.red_primary), "cancelled")
     }
-    return Pair(colorResource(id = R.color.light_blue), status)
+    return Pair(colorResource(id = R.color.light_black), status)
 }

@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.login
 
+import TypewriterText
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.const.ENTER_MOBILE_NUM
 import `in`.opening.area.zustapp.const.INVALID_MOBILE_NUM
@@ -7,7 +8,6 @@ import `in`.opening.area.zustapp.const.MOBILE_NUM_THRESHOLD
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.extensions.getNumberKeyboardOptions
 import `in`.opening.area.zustapp.login.model.UserLoginModel
-import `in`.opening.area.zustapp.onboarding.compose.TypewriterText
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.primaryColor
 import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi

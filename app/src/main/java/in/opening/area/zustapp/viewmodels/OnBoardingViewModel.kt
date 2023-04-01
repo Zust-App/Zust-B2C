@@ -19,8 +19,5 @@ class OnBoardingViewModel @Inject constructor(private val sharedPrefManager: Sha
         return !sharedPrefManager.getUserAuthToken().isNullOrEmpty()
     }
 
-//    fun changeToken() {
-//        sharedPrefManager.saveAuthToken("aman")
-//    }
 
 }

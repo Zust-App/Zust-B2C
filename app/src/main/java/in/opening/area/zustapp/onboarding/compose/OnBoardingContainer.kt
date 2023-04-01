@@ -1,6 +1,8 @@
 package `in`.opening.area.zustapp.onboarding.compose
 
+import WebsiteLinkText
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.ComposeLottie
 import `in`.opening.area.zustapp.ui.theme.*
 import android.annotation.SuppressLint
 import androidx.compose.animation.*
@@ -38,8 +40,6 @@ private val exploringText = arrayListOf(
     "Promise freshness",
     "More than 1000 items",
     "Budget friendly",
-    "All in one grocery app",
-    "Fresh Vegetables",
     "Connecting farmers",
     "Customer Satisfaction",
     "Always Available")
@@ -51,25 +51,34 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
         .fillMaxHeight()
         .background(color = colorResource(id = R.color.white))
         .padding(horizontal = 24.dp)) {
-        val topGuideline = createGuidelineFromTop(0.4f)
-        val bottomGuideline = createGuidelineFromBottom(0.7f)
         val (loginBtn, contentContainer) = createRefs()
+        val (lottieAnimation) = createRefs()
         Column(modifier = Modifier.constrainAs(contentContainer) {
-            top.linkTo(topGuideline, dp_24)
-            bottom.linkTo(bottomGuideline, dp_40)
+            top.linkTo(parent.top, dp_40)
+            bottom.linkTo(lottieAnimation.top, dp_16)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             width = Dimension.fillToConstraints
         }) {
-            Image(painter = painterResource(id = R.drawable.zust_app_black_text), contentDescription = "Zust App", modifier = Modifier
-                .width(140.dp)
-                .height(60.dp))
-            Spacer(modifier = Modifier.height(24.dp))
-            TypewriterText(text = "Just in 45 Minutes delivery",
+            Image(painter = painterResource(id = R.drawable.zust_app_black_text),
+                contentDescription = "Zust App", modifier = Modifier
+                    .width(140.dp)
+                    .height(60.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            TypewriterText(text = "Grocery in 45 Minutes",
                 modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(40.dp))
             AnimatedTextContent(exploringText)
         }
+
+        ComposeLottie(rawId = R.raw.no_order,
+            modifier = Modifier.constrainAs(lottieAnimation) {
+                top.linkTo(contentContainer.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(loginBtn.top, dp_8)
+                height = Dimension.fillToConstraints
+            }, 0.1f)
         val (website) = createRefs()
         OutlinedButton(shape = RoundedCornerShape(12.dp), modifier = Modifier
             .fillMaxWidth()
@@ -86,15 +95,12 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
             Text(text = "Login", style = Typography_Montserrat.body1, modifier = Modifier.padding(vertical = 6.dp))
         }
 
-        Text(text = "www.zustapp.com", modifier = Modifier.constrainAs(website) {
+        WebsiteLinkText(modifier = Modifier.constrainAs(website) {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             bottom.linkTo(parent.bottom, dp_24)
             width = Dimension.fillToConstraints
-        }, textAlign = TextAlign.Center,
-            style = Typography_Montserrat.subtitle1,
-            color = colorResource(id = R.color.app_black),
-            fontWeight = FontWeight.W500)
+        })
 
 
     }
@@ -102,7 +108,7 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
 
 
 @Composable
-fun TypewriterText(text: String, modifier: Modifier = Modifier, textSize: TextUnit = 24.sp) {
+fun TypewriterText(text: String, modifier: Modifier = Modifier, textSize: TextUnit = 18.sp) {
     var index by remember { mutableStateOf(0) }
     val textToShow = text.take(index + 1)
 
@@ -128,10 +134,15 @@ fun AnimatedTextContent(textList: List<String>) {
     AnimatedContent(targetState = currentText, transitionSpec = {
         addAnimation().using(SizeTransform(clip = false))
     }) { targetCount ->
-        Text(text = targetCount, style = Typography_Montserrat.body2,
-            textAlign = TextAlign.Center,
-            fontSize = 18.sp,
-            color = colorResource(id = R.color.app_black))
+        Row() {
+            Icon(painter = painterResource(id = R.drawable.ic_outline_check_circle_outline_24),
+                contentDescription = "check", tint = colorResource(id = R.color.light_green))
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(text = targetCount, style = Typography_Montserrat.body2,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                color = colorResource(id = R.color.app_black))
+        }
     }
     LaunchedEffect(currentIndex) {
         delay(2000)

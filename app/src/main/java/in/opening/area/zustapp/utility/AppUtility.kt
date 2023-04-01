@@ -26,7 +26,7 @@ class AppUtility {
         const val WA_PACKAGE_NAME = "com.whatsapp"
         const val BUSINESS_WA_PACKAGE_NAME = "com.whatsapp.w4b"
         private val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=" + getPackageName()
-
+        const val WEB_URL="www.zustapp.com"
         private fun getPackageName(): String {
             return MyApplication.getApplication().packageName ?: "in.opening.area.zustapp"
         }
