@@ -30,6 +30,8 @@ data class OrderDetailData(
     val deliveryPartnerTip: Double? = null,
     val statusSeq: String? = null,
     val reason: String? = null,
+    val updatedTotalPrice: Double? = null,
+    val riderDetails: RiderDetails? = null,
     var displayOrderStatus: ArrayList<OrderStatus>? = arrayListOf(),
 )
 
@@ -50,6 +52,8 @@ data class Item(
     val quantity: Double,
     val unit: String,
 )
+
+data class RiderDetails(val riderPhone: String? = null, val riderName: String? = null)
 
 @Keep
 data class Address(

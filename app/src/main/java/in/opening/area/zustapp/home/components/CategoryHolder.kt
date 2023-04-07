@@ -60,7 +60,7 @@ fun LazyListScope.categoryHolder(dataList: List<HomePageGenericData>?) {
 }
 
 private val categoryModifier = Modifier
-    .height(120.dp)
+    .height(140.dp)
     .padding(vertical = 6.dp,
         horizontal = 16.dp)
     .clip(RoundedCornerShape(16.dp))
@@ -85,9 +85,9 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
                 .crossfade(true)
                 .build(),
             contentDescription = null,
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .clip(MaterialTheme.shapes.medium)
+                .clip(RoundedCornerShape(8.dp))
                 .constrainAs(categoryImage) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)

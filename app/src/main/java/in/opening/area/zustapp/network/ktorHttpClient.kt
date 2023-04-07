@@ -1,9 +1,10 @@
 package `in`.opening.area.zustapp.network
 
 import `in`.opening.area.zustapp.BuildConfig
-import `in`.opening.area.zustapp.analytics.FirebaseApiEvents
 import `in`.opening.area.zustapp.utility.DeviceInfo
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
@@ -12,7 +13,12 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.features.observer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import javax.inject.Inject
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 private const val APP_VERSION_CODE = "version_code"
 private const val APP_VERSION_NAME = "version_name"
@@ -23,12 +29,20 @@ private const val DEVICE_MODEL = "device_model"
 private const val BRAND = "brand"
 
 val ktorHttpClient = HttpClient(CIO) {
+//    engine {
+//        https {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                val customTrustManager = CustomX509TrustManager()
+//                val sslContext = SSLContext.getInstance("TLS")
+//                sslContext.init(null, arrayOf<TrustManager>(customTrustManager), SecureRandom())
+//                this.trustManager = customTrustManager
+//            }
+//        }
+//    }
     install(JsonFeature) {
         serializer = GsonSerializer()
-
     }
     install(DefaultRequest) {
-        // Increase the timeout to 30 seconds
         timeout {
             requestTimeoutMillis = 30_000
         }
@@ -37,14 +51,17 @@ val ktorHttpClient = HttpClient(CIO) {
     install(Logging) {
         logger = object : Logger {
             override fun log(message: String) {
-                Log.e("Zust", message)
+                if (BuildConfig.DEBUG) {
+                    Log.e("Zust", message)
+                }
             }
         }
         level = LogLevel.ALL
-
         install(ResponseObserver) {
             onResponse { response ->
-                Log.e("Zust", "${response.status.value}")
+                if (BuildConfig.DEBUG) {
+                    Log.e("Zust", "${response.status.value}")
+                }
             }
         }
     }

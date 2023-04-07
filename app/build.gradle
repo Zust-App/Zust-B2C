@@ -17,8 +17,8 @@ android {
         applicationId "in.opening.area.zustapp"
         minSdk 23
         targetSdk 33
-        versionCode 12
-        versionName "2023.4.2"
+        versionCode 13
+        versionName "2023.4.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,11 +31,13 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "PROD_BASE_URL", "\"https://zcapi.zustapp.com/greenboys-api/api/v1\""
+            buildConfigField "String", "DEV_BASE_URL", "\"https://gcapi.grinzy.in/greenboys-api/api/v1\""
         }
         debug {
-//            minifyEnabled true
-//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "PROD_BASE_URL", "\"https://zcapi.zustapp.com/greenboys-api/api/v1\""
+            buildConfigField "String", "DEV_BASE_URL", "\"https://gcapi.grinzy.in/greenboys-api/api/v1\""
         }
     }
     compileOptions {

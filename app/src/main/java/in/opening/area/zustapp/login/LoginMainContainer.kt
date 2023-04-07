@@ -2,6 +2,7 @@ package `in`.opening.area.zustapp.login
 
 import TypewriterText
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.const.ENTER_MOBILE_NUM
 import `in`.opening.area.zustapp.const.INVALID_MOBILE_NUM
 import `in`.opening.area.zustapp.const.MOBILE_NUM_THRESHOLD
@@ -15,7 +16,6 @@ import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.moveToInAppWebPage
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -163,9 +163,11 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 annotatedStringTAndC.getStringAnnotations(tag = "policy",
                     start = offset, end = offset).firstOrNull()?.let {
                     context.moveToInAppWebPage(APP_PRIVACY_URL, "Privacy policy")
+                    FirebaseAnalytics.logEvents(FirebaseAnalytics.PRIVACY_POLICY_CLICK)
                 }
                 annotatedStringTAndC.getStringAnnotations(tag = "term", start = offset, end = offset).firstOrNull()?.let {
                     context.moveToInAppWebPage(APP_TC_URL, "Terms & Conditions")
+                    FirebaseAnalytics.logEvents(FirebaseAnalytics.TERM_VIEW)
                 }
             })
 
@@ -194,6 +196,7 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
             Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show()
             return
         }
+        FirebaseAnalytics.logEvents(FirebaseAnalytics.LOGIN_PROCEED)
         loginViewModel.userLoginModelFlow.update { UserLoginModel(otp = "", userName = "", userEmail = "", mobileNum = mobileNumber) }
         loginViewModel.makeLoginRequestForGetOtp(mobileNumber)
     }
@@ -201,7 +204,7 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
 
 
 const val APP_TC_URL = "https://zustapp.com/term-and-condition"
-const val APP_PRIVACY_URL = "https://zustapp.com/policy"
+const val APP_PRIVACY_URL = "https://zustapp.com/privacy-policy.html"
 
 
 

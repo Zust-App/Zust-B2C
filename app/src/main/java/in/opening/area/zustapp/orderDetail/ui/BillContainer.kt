@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -134,12 +135,33 @@ fun BillContainer(data: OrderDetailData?) {
                 color = colorResource(id = R.color.new_material_primary))
 
             Spacer(Modifier.weight(1f))
-
-            Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
-                style = Typography_Montserrat.body2,
-                fontSize = 14.sp,
-                color = colorResource(id = R.color.new_material_primary))
+            if (data.updatedTotalPrice != null && data.updatedTotalPrice != 0.0) {
+                Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
+                    style = Typography_Montserrat.body2.copy(textDecoration = TextDecoration.LineThrough),
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.new_material_primary))
+            } else {
+                Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
+                    style = Typography_Montserrat.body2,
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.new_material_primary))
+            }
         }
+        if (data.updatedTotalPrice != null && data.updatedTotalPrice != 0.0) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Text(text = "Updated Price",
+                    style = Typography_Montserrat.body2,
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.red_secondary))
 
+                Spacer(Modifier.weight(1f))
+
+                Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
+                    style = Typography_Montserrat.body2,
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.red_secondary))
+            }
+        }
     }
 }

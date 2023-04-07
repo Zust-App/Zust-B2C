@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.login
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.ui.generic.CustomUpBtn
 import `in`.opening.area.zustapp.ui.theme.*
@@ -8,6 +9,7 @@ import `in`.opening.area.zustapp.uiModels.login.UpdateUserProfileUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import android.content.Context
+import android.os.Bundle
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,9 +44,11 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
     when (response) {
         is UpdateUserProfileUi.ProfileSuccess -> {
             if (!response.data.id.isNullOrEmpty()) {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.PROFILE_SUCCESSFULLY_NEW_CREATED)
                 loginViewModel.saveKeyForProfileCreated(true)
                 navigationAction.invoke(LoginNav.MOVE_TO_NEXT)
             } else {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.NEW_PROFILE_CREATE_ERROR)
                 loginViewModel.saveKeyForProfileCreated(false)
                 AppUtility.showToast(context, "Something went wrong")
             }
@@ -53,6 +57,7 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
             canShowProgressbar = response.isLoading
         }
         is UpdateUserProfileUi.ErrorUi -> {
+            FirebaseAnalytics.logEvents(FirebaseAnalytics.NEW_PROFILE_CREATE_ERROR)
             loginViewModel.saveKeyForProfileCreated(false)
             referralCode = ""
             if (!response.errors.isNullOrEmpty()) {
@@ -178,6 +183,13 @@ private fun updateUserProfile(
             if (loginViewModel.userProfileUiState.value.isLoading) {
                 AppUtility.showToast(context, "Please wait")
                 return
+            }
+            if (!referralCode.isNullOrEmpty()) {
+                val bundle = Bundle()
+                bundle.putString("referral_code", referralCode)
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.PROFILE_CREATE_CLICK, bundle)
+            } else {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.PROFILE_CREATE_CLICK)
             }
             loginViewModel.updateUserProfile(userName = userName, userEmail = userEmailId, referralCodeByUser)
         }

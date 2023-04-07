@@ -40,6 +40,11 @@
 -keep class in.opening.area.zustapp.utility.UserCustomError{ *; }
 -keep class in.opening.area.zustapp.utility.PagingMetadata{ *; }
 
+-keepclassmembers class in.opening.area.zustapp.BuildConfig {
+    public static java.lang.String DEV_BASE_URL;
+    public static java.lang.String PROD_BASE_URL;
+}
+-renamesourcefileattribute SourceFile
 
 
 

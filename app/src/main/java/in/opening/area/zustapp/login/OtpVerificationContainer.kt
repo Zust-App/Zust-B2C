@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.login
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.login.model.UserLoginModel
 import `in`.opening.area.zustapp.ui.generic.CustomUpBtn
@@ -59,14 +60,17 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
         }
         is GetOtpLoginUi.OtpGetSuccess -> {
             if (resendOtpData.data.isNotificationSent == true) {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.RESEND_OTP_SUCCESS)
                 AppUtility.showToast(context, "Otp send to your mobile number")
                 loginViewModel.startResendOtpTimer()
             } else {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.RESEND_OTP_ERROR)
                 loginViewModel.resendOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
         is GetOtpLoginUi.ErrorUi -> {
+            FirebaseAnalytics.logEvents(FirebaseAnalytics.RESEND_OTP_ERROR)
             if (!resendOtpData.errors.isNullOrEmpty()) {
                 AppUtility.showToast(context, resendOtpData.errors.getTextMsg())
             } else {
@@ -88,7 +92,9 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                 loginViewModel.sharedPrefManager.saveAuthToken(response.data.token)
                 loginViewModel.sharedPrefManager.saveUserPhoneNumber(user.mobileNum)
                 loginViewModel.sendFcmToken()
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.OTP_VERIFIED)
                 if (response.data.isProfileCreated) {
+                    FirebaseAnalytics.logEvents(FirebaseAnalytics.PROFILE_CREATED)
                     loginViewModel.saveKeyForProfileCreated(true)
                     loginViewModel.verifyOtpUiState.update { VerifyOtpUi.InitialUi(false) }
                     navigationAction.invoke(LoginNav.MOVE_TO_NEXT)
@@ -98,10 +104,12 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     navigationAction.invoke(LoginNav.MOVE_TO_PROFILE)
                 }
             } else {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.OTP_VERIFICATION_ERROR)
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
         is VerifyOtpUi.ErrorUi -> {
+            FirebaseAnalytics.logEvents(FirebaseAnalytics.OTP_VERIFICATION_ERROR)
             if (!response.errorMsg.isNullOrEmpty()) {
                 AppUtility.showToast(context, response.errorMsg)
             } else {
@@ -183,6 +191,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     .clickable {
                         if (!loginViewModel.resendOtpUiState.value.isLoading) {
                             loginViewModel.makeResendOtp(user.mobileNum)
+                            FirebaseAnalytics.logEvents(FirebaseAnalytics.RESEND_OTP_CLICK)
                         } else {
                             AppUtility.showToast(context, "Please wait")
                         }
@@ -243,6 +252,7 @@ fun verificationOfUserOtp(enteredOtpText: String?, loginViewModel: LoginViewMode
                     AppUtility.run { showToast(context, "Please wait") }
                     return
                 }
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.OTP_VERIFICATION_CLICK)
                 loginVerifyUserOTP(mobileNumber, enteredOtpText)
             }
         }

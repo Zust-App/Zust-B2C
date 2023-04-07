@@ -92,6 +92,12 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                             OrderSecretCodeContainer(data = response.data)
                         }
                     }
+                    item {
+                        if (response.data.riderDetails != null) {
+                            Spacer(modifier = Modifier.height(dp_20))
+                            DeliveryPartnerInfoUi(response.data.riderDetails)
+                        }
+                    }
                     if (!response.data.reason.isNullOrEmpty()) {
                         item {
                             Spacer(modifier = Modifier.height(dp_20))

@@ -1,5 +1,7 @@
 package `in`.opening.area.zustapp.network
 
+import `in`.opening.area.zustapp.BuildConfig
+
 class NetworkUtility {
 
     companion object {
@@ -7,10 +9,14 @@ class NetworkUtility {
         private const val isProd = true
 
         private fun getCompleteBaseUrl(): String {
-            return if (isProd) {
-                "https://zcapi.zustapp.com/" + "greenboys-api/api/v1"
+            return if (!BuildConfig.DEBUG) {
+                BuildConfig.PROD_BASE_URL
             } else {
-                "https://gcapi.grinzy.in/" + "greenboys-api/api/v1"
+                if (isProd) {
+                    BuildConfig.PROD_BASE_URL
+                } else {
+                    BuildConfig.DEV_BASE_URL
+                }
             }
         }
 
