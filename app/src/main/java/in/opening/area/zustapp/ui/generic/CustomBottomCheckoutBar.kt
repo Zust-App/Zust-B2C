@@ -11,6 +11,8 @@ import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryNetworkVM
 import android.content.Context
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,7 +39,8 @@ import androidx.lifecycle.ViewModel
 
 @Composable
 fun CustomBottomBarView(
-    viewModel: ViewModel, type: VALUE, proceedToCartClick: () -> Unit,
+    viewModel: ViewModel, type: VALUE,
+    proceedToCartClick: () -> Unit,
     successCallback: (CreateCartData) -> Unit,
 ) {
     val context: Context = LocalContext.current
@@ -64,8 +67,17 @@ fun CustomBottomBarView(
             }
         }
 
-
-        if (addToCart.totalItemCount>0) {
+        AnimatedVisibility(
+            visible = addToCart.totalItemCount > 0,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(durationMillis = 400)
+            ) + fadeIn(),
+            exit = slideOutVertically(
+                targetOffsetY = { it },
+                animationSpec = tween(durationMillis = 50)
+            ) + fadeOut(),
+        ) {
             BottomAppBar(
                 modifier = Modifier
                     .clickable {
@@ -76,7 +88,7 @@ fun CustomBottomBarView(
             ) {
                 ConstraintLayout(modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)) {
+                    .height(40.dp)) {
                     val (itemCount, price, viewCart, progressBar, viewCartIcon) = createRefs()
                     Text(text = addToCart.totalItemCount.toString() + " Items", modifier = Modifier.constrainAs(itemCount) {
                         start.linkTo(parent.start, dp_16)
@@ -84,7 +96,8 @@ fun CustomBottomBarView(
                     }, color = Color.White,
                         style = Typography_Montserrat.subtitle1)
 
-                    Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(addToCart.calculatedPrice),
+                    Text(text = stringResource(id = R.string.ruppes) +
+                            ProductUtils.roundTo1DecimalPlaces(addToCart.calculatedPrice),
                         modifier = Modifier.constrainAs(price) {
                             start.linkTo(parent.start, dp_16)
                             top.linkTo(itemCount.bottom, dp_4)
@@ -120,6 +133,7 @@ fun CustomBottomBarView(
 
             }
         }
+
     }
 }
 

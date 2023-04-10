@@ -3,10 +3,7 @@ package `in`.opening.area.zustapp.home.components
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.home.models.HomePageGenericData
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
-import `in`.opening.area.zustapp.ui.theme.dp_12
-import `in`.opening.area.zustapp.ui.theme.dp_16
-import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,10 +29,9 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
         ConstraintLayout(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp)
-            .height(130.dp)
+            .wrapContentHeight()
             .background(color = colorResource(id = R.color.light_green))) {
-            val verticalGuideline = createGuidelineFromStart(0.5f)
-            val (alertTextTitle, alertTextImage, alertTextBody, waIcon, callUs) = createRefs()
+            val (alertTextTitle, alertTextBody, waIcon, callUs) = createRefs()
             Text(text = "Delivery Alert",
                 color = colorResource(id = R.color.white),
                 style = Typography_Montserrat.body1,
@@ -47,15 +43,6 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
                         width = Dimension.fillToConstraints
                     })
 
-            Image(painter = painterResource(id = R.drawable.handshake),
-                contentDescription = "", modifier = Modifier
-                    .constrainAs(alertTextImage) {
-                        top.linkTo(alertTextTitle.bottom, dp_12)
-                        start.linkTo(parent.start, dp_16)
-                        bottom.linkTo(parent.bottom, dp_12)
-                        end.linkTo(verticalGuideline)
-                    }
-                    .size(100.dp))
 
             Text(text = data[0].description ?: "For now you can call or whatsapp us",
                 color = colorResource(id = R.color.white),
@@ -64,8 +51,8 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
                     .wrapContentHeight()
                     .constrainAs(alertTextBody) {
                         top.linkTo(alertTextTitle.bottom, dp_8)
-                        end.linkTo(parent.end)
-                        start.linkTo(verticalGuideline)
+                        end.linkTo(parent.end, dp_20)
+                        start.linkTo(parent.start, dp_16)
                         bottom.linkTo(waIcon.top, dp_12)
                         width = Dimension.fillToConstraints
                     }, overflow = TextOverflow.Ellipsis)
@@ -89,7 +76,7 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
                 modifier = Modifier
                     .size(30.dp)
                     .constrainAs(callUs) {
-                        end.linkTo(waIcon.start, dp_12)
+                        end.linkTo(waIcon.start, dp_20)
                         bottom.linkTo(parent.bottom, dp_12)
                     }
                     .clickable {

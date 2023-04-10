@@ -1,6 +1,10 @@
 package `in`.opening.area.zustapp.profile
 
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.address.AddressAddSelectActivity
 import `in`.opening.area.zustapp.address.AddressBottomSheetV2
+import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
 import `in`.opening.area.zustapp.helpline.HelplineBtmSheet
@@ -9,8 +13,10 @@ import `in`.opening.area.zustapp.inappreview.InAppReview
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.profile.components.ProfileMainContainer
+import `in`.opening.area.zustapp.utility.moveToInAppWebPage
 import `in`.opening.area.zustapp.utility.navigateToReferAndEarn
 import `in`.opening.area.zustapp.utility.proceedToLoginActivity
+import `in`.opening.area.zustapp.utility.startMyOrders
 import `in`.opening.area.zustapp.viewmodels.ProfileViewModel
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Intent
@@ -27,7 +33,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
+class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSheetCallback {
     private val profileViewModel: ProfileViewModel by viewModels()
 
     private val inAppReview: InAppReview by lazy { InAppReview(this) }
@@ -77,8 +83,8 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
     private fun handleClickRedirection(eventCode: Int) {
         when (eventCode) {
             ProfileActionCallback.MY_ORDER -> {
-                val orderHistoryIntent = Intent(this, MyOrdersActivity::class.java)
-                startActivity(orderHistoryIntent)
+                this.startMyOrders()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
             ProfileActionCallback.MY_ADDRESS -> {
                 showAddressBtmSheet()
@@ -91,26 +97,31 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
             }
             ProfileActionCallback.SHARE_APP -> {
                 this.navigateToReferAndEarn(profileViewModel.getReferral())
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
             //web activity start from here
             ProfileActionCallback.FAQ -> {
                 if (profileViewModel.faqUrl() != null) {
-                    startInAppWebActivity(profileViewModel.faqUrl(), "Faq")
+                    this.moveToInAppWebPage(profileViewModel.faqUrl()!!, "Faq")
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.ABOUT_US -> {
                 if (profileViewModel.getAboutUsUrl() != null) {
-                    startInAppWebActivity(profileViewModel.getAboutUsUrl(), "About us")
+                    this.moveToInAppWebPage(profileViewModel.getAboutUsUrl()!!, "About us")
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.OPEN_SOURCE -> {
                 if (profileViewModel.getOpenSourceUrl() != null) {
-                    startInAppWebActivity(profileViewModel.getOpenSourceUrl(), "Open source")
+                    this.moveToInAppWebPage(profileViewModel.getOpenSourceUrl()!!, "Open source")
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.TC -> {
                 if (profileViewModel.termAndConditionUrl() != null) {
-                    startInAppWebActivity(profileViewModel.termAndConditionUrl(), "Terms & Condition")
+                    this.moveToInAppWebPage(profileViewModel.termAndConditionUrl()!!, "Terms & Condition")
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.HELPLINE -> {
@@ -118,7 +129,8 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
             }
             ProfileActionCallback.PRIVACY_POLICY -> {
                 if (profileViewModel.privacyPolicyUrl() != null) {
-                    startInAppWebActivity(profileViewModel.privacyPolicyUrl(), "Privacy Policy")
+                    this.moveToInAppWebPage(profileViewModel.privacyPolicyUrl()!!, "Privacy Policy")
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.LOGOUT -> {
@@ -142,18 +154,20 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback {
         suggestProductSheet.show(supportFragmentManager, "suggest_product")
     }
 
-    private fun startInAppWebActivity(url: String? = null, title: String) {
-        if (url == null) {
-            return
-        }
-        val inAppWebActivity = Intent(this, InAppWebActivity::class.java)
-        inAppWebActivity.putExtra(InAppWebActivity.WEB_URL, url)
-        inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, title)
-        startActivity(inAppWebActivity)
-    }
 
     private fun openHelplineBtmSheet() {
         val helpAndSupportBtmSheet: HelplineBtmSheet = HelplineBtmSheet.newInstance()
         helpAndSupportBtmSheet.show(supportFragmentManager, "help_support")
+    }
+
+
+    override fun didTapOnAddNewAddress() {
+        val newAddressIntent = Intent(this, AddressAddSelectActivity::class.java)
+        startActivity(newAddressIntent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
+    override fun didTapOnAddAddress(savedAddress: AddressItem) {
+        //empty
     }
 }

@@ -5,6 +5,7 @@ import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity.Companion.ORDER_ID
 import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
 import `in`.opening.area.zustapp.orderHistory.models.OrderHistoryItem
+import `in`.opening.area.zustapp.pagination.LoadingError
 import `in`.opening.area.zustapp.pagination.NoPageFoundException
 import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -49,11 +50,15 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
     val state = rememberSwipeRefreshState(
         isRefreshing = userBookingItems.loadState.refresh is LoadState.Loading,
     )
+    val context= LocalContext.current
     userBookingItems.apply {
         if (userBookingItems.loadState.refresh is LoadState.Error) {
             val error = (userBookingItems.loadState.refresh as LoadState.Error).error
             if (error is NoPageFoundException) {
                 NoOrderFoundContainer()
+            }
+            if (error is LoadingError) {
+                AppUtility.showToast(context,"Something went wrong please try again")
             }
         }
     }
@@ -183,7 +188,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
                 width = Dimension.fillToConstraints
             })
 
-        Text(text = stringResource(id = R.string.ruppes) + ProductUtils.getNumberDisplayValue(userBooking.payablePrice), modifier = Modifier.constrainAs(orderAmount) {
+        Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(userBooking.payablePrice), modifier = Modifier.constrainAs(orderAmount) {
             end.linkTo(parent.end, dp_16)
             top.linkTo(divider.bottom, dp_12)
         }, color = colorResource(id = R.color.app_black), style = Typography_Montserrat.body2, fontWeight = FontWeight.W600)

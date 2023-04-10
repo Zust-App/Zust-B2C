@@ -77,7 +77,7 @@ fun OrderedItemSingleUnit(item: Item) {
 
         Text(text = buildString {
             append(stringResource(id = R.string.ruppes))
-            append(ProductUtils.getNumberDisplayValue(item.payablePrice))
+            append(ProductUtils.roundTo1DecimalPlaces(item.payablePrice))
         }, modifier = Modifier.constrainAs(productPrice) {
             top.linkTo(productQuantity.bottom, dp_10)
             start.linkTo(productImage.end, dp_12)

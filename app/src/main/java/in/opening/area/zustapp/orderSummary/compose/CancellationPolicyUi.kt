@@ -4,6 +4,7 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
 import `in`.opening.area.zustapp.orderSummary.model.CancellationPolicyUiModel
 import `in`.opening.area.zustapp.ui.theme.montserrat
+import `in`.opening.area.zustapp.ui.theme.okraFontFamily
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,10 +27,10 @@ fun CancellationPolicyUi(orderSummaryViewModel: OrderSummaryViewModel) {
             Column(modifier = Modifier
                 .padding(vertical = 10.dp)
                 .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
-                .padding(horizontal = 16.dp, vertical = 24.dp)) {
+                .padding(horizontal = 16.dp, vertical = 16.dp)) {
                 Text(
                     fontWeight = FontWeight.W500,
-                    fontFamily = montserrat,
+                    fontFamily = okraFontFamily,
                     color = colorResource(id = R.color.new_hint_color),
                     fontSize = 12.sp,
                     text = "Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided")

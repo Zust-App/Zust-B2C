@@ -20,7 +20,7 @@ import androidx.constraintlayout.compose.Dimension
 
 @Composable
 fun DeliveryAddressContainer(data: OrderDetailData?) {
-    if (data == null) {
+    if (data?.address == null) {
         return
     }
     val address: Address = data.address

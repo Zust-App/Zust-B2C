@@ -24,6 +24,7 @@ import androidx.constraintlayout.compose.Dimension
 const val KEY_NEW_ADDRESS = "new"
 const val KEY_SAVED_ADDRESS = "saved"
 const val CURRENT_LOCATION="current_location"
+const val FINISH_PAGE="finish"
 
 @Composable
 fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, paddingValues: PaddingValues, callback: (Any) -> Unit) {

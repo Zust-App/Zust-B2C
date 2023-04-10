@@ -22,5 +22,5 @@ data class LockOrderResponseData(
     val orderId: Int,
     val address: Address,
     val expectedDelivery: String? = null,
-    val isFreeDelivery: String? = null,
+    val isFreeDelivery: Boolean? = null,
 )

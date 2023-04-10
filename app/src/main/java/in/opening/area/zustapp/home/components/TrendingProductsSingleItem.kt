@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -48,8 +49,12 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
         .clickable {
             context.startProductDetailPage(product)
         }) {
-        val (productImage, productName, productQuantity, productPrice, productMrp, incDecContainer, addItemContainer) = createRefs()
-        AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(product.thumbnail).crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
+        val (
+            productImage, productName, productQuantity, productPrice, productMrp,
+            incDecContainer, addItemContainer, offerPercentage,
+        ) = createRefs()
+        AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(product.thumbnail)
+            .crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
             .size(88.dp)
             .constrainAs(productImage) {
                 top.linkTo(parent.top, dp_8)
@@ -168,6 +173,19 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                         shape = RoundedCornerShape(4.dp)),
                 tint = colorResource(id = R.color.white)
             )
+        }
+        if (product.discountPercentage > 0.0) {
+            Text(text = product.discountPercentage.toInt().toString() + "% OFF", modifier = Modifier
+                .background(color = colorResource(id = R.color.new_material_primary), shape = RoundedCornerShape(4.dp))
+                .padding(horizontal = 8.dp,
+                    vertical = 2.dp)
+                .constrainAs(offerPercentage) {
+                    start.linkTo(parent.start, dp_4)
+                    top.linkTo(parent.top, dp_4)
+                }, color = Color.White,
+                fontSize = 10.sp,
+                fontFamily = montserrat,
+                fontWeight = FontWeight.W600)
         }
     }
 }

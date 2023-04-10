@@ -144,8 +144,11 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                             Text(text = "Pay", style = Typography_Montserrat.subtitle1,
                                 color = colorResource(id = R.color.white))
                             Text(text = stringResource(id = R.string.ruppes) +
-                                    ProductUtils.roundTo1DecimalPlaces(cartData.data.totalCurrentPrice +
-                                            cartData.data.deliveryPartnerTip),
+                                    ProductUtils.roundTo1DecimalPlaces(
+                                        cartData.data.totalCurrentPrice +
+                                                (cartData.data.deliveryPartnerTip) +
+                                                (cartData.data.deliveryFee ?: 0.0)
+                                                + (cartData.data.packagingFee ?: 0.0)),
                                 style = Typography_Montserrat.body1,
                                 color = colorResource(id = R.color.white))
                         }

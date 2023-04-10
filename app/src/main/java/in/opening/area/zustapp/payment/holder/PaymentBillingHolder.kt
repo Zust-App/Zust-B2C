@@ -42,7 +42,9 @@ class PaymentBillingHolder(
         paymentBillingDetailsBinding?.expandCollapseArrow?.setOnClickListener {
             if (paymentContainer?.visibility == View.VISIBLE) {
                 paymentContainer?.hideViewWithAnimation(true)
+                paymentBillingDetailsBinding.expandCollapseArrow.rotation =0f
             } else if (paymentContainer?.visibility == View.GONE) {
+                paymentBillingDetailsBinding.expandCollapseArrow.rotation =180f
                 paymentContainer?.showViewWithAnimation(true)
             }
         }

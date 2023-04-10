@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".codes.webpage.InAppWebActivity">
+    tools:context=".webpage.InAppWebActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"
@@ -25,7 +25,8 @@
                 android:src="@drawable/ic_baseline_keyboard_backspace_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black_2" />
 
             <TextView
                 android:id="@+id/titleText"
@@ -35,7 +36,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/okra_semibold"
+                android:fontFamily="@font/montserrat_semibold"
                 android:text=""
                 android:textColor="@color/app_black"
                 android:textSize="18sp"

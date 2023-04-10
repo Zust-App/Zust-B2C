@@ -20,7 +20,6 @@ class ProductUtils @Inject constructor(private val sharedPrefManager: SharedPref
                 return ""
             }
             return if (doubleValue == doubleValue.toInt().toDouble()) doubleValue.toInt().toString() else BigDecimal(doubleValue).setScale(1, RoundingMode.HALF_UP).toDouble().toString()
-
         }
 
     }

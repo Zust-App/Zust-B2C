@@ -1,23 +1,15 @@
 package `in`.opening.area.zustapp.payment.holder
 
+import `in`.opening.area.zustapp.databinding.PaymentDetailSavingsItemBinding
 import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
-import `in`.opening.area.zustapp.databinding.PaymentPageSavingsBinding
-import android.view.View
 import android.widget.TextView
 
-class TimingSavingHolder(val binding: PaymentPageSavingsBinding?) {
+class TimingSavingHolder(val binding: PaymentDetailSavingsItemBinding?) {
     private val freeDeliveryTag: TextView? = binding?.freeDeliveryTag
-    val savingsAmount: TextView? = binding?.totalSavingsTextView
     private val expectedDeliveryTime: TextView? = binding?.expectedDeliveryTimeText
 
-    private fun setFreeDelivery(isFreeDelivery: Boolean) {
-        if (isFreeDelivery) {
-            freeDeliveryTag?.visibility = View.VISIBLE
-            savingsAmount?.visibility=View.GONE
-        } else {
-            freeDeliveryTag?.visibility = View.GONE
-            savingsAmount?.visibility=View.VISIBLE
-        }
+    private fun setFreeDelivery(freeDeliveryText: String) {
+        freeDeliveryTag?.text = freeDeliveryText
     }
 
     private fun setExpectedDeliveryTime(time: String?) {
@@ -30,13 +22,10 @@ class TimingSavingHolder(val binding: PaymentPageSavingsBinding?) {
         } else {
             setExpectedDeliveryTime("Delivery in 45 Mins")
         }
-        if (!paymentActivityReqData?.isFreeDelivery.isNullOrEmpty()) {
-            val freeDelivery = paymentActivityReqData!!.isFreeDelivery
-            if (freeDelivery?.contains("ADD", ignoreCase = true) == true) {
-                setFreeDelivery(true)
-            }else{
-                setFreeDelivery(false)
-            }
+        if (paymentActivityReqData?.isFreeDelivery == true) {
+            setFreeDelivery("Yay! Eligible for free delivery")
+        } else {
+            setFreeDelivery("Free delivery above ₹99")
         }
     }
 }

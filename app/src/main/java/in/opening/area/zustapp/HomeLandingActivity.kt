@@ -4,7 +4,10 @@ import `in`.opening.area.zustapp.address.AddressAddSelectActivity
 import `in`.opening.area.zustapp.address.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.compose.CustomBottomNavigation
 import `in`.opening.area.zustapp.compose.CustomTopBar
+import `in`.opening.area.zustapp.compose.FloatingCartButton
+import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
 import `in`.opening.area.zustapp.fcm.CustomFcmService
 import `in`.opening.area.zustapp.helper.InAppUpdateManager
@@ -12,25 +15,16 @@ import `in`.opening.area.zustapp.helper.SelectLanguageFragment
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.home.HomeMainContainer
 import `in`.opening.area.zustapp.offline.ConnectionLiveData
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 import `in`.opening.area.zustapp.orderSummary.OrderSummaryActivity
 import `in`.opening.area.zustapp.payment.PaymentActivity
 import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.model.CreateCartData
-import `in`.opening.area.zustapp.profile.ProfileActivity
 import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
-import `in`.opening.area.zustapp.search.SearchProductActivity
-import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
 import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
-import `in`.opening.area.zustapp.uiModels.VALUE
-import `in`.opening.area.zustapp.utility.AppDeepLinkHandler
-import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.utility.ShowToast
-import `in`.opening.area.zustapp.utility.proceedToLoginActivity
+import `in`.opening.area.zustapp.utility.*
 import `in`.opening.area.zustapp.viewmodels.HomeViewModel
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
@@ -44,7 +38,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -61,14 +54,8 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         setContent {
             Scaffold(
                 bottomBar = {
-                    CustomBottomBarView(viewModel = homeViewModel, VALUE.A, {
-                        if (!homeViewModel.isCreateCartOnGoing()) {
-                            homeViewModel.createCartOrderWithServer(VALUE.A)
-                        } else {
-                            AppUtility.showToast(this, "Please wait")
-                        }
-                    }) {
-                        startOrderSummaryActivity(it)
+                    CustomBottomNavigation(homeViewModel) { destination, data ->
+                        handleBottomNavCallback(destination, data)
                     }
                 },
                 topBar = {
@@ -138,48 +125,33 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
                 supportFragmentManager.showBottomSheetIsNotPresent(bottomSheetV2, AddressBottomSheetV2.SHEET_TAG)
             }
             ACTION.OPEN_USER_BOOKING -> {
-                startUserProfileActivity()
+                this.startUserProfileActivity()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
             ACTION.SEARCH_PRODUCT -> {
-                startSearchActivity()
+                this.startSearchActivity()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
             ACTION.SUGGEST_PRODUCT -> {
                 showSuggestProductSheet()
             }
             ACTION.OPEN_PROFILE -> {
-                startUserProfileActivity()
+                this.startUserProfileActivity()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
             ACTION.ORDER_WA -> {
-                openWhatsAppOrderIntent()
+                this.openWhatsAppOrderIntent()
             }
             ACTION.LANGUAGE_DIALOG -> {
                 showLanguageSelectionDialog()
             }
             ACTION.PHONE_CALL -> {
-                AppUtility.openCallIntent(this, "74564062907")
+                this.openCallIntent("74564062907")
             }
             else -> {}
         }
     }
 
-    private fun startUserProfileActivity() {
-        val profileIntent = Intent(this, ProfileActivity::class.java)
-        startActivity(profileIntent)
-    }
-
-    private fun startSearchActivity() {
-        val searchIntent = Intent(this, SearchProductActivity::class.java)
-        startActivity(searchIntent)
-    }
-
-
-    private fun proceedToOrderDetails(orderId: Int?) {
-        if (orderId != null) {
-            val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
-            orderDetailIntent.putExtra(OrderDetailActivity.ORDER_ID, orderId)
-            startActivity(orderDetailIntent)
-        }
-    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -191,38 +163,10 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
     }
 
 
-    private fun openWhatsAppOrderIntent() {
-        val sendIntent = Intent(Intent.ACTION_VIEW)
-        sendIntent.data = Uri.parse(AppUtility.getWhatsappHelpUrl())
-        if (AppUtility.isAppInstalled(AppUtility.WA_PACKAGE_NAME)) {
-            startActivity(sendIntent)
-        } else if (AppUtility.isAppInstalled(AppUtility.BUSINESS_WA_PACKAGE_NAME)) {
-            startActivity(sendIntent)
-        }
-    }
-
     private fun showSuggestProductSheet() {
         supportFragmentManager.showBottomSheetIsNotPresent(
             SuggestProductBtmSheet.newInstance(),
             SuggestProductBtmSheet.TAG)
-    }
-
-    private fun startOrderSummaryActivity(createCartData: CreateCartData) {
-        homeViewModel.createCartUiState.update { CreateCartResponseUi.InitialUi(false) }
-        val intent = Intent(this, OrderSummaryActivity::class.java)
-        val paymentActivityReqData = PaymentActivityReqData()
-        paymentActivityReqData.apply {
-            orderId = createCartData.orderId
-            itemPrice = createCartData.itemTotalPrice
-            deliveryFee = createCartData.deliveryFee
-            packagingFee = createCartData.packagingFee
-            couponDiscount = createCartData.couponMaxDiscountPrice
-            couponString = createCartData.couponCode
-            isFreeDelivery = createCartData.isFreeDelivery
-            expectedDelivery = createCartData.expectedDelivery
-        }
-        intent.putExtra(PaymentActivity.PAYMENT_MODEL_KEY, paymentActivityReqData)
-        startActivity(intent)
     }
 
     private fun showLanguageSelectionDialog() {
@@ -310,4 +254,35 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         super.onStart()
         homeViewModel.getAppMetaData()
     }
+
+    private fun handleBottomNavCallback(homeBottomNavTypes: HomeBottomNavTypes, data: Any?) {
+        if (homeBottomNavTypes == HomeBottomNavTypes.Orders) {
+            this.startMyOrders()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+        if (homeBottomNavTypes == HomeBottomNavTypes.MoveToCartPage) {
+            if (data != null && data is CreateCartData) {
+                startOrderSummaryActivity(data)
+            }
+        }
+    }
+
+    private fun startOrderSummaryActivity(createCartData: CreateCartData) {
+        homeViewModel.createCartUiState.update { CreateCartResponseUi.InitialUi(false) }
+        val intent = Intent(this, OrderSummaryActivity::class.java)
+        val paymentActivityReqData = PaymentActivityReqData()
+        paymentActivityReqData.apply {
+            orderId = createCartData.orderId
+            itemPrice = createCartData.itemTotalPrice
+            deliveryFee = createCartData.deliveryFee
+            packagingFee = createCartData.packagingFee
+            couponDiscount = createCartData.couponMaxDiscountPrice
+            couponString = createCartData.couponCode
+            isFreeDelivery = createCartData.isFreeDelivery
+            expectedDelivery = createCartData.expectedDelivery
+        }
+        intent.putExtra(PaymentActivity.PAYMENT_MODEL_KEY, paymentActivityReqData)
+        startActivity(intent)
+    }
 }
+

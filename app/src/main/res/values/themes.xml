@@ -31,4 +31,12 @@
         <item name="android:statusBarColor">@color/white</item>
     </style>
 
+    <style name="SlideFromRightActivity" parent="@android:style/Animation">
+        <item name="android:windowAnimationStyle">@style/SlideFromRightAnimation</item>
+    </style>
+
+    <style name="SlideFromRightAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
+    </style>
 </resources>

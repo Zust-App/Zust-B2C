@@ -1,9 +1,7 @@
 package `in`.opening.area.zustapp.address
 
-import `in`.opening.area.zustapp.address.compose.AddNewAddressUi
-import `in`.opening.area.zustapp.address.compose.CURRENT_LOCATION
-import `in`.opening.area.zustapp.address.compose.KEY_NEW_ADDRESS
-import `in`.opening.area.zustapp.address.compose.KEY_SAVED_ADDRESS
+import `in`.opening.area.zustapp.BaseActivityWithLocation
+import `in`.opening.area.zustapp.address.compose.*
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.model.CustomAddress
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
@@ -26,7 +24,7 @@ import kotlinx.coroutines.flow.update
 
 
 @AndroidEntryPoint
-class AddressAddSelectActivity : `in`.opening.area.zustapp.BaseActivityWithLocation() {
+class AddressAddSelectActivity : BaseActivityWithLocation() {
     private val viewModel: AddressViewModel by viewModels()
 
     companion object {
@@ -36,13 +34,7 @@ class AddressAddSelectActivity : `in`.opening.area.zustapp.BaseActivityWithLocat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold(topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = "Address") {
-                    if (it == ACTION.NAV_BACK) {
-                        finish()
-                    }
-                }
-            }) {
+            Scaffold {
                 AddressAddSelectContainer(it)
                 viewModel.getAllAddress()
             }
@@ -51,7 +43,7 @@ class AddressAddSelectActivity : `in`.opening.area.zustapp.BaseActivityWithLocat
 
     @Composable
     fun AddressAddSelectContainer(paddingValues: PaddingValues) {
-        AddNewAddressUi(modifier = Modifier, viewModel, paddingValues) {
+        AddNewAddressUi(modifier = Modifier, viewModel) {
             handleAction(it)
         }
     }
@@ -65,15 +57,22 @@ class AddressAddSelectActivity : `in`.opening.area.zustapp.BaseActivityWithLocat
             finish()
         }
         if (data is String) {
-            if (data == KEY_SAVED_ADDRESS) {
+            when (data) {
+                KEY_SAVED_ADDRESS -> {
 
-            } else if (data == KEY_NEW_ADDRESS) {
-
-            } else if (data == CURRENT_LOCATION) {
-                viewModel.currentLocationUiState.update {
-                    CurrentLocationUi.InitialUi(true)
                 }
-                clickOnUseCurrentLocation()
+                KEY_NEW_ADDRESS -> {
+
+                }
+                CURRENT_LOCATION -> {
+                    viewModel.currentLocationUiState.update {
+                        CurrentLocationUi.InitialUi(true)
+                    }
+                    clickOnUseCurrentLocation()
+                }
+                FINISH_PAGE -> {
+                    finish()
+                }
             }
         }
         if (data is AddressItem) {

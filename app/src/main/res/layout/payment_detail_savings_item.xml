@@ -6,55 +6,44 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
     android:layout_marginTop="20dp"
-    android:background="@drawable/backround_8dp_yellow">
+    android:background="@drawable/container_8dp_silver">
 
     <TextView
-        android:id="@+id/totalSavingsTextView"
+        android:id="@+id/freeDeliveryTag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/montserrat_semibold"
-        android:text="Amount"
-        android:textColor="@color/black_3"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/freeDeliveryTag"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/freeDeliveryTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:fontFamily="@font/montserrat_medium"
         android:text=""
         android:textColor="@color/black_3"
-        app:layout_constraintBottom_toBottomOf="@+id/totalSavingsTextView"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/totalSavingsTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
         android:background="#636363"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalSavingsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/freeDeliveryTag" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/iconDeliveryImageView"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        app:lottie_loop="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
         app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         app:lottie_rawRes="@raw/timer" />
 
     <TextView
@@ -62,15 +51,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:fontFamily="@font/montserrat_semibold"
+        android:fontFamily="@font/okra_semibold"
         android:text=""
         android:textColor="@color/new_material_primary"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/iconDeliveryImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iconDeliveryImageView"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toTopOf="@+id/iconDeliveryImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

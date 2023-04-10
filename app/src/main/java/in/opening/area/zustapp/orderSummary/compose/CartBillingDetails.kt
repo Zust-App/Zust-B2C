@@ -17,12 +17,31 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+val gradientColors = listOf(
+    Color(0xFFD6C28F),
+    Color(0xFFFEECBC)
+)
+
+val eligibleFreeDeliveryText = buildAnnotatedString {
+    append("Yay!, Eligible for ")
+    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+        append("Free Delivery")
+    }
+}
 
 @Composable
 fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
@@ -30,8 +49,9 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
     val value = cartItemData
 
     var doesBillingCollapse by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
+    var rotationAngle by remember { mutableStateOf(0f) }
 
     val rupees = stringResource(id = R.string.ruppes)
     when (value) {
@@ -41,22 +61,26 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                 .padding(vertical = 8.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
-                .padding(horizontal = 16.dp, vertical = 24.dp)) {
+                .padding(horizontal = 16.dp, vertical = 16.dp)) {
 
-                Row() {
+                Row {
                     Text(text = "Bill Summary",
                         color = colorResource(id = R.color.app_black),
                         style = Typography_Montserrat.body1)
                     Spacer(modifier = Modifier.weight(1f))
-                    Icon(painter = painterResource(id = R.drawable.down_arrow), contentDescription = "down_arrow", modifier = Modifier.clickable {
-                        doesBillingCollapse = !doesBillingCollapse
-                    })
+                    Icon(painter = painterResource(id = R.drawable.down_arrow),
+                        contentDescription = "down_arrow", modifier = Modifier
+                            .clickable {
+                                doesBillingCollapse = !doesBillingCollapse
+                                rotationAngle = if (!doesBillingCollapse) 0f else 180f
+                            }
+                            .rotate(rotationAngle))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 if (doesBillingCollapse) {
-                    Row() {
+                    Row {
                         Text(
                             fontWeight = FontWeight.W500,
                             color = colorResource(id = R.color.black_4),
@@ -71,7 +95,7 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                             text = rupees + ProductUtils.roundTo1DecimalPlaces(value.data.totalCurrentPrice))
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row() {
+                    Row {
                         Text(
                             fontWeight = FontWeight.W500,
                             fontFamily = montserrat, fontSize = 12.sp,
@@ -82,56 +106,96 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                             fontWeight = FontWeight.W500,
                             color = colorResource(id = R.color.new_hint_color),
                             fontFamily = montserrat, fontSize = 12.sp,
-                            text = rupees + "0")
+                            text = rupees + if (value.data.deliveryFee != null && value.data.deliveryFee == 0.0) {
+                                "0"
+                            } else {
+                                ProductUtils.roundTo1DecimalPlaces(value.data.deliveryFee)
+                            })
                     }
-
                     Spacer(modifier = Modifier.height(8.dp))
-                    if (value.data.deliveryPartnerTip != 0) {
-                        Row() {
-                            Text(
-                                fontWeight = FontWeight.W500,
-                                fontFamily = montserrat, fontSize = 12.sp,
-                                color = colorResource(id = R.color.black_4),
-                                text = "Delivery Tip")
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                fontWeight = FontWeight.W500,
-                                color = colorResource(id = R.color.new_hint_color),
-                                fontFamily = montserrat, fontSize = 12.sp,
-                                text = rupees + value.data.deliveryPartnerTip)
-                        }
+
+                    Row {
+                        Text(
+                            fontWeight = FontWeight.W500,
+                            fontFamily = montserrat, fontSize = 12.sp,
+                            color = colorResource(id = R.color.black_4),
+                            text = "Packaging fee")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            fontWeight = FontWeight.W500,
+                            color = colorResource(id = R.color.new_hint_color),
+                            fontFamily = montserrat, fontSize = 12.sp,
+                            text = rupees + if (value.data.packagingFee != null && value.data.packagingFee == 0.0) {
+                                "0"
+                            } else {
+                                ProductUtils.roundTo1DecimalPlaces(value.data.packagingFee)
+                            })
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         fontWeight = FontWeight.W500,
                         modifier = Modifier
-                            .background(color = colorResource(id = R.color.new_material_primary),
-                                shape = RoundedCornerShape(4.dp))
+                            .background(
+                                Brush.linearGradient(
+                                    colors = gradientColors,
+                                ),
+                                shape = RoundedCornerShape(4.dp)
+                            )
                             .padding(horizontal = 8.dp, vertical = 4.dp),
-                        color = colorResource(id = R.color.white),
+                        color = colorResource(id = R.color.app_black),
                         fontFamily = montserrat, fontSize = 12.sp,
-                        text = "Free delivery above " + stringResource(id = R.string.ruppes) + "149")
+
+                        text = if (value.data.deliveryFee != null && value.data.deliveryFee == 0.0) {
+                            eligibleFreeDeliveryText
+                        } else {
+                            buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                                    append("Free Delivery ")
+                                }
+                                append("above ")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                                    append(stringResource(id = R.string.ruppes) + "99")
+                                }
+                            }
+                        })
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Text(
+                            fontWeight = FontWeight.W500,
+                            fontFamily = montserrat, fontSize = 14.sp,
+                            color = colorResource(id = R.color.new_material_primary),
+                            text = "Total bill")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            fontWeight = FontWeight.W600,
+                            color = colorResource(id = R.color.new_material_primary),
+                            fontFamily = montserrat, fontSize = 14.sp,
+                            text = rupees + ProductUtils.roundTo1DecimalPlaces((value.data.totalCurrentPrice
+                                    + value.data.deliveryPartnerTip + (value.data.deliveryFee ?: 0.0) + (value.data.packagingFee ?: 0.0))))
+                    }
 
                 } else {
                     AnimatedVisibility(visible = true) {
                         Spacer(modifier = Modifier.height(8.dp))
-                        Row() {
+                        Row {
                             Text(
                                 fontWeight = FontWeight.W500,
-                                fontFamily = montserrat, fontSize = 12.sp,
+                                fontFamily = montserrat, fontSize = 14.sp,
                                 color = colorResource(id = R.color.new_material_primary),
                                 text = "Total bill")
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
                                 fontWeight = FontWeight.W600,
                                 color = colorResource(id = R.color.new_material_primary),
-                                fontFamily = montserrat, fontSize = 12.sp,
-                                text = rupees + ProductUtils.roundTo1DecimalPlaces(value.data.totalCurrentPrice+value.data.deliveryPartnerTip))
+                                fontFamily = montserrat, fontSize = 14.sp,
+                                text = rupees + ProductUtils.roundTo1DecimalPlaces((value.data.totalCurrentPrice
+                                        + value.data.deliveryPartnerTip + (value.data.deliveryFee ?: 0.0) + (value.data.packagingFee ?: 0.0))))
                         }
                     }
-
                 }
             }
         }
+        else -> {}
     }
 }

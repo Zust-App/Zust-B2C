@@ -194,11 +194,13 @@ class HomeViewModel @Inject constructor(
                 response.value.data?.let {
                     if (it.isAppUpdateAvail == true) {
                         isAppUpdateAvail.update { true }
+                    }else{
+                        isAppUpdateAvail.update { false }
                     }
                 }
             }
             else -> {
-
+                isAppUpdateAvail.update { false }
             }
         }
     }

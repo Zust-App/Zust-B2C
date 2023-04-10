@@ -21,8 +21,7 @@ data class OrderHistoryData(
 @Keep
 data class OrderHistoryItem(
     val orderedDateAndTime: String,
-    val itemText: String? = null,
-    val totalItems: Int? = -1,
+    val totalItems: Int? = 0,
     val orderId: Int,
     val orderStatusType: String,
     val payablePrice: Double? = -1.0,

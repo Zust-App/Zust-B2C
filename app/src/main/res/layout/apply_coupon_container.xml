@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:paddingVertical="11dp"
     android:background="@drawable/rounded_new_material_12dp"
-    >
+    android:paddingVertical="12dp">
 
     <TextView
         android:id="@+id/couponTitleTextView"
@@ -45,8 +44,8 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/remove"
-        android:textSize="12sp"
         android:textColor="@color/white"
+        android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/couponTitleTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,10 +71,11 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="2dp"
         android:src="@drawable/offer_icon"
-        android:visibility="visible"
         android:tint="@color/white"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/couponTitleTextView" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

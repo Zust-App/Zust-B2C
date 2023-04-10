@@ -33,7 +33,7 @@ class UserBookingDataSource(private val apiRequestManager: ApiRequestManager) : 
                 LoadResult.Error(NoDataFoundException())
             }
         } catch (e: Throwable) {
-            return LoadResult.Error(e)
+            return LoadResult.Error(LoadingError())
         }
     }
 
@@ -52,6 +52,11 @@ class PageMismatchedException : Exception() {
 class NoDataFoundException : Exception() {
     override val message: String
         get() = NO_PAGE
+}
+
+class LoadingError : Exception() {
+    override val message: String
+        get() = "Something went error try again"
 }
 
 const val NO_PAGE = "no_page"

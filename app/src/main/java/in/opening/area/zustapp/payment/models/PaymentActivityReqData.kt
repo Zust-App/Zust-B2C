@@ -12,7 +12,7 @@ data class PaymentActivityReqData(var orderId: Int? = -1,
                                   var totalAmount: Double? =0.0,
                                   var couponString: String?=null,
                                   var deliveryPartnerTip:Double?=0.0,
-                                  var isFreeDelivery:String?=null,
+                                  var isFreeDelivery:Boolean?=null,
                                   var expectedDelivery:String?=null,
 ):Parcelable {
     constructor(parcel: Parcel) : this(
@@ -24,7 +24,7 @@ data class PaymentActivityReqData(var orderId: Int? = -1,
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readString(),
         parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.readString(),
+        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
         parcel.readString()) {
     }
 
@@ -37,7 +37,7 @@ data class PaymentActivityReqData(var orderId: Int? = -1,
         parcel.writeValue(totalAmount)
         parcel.writeString(couponString)
         parcel.writeValue(deliveryPartnerTip)
-        parcel.writeString(isFreeDelivery)
+        parcel.writeValue(isFreeDelivery)
         parcel.writeString(expectedDelivery)
     }
 

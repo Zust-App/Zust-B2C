@@ -1,12 +1,17 @@
 package `in`.opening.area.zustapp.utility
 
 import `in`.opening.area.zustapp.HomeLandingActivity
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.login.LoginActivity
+import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
+import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.product.ProductListingActivity
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
+import `in`.opening.area.zustapp.profile.ProfileActivity
 import `in`.opening.area.zustapp.profile.models.Refer
 import `in`.opening.area.zustapp.refer.ReferAndEarnActivity
+import `in`.opening.area.zustapp.search.SearchProductActivity
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Context
 import android.content.Intent
@@ -30,6 +35,10 @@ fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
     startActivity(productDetailIntent)
 }
 
+fun Context.startMyOrders() {
+    val productDetailIntent = Intent(this, MyOrdersActivity::class.java)
+    startActivity(productDetailIntent)
+}
 
 fun Context.proceedToHomePage() {
     val homeLandingActivity = Intent(this, HomeLandingActivity::class.java)
@@ -67,6 +76,48 @@ fun Context.openBrowser(url: String) {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(httpsUrl))
             startActivity(intent)
         }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+fun Context.proceedToOrderDetails(orderId: Int?) {
+    if (orderId != null) {
+        val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
+        orderDetailIntent.putExtra(OrderDetailActivity.ORDER_ID, orderId)
+        startActivity(orderDetailIntent)
+    }
+}
+
+fun Context.startSearchActivity() {
+    val searchIntent = Intent(this, SearchProductActivity::class.java)
+    startActivity(searchIntent)
+}
+
+fun Context.startUserProfileActivity() {
+    val profileIntent = Intent(this, ProfileActivity::class.java)
+    startActivity(profileIntent)
+}
+
+fun Context.openWhatsAppOrderIntent() {
+    val sendIntent = Intent(Intent.ACTION_VIEW)
+    sendIntent.data = Uri.parse(AppUtility.getWhatsappHelpUrl())
+    if (AppUtility.isAppInstalled(AppUtility.WA_PACKAGE_NAME)) {
+        startActivity(sendIntent)
+    } else if (AppUtility.isAppInstalled(AppUtility.BUSINESS_WA_PACKAGE_NAME)) {
+        startActivity(sendIntent)
+    }
+}
+
+fun Context?.openCallIntent( phoneNumber: String) {
+    try {
+        val phone = if (phoneNumber.contains("+91")) {
+            phoneNumber
+        } else {
+            "+91$phoneNumber"
+        }
+        val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
+        this?.startActivity(intent)
     } catch (e: Exception) {
         e.printStackTrace()
     }

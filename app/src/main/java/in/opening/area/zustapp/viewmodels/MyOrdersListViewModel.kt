@@ -45,20 +45,22 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                 } else {
                     val displayOrderStatus = ArrayList<OrderStatus>()
                     response.value.data.apply {
-                        val allStatusSeq = this.statusSeq
-                        val allStatusList: List<String>? = allStatusSeq?.split(",")
-                        if (allStatusList != null) {
-                            for (i in allStatusList.indices) {
-                                var isContains = false
-                                for (j in orderStatuses.indices) {
-                                    if (allStatusList[i] == orderStatuses[j].orderStatusType) {
-                                        isContains = true
-                                        displayOrderStatus.add(OrderStatus(orderStatuses[j].createdDateTime,
-                                            orderStatuses[j].orderStatusType?.replace("_", " ")))
+                        if (orderStatuses != null) {
+                            val allStatusSeq = this.statusSeq
+                            val allStatusList: List<String>? = allStatusSeq?.split(",")
+                            if (allStatusList != null) {
+                                for (i in allStatusList.indices) {
+                                    var isContains = false
+                                    for (j in orderStatuses.indices) {
+                                        if (allStatusList[i] == orderStatuses[j].orderStatusType) {
+                                            isContains = true
+                                            displayOrderStatus.add(OrderStatus(orderStatuses[j].createdDateTime,
+                                                orderStatuses[j].orderStatusType?.replace("_", " ")))
+                                        }
                                     }
-                                }
-                                if (!isContains) {
-                                    displayOrderStatus.add(OrderStatus(orderStatusType = allStatusList[i].replace("_", " ")))
+                                    if (!isContains) {
+                                        displayOrderStatus.add(OrderStatus(orderStatusType = allStatusList[i].replace("_", " ")))
+                                    }
                                 }
                             }
                         }

@@ -7,6 +7,7 @@ import `in`.opening.area.zustapp.orderDetail.models.Address
 import `in`.opening.area.zustapp.orderSummary.model.CancellationPolicyUiModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryItem
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryModel
+import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.repository.ProductRepo
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
@@ -37,6 +38,8 @@ class OrderSummaryViewModel @Inject constructor(
 
     private var deliveryPartnerTipAmount: Int = 0
 
+    internal var paymentActivityReqData: PaymentActivityReqData? = null
+
     internal val addedCartUiState = MutableStateFlow<OrderSummaryUi>(OrderSummaryUi.InitialUi(false))
     private val lockOrderSummaryItems = ArrayList<LockOrderSummaryItem>()
     private val cartItemsIdMap = HashMap<String, Int>()
@@ -55,6 +58,7 @@ class OrderSummaryViewModel @Inject constructor(
     private val originalCartItems = ArrayList<ProductSingleItem>()
     private var upSellingItemsId: Set<String> = hashSetOf()
     internal val addressLineData = MutableStateFlow("")
+    private val freeDeliveryPrice: Double = 99.0
 
 
     init {
@@ -109,7 +113,12 @@ class OrderSummaryViewModel @Inject constructor(
                     selectedItemCount,
                     totalOriginalPrice,
                     totalCurrentPrice,
-                    suggestedProducts = upSellingProductsCache))
+                    suggestedProducts = upSellingProductsCache,
+                    deliveryFee = if (totalCurrentPrice > freeDeliveryPrice) {
+                        0.0
+                    } else {
+                        paymentActivityReqData?.deliveryFee
+                    }, packagingFee = paymentActivityReqData?.packagingFee ?: 0.0))
         }
     }
 
@@ -138,7 +147,7 @@ class OrderSummaryViewModel @Inject constructor(
         } else {
             val lockOrderSummaryModel = LockOrderSummaryModel(addressId = addressItemCache!!.id,
                 lockOrderSummaryItems = lockOrderSummaryItems,
-                merchantId = 6, orderId = orderId, deliveryPartnerTip = deliveryPartnerTipAmount)
+                merchantId = 1, orderId = orderId, deliveryPartnerTip = deliveryPartnerTipAmount)
             when (val response = apiRequestManager.syncUserCartWithServerAndLock(lockOrderSummaryModel)) {
                 is ResultWrapper.Success -> {
                     if (response.value.lockOrderResponseData != null) {
@@ -182,7 +191,8 @@ class OrderSummaryViewModel @Inject constructor(
         if (deliveryPartnerTipAmount == amount) {
             if (alreadyCartData is OrderSummaryUi.SummarySuccess) {
                 addedCartUiState.update {
-                    OrderSummaryUi.SummarySuccess(false, data = alreadyCartData.data.copy(deliveryPartnerTipAmount))
+                    OrderSummaryUi.SummarySuccess(false,
+                        data = alreadyCartData.data.copy(deliveryPartnerTipAmount))
                 }
             }
         }

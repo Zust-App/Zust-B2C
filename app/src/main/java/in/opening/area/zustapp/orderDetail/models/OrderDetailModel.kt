@@ -15,15 +15,15 @@ data class OrderDetailModel(
 
 @Keep
 data class OrderDetailData(
-    val address: Address,
+    val address: Address?=null,
     val couponDiscountPrice: Double,
     val deliveryFee: Double,
     val itemTotalPrice: Double,
-    val items: List<Item>,
+    val items: List<Item>? = arrayListOf(),
     val orderId: Int,
-    val orderStatuses: List<OrderStatus>,
+    val orderStatuses: List<OrderStatus>? = null,
     val packagingFee: Double,
-    val paymentMethod: String?,
+    val paymentMethod: String?=null,
     val secretCode: String? = null,
     val verificationCode: String? = null,
     val expectedTimeToDelivery: String? = null,

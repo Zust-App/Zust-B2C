@@ -25,7 +25,7 @@ data class CreateCartData(
     val items: List<Item> = arrayListOf(),
     val packagingFee: Double? = -1.0,
     val expectedDelivery: String? = null,
-    val isFreeDelivery: String? = null,
+    val isFreeDelivery: Boolean? = null,
 )
 
 @Keep

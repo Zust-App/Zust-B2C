@@ -25,7 +25,6 @@ class AddressBottomSheetV2 : BottomSheetDialogFragment(), AddressFragmentCommuni
     private var listener: AddressBtmSheetCallback? = null
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = AddressBtmSheetV2Binding.inflate(layoutInflater)
         return binding?.root

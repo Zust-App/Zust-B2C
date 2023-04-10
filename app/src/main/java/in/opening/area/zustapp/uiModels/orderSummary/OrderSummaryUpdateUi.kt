@@ -22,14 +22,17 @@ data class OrderSummary(
     val totalOriginalPrice: Double = 0.0,
     val totalCurrentPrice: Double = 0.0,
     val deliveryPartnerTip: Int = 0,
+    val deliveryFee: Double? = 0.0,
+    val packagingFee: Double? = 0.0,
     val suggestedProducts: List<ProductSingleItem>? = arrayListOf(),
-    ) {
+) {
     fun copy(deliveryPartnerTip: Int): OrderSummary {
-        return OrderSummary(productsAlreadyInCart,totalItemCount, totalOriginalPrice, totalCurrentPrice,
-            deliveryPartnerTip,suggestedProducts)
+        return OrderSummary(productsAlreadyInCart, totalItemCount, totalOriginalPrice, totalCurrentPrice,
+            deliveryPartnerTip, deliveryFee, packagingFee, suggestedProducts)
     }
+
     fun copy(suggestedProducts: List<ProductSingleItem>?): OrderSummary {
-        return OrderSummary(productsAlreadyInCart,totalItemCount, totalOriginalPrice, totalCurrentPrice,
-            deliveryPartnerTip,suggestedProducts)
+        return OrderSummary(productsAlreadyInCart, totalItemCount, totalOriginalPrice, totalCurrentPrice,
+            deliveryPartnerTip, deliveryFee, packagingFee, suggestedProducts)
     }
 }

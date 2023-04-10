@@ -1,17 +1,18 @@
 package `in`.opening.area.zustapp.address.compose
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.locationManager.models.CustomLocationModel
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
-import `in`.opening.area.zustapp.ui.theme.dp_20
-import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.uiModels.CurrentLocationUi
 import `in`.opening.area.zustapp.uiModels.SaveUserAddressUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,7 +33,7 @@ import androidx.constraintlayout.compose.Dimension
 
 @Composable
 fun AddNewAddressUi(
-    modifier: Modifier, viewModel: AddressViewModel, paddingValues: PaddingValues,
+    modifier: Modifier, viewModel: AddressViewModel,
     callback: (Any) -> Unit,
 ) {
     val saveAddressUiData by viewModel.saveUserAddressUiState.collectAsState(initial = SaveUserAddressUi.InitialUi(false))
@@ -46,7 +47,7 @@ fun AddNewAddressUi(
         mutableStateOf("")
     }
 
-    var landmarkAndArea by rememberSaveable() {
+    val landmarkAndArea by rememberSaveable() {
         mutableStateOf("")
     }
 
@@ -73,7 +74,6 @@ fun AddNewAddressUi(
             AppUtility.showToast(context, data.errors.getTextMsg())
         }
         is SaveUserAddressUi.InitialUi -> {
-
         }
     }
 
@@ -91,13 +91,28 @@ fun AddNewAddressUi(
         }
     }
     ConstraintLayout(modifier = modifier
-        .padding(paddingValues)
         .fillMaxWidth()
         .fillMaxHeight()) {
         val (progressBar, progressBar1) = createRefs()
         val (newAddressContainer) = createRefs()
         val (titleText) = createRefs()
         val (subTitleText) = createRefs()
+        val (navIcon) = createRefs()
+
+        Icon(
+            painter = painterResource(id = R.drawable.ic_baseline_close_24),
+            contentDescription = "back",
+            tint = colorResource(id = R.color.black_2), modifier = Modifier
+                .constrainAs(navIcon) {
+                    end.linkTo(parent.end, dp_16)
+                    bottom.linkTo(titleText.bottom)
+                    top.linkTo(titleText.top)
+                }
+                .size(24.dp)
+                .clickable {
+                    callback.invoke(FINISH_PAGE)
+                }
+        )
         Text(text = "Please enter your address",
             style = Typography_Montserrat.body1,
             color = colorResource(id = R.color.app_black),
@@ -110,7 +125,7 @@ fun AddNewAddressUi(
 
         Text(text = "Required fields are marked with an asterisk *",
             modifier = modifier.constrainAs(subTitleText) {
-                top.linkTo(titleText.bottom, dp_8)
+                top.linkTo(titleText.bottom, dp_4)
                 start.linkTo(parent.start, dp_20)
                 end.linkTo(parent.end, dp_20)
                 width = Dimension.fillToConstraints
@@ -155,7 +170,7 @@ fun AddNewAddressUi(
 
             Text(text = "PinCode*",
                 style = Typography_Montserrat.subtitle1,
-                color = colorResource(id = R.color.new_hint_color))
+                color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
             TextField(value = inputPinCode,
                 textStyle = Typography_Montserrat.body2,
@@ -164,13 +179,13 @@ fun AddNewAddressUi(
                 }, modifier = modifier
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(8.dp)),
-                colors = getTextFieldColors())
+                colors = getTextFieldColors(), maxLines = 1)
 
             Spacer(modifier = modifier.height(16.dp))
 
-            Text(text = "Flat, House no., Building, Apartment *",
+            Text(text = "Enter Complete Address*",
                 style = Typography_Montserrat.subtitle1,
-                color = colorResource(id = R.color.new_hint_color))
+                color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
             TextField(value = houseAndFloor,
                 textStyle = Typography_Montserrat.body2,
@@ -179,22 +194,21 @@ fun AddNewAddressUi(
                 }, modifier = modifier
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(8.dp)),
-                colors = getTextFieldColors(), maxLines = 2)
+                colors = getTextFieldColors(), maxLines = 3)
 
-            Spacer(modifier = modifier.height(16.dp))
-
-            Text(text = "Area, Street, Sector, Society *",
-                style = Typography_Montserrat.subtitle1,
-                color = colorResource(id = R.color.new_hint_color))
-            Spacer(modifier = modifier.height(6.dp))
-            TextField(value = landmarkAndArea,
-                textStyle = Typography_Montserrat.body2,
-                onValueChange = {
-                    landmarkAndArea = it
-                }, modifier = modifier
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(8.dp)),
-                colors = getTextFieldColors(), maxLines = 2)
+//            Spacer(modifier = modifier.height(16.dp))
+//            Text(text = "Area, Street, Sector, Society *",
+//                style = Typography_Montserrat.subtitle1,
+//                color = colorResource(id = R.color.new_hint_color))
+//            Spacer(modifier = modifier.height(6.dp))
+//            TextField(value = landmarkAndArea,
+//                textStyle = Typography_Montserrat.body2,
+//                onValueChange = {
+//                    landmarkAndArea = it
+//                }, modifier = modifier
+//                    .fillMaxWidth()
+//                    .clip(shape = RoundedCornerShape(8.dp)),
+//                colors = getTextFieldColors(), maxLines = 2)
             Spacer(modifier = modifier.height(24.dp))
             OutlinedButton(onClick = {
                 if (validateAddressLocally(inputPinCode, houseAndFloor, landmarkAndArea, context)) {
@@ -202,7 +216,7 @@ fun AddNewAddressUi(
                         viewModel.userAddressInputCache.apply {
                             pinCode = inputPinCode
                             houseNumberAndFloor = houseAndFloor
-                            landmark = landmarkAndArea
+                            landmark = ""
                             if (customLocationModel.addressLine != null) {
                                 description = customLocationModel.addressLine
                             }
@@ -266,10 +280,10 @@ private fun validateAddressLocally(
         AppUtility.showToast(context, "Please enter House number")
         return false
     }
-    if (landmark.isNullOrEmpty()) {
-        AppUtility.showToast(context, "Please enter Area name")
-        return false
-    }
+//    if (landmark.isNullOrEmpty()) {
+//        AppUtility.showToast(context, "Please enter Area name")
+//        return false
+//    }
     return true
 }
 

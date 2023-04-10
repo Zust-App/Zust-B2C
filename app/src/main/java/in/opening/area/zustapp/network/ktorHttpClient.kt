@@ -74,9 +74,9 @@ val ktorHttpClient = HttpClient(CIO) {
             append(DEVICE_ID, DeviceInfo.getDeviceIdInfo())
             if (url.build().toString().contains("home")) {
                 append(APP_VERSION_NAME, BuildConfig.VERSION_NAME)
-                append(OS_MODEL, android.os.Build.MODEL)
-                append(DEVICE_MODEL, android.os.Build.DEVICE)
-                append(BRAND, android.os.Build.BRAND)
+                append(OS_MODEL, Build.MODEL)
+                append(DEVICE_MODEL, Build.DEVICE)
+                append(BRAND, Build.BRAND)
             }
         }
     }

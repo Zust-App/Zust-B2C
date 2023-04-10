@@ -99,10 +99,6 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
         return
     }
 
-    internal fun openAddressSelectionBtmSheet() {
-        val addressBtmSheet = AddressBottomSheetV2.newInstance()
-        supportFragmentManager.showBottomSheetIsNotPresent(addressBtmSheet, "address_sheet")
-    }
 
     override fun clickOnUseCurrentLocation() {
         requestLocationAccess()

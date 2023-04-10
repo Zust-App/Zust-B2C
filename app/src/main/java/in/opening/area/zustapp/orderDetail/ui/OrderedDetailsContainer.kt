@@ -55,12 +55,14 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                         Spacer(modifier = Modifier.height(dp_20))
                     }
 
-                    items(response.data.items) { item ->
-                        OrderedItemSingleUnit(item)
-                        Divider(modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxWidth()
-                            .background(color = Color(0xFFA0A0A0)))
+                    if (!response.data.items.isNullOrEmpty()) {
+                        items(response.data.items) { item ->
+                            OrderedItemSingleUnit(item)
+                            Divider(modifier = Modifier
+                                .width(1.dp)
+                                .fillMaxWidth()
+                                .background(color = Color(0xFFA0A0A0)))
+                        }
                     }
 
                     if (!response.data.displayOrderStatus.isNullOrEmpty()) {
@@ -79,8 +81,10 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                             Spacer(modifier = Modifier.height(dp_20))
                             OrderStatusTitleContainer()
                         }
-                        itemsIndexed(response.data.orderStatuses) { index, item: OrderStatus ->
-                            OrderStatusSingleItem(item, index, response.data.orderStatuses.size)
+                        if (!response.data.orderStatuses.isNullOrEmpty()) {
+                            itemsIndexed(response.data.orderStatuses) { index, item: OrderStatus ->
+                                OrderStatusSingleItem(item, index, response.data.orderStatuses.size)
+                            }
                         }
                         item {
                             OrderStatusBottomContainer()

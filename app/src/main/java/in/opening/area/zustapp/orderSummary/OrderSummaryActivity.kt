@@ -41,8 +41,6 @@ import kotlinx.coroutines.launch
 class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, AddressBtmSheetCallback {
     private val orderSummaryViewModel: OrderSummaryViewModel by viewModels()
 
-    private var paymentActivityReqData: PaymentActivityReqData? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -72,12 +70,12 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
     private fun receiveDataFromIntent() {
         if (intent != null) {
             if (intent.hasExtra(PAYMENT_MODEL_KEY)) {
-                paymentActivityReqData = if (SDK_INT >= 33) {
+                orderSummaryViewModel.paymentActivityReqData = if (SDK_INT >= 33) {
                     intent.getParcelableExtra(PAYMENT_MODEL_KEY, PaymentActivityReqData::class.java)
                 } else {
                     intent.getParcelableExtra(PAYMENT_MODEL_KEY)
                 }
-                orderSummaryViewModel.expectedDeliveryTimeUiState.update { paymentActivityReqData?.expectedDelivery }
+                orderSummaryViewModel.expectedDeliveryTimeUiState.update {  orderSummaryViewModel.paymentActivityReqData?.expectedDelivery }
             } else {
                 finish()
             }
@@ -179,9 +177,9 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
     }
 
     private fun updateUserCartWithServer() {
-        if (paymentActivityReqData?.orderId != null && paymentActivityReqData?.orderId != -1) {
+        if ( orderSummaryViewModel.paymentActivityReqData?.orderId != null &&  orderSummaryViewModel.paymentActivityReqData?.orderId != -1) {
             if (!orderSummaryViewModel.isLockedCartOnGoing()) {
-                orderSummaryViewModel.updateUserCartWithServer(paymentActivityReqData?.orderId!!)
+                orderSummaryViewModel.updateUserCartWithServer( orderSummaryViewModel.paymentActivityReqData?.orderId!!)
             } else {
                 AppUtility.showToast(this, "Please wait")
             }
