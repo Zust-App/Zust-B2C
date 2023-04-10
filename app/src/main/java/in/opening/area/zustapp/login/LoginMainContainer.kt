@@ -52,9 +52,6 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
         mutableStateOf(false)
     }
 
-    val canShowError by rememberSaveable {
-        mutableStateOf(false)
-    }
     val response = getOtpUiState
     canShowProgressbar = response.isLoading
     when (response) {
@@ -76,6 +73,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
             } else {
                 AppUtility.showToast(context, response.errors?.getTextMsg())
             }
+            loginViewModel.getOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
         }
     }
 
@@ -123,20 +121,6 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 }
             })
 
-        if (canShowError) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(painter = painterResource(id = R.drawable.ic_outline_info_24),
-                    contentDescription = "info",
-                    modifier = Modifier.size(14.dp),
-                    tint = colorResource(id = R.color.red_primary))
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "Please enter a valid 10 digit number. ",
-                    style = Typography_Montserrat.subtitle1,
-                    fontWeight = FontWeight.W500,
-                    color = colorResource(id = R.color.red_primary))
-            }
-        }
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
@@ -157,7 +141,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        //term and condition
+
         ClickableText(text = annotatedStringTAndC, style = Typography_Montserrat.subtitle1,
             onClick = { offset ->
                 annotatedStringTAndC.getStringAnnotations(tag = "policy",

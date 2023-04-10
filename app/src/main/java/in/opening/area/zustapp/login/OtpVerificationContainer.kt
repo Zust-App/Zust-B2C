@@ -76,6 +76,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
             } else {
                 AppUtility.showToast(context, resendOtpData.errorMsg)
             }
+            loginViewModel.verifyOtpUiState.update { VerifyOtpUi.InitialUi(false) }
         }
     }
 
