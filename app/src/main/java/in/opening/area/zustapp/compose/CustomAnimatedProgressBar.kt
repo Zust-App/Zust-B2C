@@ -36,7 +36,7 @@ fun CustomAnimatedProgressBar(modifier: Modifier) {
             composition,
             lottieAnimation,
             modifier = Modifier
-                .size(100.dp)
+                .size(80.dp)
                 .constrainAs(progressBar) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)

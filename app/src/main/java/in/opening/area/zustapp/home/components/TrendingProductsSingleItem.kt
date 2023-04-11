@@ -112,6 +112,7 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                     .border(border = BorderStroke(width = 1.dp,
                         color = colorResource(id = R.color.light_green)),
                         shape = RoundedCornerShape(4.dp))
+                    .clip(RoundedCornerShape(4.dp))
                     .wrapContentWidth()
                     .background(color = colorResource(id = R.color.white))
                     .height(22.dp)

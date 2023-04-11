@@ -93,7 +93,7 @@ fun CustomBottomBarView(
                     Text(text = addToCart.totalItemCount.toString() + " Items", modifier = Modifier.constrainAs(itemCount) {
                         start.linkTo(parent.start, dp_16)
                         top.linkTo(parent.top, dp_4)
-                    }, color = Color.White,
+                    }, color = colorResource(id = R.color.white),
                         style = Typography_Montserrat.subtitle1)
 
                     Text(text = stringResource(id = R.string.ruppes) +
@@ -102,7 +102,7 @@ fun CustomBottomBarView(
                             start.linkTo(parent.start, dp_16)
                             top.linkTo(itemCount.bottom, dp_4)
                             bottom.linkTo(parent.bottom, dp_4)
-                        }, color = Color.White,
+                        }, color = colorResource(id = R.color.white),
                         style = Typography_Montserrat.body1,
                         fontSize = 14.sp)
 
@@ -111,7 +111,7 @@ fun CustomBottomBarView(
                             end.linkTo(viewCartIcon.start, dp_12)
                             top.linkTo(parent.top, dp_20)
                             bottom.linkTo(parent.bottom, dp_20)
-                        }, color = Color.White,
+                        }, color = colorResource(id = R.color.white),
                         style = Typography_Montserrat.body1)
 
                     Icon(painter = painterResource(id = R.drawable.arrow_right_icon),
@@ -119,7 +119,7 @@ fun CustomBottomBarView(
                             end.linkTo(parent.end, dp_20)
                             top.linkTo(parent.top, dp_20)
                             bottom.linkTo(parent.bottom, 20.dp)
-                        }, tint = Color.White)
+                        }, tint = colorResource(id = R.color.white))
 
                     if (cartUiState.isLoading) {
                         CircularProgressIndicator(modifier = Modifier.constrainAs(progressBar) {

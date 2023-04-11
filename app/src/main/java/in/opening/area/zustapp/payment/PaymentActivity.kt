@@ -2,12 +2,11 @@ package `in`.opening.area.zustapp.payment
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.MyApplication
+import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
 import `in`.opening.area.zustapp.coupon.CouponListingActivity
 import `in`.opening.area.zustapp.coupon.model.AppliedCouponData
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity.Companion.JUST_ORDERED
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity.Companion.ORDER_ID
 import `in`.opening.area.zustapp.orderDetail.models.Address
 import `in`.opening.area.zustapp.orderDetail.models.convertAsStringText
@@ -223,9 +222,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             if (data.has("payment")) {
                 val payment = data.getJSONObject("payment")
                 if (payment.has("status") && payment.getString("status").equals("captured", ignoreCase = true)) {
-                    showToast(this, "Order confirm")
-                    delay(1000)
-                    moveToOrderDetailsPage()
+                    delay(500)
+                    moveToOrderConfIntermediatePage()
                 } else {
                     showToast(this, "status not captured")
                 }
@@ -374,7 +372,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
     private fun proceedAfterCreatePayment(createPaymentResponseModel: CreatePaymentDataModel) {
         if (createPaymentResponseModel.success == true) {
             if (createPaymentResponseModel.order == null) {
-                moveToOrderDetailsPage()
+                moveToOrderConfIntermediatePage()
             } else {
                 initializePayments(createPaymentResponseModel.order.rzrPayOrderId, this@PaymentActivity)
             }
@@ -398,14 +396,13 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
         }
     }
 
-    private fun moveToOrderDetailsPage() {
+    private fun moveToOrderConfIntermediatePage() {
         if (paymentActivityReqData?.orderId != null) {
             paymentViewModel.clearCartItems()
-            val orderDetailIntent: Intent? by lazy { Intent(this, OrderDetailActivity::class.java) }
-            orderDetailIntent?.putExtra(ORDER_ID, paymentActivityReqData?.orderId)
-            orderDetailIntent?.putExtra(JUST_ORDERED, true)
-            orderDetailIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(orderDetailIntent)
+            val orderConfirmationPage: Intent? by lazy { Intent(this, OrderConfirmationIntermediateActivity::class.java) }
+            orderConfirmationPage?.putExtra(ORDER_ID, paymentActivityReqData?.orderId)
+            orderConfirmationPage?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(orderConfirmationPage)
             finish()
         }
     }

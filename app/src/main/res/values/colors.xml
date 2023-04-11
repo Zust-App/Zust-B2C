@@ -8,13 +8,12 @@
     <color name="app_black">#1E1E1E</color>
     <color name="grey_color_2">#4e4e4f</color>
     <color name="grey_color_3">#666666</color>
-    <color name="purple">#7B29FB</color>
     <color name="light_blue">#645cb0</color>
     <color name="light_black">#242c5a</color>
     <color name="logout_bg">#fee5dc</color>
     <color name="green">#0C831F</color>
 
-    <color name="new_material_primary">#6750A4</color>
+    <color name="new_material_primary">#1f7ae0</color>
     <!-- #6750A4-->
     <!--#1f7ae0-->
     <color name="screen_surface_color">#F8F4FF</color>

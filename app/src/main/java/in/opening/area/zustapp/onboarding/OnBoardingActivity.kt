@@ -35,7 +35,7 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private fun handleClickAction(loginClick: LoginClick) {
         if (loginClick == LoginClick.LOGIN) {
-            viewModel.updateOnBoardingShown(true)
+            //viewModel.updateOnBoardingShown(true)
             proceedToLogin()
         }
     }

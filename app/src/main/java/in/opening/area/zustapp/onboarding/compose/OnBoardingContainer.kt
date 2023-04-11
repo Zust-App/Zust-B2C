@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -46,182 +47,46 @@ private val exploringText = arrayListOf(
 
 @Composable
 fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
+    val scale = remember { Animatable(0f) }
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
-        .background(color = colorResource(id = R.color.white))
-        .padding(horizontal = 24.dp)) {
-        val (loginBtn, contentContainer) = createRefs()
+        .background(color = colorResource(id = R.color.new_material_primary))) {
         val (lottieAnimation) = createRefs()
-        Column(modifier = Modifier.constrainAs(contentContainer) {
-            top.linkTo(parent.top, dp_40)
-            bottom.linkTo(lottieAnimation.top, dp_16)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            width = Dimension.fillToConstraints
-        }) {
-            Image(painter = painterResource(id = R.drawable.zust_app_black_text),
-                contentDescription = "Zust App", modifier = Modifier
-                    .width(140.dp)
-                    .height(60.dp))
-            Spacer(modifier = Modifier.height(8.dp))
-            TypewriterText(text = "Grocery in 45 Minutes",
-                modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(40.dp))
-            AnimatedTextContent(exploringText)
-        }
-
-        ComposeLottie(rawId = R.raw.no_order,
-            modifier = Modifier.constrainAs(lottieAnimation) {
-                top.linkTo(contentContainer.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(loginBtn.top, dp_8)
-                height = Dimension.fillToConstraints
-            }, 0.1f)
-        val (website) = createRefs()
-        OutlinedButton(shape = RoundedCornerShape(12.dp), modifier = Modifier
-            .fillMaxWidth()
-            .constrainAs(loginBtn) {
-                bottom.linkTo(website.top, dp_8)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                width = Dimension.fillToConstraints
-            }
-            .padding(horizontal = 8.dp), onClick = {
-            callback.invoke(LoginClick.LOGIN)
-        }, colors = ButtonDefaults.outlinedButtonColors(backgroundColor = colorResource(R.color.new_material_primary),
-            contentColor = Color.White)) {
-            Text(text = "Login", style = Typography_Montserrat.body1, modifier = Modifier.padding(vertical = 6.dp))
-        }
-
-        WebsiteLinkText(modifier = Modifier.constrainAs(website) {
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom, dp_24)
-            width = Dimension.fillToConstraints
-        })
-
-
-    }
-}
-
-
-@Composable
-fun TypewriterText(text: String, modifier: Modifier = Modifier, textSize: TextUnit = 18.sp) {
-    var index by remember { mutableStateOf(0) }
-    val textToShow = text.take(index + 1)
-
-    LaunchedEffect(Unit) {
-        while (index < text.length) {
-            delay(80)
-            index++
-        }
-    }
-    Text(text = textToShow, modifier = modifier, style = Typography_Montserrat.body1,
-        fontSize = textSize,
-        color = colorResource(id = R.color.new_material_primary))
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@SuppressLint("UnrememberedMutableState")
-@Composable
-fun AnimatedTextContent(textList: List<String>) {
-    var currentIndex by remember { mutableStateOf(0) }
-
-    val currentText by derivedStateOf { textList[currentIndex] }
-
-    AnimatedContent(targetState = currentText, transitionSpec = {
-        addAnimation().using(SizeTransform(clip = false))
-    }) { targetCount ->
-        Row() {
-            Icon(painter = painterResource(id = R.drawable.ic_outline_check_circle_outline_24),
-                contentDescription = "check", tint = colorResource(id = R.color.light_green))
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(text = targetCount, style = Typography_Montserrat.body2,
-                textAlign = TextAlign.Center,
-                fontSize = 18.sp,
-                color = colorResource(id = R.color.app_black))
-        }
-    }
-    LaunchedEffect(currentIndex) {
-        delay(2000)
-        currentIndex = (currentIndex + 1) % textList.size
-    }
-}
-
-
-@Composable
-fun AnimatedTextContent1(textList: List<String>) {
-    var currentIndex by remember { mutableStateOf(0) }
-
-    LaunchedEffect(Unit) {
-        while (currentIndex < textList.size - 1) {
-            delay(2000)
-            currentIndex += 1
-        }
-    }
-
-    val displayedTexts = textList.subList(0, currentIndex + 1)
-
-    LazyColumn(modifier = Modifier.height(200.dp)) {
-        itemsIndexed(displayedTexts) { index, text ->
-            AnimatedVisibility(
-                visible = true,
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-                    val (icon, name, divider) = createRefs()
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_outline_check_circle_outline_24),
-                        contentDescription = "Check icon",
-                        tint = colorResource(id = R.color.light_green),
-                        modifier = Modifier.constrainAs(icon) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                        }
-                    )
-                    Text(
-                        text = text,
-                        style = Typography_Montserrat.body2,
-                        modifier = Modifier.constrainAs(name) {
-                            start.linkTo(icon.end, dp_6)
-                            end.linkTo(parent.end)
-                            top.linkTo(icon.top)
-                            bottom.linkTo(icon.bottom)
-                            width = Dimension.fillToConstraints
-                        }
-                    )
-                    val infiniteTransition = rememberInfiniteTransition()
-
-                    val height by infiniteTransition.animateFloat(
-                        initialValue = 0f,
-                        targetValue = 20f,
-                        animationSpec = infiniteRepeatable(
-                            animation = tween(durationMillis = 500),
-                            repeatMode = RepeatMode.Reverse
-                        )
-                    )
-
-                    if (index < displayedTexts.size - 1) {
-                        Divider(
-                            modifier = Modifier
-                                .constrainAs(divider) {
-                                    top.linkTo(icon.bottom)
-                                    start.linkTo(icon.start)
-                                    end.linkTo(icon.end)
-                                }
-                                .height(height.dp)
-                                .width(0.5.dp),
-                            color = Color.Gray
-                        )
-                    }
-
+        Image(painter = painterResource(id = R.drawable.zust_white_text),
+            contentDescription = "Zust App", modifier = Modifier
+                .constrainAs(lottieAnimation) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                 }
-            }
-        }
+                .width(140.dp)
+                .height(60.dp)
+                .scale(scale.value))
+
+        LaunchedEffect(key1 = Unit, block = {
+            animateImageScale(scale)
+            callback.invoke(LoginClick.LOGIN)
+        })
     }
+}
+
+private suspend fun animateImageScale(scale: Animatable<Float, AnimationVector1D>) {
+    scale.animateTo(
+        targetValue = 1.2f, // target scale value
+        animationSpec = tween(
+            durationMillis = 1000, // animation duration
+            easing = FastOutSlowInEasing // animation easing function
+        )
+    )
+    scale.animateTo(
+        targetValue = 1f, // target scale value
+        animationSpec = tween(
+            durationMillis = 500, // animation duration
+            easing = FastOutSlowInEasing // animation easing function
+        )
+    )
 }
 
 

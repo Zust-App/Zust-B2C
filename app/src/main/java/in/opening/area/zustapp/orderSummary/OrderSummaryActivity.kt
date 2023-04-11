@@ -153,6 +153,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
         paymentIntent.putExtra(PAYMENT_MODEL_KEY, reqData)
         paymentIntent.putExtra(TOTAL_ITEMS_IN_CART,itemCount)
         startActivity(paymentIntent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
 

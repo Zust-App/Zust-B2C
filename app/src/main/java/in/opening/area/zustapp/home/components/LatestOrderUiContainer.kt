@@ -74,7 +74,7 @@ fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> U
                     }
 
                     Text(text = response.data?.expectedTimeToDelivery ?: response.data?.orderStatuses?.last()?.orderStatusType!!,
-                        color = colorResource(id = R.color.purple),
+                        color = colorResource(id = R.color.new_material_primary),
                         modifier = Modifier.constrainAs(orderTiming) {
                             top.linkTo(itemText.bottom, dp_4)
                             start.linkTo(parent.start, dp_12)

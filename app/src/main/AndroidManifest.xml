@@ -42,9 +42,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".OrderConfirmationIntermediateActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".address.AddressAddSelectActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -55,18 +63,33 @@
             android:theme="@style/Theme.CustomSplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <intent-filter
+                android:autoVerify="true"
+                android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data
+                    android:host="www.zustapp.com"
+                    android:pathPrefix="/" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".productDetails.presentation.ProductDetailsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -74,7 +97,7 @@
         <activity
             android:name=".refer.ReferAndEarnActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -82,16 +105,15 @@
         <activity
             android:name=".offline.OfflineActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".webpage.InAppWebActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -99,7 +121,7 @@
         <activity
             android:name=".profile.ProfileActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -107,7 +129,7 @@
         <activity
             android:name=".track.MapsActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -115,7 +137,7 @@
         <activity
             android:name=".address.AddressInputActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -123,7 +145,7 @@
         <activity
             android:name=".address.AddressSearchActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -131,7 +153,7 @@
         <activity
             android:name=".orderHistory.MyOrdersActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -139,7 +161,7 @@
         <activity
             android:name=".orderDetail.OrderDetailActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -148,7 +170,7 @@
             android:name=".payment.PaymentActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -157,7 +179,7 @@
             android:name=".HomeLandingActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -165,8 +187,8 @@
         <activity
             android:name=".search.SearchProductActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|adjustPan"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp"
+            android:windowSoftInputMode="adjustResize|adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -174,7 +196,7 @@
         <activity
             android:name=".coupon.CouponListingActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -182,7 +204,7 @@
         <activity
             android:name=".login.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -190,7 +212,7 @@
         <activity
             android:name=".product.ProductListingActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:theme="@style/Theme.ZustApp"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
@@ -199,7 +221,7 @@
         <activity
             android:name=".orderSummary.OrderSummaryActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:theme="@style/Theme.ZustApp"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
@@ -208,7 +230,7 @@
         <activity
             android:name=".BaseActivityWithLocation"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:theme="@style/Theme.ZustApp"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
@@ -234,12 +256,12 @@
                 <action android:name="rzp.device_token.share" />
             </intent-filter>
         </receiver>
-
-
-        <receiver android:name=".services.SMSReceiver" android:exported="true"
+        <receiver
+            android:name=".services.SMSReceiver"
+            android:exported="true"
             android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
 
