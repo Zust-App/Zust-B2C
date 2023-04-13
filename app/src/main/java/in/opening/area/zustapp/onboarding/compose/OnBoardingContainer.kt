@@ -12,12 +12,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,17 +57,23 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
         .fillMaxHeight()
         .background(color = colorResource(id = R.color.new_material_primary))) {
         val (lottieAnimation) = createRefs()
-        Image(painter = painterResource(id = R.drawable.zust_white_text),
-            contentDescription = "Zust App", modifier = Modifier
+
+        Image(
+            painter = painterResource(id = R.drawable.zust_white_text),
+            contentDescription = "Zust App",
+            modifier = Modifier
+                .clip(CircleShape)
                 .constrainAs(lottieAnimation) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .width(140.dp)
-                .height(60.dp)
-                .scale(scale.value))
+                .width(200.dp)
+                .height(200.dp)
+                .scale(scale.value),
+            contentScale = ContentScale.FillWidth,
+        )
 
         LaunchedEffect(key1 = Unit, block = {
             animateImageScale(scale)

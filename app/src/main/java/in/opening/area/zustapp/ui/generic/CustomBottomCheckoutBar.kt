@@ -78,6 +78,7 @@ fun CustomBottomBarView(
                 animationSpec = tween(durationMillis = 50)
             ) + fadeOut(),
         ) {
+            //new_material_primary
             BottomAppBar(
                 modifier = Modifier
                     .clickable {
@@ -106,7 +107,7 @@ fun CustomBottomBarView(
                         style = Typography_Montserrat.body1,
                         fontSize = 14.sp)
 
-                    Text(text = "View Cart",
+                    Text(text = stringResource(R.string.view_cart),
                         modifier = Modifier.constrainAs(viewCart) {
                             end.linkTo(viewCartIcon.start, dp_12)
                             top.linkTo(parent.top, dp_20)

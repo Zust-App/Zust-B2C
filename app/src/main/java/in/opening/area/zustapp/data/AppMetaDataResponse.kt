@@ -16,6 +16,7 @@ data class AppMetaData(
     val projectBaseUrl: String,
     val testBaseUrl: String,
     val isAppUpdateAvail: Boolean? = false,
+    val freeDeliveryFee: Double? = 99.0,
 )
 
 data class DeliveryFeePolicy(

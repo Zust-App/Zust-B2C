@@ -72,11 +72,13 @@ val ktorHttpClient = HttpClient(CIO) {
             append(APP_VERSION_CODE, BuildConfig.VERSION_CODE.toString())
             append("source", SOURCE)
             append(DEVICE_ID, DeviceInfo.getDeviceIdInfo())
-            if (url.build().toString().contains("home")) {
-                append(APP_VERSION_NAME, BuildConfig.VERSION_NAME)
-                append(OS_MODEL, Build.MODEL)
-                append(DEVICE_MODEL, Build.DEVICE)
-                append(BRAND, Build.BRAND)
+            url.build().toString().let {
+                if (it.contains("home") || it.contains("metadata")) {
+                    append(APP_VERSION_NAME, BuildConfig.VERSION_NAME)
+                    append(OS_MODEL, Build.MODEL)
+                    append(DEVICE_MODEL, Build.DEVICE)
+                    append(BRAND, Build.BRAND)
+                }
             }
         }
     }

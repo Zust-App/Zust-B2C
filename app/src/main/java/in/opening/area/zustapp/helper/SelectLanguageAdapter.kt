@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SelectLanguageAdapter(
     selectedLanguagePosition: Int, languageList: List<LanguageDTO>?,
-    listener: ItemClickListener?, context: Context,
+    listener: ItemClickListener?,
 ) : RecyclerView.Adapter<SelectLanguageAdapter.LanguageViewHolder>() {
     private val mListener: ItemClickListener?
     private var mIsSelected = -1

@@ -10,7 +10,6 @@ import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.product.others.OtherCategoryUi
-import `in`.opening.area.zustapp.productDetails.ProductDetailsBtmSheet
 import `in`.opening.area.zustapp.productDetails.ProductDetailsCallback
 import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
 import `in`.opening.area.zustapp.search.SearchProductActivity
@@ -43,8 +42,6 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
     private val productListingViewModel: ProductListingViewModel by viewModels()
     private var categoryId: Int? = null
     private var categoryName: String? = null
-
-    private var productDetailsBottomSheet: ProductDetailsBtmSheet? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,7 +154,6 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
     }
 
     override fun startOrderSummary(cartData: CreateCartData) {
-        productDetailsBottomSheet?.dismiss()
         startOrderSummaryActivity(cartData)
     }
 

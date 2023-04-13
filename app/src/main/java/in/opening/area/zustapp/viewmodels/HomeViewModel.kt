@@ -16,8 +16,6 @@ import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.HomePageResUi
 import `in`.opening.area.zustapp.uiModels.LatestOrderUi
 import `in`.opening.area.zustapp.utility.AppUtility
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -165,7 +163,7 @@ class HomeViewModel @Inject constructor(
         val orderBodyRequest = addToCartList.map {
             it.convertProductToCreateOrder()
         }
-        addToCartFlow.tryEmit(CreateCartReqModel(1, priceAndTotalItemCount.first,
+        addToCartFlow.tryEmit(CreateCartReqModel(-1, priceAndTotalItemCount.first,
             orderBodyRequest, priceAndTotalItemCount.second))
     }
 
@@ -193,6 +191,7 @@ class HomeViewModel @Inject constructor(
             is ResultWrapper.Success -> {
                 response.value.data?.let {
                     if (it.isAppUpdateAvail == true) {
+                        sharedPrefManager.saveFreeDeliveryBasePrice(it.freeDeliveryFee)
                         isAppUpdateAvail.update { true }
                     }else{
                         isAppUpdateAvail.update { false }

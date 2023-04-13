@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.productDetails.presentation
 
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION.*
 import `in`.opening.area.zustapp.orderSummary.OrderSummaryActivity
 import `in`.opening.area.zustapp.payment.PaymentActivity
@@ -7,7 +8,7 @@ import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.ProductSelectionListener
 import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.productDetails.compose.OrderDetailsTopBarUi
+import `in`.opening.area.zustapp.productDetails.compose.ProductDetailTopBarUi
 import `in`.opening.area.zustapp.productDetails.compose.ProductDetailMainUi
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
 import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
@@ -28,10 +29,10 @@ import kotlinx.coroutines.flow.update
 @AndroidEntryPoint
 class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
     private val viewModel: ProductDetailsViewModel by viewModels()
-    private var productSingleItem: ProductSingleItem? = null
 
     companion object {
-        const val PRODUCT_KEY = "product_key"
+        const val PRODUCT_ID = "product_key"
+        const val MERCHANT_ID = "merchant_id"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +40,7 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
         getDataFromIntent()
         setContent {
             Scaffold(topBar = {
-                OrderDetailsTopBarUi(Modifier) {
+                ProductDetailTopBarUi(Modifier) {
                     handleNavigation(it)
                 }
             }, bottomBar = {
@@ -47,22 +48,24 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
                     if (!viewModel.isCreateCartOnGoing()) {
                         viewModel.createCartOrderWithServer(VALUE.A)
                     } else {
-                        AppUtility.showToast(this, "Please wait")
+                        AppUtility.showToast(this, getString(R.string.please_wait))
                     }
                 }) {
                     startOrderSummaryActivity(it)
                 }
             }, content = { innerPadding ->
-                ProductDetailMainUi(viewModel, innerPadding, productSingleItem, this)
+                ProductDetailMainUi(viewModel, innerPadding, this)
             })
         }
     }
 
     private fun getDataFromIntent() {
-        if (intent.hasExtra(PRODUCT_KEY)) {
-            productSingleItem = intent.getParcelableExtra(PRODUCT_KEY)
-            viewModel.singleItemCache = productSingleItem
-            viewModel.attachObservers()
+        if (intent.hasExtra(PRODUCT_ID)) {
+            val productId = intent.getStringExtra(PRODUCT_ID)
+            productId?.let {
+                viewModel.setProductAndMerchantId(it, intent.getStringExtra(MERCHANT_ID) ?: "1")
+                viewModel.getProductDetails()
+            }
         } else {
             finish()
         }

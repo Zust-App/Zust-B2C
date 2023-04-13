@@ -29,7 +29,7 @@ fun DisplayUserInfo(user: User?) {
                 shape = RoundedCornerShape(8.dp))
             .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 16.dp)
             .fillMaxWidth()) {
-            val (userIcon, titleText, phoneNum, email) = createRefs()
+            val (userIcon, titleText, phoneNum, _) = createRefs()
             val displayText = user?.getDisplayIconText() ?: "G"
             Text(
                 modifier = Modifier

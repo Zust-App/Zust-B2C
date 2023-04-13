@@ -1,7 +1,6 @@
 package `in`.opening.area.zustapp.helper
 
 import android.app.Activity
-import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -92,7 +91,7 @@ class InAppUpdateManager(activity: Activity, val callback: () -> Unit) : Install
         }
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun onActivityResult(requestCode: Int, resultCode: Int) {
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode != AppCompatActivity.RESULT_OK) {
                 Log.e("ERROR", "Update flow failed! Result code: $resultCode")

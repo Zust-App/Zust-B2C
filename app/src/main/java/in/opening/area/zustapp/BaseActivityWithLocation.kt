@@ -53,12 +53,13 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ACTION_PERMISSION_GPS) {
             locationManager.initiate()
         } else {
-            AppUtility.showToast(this, "Please allow location permission")
+            AppUtility.showToast(this, getString(R.string.please_allow_location_permission))
         }
     }
 
@@ -67,7 +68,7 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
 
         } else {
             Log.e("TAG", "LOC NULL")
-            AppUtility.showToast(this, "Please Retry current address")
+            AppUtility.showToast(this, getString(R.string.please_retry_current_address))
         }
     }
 

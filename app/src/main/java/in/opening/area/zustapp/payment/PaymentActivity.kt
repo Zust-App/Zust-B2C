@@ -264,7 +264,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
                 }
 //                paymentActivityReqData?.couponDiscount = 0.0
 //                couponHolder?.setCouponData(null, null)
-               // paymentBillingHolder?.setUpData(paymentActivityReqData)
+                // paymentBillingHolder?.setUpData(paymentActivityReqData)
                 binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
             }
             is ValidateCouponUi.AppliedSuccessfully -> {
@@ -403,7 +403,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             orderConfirmationPage?.putExtra(ORDER_ID, paymentActivityReqData?.orderId)
             orderConfirmationPage?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(orderConfirmationPage)
-            finish()
         }
     }
 

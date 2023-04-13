@@ -130,7 +130,7 @@ class ProductListingViewModel @Inject constructor(private val apiRequestManager:
         val orderBodyRequest = addToCartList.map {
             it.convertProductToCreateOrder()
         }
-        addToCartFlow.tryEmit(CreateCartReqModel(1, priceAndTotalItemCount.first, orderBodyRequest, priceAndTotalItemCount.second))
+        addToCartFlow.tryEmit(CreateCartReqModel(-1, priceAndTotalItemCount.first, orderBodyRequest, priceAndTotalItemCount.second))
     }
 
     private fun getAllCategory() = viewModelScope.launch {

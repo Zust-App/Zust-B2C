@@ -22,35 +22,18 @@ class OnBoardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-            val doesOnBoardingShown = viewModel.doesOnBoardingShown()
-            if (doesOnBoardingShown) {
-                checkUserLoginOrNot()
-            } else {
-                OnBoardingContainer {
-                    handleClickAction(it)
-                }
+            OnBoardingContainer {
+                handleClickAction(it)
             }
         }
     }
 
     private fun handleClickAction(loginClick: LoginClick) {
         if (loginClick == LoginClick.LOGIN) {
-            //viewModel.updateOnBoardingShown(true)
-            proceedToLogin()
+            checkUserLoginOrNot()
         }
     }
 
-    private fun proceedToLogin() {
-        val loginActivity = Intent(this, LoginActivity::class.java)
-        startActivity(loginActivity)
-        finish()
-    }
-
-    private fun proceedToHomePage() {
-        val loginActivity = Intent(this, HomeLandingActivity::class.java)
-        startActivity(loginActivity)
-        finish()
-    }
 
     private fun checkUserLoginOrNot() {
         if (viewModel.isAuthTokenFound()) {
@@ -63,4 +46,17 @@ class OnBoardingActivity : AppCompatActivity() {
             proceedToLogin()
         }
     }
+
+    private fun proceedToHomePage() {
+        val loginActivity = Intent(this, HomeLandingActivity::class.java)
+        startActivity(loginActivity)
+        finish()
+    }
+
+    private fun proceedToLogin() {
+        val loginActivity = Intent(this, LoginActivity::class.java)
+        startActivity(loginActivity)
+        finish()
+    }
+
 }

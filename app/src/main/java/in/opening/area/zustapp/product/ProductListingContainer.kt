@@ -105,7 +105,7 @@ fun ProductListingContainer(
                         }
                     }
                 } else {
-                    NoProductFoundErrorPage(layoutScope, otherCategoryUi){
+                    NoProductFoundErrorPage(layoutScope, otherCategoryUi) {
                         listener.openSuggestProduct()
                     }
                 }
@@ -149,8 +149,8 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .height(65.dp)
-                .width(65.dp)
+                .height(80.dp)
+                .width(80.dp)
                 .constrainAs(imageIcon) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -299,7 +299,7 @@ interface ProductSelectionListener {
     fun didTapOnIncrementCount(productSingleItem: ProductSingleItem?)
     fun didTapOnDecrementCount(productSingleItem: ProductSingleItem?)
     fun didTapOnContainerClick(productSingleItem: ProductSingleItem?)
-    fun openSuggestProduct(){
+    fun openSuggestProduct() {
 
     }
 }

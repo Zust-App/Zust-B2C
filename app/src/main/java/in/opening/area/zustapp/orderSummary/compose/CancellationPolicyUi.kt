@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 fun CancellationPolicyUi(orderSummaryViewModel: OrderSummaryViewModel) {
     val cancellationPolicyData by orderSummaryViewModel.cancellationPolicyCacheData.collectAsStateLifecycleAware(initial = CancellationPolicyUiModel.InitialUi(false))
 
-    when (val response = cancellationPolicyData) {
+    when (cancellationPolicyData) {
         is CancellationPolicyUiModel.CancellationPolicyUiSuccess -> {
             Column(modifier = Modifier
                 .padding(vertical = 10.dp)

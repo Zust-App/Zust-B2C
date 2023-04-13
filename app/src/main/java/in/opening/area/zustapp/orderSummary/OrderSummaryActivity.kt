@@ -51,7 +51,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
                     }
                 },
                 topBar = {
-                    ComposeCustomTopAppBar(Modifier, "My Cart", null, null) {
+                    ComposeCustomTopAppBar(Modifier, getString(R.string.my_cart), null, null) {
                         if (it == ACTION.NAV_BACK) {
                             finish()
                         }
@@ -75,7 +75,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
                 } else {
                     intent.getParcelableExtra(PAYMENT_MODEL_KEY)
                 }
-                orderSummaryViewModel.expectedDeliveryTimeUiState.update {  orderSummaryViewModel.paymentActivityReqData?.expectedDelivery }
+                orderSummaryViewModel.expectedDeliveryTimeUiState.update { orderSummaryViewModel.paymentActivityReqData?.expectedDelivery }
             } else {
                 finish()
             }
@@ -93,6 +93,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
         }
         orderSummaryViewModel.getCartItemsFromDb()
         orderSummaryViewModel.getLatestAddress()
+        orderSummaryViewModel.setFreeDeliveryBasePrice()
     }
 
     private fun parseLockedOrderResponse(response: LockOrderCartUi) {
@@ -131,7 +132,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
 
     private fun startPaymentActivity(data: LockOrderResponseData?) {
         if (data == null) {
-            AppUtility.showToast(this, "Something went wrong")
+            AppUtility.showToast(this, getString(R.string.common_error_message))
             return
         }
         val itemCount = data.items.sumOf {
@@ -151,7 +152,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
         }
         val paymentIntent = Intent(this, PaymentActivity::class.java)
         paymentIntent.putExtra(PAYMENT_MODEL_KEY, reqData)
-        paymentIntent.putExtra(TOTAL_ITEMS_IN_CART,itemCount)
+        paymentIntent.putExtra(TOTAL_ITEMS_IN_CART, itemCount)
         startActivity(paymentIntent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
@@ -178,14 +179,14 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
     }
 
     private fun updateUserCartWithServer() {
-        if ( orderSummaryViewModel.paymentActivityReqData?.orderId != null &&  orderSummaryViewModel.paymentActivityReqData?.orderId != -1) {
+        if (orderSummaryViewModel.paymentActivityReqData?.orderId != null && orderSummaryViewModel.paymentActivityReqData?.orderId != -1) {
             if (!orderSummaryViewModel.isLockedCartOnGoing()) {
-                orderSummaryViewModel.updateUserCartWithServer( orderSummaryViewModel.paymentActivityReqData?.orderId!!)
+                orderSummaryViewModel.updateUserCartWithServer(orderSummaryViewModel.paymentActivityReqData?.orderId!!)
             } else {
-                AppUtility.showToast(this, "Please wait")
+                AppUtility.showToast(this, getString(R.string.please_wait))
             }
         } else {
-            AppUtility.showToast(this, "Something went wrong")
+            AppUtility.showToast(this, getString(R.string.common_error_message))
         }
     }
 

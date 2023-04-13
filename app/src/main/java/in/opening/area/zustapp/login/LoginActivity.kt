@@ -81,7 +81,6 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
         val intent = Intent(this@LoginActivity, HomeLandingActivity::class.java)
         startActivity(intent)
         finish()
-        Log.e("MOVE", "moveToHomeActivity: ")
     }
 
     private fun hideKeyBoard() {

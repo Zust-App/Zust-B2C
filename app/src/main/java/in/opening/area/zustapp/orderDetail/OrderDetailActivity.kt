@@ -1,10 +1,10 @@
 package `in`.opening.area.zustapp.orderDetail
 
 import `in`.opening.area.zustapp.HomeLandingActivity
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.orderDetail.ui.OrderDetailsTopAppBar
 import `in`.opening.area.zustapp.orderDetail.ui.OrderedDetailsContainer
-import `in`.opening.area.zustapp.ui.theme.screenBgColor
 import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,7 @@ class OrderDetailActivity : ComponentActivity() {
                 justOrdered = intent.getBooleanExtra(JUST_ORDERED, false)
             }
             Scaffold(
-                backgroundColor = screenBgColor,
+                backgroundColor = colorResource(id = R.color.screen_surface_color),
                 topBar = {
                     OrderDetailsTopAppBar(modifier = Modifier, orderId = orderId) {
                         handleAction(it)
@@ -41,7 +42,7 @@ class OrderDetailActivity : ComponentActivity() {
                 }) {
                 ConstraintLayout(modifier = Modifier
                     .padding(it)
-                    .background(screenBgColor)
+                    .background(colorResource(id = R.color.screen_surface_color))
                     .fillMaxWidth()
                     .fillMaxHeight()) {
                     OrderedDetailsContainer(myOrdersListViewModel, this) {
@@ -78,6 +79,7 @@ class OrderDetailActivity : ComponentActivity() {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (justOrdered) {
             val intent = Intent(this, HomeLandingActivity::class.java)

@@ -44,7 +44,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
             MaterialTheme {
                 Scaffold(
                     topBar = {
-                        ComposeCustomTopAppBar(modifier = Modifier, titleText = "My Profile", null, null) {
+                        ComposeCustomTopAppBar(modifier = Modifier, titleText = getString(R.string.my_profile), null, null) {
                             handleAction(it)
                         }
                     },
@@ -102,25 +102,25 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
             //web activity start from here
             ProfileActionCallback.FAQ -> {
                 if (profileViewModel.faqUrl() != null) {
-                    this.moveToInAppWebPage(profileViewModel.faqUrl()!!, "Faq")
+                    this.moveToInAppWebPage(profileViewModel.faqUrl()!!, getString(R.string.faq))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.ABOUT_US -> {
                 if (profileViewModel.getAboutUsUrl() != null) {
-                    this.moveToInAppWebPage(profileViewModel.getAboutUsUrl()!!, "About us")
+                    this.moveToInAppWebPage(profileViewModel.getAboutUsUrl()!!, getString(R.string.about_us))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.OPEN_SOURCE -> {
                 if (profileViewModel.getOpenSourceUrl() != null) {
-                    this.moveToInAppWebPage(profileViewModel.getOpenSourceUrl()!!, "Open source")
+                    this.moveToInAppWebPage(profileViewModel.getOpenSourceUrl()!!, getString(R.string.open_source))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
             ProfileActionCallback.TC -> {
                 if (profileViewModel.termAndConditionUrl() != null) {
-                    this.moveToInAppWebPage(profileViewModel.termAndConditionUrl()!!, "Terms & Condition")
+                    this.moveToInAppWebPage(profileViewModel.termAndConditionUrl()!!, getString(R.string.terms_condition))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
@@ -129,7 +129,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
             }
             ProfileActionCallback.PRIVACY_POLICY -> {
                 if (profileViewModel.privacyPolicyUrl() != null) {
-                    this.moveToInAppWebPage(profileViewModel.privacyPolicyUrl()!!, "Privacy Policy")
+                    this.moveToInAppWebPage(profileViewModel.privacyPolicyUrl()!!, getString(R.string.privacy_policy))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }

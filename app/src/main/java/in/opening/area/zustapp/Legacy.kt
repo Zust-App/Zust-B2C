@@ -187,3 +187,14 @@ import kotlinx.coroutines.delay
 //        }
 //    }
 //}
+
+////    engine {
+////        https {
+////            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+////                val customTrustManager = CustomX509TrustManager()
+////                val sslContext = SSLContext.getInstance("TLS")
+////                sslContext.init(null, arrayOf<TrustManager>(customTrustManager), SecureRandom())
+////                this.trustManager = customTrustManager
+////            }
+////        }
+////    }

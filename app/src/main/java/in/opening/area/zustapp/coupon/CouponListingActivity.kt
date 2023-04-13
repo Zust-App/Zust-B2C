@@ -49,7 +49,7 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
                             finish()
                         }
                     })
-            }, modifier = Modifier.background(screenBgColor)) {
+            }, modifier = Modifier.background(color = colorResource(id = R.color.screen_surface_color))) {
                 LoadMainContent(it)
             }
         }
@@ -62,7 +62,7 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(color = screenBgColor)
+                .background(color = colorResource(id = R.color.screen_surface_color) )
         ) {
             val (manualCouponContainer, titleText, couponList) = createRefs()
             ConstraintLayout(
@@ -78,7 +78,6 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
                     .border(width = 1.dp, color = Color(0xffB58AFB), shape = RoundedCornerShape(8.dp))
                     .background(color = Color.White)
             ) {
-                val (manualText, apply) = createRefs()
                 Row(
                     Modifier.fillMaxWidth()
                 ) {

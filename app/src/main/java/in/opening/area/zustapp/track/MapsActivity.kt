@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.track
 
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.track.manager.RealtimeTrackingManager
 import `in`.opening.area.zustapp.tracking.track.model.TrackingDataModel
 import `in`.opening.area.zustapp.tracking.track.utils.AnimationUtils
@@ -128,7 +129,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, RealtimeTrackingMa
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -144,9 +145,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, RealtimeTrackingMa
                     }
                 } else {
                     Toast.makeText(
-                        this,
-                        "loc not granted",
-                        Toast.LENGTH_LONG
+                        this, getString(R.string.please_allow_location_permission), Toast.LENGTH_LONG
                     ).show()
                 }
             }

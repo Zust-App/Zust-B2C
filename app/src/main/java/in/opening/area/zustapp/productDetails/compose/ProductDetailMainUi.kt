@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.productDetails.compose
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.product.ProductSelectionListener
 import `in`.opening.area.zustapp.product.addIcon
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
@@ -9,16 +10,14 @@ import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
 import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.ProductDetailsViewModel
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,187 +45,240 @@ import java.util.*
 fun ProductDetailMainUi(
     viewModel: ProductDetailsViewModel,
     paddingValue: PaddingValues,
-    productSingleItem: ProductSingleItem?,
     callback: ProductSelectionListener,
 ) {
-    if (productSingleItem == null) {
-        return
-    }
     val productDetailsUiState by viewModel.singleItemUiState.collectAsState(ProductDetailsUiState.InitialUi(false))
-    when (val data = productDetailsUiState) {
-        is ProductDetailsUiState.Success -> {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .verticalScroll(rememberScrollState())
-                .background(color = colorResource(id = R.color.screen_surface_color))
-                .padding(paddingValue)) {
-                ConstraintLayout(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 16.dp)
-                    .background(color = colorResource(id = R.color.white),
-                        shape = RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp, vertical = 16.dp)) {
-                    val (offerPercentage, imageIcon) = createRefs()
-                    if (productSingleItem.discountPercentage > 0.0) {
-                        Text(text = productSingleItem.discountPercentage.toInt().toString() + "% OFF", modifier = Modifier
-                            .background(color = colorResource(id = R.color.new_material_primary), shape = RoundedCornerShape(4.dp))
-                            .padding(horizontal = 8.dp,
-                                vertical = 2.dp)
-                            .constrainAs(offerPercentage) {
-                                start.linkTo(parent.start, 5.dp)
-                                top.linkTo(parent.top)
-                            }, color = Color.White,
-                            fontSize = 12.sp,
-                            fontFamily = montserrat,
-                            fontWeight = FontWeight.W600)
-                    }
 
-                    AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(productSingleItem.thumbnail)
-                        .allowHardware(true).build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .height(175.dp)
-                            .width(175.dp)
-                            .constrainAs(imageIcon) {
-                                top.linkTo(parent.top, dp_24)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                bottom.linkTo(parent.bottom, dp_24)
-                            }, alignment = Alignment.Center)
+    ConstraintLayout(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
+        val (progressbar) = createRefs()
+        when (val data = productDetailsUiState) {
 
+            is ProductDetailsUiState.Success -> {
+                if (data.isLoading) {
+                    CustomAnimatedProgressBar(modifier = Modifier.constrainAs(progressbar) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                    })
                 }
 
-                ConstraintLayout(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp, vertical = 16.dp)) {
-
-                    val (title, quantityUnitText, priceText, mrpText, descTitle, descText, incDecContainer) = createRefs()
-
-                    Text(text = productSingleItem.productName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }, color = colorResource(id = R.color.app_black), modifier = Modifier.constrainAs(title) {
-                        start.linkTo(parent.start)
-                        end.linkTo(incDecContainer.start, dp_12)
-                        top.linkTo(parent.top, dp_8)
-                        width = Dimension.fillToConstraints
-                    }, fontFamily = montserrat,
-                        fontWeight = FontWeight.W600,
-                        fontSize = 14.sp)
-
-                    Text(text = ProductUtils.getNumberDisplayValue(productSingleItem.quantity) + " " + productSingleItem.quantityUnit.lowercase(),
-                        color = colorResource(id = R.color.new_hint_color),
-                        modifier = Modifier.constrainAs(quantityUnitText) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            top.linkTo(title.bottom, dp_12)
-                            width = Dimension.fillToConstraints
-                        }, fontFamily = montserrat,
-                        fontWeight = FontWeight.W600,
-                        fontSize = 12.sp)
-
-                    Text(text = stringResource(id = R.string.ruppes) + " " + productSingleItem.price.toString(),
-                        modifier = Modifier.constrainAs(priceText) {
-                            start.linkTo(parent.start)
-                            top.linkTo(quantityUnitText.bottom, dp_8)
-                        }, fontFamily = montserrat,
-                        fontWeight = FontWeight.W600,
-                        fontSize = 14.sp,
-                        color = colorResource(id = R.color.app_black))
-
-                    Text(
-                        text = stringResource(id = R.string.ruppes) + " " + productSingleItem.mrp.toString(),
-                        modifier = Modifier.constrainAs(mrpText) {
-                            start.linkTo(priceText.end, dp_8)
-                            top.linkTo(priceText.top, dp_4)
-                            width = Dimension.fillToConstraints
-                        },
-                        style = TextStyle(textDecoration = TextDecoration.LineThrough,
-                            fontFamily = montserrat,
-                            fontWeight = FontWeight.W400,
-                            fontSize = 12.sp),
-                        color = colorResource(id = R.color.new_hint_color),
-                    )
-                    if ((data.singleItem?.itemCountByUser ?: 0) > 0) {
-                        Row(horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .constrainAs(incDecContainer) {
-                                    top.linkTo(parent.top, dp_8)
-                                    end.linkTo(parent.end)
-                                }
-                                .background(color = colorResource(id = R.color.light_green),
-                                    shape = RoundedCornerShape(6.dp))
-                                .padding(horizontal = 8.dp, vertical = 2.dp)
-                                .wrapContentHeight()) {
-                            Icon(painter = painterResource(removeIcon), contentDescription = "",
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable {
-                                        callback.didTapOnDecrementCount(data.singleItem)
-                                    }, tint = colorResource(id = R.color.white))
-
-                            Text(text = (data.singleItem?.itemCountByUser ?: "").toString(),
-                                modifier = Modifier.padding(start = dp_8, end = dp_8),
+                if (!data.productPriceSingleItems.isNullOrEmpty()) {
+                    LazyColumn(modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(color = colorResource(id = R.color.white))
+                        .padding(paddingValue)
+                        .padding(vertical = 16.dp)) {
+                        item {
+                            Text(text = data.productPriceSingleItems[0].productName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }, color = colorResource(id = R.color.app_black),
+                                fontFamily = montserrat,
                                 fontWeight = FontWeight.W600,
-                                fontFamily = montserrat, fontSize = 12.sp, color = colorResource(id = R.color.white))
-
-                            Icon(painter = painterResource(addIcon), contentDescription = "", modifier = Modifier
-                                .size(20.dp)
-                                .padding(0.dp)
-                                .clickable {
-                                    callback.didTapOnIncrementCount(data.singleItem)
-                                }, tint = colorResource(id = R.color.white))
-
+                                fontSize = 16.sp, modifier = Modifier.padding(horizontal = 16.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
                         }
-                    } else {
-                        Button(modifier = Modifier
-                            .constrainAs(incDecContainer) {
-                                top.linkTo(parent.top, dp_8)
-                                end.linkTo(parent.end)
+
+                        item {
+                            ConstraintLayout(modifier = Modifier
+                                .fillMaxWidth()) {
+                                val (imageIcon) = createRefs()
+                                AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(data.productPriceSingleItems[0].thumbnail)
+                                    .allowHardware(true).build(),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .height(175.dp)
+                                        .width(175.dp)
+                                        .constrainAs(imageIcon) {
+                                            top.linkTo(parent.top, dp_24)
+                                            start.linkTo(parent.start)
+                                            end.linkTo(parent.end)
+                                            bottom.linkTo(parent.bottom, dp_24)
+                                        }, alignment = Alignment.Center)
                             }
-                            .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(8.dp))
-                            .height(26.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = colorResource(id = R.color.light_green),
-                                contentColor = colorResource(id = R.color.light_green)),
-                            contentPadding = PaddingValues(vertical = 0.dp, horizontal = 20.dp),
-                            onClick = {
-                                callback.didTapOnIncrementCount(productSingleItem)
-                            }) {
-                            Text(text = stringResource(R.string.add),
-                                fontWeight = FontWeight.W600, color = colorResource(id = R.color.white),
-                                fontFamily = montserrat, fontSize = 12.sp)
+                        }
+
+                        item {
+                            Divider(modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(color = colorResource(id = com.google.android.material.R.color.material_divider_color)))
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Text(
+                                text = "Pack Sizes",
+                                fontFamily = openSansFontFamily,
+                                fontWeight = FontWeight.W400,
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.app_black),
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+                        data.productPriceSingleItems.forEach {
+                            item {
+                                MultipleVariantItemUI(it, callback)
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Text(
+                                text = "Important Information",
+                                style = Typography_Okra.body1,
+                                color = colorResource(id = R.color.app_black),
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = data.productPriceSingleItems[0].description,
+                                style = Typography_Montserrat.body2,
+                                color = colorResource(id = R.color.new_hint_color), modifier = Modifier.padding(horizontal = 16.dp)
+                            )
                         }
                     }
-
-                    Text(
-                        text = "Important Information",
-                        modifier = Modifier.constrainAs(descTitle) {
-                            start.linkTo(parent.start)
-                            top.linkTo(priceText.bottom, dp_24)
-                            width = Dimension.fillToConstraints
-                        },
-                        style = Typography_Montserrat.body1,
-                        color = colorResource(id = R.color.app_black),
-                    )
-
-                    Text(
-                        text = productSingleItem.description,
-                        modifier = Modifier.constrainAs(descText) {
-                            start.linkTo(parent.start)
-                            top.linkTo(descTitle.bottom, dp_8)
-                            width = Dimension.fillToConstraints
-                        },
-                        style = Typography_Montserrat.body2,
-                        color = colorResource(id = R.color.new_hint_color),
-                    )
+                }
+            }
+            is ProductDetailsUiState.InitialUi -> {
+                if (data.isLoading) {
+                    CustomAnimatedProgressBar(modifier = Modifier.constrainAs(progressbar) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                    })
                 }
             }
         }
-        is ProductDetailsUiState.InitialUi -> {
+    }
+}
 
+@Composable
+private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback: ProductSelectionListener) {
+    ConstraintLayout(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)
+        .border( // Set the background color
+            shape = RoundedCornerShape(4.dp), // Set the corner shape
+            border = BorderStroke(0.5.dp, colorResource(id = R.color.new_hint_color)) // Set the border
+        )) {
+        val (
+            priceText, incDecContainer, quantityUnitText, mrpText, offerPercentage,
+        ) = createRefs()
+
+        Text(text = buildString {
+            append(ProductUtils.getNumberDisplayValue(productSingleItem.quantity))
+            append(" ")
+            append(productSingleItem.quantityUnit.lowercase())
+        }, modifier = Modifier.constrainAs(quantityUnitText) {
+            start.linkTo(parent.start, dp_12)
+            top.linkTo(parent.top, dp_16)
+            bottom.linkTo(parent.bottom, dp_16)
+        }, fontFamily = montserrat,
+            fontWeight = FontWeight.W500,
+            fontSize = 14.sp,
+            color = colorResource(id = R.color.new_hint_color))
+
+        Text(text = stringResource(id = R.string.ruppes) + " " + productSingleItem.price.toString(),
+            modifier = Modifier.constrainAs(priceText) {
+                start.linkTo(quantityUnitText.start, dp_8)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                end.linkTo(incDecContainer.start, dp_8)
+            }, fontFamily = montserrat,
+            fontWeight = FontWeight.W600,
+            fontSize = 16.sp,
+            color = colorResource(id = R.color.app_black))
+
+        Text(
+            text = stringResource(id = R.string.ruppes) + " " + productSingleItem.mrp.toString(),
+            modifier = Modifier.constrainAs(mrpText) {
+                start.linkTo(priceText.end, dp_8)
+                top.linkTo(priceText.top)
+                bottom.linkTo(priceText.bottom)
+                end.linkTo(incDecContainer.start, dp_8)
+                width = Dimension.fillToConstraints
+            },
+            style = TextStyle(textDecoration = TextDecoration.LineThrough,
+                fontFamily = montserrat,
+                fontWeight = FontWeight.W400,
+                fontSize = 12.sp),
+            color = colorResource(id = R.color.new_hint_color),
+        )
+
+        if (productSingleItem.itemCountByUser > 0) {
+            Row(horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .constrainAs(incDecContainer) {
+                        top.linkTo(parent.top, dp_8)
+                        end.linkTo(parent.end, dp_12)
+                        bottom.linkTo(parent.bottom, dp_8)
+                    }
+                    .background(color = colorResource(id = R.color.light_green),
+                        shape = RoundedCornerShape(6.dp))
+                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                    .wrapContentHeight()) {
+                Icon(painter = painterResource(removeIcon), contentDescription = "",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clickable {
+                            callback.didTapOnDecrementCount(productSingleItem)
+                        }, tint = colorResource(id = R.color.white))
+
+                Text(text = productSingleItem.itemCountByUser.toString(),
+                    modifier = Modifier.padding(start = dp_8,
+                        end = dp_8),
+                    fontWeight = FontWeight.W600,
+                    fontFamily = montserrat, fontSize = 14.sp,
+                    color = colorResource(id = R.color.white),
+                    textAlign = TextAlign.Center)
+
+                Icon(painter = painterResource(addIcon), contentDescription = "", modifier = Modifier
+                    .size(22.dp)
+                    .padding(0.dp)
+                    .clickable {
+                        callback.didTapOnIncrementCount(productSingleItem)
+                    }, tint = colorResource(id = R.color.white))
+            }
+        } else {
+            Button(modifier = Modifier
+                .constrainAs(incDecContainer) {
+                    top.linkTo(parent.top, dp_8)
+                    end.linkTo(parent.end, dp_12)
+                    bottom.linkTo(parent.bottom, dp_8)
+                }
+                .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(8.dp))
+                .height(26.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = colorResource(id = R.color.light_green),
+                    contentColor = colorResource(id = R.color.light_green)),
+                contentPadding = PaddingValues(vertical = 0.dp, horizontal = 20.dp),
+                onClick = {
+                    callback.didTapOnIncrementCount(productSingleItem)
+                }) {
+                Text(text = stringResource(R.string.add),
+                    fontWeight = FontWeight.W600, color = colorResource(id = R.color.white),
+                    fontFamily = montserrat, fontSize = 12.sp)
+            }
+        }
+
+        if (productSingleItem.discountPercentage > 0.0) {
+            Text(text = productSingleItem.discountPercentage.toInt().toString() + "% OFF", modifier = Modifier
+                .background(color = colorResource(id = R.color.light_offer_color),
+                    shape = RoundedCornerShape(topStart = 4.dp))
+                .padding(horizontal = 4.dp)
+                .constrainAs(offerPercentage) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                }, color = Color.White,
+                fontSize = 12.sp,
+                fontFamily = okraFontFamily,
+                fontWeight = FontWeight.W600)
         }
     }
 }

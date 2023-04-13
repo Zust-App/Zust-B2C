@@ -15,6 +15,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,14 +37,13 @@ class AddressAddSelectActivity : BaseActivityWithLocation() {
         setContent {
             Scaffold {
                 AddressAddSelectContainer(it)
-                viewModel.getAllAddress()
             }
         }
     }
 
     @Composable
     fun AddressAddSelectContainer(paddingValues: PaddingValues) {
-        AddNewAddressUi(modifier = Modifier, viewModel) {
+        AddNewAddressUi(modifier = Modifier.padding(paddingValues), viewModel) {
             handleAction(it)
         }
     }
@@ -85,7 +85,6 @@ class AddressAddSelectActivity : BaseActivityWithLocation() {
     }
 
     override fun receiveLocation(location: Location?) {
-        super.receiveLocation(location)
         if (location != null) {
             val customLocationModel = LocationUtility.getAddress(latLng = LatLng(location.latitude, location.longitude), context = this)
             viewModel.currentLocationUiState.update {

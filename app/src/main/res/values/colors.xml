@@ -13,17 +13,18 @@
     <color name="logout_bg">#fee5dc</color>
     <color name="green">#0C831F</color>
 
-    <color name="new_material_primary">#1f7ae0</color>
+    <color name="new_material_primary">#542580</color>
     <!-- #6750A4-->
-    <!--#1f7ae0-->
     <color name="screen_surface_color">#F8F4FF</color>
     <color name="new_hint_color">#6C6C6C</color>
     <color name="indicator_color">#D9D9D9</color>
     <color name="yellow">#E9F0D5</color>
     <color name="nobel">#A0A0A0</color>
-    <color name="light_green">#8DA450</color>
+    <color name="light_green">#008000</color>
     <color name="black_2">#323232</color>
     <color name="black_3">#333333</color>
     <color name="black_4">#969696</color>
     <color name="language_default">#991A1A1A</color>
+    <color name="light_offer_color">#538cee</color>
+<!--    <color name="orange">#bdea09</color>-->
 </resources>

@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.webpage
 
 import `in`.opening.area.zustapp.utility.AppUtility
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.webkit.WebChromeClient
@@ -8,13 +9,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 
 
+@SuppressLint("SetJavaScriptEnabled")
 fun WebView?.webViewExtension(webUrl: String, context: Context, progress: (Int) -> Unit, showHidePgBar: (Boolean) -> Unit) {
     this?.loadUrl(webUrl)
     this?.settings?.javaScriptEnabled = true
     this?.settings?.domStorageEnabled = true
     this?.webViewClient = object : WebViewClient() {
         @Deprecated("Deprecated in Java")
-
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             if (url != null) {
                 view?.loadUrl(url)
@@ -36,7 +37,7 @@ fun WebView?.webViewExtension(webUrl: String, context: Context, progress: (Int) 
             view: WebView?,
             errorCode: Int,
             description: String?,
-            failingUrl: String?
+            failingUrl: String?,
         ) {
             showHidePgBar.invoke(false)
             progress.invoke(100)

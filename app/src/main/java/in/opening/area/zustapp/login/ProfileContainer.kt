@@ -136,7 +136,7 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
                 .fillMaxWidth()
                 .wrapContentHeight(),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(primaryColor)) {
+                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.new_material_primary))) {
                 Text(text = "Complete".uppercase(),
                     modifier = Modifier.padding(8.dp),
                     color = Color.White,

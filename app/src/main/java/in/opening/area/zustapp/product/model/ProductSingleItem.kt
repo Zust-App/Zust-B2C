@@ -57,30 +57,20 @@ data class ProductSingleItem(
     var wareHouseId: String? = null,
     @ColumnInfo(name = "isOutOfStock")
     val isOutOfStock: Boolean = false,
-) : Parcelable {
-    fun copy(userSelectedItemCount: Int): ProductSingleItem {
-        return ProductSingleItem(tableId, brand, categoryId,
-            description,
-            productPriceId, productGroupId, itemInStock,
-            mrp, productName,
-            price, quantity, quantityUnit, subcategoryId, thumbnail,
-            userSelectedItemCount,
-            discountPercentage, wareHouseId, isOutOfStock)
-    }
-
+):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
+        parcel.readString()?:"",
+        parcel.readString()?:"",
+        parcel.readString()?:"",
+        parcel.readString()?:"",
         parcel.readDouble(),
         parcel.readDouble(),
-        parcel.readString() ?: "",
+        parcel.readString()?:"",
         parcel.readDouble(),
         parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.readString() ?: "",
+        parcel.readString()?:"",
         parcel.readInt(),
         parcel.readString(),
         parcel.readInt(),
@@ -122,6 +112,15 @@ data class ProductSingleItem(
         override fun newArray(size: Int): Array<ProductSingleItem?> {
             return arrayOfNulls(size)
         }
+    }
+    fun copy(userSelectedItemCount: Int): ProductSingleItem {
+        return ProductSingleItem(tableId, brand, categoryId,
+            description,
+            productPriceId, productGroupId, itemInStock,
+            mrp, productName,
+            price, quantity, quantityUnit, subcategoryId, thumbnail,
+            userSelectedItemCount,
+            discountPercentage, wareHouseId, isOutOfStock)
     }
 }
 

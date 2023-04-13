@@ -21,8 +21,12 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val PROFILE_CREATED = "profile_created"
         const val ONBOARDING_SHOWN = "onboarding_shown"
         const val SELECTED_LANG = "select_lang"
-        const val MOBILE_NUM = "mobile_num"
+        const val USER_MOBILE_NUM = "user_mobile_num"
+        const val FREE_DELIVERY_BASE_PRICE = "free_delivery_base_price"
 
+        const val SUPPORT_WA_NUM = "support_wa_num"
+        const val SUPPORT_EMAIL = "support_email"
+        const val SUPPORT_CALL = "support_call"
     }
 
     open fun getUserAuthToken(): String? {
@@ -50,7 +54,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun removePhoneNumber() {
-        sharedPreferences.edit().remove(MOBILE_NUM).apply()
+        sharedPreferences.edit().remove(USER_MOBILE_NUM).apply()
     }
 
     fun saveAuthToken(authToken: String?) {
@@ -86,13 +90,6 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         return sharedPreferences.getBoolean(PROFILE_CREATED, false)
     }
 
-    open fun saveOnBoardingShown(isShown: Boolean) {
-        sharedPreferences.edit().putBoolean(ONBOARDING_SHOWN, isShown).apply()
-    }
-
-    open fun doesOnBoardingShown(): Boolean {
-        return sharedPreferences.getBoolean(ONBOARDING_SHOWN, false)
-    }
 
     fun saveUserSelectedLanguage(language: String) {
         sharedPreferences.edit().putString(SELECTED_LANG, language).apply()
@@ -103,12 +100,54 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         return value ?: LanguageManager.ENG
     }
 
+
     fun saveUserPhoneNumber(mobileNum: String) {
-        sharedPreferences.edit().putString(MOBILE_NUM, mobileNum).apply()
+        sharedPreferences.edit().putString(USER_MOBILE_NUM, mobileNum).apply()
     }
 
     fun getUserMobileNumber(): String {
-        return sharedPreferences.getString(MOBILE_NUM, "8000012121") ?: "8000012121"
+        return sharedPreferences.getString(USER_MOBILE_NUM, "8000012121") ?: "8000012121"
+    }
+
+    fun saveFreeDeliveryBasePrice(freeDeliveryFee: Double?) {
+        sharedPreferences.edit().putFloat(FREE_DELIVERY_BASE_PRICE, (freeDeliveryFee?.toFloat()) ?: 99f).apply()
+    }
+
+    fun getFreeDeliveryBasePrice(): Int {
+        return sharedPreferences.getFloat(FREE_DELIVERY_BASE_PRICE, 99f).toInt()
+    }
+
+    fun getSupportPhoneNumber(): String {
+        return sharedPreferences.getString(SUPPORT_CALL, "7858906229") ?: "7858906229"
+    }
+
+    fun getSupportEmail(): String {
+        return sharedPreferences.getString(SUPPORT_EMAIL, "7858906229") ?: "7858906229"
+    }
+
+    fun getSupportWhatsapp(): String {
+        return sharedPreferences.getString(SUPPORT_WA_NUM, "7858906229") ?: "7858906229"
+    }
+
+    fun saveSupportPhoneNumber(supportPhNum: String?) {
+        if (supportPhNum == null) {
+            return
+        }
+        sharedPreferences.edit().putString(SUPPORT_CALL, supportPhNum).apply()
+    }
+
+    fun saveSupportEmail(supportEmail: String?) {
+        if (supportEmail == null) {
+            return
+        }
+        sharedPreferences.edit().putString(SUPPORT_EMAIL, supportEmail).apply()
+    }
+
+    fun saveSupportWhatsapp(supportWhatsapp: String?) {
+        if (supportWhatsapp == null) {
+            return
+        }
+        sharedPreferences.edit().putString(SUPPORT_WA_NUM, supportWhatsapp).apply()
     }
 
 }

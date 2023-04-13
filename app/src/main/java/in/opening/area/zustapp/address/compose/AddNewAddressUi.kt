@@ -82,13 +82,14 @@ fun AddNewAddressUi(
             if (currentLocation.data != null) {
                 customLocationModel = currentLocation.data
                 if (!currentLocation.data.pinCode.isNullOrEmpty()) {
-                    inputPinCode = currentLocation.data.pinCode!!
+                  //  inputPinCode = currentLocation.data.pinCode!!
                 }
             }
         }
         is CurrentLocationUi.ErrorState -> {
             customLocationModel = CustomLocationModel()
         }
+        else -> {}
     }
     ConstraintLayout(modifier = modifier
         .fillMaxWidth()
@@ -168,7 +169,7 @@ fun AddNewAddressUi(
             }
             Spacer(modifier = modifier.height(16.dp))
 
-            Text(text = "PinCode*",
+            Text(text = "Enter PinCode*",
                 style = Typography_Montserrat.subtitle1,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
@@ -196,20 +197,8 @@ fun AddNewAddressUi(
                     .clip(shape = RoundedCornerShape(8.dp)),
                 colors = getTextFieldColors(), maxLines = 3)
 
-//            Spacer(modifier = modifier.height(16.dp))
-//            Text(text = "Area, Street, Sector, Society *",
-//                style = Typography_Montserrat.subtitle1,
-//                color = colorResource(id = R.color.new_hint_color))
-//            Spacer(modifier = modifier.height(6.dp))
-//            TextField(value = landmarkAndArea,
-//                textStyle = Typography_Montserrat.body2,
-//                onValueChange = {
-//                    landmarkAndArea = it
-//                }, modifier = modifier
-//                    .fillMaxWidth()
-//                    .clip(shape = RoundedCornerShape(8.dp)),
-//                colors = getTextFieldColors(), maxLines = 2)
             Spacer(modifier = modifier.height(24.dp))
+
             OutlinedButton(onClick = {
                 if (validateAddressLocally(inputPinCode, houseAndFloor, landmarkAndArea, context)) {
                     if (!viewModel.checkIsSaveAddressAlreadyGoing()) {
@@ -277,7 +266,7 @@ private fun validateAddressLocally(
         return false
     }
     if (houseNumberAndFloor.isNullOrEmpty()) {
-        AppUtility.showToast(context, "Please enter House number")
+        AppUtility.showToast(context, "Please enter full Address")
         return false
     }
 //    if (landmark.isNullOrEmpty()) {

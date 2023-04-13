@@ -83,7 +83,7 @@ fun DeliveryPartnerTipUi(orderSummaryViewModel: OrderSummaryViewModel) {
                                     colorResource(id = R.color.white)
                                 })) {
                                 val (deliveryTipText, emojiIcon) = createRefs()
-                                Image(painter = GetEmoji(it),
+                                Image(painter = getEmoji(it),
                                     contentDescription = "emoji", modifier = Modifier.constrainAs(emojiIcon) {
                                         top.linkTo(parent.top)
                                         bottom.linkTo(parent.bottom)
@@ -118,13 +118,14 @@ fun DeliveryPartnerTipUi(orderSummaryViewModel: OrderSummaryViewModel) {
                     }
                 }
             }
+            else -> {}
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
 @Composable
-private fun GetEmoji(index: Int): Painter {
+private fun getEmoji(index: Int): Painter {
     when (index) {
         0 -> return painterResource(id = R.drawable.emoji_1)
         1->return painterResource(id = R.drawable.emoji_2)

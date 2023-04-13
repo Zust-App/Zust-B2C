@@ -95,7 +95,7 @@ class SelectLanguageFragment : BottomSheetDialogFragment() {
                     binding?.btnNext?.isEnabled = true
                     mAdapter?.notifyDataSetChanged()
                 }
-            }, context = requireContext())
+            })
             recyclerView?.adapter = mAdapter
         }
     }

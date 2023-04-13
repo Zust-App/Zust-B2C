@@ -188,7 +188,8 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
                 width = Dimension.fillToConstraints
             })
 
-        Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(userBooking.payablePrice), modifier = Modifier.constrainAs(orderAmount) {
+        Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(userBooking.payablePrice),
+            modifier = Modifier.constrainAs(orderAmount) {
             end.linkTo(parent.end, dp_16)
             top.linkTo(divider.bottom, dp_12)
         }, color = colorResource(id = R.color.app_black), style = Typography_Montserrat.body2, fontWeight = FontWeight.W600)

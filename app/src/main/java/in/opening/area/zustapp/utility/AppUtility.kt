@@ -3,6 +3,7 @@ package `in`.opening.area.zustapp.utility
 import `in`.opening.area.zustapp.MyApplication
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.offline.OfflineActivity
+import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import android.app.AlertDialog
 import android.content.*
 import android.content.pm.PackageManager
@@ -18,15 +19,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import javax.inject.Inject
 
 
-class AppUtility {
+class AppUtility @Inject constructor() {
+    @Inject
+    lateinit var sharedPrefManager: SharedPrefManager
 
     companion object {
         const val WA_PACKAGE_NAME = "com.whatsapp"
         const val BUSINESS_WA_PACKAGE_NAME = "com.whatsapp.w4b"
         private val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=" + getPackageName()
-        const val WEB_URL="www.zustapp.com"
+        const val WEB_URL = "www.zustapp.com"
         private fun getPackageName(): String {
             return MyApplication.getApplication().packageName ?: "in.opening.area.zustapp"
         }
@@ -54,19 +58,6 @@ class AppUtility {
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
 
-        @Composable
-        fun OfflineDialog(confirmButtonClick: () -> Unit) {
-            AlertDialog(
-                onDismissRequest = {},
-                title = { Text(text = stringResource(R.string.connection_error_title)) },
-                text = { Text(text = stringResource(R.string.connection_error_message)) },
-                confirmButton = {
-                    TextButton(onClick = confirmButtonClick) {
-                        Text(stringResource(R.string.retry_label))
-                    }
-                }
-            )
-        }
 
         fun showShareIntent(context: Context?, shareText: String?) {
             if (context == null) {
@@ -92,7 +83,7 @@ class AppUtility {
             val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
             val clip = ClipData.newPlainText(label, text)
             clipboard?.setPrimaryClip(clip)
-            showToast(context, "Successfully Copied to clipboard")
+            showToast(context, context.getString(R.string.copied))
         }
 
         fun getAuthError(): UserCustomError {
@@ -118,7 +109,7 @@ class AppUtility {
         }
 
         fun getWhatsappHelpUrl(): String {
-            return "https://api.whatsapp.com/send?phone=" + "7564062907"
+            return "https://api.whatsapp.com/send?phone=" + "7858906229"
         }
 
         fun showNoInternetActivity(context: Context?) {

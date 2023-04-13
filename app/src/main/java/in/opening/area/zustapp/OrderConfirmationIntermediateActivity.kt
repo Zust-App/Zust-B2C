@@ -21,6 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +55,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
                 val (successAnimation) = createRefs()
                 val (thanksMessage) = createRefs()
                 val (orderConfirmedMessage) = createRefs()
-                Text(text = "Your order $completeOrderId confirmed. Will deliver in 45 Minutes",
+                Text(text = stringResource(`in`.opening.area.zustapp.R.string.order_confirmation_message, completeOrderId, 45),
                     modifier = Modifier.constrainAs(orderConfirmedMessage) {
                         bottom.linkTo(successAnimation.top, dp_16)
                         start.linkTo(parent.start, dp_20)
@@ -64,7 +65,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
                     fontFamily = okraFontFamily,
                     color = colorResource(id = color.light_green), textAlign = TextAlign.Center)
 
-                Text(text = "Thanks for using Zust app",
+                Text(text = stringResource(`in`.opening.area.zustapp.R.string.thanks_for_using_zust_app),
                     modifier = Modifier.constrainAs(thanksMessage) {
                         top.linkTo(successAnimation.bottom, dp_16)
                         start.linkTo(parent.start, dp_20)
@@ -99,7 +100,6 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
         orderDetailIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(orderDetailIntent)
         overridePendingTransition(anim.slide_in_right, anim.slide_out_left)
-        finish()
     }
 }
 

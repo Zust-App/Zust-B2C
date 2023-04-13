@@ -58,7 +58,7 @@ class OrderSummaryViewModel @Inject constructor(
     private val originalCartItems = ArrayList<ProductSingleItem>()
     private var upSellingItemsId: Set<String> = hashSetOf()
     internal val addressLineData = MutableStateFlow("")
-    private val freeDeliveryPrice: Double = 99.0
+    private var freeDeliveryPrice: Int = 99
 
 
     init {
@@ -235,6 +235,10 @@ class OrderSummaryViewModel @Inject constructor(
             }
 
         }
+    }
+
+    fun setFreeDeliveryBasePrice() {
+        freeDeliveryPrice = sharedPrefManager.getFreeDeliveryBasePrice()
     }
 
 

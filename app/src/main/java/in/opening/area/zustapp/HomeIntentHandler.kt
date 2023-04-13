@@ -16,22 +16,21 @@ class HomeIntentHandler {
     private fun getLocationPermission(context: Context) {
         val permissions = hasPermissions(context, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
         if (!permissions) {
-            if (context is `in`.opening.area.zustapp.HomeLandingActivity) {
+            if (context is HomeLandingActivity) {
                 registerLocationLauncher(context)
             }
         }
     }
 
     private fun registerLocationLauncher(context: Context) {
-        if (context is `in`.opening.area.zustapp.HomeLandingActivity) {
+        if (context is HomeLandingActivity) {
             val requestPermissionLauncher = context.registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) { result ->
                 if (result) {
-                    showToast(context, "Permission Granted")
-
+                    showToast(context, context.getString(R.string.permission_granted))
                 } else {
-                    showToast(context, "Permission Not Granted")
+                    showToast(context, context.getString(R.string.permission_not_granted))
                 }
             }
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)

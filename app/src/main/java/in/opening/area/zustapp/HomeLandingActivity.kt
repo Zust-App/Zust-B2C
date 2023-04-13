@@ -6,7 +6,6 @@ import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.compose.CustomBottomNavigation
 import `in`.opening.area.zustapp.compose.CustomTopBar
-import `in`.opening.area.zustapp.compose.FloatingCartButton
 import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
 import `in`.opening.area.zustapp.fcm.CustomFcmService
@@ -26,6 +25,7 @@ import `in`.opening.area.zustapp.viewmodels.HomeViewModel
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,11 +43,22 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallback {
+class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private var backPressedCount: Int = 0
     private var inAppUpdateManager: InAppUpdateManager? = null
+
+    private var onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            backPressedCount++
+            if (backPressedCount >= 2) {
+                finish()
+            } else {
+                AppUtility.showToast(this@HomeLandingActivity, getString(R.string.press_again_to_exit_app))
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +94,8 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
             }
         }
         handleDeepLinkIntent(intent = intent)
-        inAppUpdateManager = InAppUpdateManager(this, inAppUpdateCallback);
+        inAppUpdateManager = InAppUpdateManager(this, inAppUpdateCallback)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     private fun initialDataManagement() {
@@ -205,15 +217,6 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         inAppUpdateManager?.onResume()
     }
 
-    override fun onBackPressed() {
-        backPressedCount++
-        if (backPressedCount >= 2) {
-            super.onBackPressed()
-        } else {
-            AppUtility.showToast(this, "Press again to exit app")
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         backPressedCount = 0
@@ -239,9 +242,10 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        inAppUpdateManager?.onActivityResult(requestCode, resultCode, data)
+        inAppUpdateManager?.onActivityResult(requestCode, resultCode)
     }
 
     private val inAppUpdateCallback = fun() {
@@ -284,5 +288,6 @@ class HomeLandingActivity : AppCompatActivity(), ShowToast, AddressBtmSheetCallb
         intent.putExtra(PaymentActivity.PAYMENT_MODEL_KEY, paymentActivityReqData)
         startActivity(intent)
     }
+
 }
 

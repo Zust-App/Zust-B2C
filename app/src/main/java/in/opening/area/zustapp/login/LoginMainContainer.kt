@@ -64,7 +64,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 navigationAction.invoke(LoginNav.MOVE_TO_OTP)
                 loginViewModel.getOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
             } else {
-                AppUtility.showToast(context, "Something went wrong")
+                AppUtility.showToast(context, stringResource(R.string.common_error_message))
             }
         }
         is GetOtpLoginUi.ErrorUi -> {
@@ -85,11 +85,11 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
         .padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(60.dp))
         Image(painter = painterResource(id = R.drawable.zust_app_black_text),
-            contentDescription = "Zust Logo", modifier = Modifier
+            contentDescription = stringResource(R.string.zust_logo), modifier = Modifier
                 .width(140.dp)
                 .height(60.dp))
         Spacer(modifier = Modifier.height(8.dp))
-        TypewriterText(text = "Just in 45 Minutes delivery",
+        TypewriterText(text = stringResource(R.string.just_in_45_min_delivery),
             modifier = Modifier.fillMaxWidth(), textSize = 16.sp)
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(R.string.enter_your_mobile_number),
@@ -126,7 +126,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
             onClick = {
                 proceedToGetOtp(user.mobileNum, context, loginViewModel)
             },
-            colors = ButtonDefaults.buttonColors(primaryColor),
+            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.new_material_primary)),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -177,7 +177,7 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
         Toast.makeText(context, INVALID_MOBILE_NUM, Toast.LENGTH_SHORT).show()
     } else {
         if (loginViewModel.isGetOtpRequestOnGoing()) {
-            Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.please_wait), Toast.LENGTH_SHORT).show()
             return
         }
         FirebaseAnalytics.logEvents(FirebaseAnalytics.LOGIN_PROCEED)

@@ -1,7 +1,6 @@
 package `in`.opening.area.zustapp.utility
 
 import `in`.opening.area.zustapp.HomeLandingActivity
-import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
@@ -31,7 +30,8 @@ fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
 
 fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
     val productDetailIntent = Intent(this, ProductDetailsActivity::class.java)
-    productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_KEY, productSingleItem)
+    productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_ID, productSingleItem.productGroupId)
+    productDetailIntent.putExtra(ProductDetailsActivity.MERCHANT_ID, "1")
     startActivity(productDetailIntent)
 }
 
@@ -109,7 +109,7 @@ fun Context.openWhatsAppOrderIntent() {
     }
 }
 
-fun Context?.openCallIntent( phoneNumber: String) {
+fun Context?.openCallIntent(phoneNumber: String) {
     try {
         val phone = if (phoneNumber.contains("+91")) {
             phoneNumber

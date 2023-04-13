@@ -3,7 +3,6 @@ package `in`.opening.area.zustapp.profile.components
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.profile.models.ProfileStaticItem
 import `in`.opening.area.zustapp.ui.theme.montserrat
-import `in`.opening.area.zustapp.ui.theme.screenBgColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,7 +33,7 @@ fun ProfileEachItemContainer(profileStaticItem: ProfileStaticItem, clickEvent: (
             modifier = Modifier
                 .padding(start = 8.dp, top = 12.dp)
                 .size(30.dp)
-                .background(color = screenBgColor,
+                .background(color = colorResource(id = R.color.screen_surface_color),
                     shape = RoundedCornerShape(8.dp))
                 .padding(4.dp)
                 .align(Alignment.CenterVertically),

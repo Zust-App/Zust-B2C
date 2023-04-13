@@ -8,9 +8,6 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(private val sharedPrefManager: SharedPrefManager) : ViewModel() {
 
-    internal fun doesOnBoardingShown() = sharedPrefManager.doesOnBoardingShown()
-    internal fun updateOnBoardingShown(isShown: Boolean) = sharedPrefManager.saveOnBoardingShown(isShown)
-
     fun isProfileCreated(): Boolean {
         return sharedPrefManager.checkIsProfileCreate()
     }

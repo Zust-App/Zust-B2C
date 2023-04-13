@@ -135,7 +135,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                     }
                 }
                 is ProductListUi.ErrorUi -> {
-                    AppUtility.showToast(context, "Somethin went wrong")
+                    AppUtility.showToast(context, "Something went wrong")
                 }
                 is ProductListUi.InitialUi -> {
 

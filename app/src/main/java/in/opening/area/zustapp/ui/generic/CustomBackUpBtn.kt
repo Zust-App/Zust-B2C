@@ -1,7 +1,6 @@
 package `in`.opening.area.zustapp.ui.generic
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.primaryColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -30,7 +30,7 @@ fun CustomUpBtn(upPress: () -> Unit) {
             .statusBarsPadding()
             .size(36.dp)
             .background(
-                shape = CircleShape, color = primaryColor
+                shape = CircleShape, color = colorResource(id = R.color.new_material_primary)
             )
     ) {
         Icon(

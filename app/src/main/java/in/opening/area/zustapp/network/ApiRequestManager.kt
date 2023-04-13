@@ -25,6 +25,8 @@ import `in`.opening.area.zustapp.payment.models.CreatePaymentReqBodyModel
 import `in`.opening.area.zustapp.payment.models.CreatePaymentResponseModel
 import `in`.opening.area.zustapp.payment.models.PaymentMethodResponseModel
 import `in`.opening.area.zustapp.product.model.*
+import `in`.opening.area.zustapp.productDetails.models.ProductDetailsModel
+import `in`.opening.area.zustapp.productDetails.models.ProductPriceDetails
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.profile.models.UserProfileResponse
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
@@ -138,6 +140,7 @@ class ApiRequestManager @Inject constructor() {
             }
             emit(ResultWrapper.Success(value))
         } catch (e: Throwable) {
+            print(e.message)
             emit(ResultWrapper.NetworkError)
         }
     }
@@ -381,5 +384,15 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
+    suspend fun getProductDetails(productId: Long, merchantId: Long) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<ProductDetailsModel>(NetworkUtility.PRODUCT_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("merchantId", merchantId)
+            parameter("productId", productId)
+        }
+    }
 
 }

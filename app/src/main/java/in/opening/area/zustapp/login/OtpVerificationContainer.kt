@@ -7,7 +7,6 @@ import `in`.opening.area.zustapp.login.model.UserLoginModel
 import `in`.opening.area.zustapp.ui.generic.CustomUpBtn
 import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
 import `in`.opening.area.zustapp.ui.theme.dp_4
-import `in`.opening.area.zustapp.ui.theme.primaryColor
 import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi
 import `in`.opening.area.zustapp.uiModels.login.VerifyOtpUi
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -206,7 +205,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
 
         Button(onClick = {
             verificationOfUserOtp(user.otp, loginViewModel, context = context)
-        }, colors = ButtonDefaults.buttonColors(primaryColor), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
+        }, colors = ButtonDefaults.buttonColors(colorResource(id = R.color.new_material_primary)), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
             Row(modifier = Modifier.wrapContentHeight()) {
                 Spacer(modifier = Modifier.width(4.dp))
             }
