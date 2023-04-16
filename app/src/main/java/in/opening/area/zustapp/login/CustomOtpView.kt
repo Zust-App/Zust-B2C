@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.login
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -46,7 +46,7 @@ fun OtpCell(modifier: Modifier, value: Char?, isCursorVisible: Boolean = false, 
 
     Box(modifier = modifier) {
         Text(text = if (isCursorVisible) cursorSymbol else if (!obscureText.isNullOrBlank() && value?.toString().isNullOrBlank().not()) obscureText else value?.toString() ?: "",
-            style = Typography_Montserrat.body2,
+            style = ZustTypography.body2,
             color = colorResource(id = R.color.app_black),
             modifier = Modifier.align(Alignment.Center))
     }

@@ -38,14 +38,19 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
+val trendingItemsIMageModifier = Modifier
+    .width(80.dp)
+    .height(80.dp)
+val trendingItemsModifier = Modifier
+    .padding(bottom = 6.dp, end = 8.dp)
+    .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+    .padding(bottom = 8.dp)
+
 @Composable
 fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemClick: (ProductSingleItem?, ACTION) -> Unit) {
     val context = LocalContext.current
-    ConstraintLayout(modifier = Modifier
+    ConstraintLayout(modifier = trendingItemsModifier
         .weight(1f)
-        .padding(bottom = 6.dp, end = 8.dp)
-        .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
-        .padding(bottom = 8.dp)
         .clickable {
             context.startProductDetailPage(product)
         }) {
@@ -54,57 +59,64 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
             incDecContainer, addItemContainer, offerPercentage,
         ) = createRefs()
         AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(product.thumbnail)
-            .crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
-            .size(88.dp)
+            .crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier
+        = trendingItemsIMageModifier
             .constrainAs(productImage) {
                 top.linkTo(parent.top, dp_8)
                 start.linkTo(parent.start, dp_12)
                 end.linkTo(parent.end, dp_12)
             })
-        Text(text = product.productName, style = Typography_Montserrat.body1,
+        Text(text = product.productName,
+            style = ZustTypography.body2,
             color = colorResource(id = R.color.app_black),
-            fontSize = 14.sp, modifier = Modifier.constrainAs(productName) {
-                top.linkTo(productImage.bottom, dp_4)
-                start.linkTo(parent.start, dp_12)
-                end.linkTo(parent.end, dp_4)
-                width = Dimension.fillToConstraints
-            }, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            fontSize = 14.sp, modifier = Modifier
+                .height(38.dp)
+                .constrainAs(productName) {
+                    top.linkTo(productImage.bottom, dp_4)
+                    start.linkTo(parent.start, dp_12)
+                    end.linkTo(parent.end, dp_4)
+                    width = Dimension.fillToConstraints
+                }, maxLines = 2, overflow = TextOverflow.Ellipsis)
         Text(text = buildString {
             append(ProductUtils.getNumberDisplayValue(product.quantity))
             append(" ")
             append(product.quantityUnit.lowercase())
-        }, style = Typography_Montserrat.body2,
+        }, style = ZustTypography.body2,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.new_hint_color),
             fontSize = 12.sp,
             modifier = Modifier.constrainAs(productQuantity) {
-                top.linkTo(productName.bottom, dp_12)
-                start.linkTo(parent.start, dp_12)
-            })
-        Text(text = buildString {
-            append(stringResource(id = R.string.ruppes))
-            append(product.price.toInt())
-        }, style = Typography_Montserrat.body1,
-            color = colorResource(id = R.color.app_black),
-            fontSize = 14.sp,
-            modifier = Modifier.constrainAs(productPrice) {
-                top.linkTo(productQuantity.bottom, dp_8)
+                top.linkTo(productName.bottom, dp_8)
                 start.linkTo(parent.start, dp_12)
             })
 
         Text(text = buildString {
             append(stringResource(id = R.string.ruppes))
-            append(product.mrp.toInt())
-        }, style = TextStyle(textDecoration = TextDecoration.LineThrough,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.W500,
-            fontFamily = montserrat),
-            color = colorResource(id = R.color.new_hint_color),
-            modifier = Modifier.constrainAs(productMrp) {
-                top.linkTo(productPrice.top)
-                start.linkTo(productPrice.end, dp_16)
-                bottom.linkTo(productPrice.bottom)
+            append(product.price.toInt())
+        }, style = ZustTypography.body1,
+            color = colorResource(id = R.color.app_black),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W600,
+            modifier = Modifier.constrainAs(productPrice) {
+                top.linkTo(productQuantity.bottom, dp_8)
+                start.linkTo(parent.start, dp_12)
             })
+
+        if (product.discountPercentage > 0) {
+            Text(text = buildString {
+                append(stringResource(id = R.string.ruppes))
+                append(product.mrp.toInt())
+            }, style = TextStyle(textDecoration = TextDecoration.LineThrough,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W500,
+                fontFamily = zustFont),
+                color = colorResource(id = R.color.new_hint_color),
+                modifier = Modifier.constrainAs(productMrp) {
+                    top.linkTo(productPrice.top)
+                    start.linkTo(productPrice.end, dp_8)
+                    bottom.linkTo(productPrice.bottom)
+                })
+        }
 
         if (product.itemCountByUser > 0) {
             Row(horizontalArrangement = Arrangement.Center,
@@ -139,7 +151,7 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = Typography_Montserrat.body1,
+                    style = ZustTypography.body1,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,
@@ -177,15 +189,15 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
         }
         if (product.discountPercentage > 0.0) {
             Text(text = product.discountPercentage.toInt().toString() + "% OFF", modifier = Modifier
-                .background(color = colorResource(id = R.color.new_material_primary), shape = RoundedCornerShape(4.dp))
-                .padding(horizontal = 8.dp,
+                .background(color = colorResource(id = R.color.light_offer_color), shape = RoundedCornerShape(4.dp))
+                .padding(horizontal = 4.dp,
                     vertical = 2.dp)
                 .constrainAs(offerPercentage) {
                     start.linkTo(parent.start, dp_4)
                     top.linkTo(parent.top, dp_4)
                 }, color = Color.White,
                 fontSize = 10.sp,
-                fontFamily = montserrat,
+                fontFamily = zustFont,
                 fontWeight = FontWeight.W600)
         }
     }

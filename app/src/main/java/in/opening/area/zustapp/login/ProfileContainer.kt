@@ -87,26 +87,26 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
             }
             Spacer(modifier = Modifier.height(24.dp))
             Text(text = "What should we call you?",
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 color = colorResource(id = R.color.app_black))
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(text = "Let us know how to properly address you.",
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 fontWeight = FontWeight.W400,
                 color = colorResource(id = R.color.app_black))
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(text = "Name*",
-                style = Typography_Montserrat.subtitle1,
+                style = ZustTypography.subtitle1,
                 fontWeight = FontWeight.W500,
                 color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(dp_8))
             TextField(value = userName, onValueChange = {
                 userName = it
-            }, textStyle = Typography_Montserrat.body2, modifier = Modifier
+            }, textStyle = ZustTypography.body2, modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
                 colors = setTextFiledColors(), shape = RoundedCornerShape(12.dp),
@@ -115,13 +115,13 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
             Spacer(modifier = Modifier.height(dp_20))
 
             Text(text = "Referral code (if available)",
-                style = Typography_Montserrat.subtitle1,
+                style = ZustTypography.subtitle1,
                 fontWeight = FontWeight.W500,
                 color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(dp_8))
             TextField(value = referralCode, onValueChange = {
                 referralCode = it
-            }, textStyle = Typography_Montserrat.body2,
+            }, textStyle = ZustTypography.body2,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
@@ -140,7 +140,7 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
                 Text(text = "Complete".uppercase(),
                     modifier = Modifier.padding(8.dp),
                     color = Color.White,
-                    style = Typography_Montserrat.body1)
+                    style = ZustTypography.body1)
             }
         }
         val (progressbarRef) = createRefs()

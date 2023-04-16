@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.compose
 
 import androidx.compose.runtime.Composable
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import androidx.compose.foundation.background
@@ -44,11 +44,11 @@ fun ErrorRetryCaseUiForProductList(layoutScope: ConstraintLayoutScope, otherCate
                     end.linkTo(parent.end, dp_20)
                 }
                 .wrapContentHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "No product found", style = Typography_Montserrat.body1,
+                Text(text = "No product found", style = ZustTypography.body1,
                     color = colorResource(id = R.color.app_black))
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(text = "Don't worry it will available soon",
-                    style = Typography_Montserrat.body1,
+                    style = ZustTypography.body1,
                     fontSize = 20.sp, color = colorResource(id = R.color.app_black))
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
@@ -61,7 +61,7 @@ fun ErrorRetryCaseUiForProductList(layoutScope: ConstraintLayoutScope, otherCate
                             shape = RoundedCornerShape(12.dp))
                         .clip(shape = RoundedCornerShape(12.dp)),
                 ) {
-                    Text(text = "Suggest items", style = Typography_Montserrat.body1,
+                    Text(text = "Suggest items", style = ZustTypography.body1,
                         color = colorResource(id = R.color.new_material_primary))
                 }
             }

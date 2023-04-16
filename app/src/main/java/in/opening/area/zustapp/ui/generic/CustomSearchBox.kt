@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.ui.generic
 
 import `in`.opening.area.zustapp.R.color
 import `in`.opening.area.zustapp.R.drawable
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -36,7 +36,7 @@ fun LazyListScope.customHomePageSearch(callback: () -> Unit) {
             .background(color = colorResource(id = color.white),
                 shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 12.dp, vertical = 12.dp)) {
-            Text(text = text, style = Typography_Montserrat.body2,
+            Text(text = text, style = ZustTypography.body2,
                 color = colorResource(id = color.new_hint_color))
             Spacer(modifier = Modifier.weight(1f))
             Icon(painter = painterResource(id = drawable.new_search_icon),

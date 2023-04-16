@@ -16,10 +16,17 @@ class ProductUtils @Inject constructor(private val sharedPrefManager: SharedPref
         }
 
         fun roundTo1DecimalPlaces(doubleValue: Double?): String {
-            if (doubleValue==null){
+            if (doubleValue == null) {
                 return ""
             }
             return if (doubleValue == doubleValue.toInt().toDouble()) doubleValue.toInt().toString() else BigDecimal(doubleValue).setScale(1, RoundingMode.HALF_UP).toDouble().toString()
+        }
+
+        fun calculatePercentage(percentage: Double?, mrp: Double?): Double {
+            if (percentage == null || mrp == null) {
+                return 0.0
+            }
+            return ((mrp) - (mrp * percentage)/100)
         }
 
     }

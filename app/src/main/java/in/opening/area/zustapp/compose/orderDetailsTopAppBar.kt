@@ -67,7 +67,7 @@ fun CustomTopBar(
                 }
                 .clickable {
                     callback.invoke(ACTION.OPEN_LOCATION)
-                }, style = Typography_Montserrat.body1)
+                }, style = ZustTypography.body1)
 
         Icon(painter = painterResource(id = drawable.down_arrow),
             contentDescription = "location", tint = colorResource(id = color.white),
@@ -84,7 +84,7 @@ fun CustomTopBar(
                 })
         Text(
             text = userAddress.fullAddress?:"Delivery in Patna",
-            style = Typography_Montserrat.subtitle1,
+            style = ZustTypography.subtitle1,
             color = colorResource(id = color.white),
             modifier = modifier.constrainAs(locationSubTitle) {
                 top.linkTo(locationTag.bottom, dp_4)

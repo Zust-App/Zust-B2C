@@ -2,8 +2,8 @@ package `in`.opening.area.zustapp.orderSummary.compose
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
-import `in`.opening.area.zustapp.ui.theme.montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.zustFont
 import `in`.opening.area.zustapp.uiModels.orderSummary.OrderSummaryUi
 import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -66,7 +65,7 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                 Row {
                     Text(text = "Bill Summary",
                         color = colorResource(id = R.color.app_black),
-                        style = Typography_Montserrat.body1)
+                        style = ZustTypography.body1)
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(painter = painterResource(id = R.drawable.down_arrow),
                         contentDescription = "down_arrow", modifier = Modifier
@@ -84,28 +83,28 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                         Text(
                             fontWeight = FontWeight.W500,
                             color = colorResource(id = R.color.black_4),
-                            fontFamily = montserrat, fontSize = 12.sp,
+                            fontFamily = zustFont, fontSize = 12.sp,
                             text = "Item price")
                         Spacer(modifier = Modifier.weight(1f))
 
                         Text(
                             fontWeight = FontWeight.W500,
                             color = colorResource(id = R.color.new_hint_color),
-                            fontFamily = montserrat, fontSize = 12.sp,
+                            fontFamily = zustFont, fontSize = 12.sp,
                             text = rupees + ProductUtils.roundTo1DecimalPlaces(value.data.totalCurrentPrice))
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row {
                         Text(
                             fontWeight = FontWeight.W500,
-                            fontFamily = montserrat, fontSize = 12.sp,
+                            fontFamily = zustFont, fontSize = 12.sp,
                             color = colorResource(id = R.color.black_4),
                             text = "Delivery Charges")
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
                             fontWeight = FontWeight.W500,
                             color = colorResource(id = R.color.new_hint_color),
-                            fontFamily = montserrat, fontSize = 12.sp,
+                            fontFamily = zustFont, fontSize = 12.sp,
                             text = rupees + if (value.data.deliveryFee != null && value.data.deliveryFee == 0.0) {
                                 "0"
                             } else {
@@ -117,14 +116,14 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                     Row {
                         Text(
                             fontWeight = FontWeight.W500,
-                            fontFamily = montserrat, fontSize = 12.sp,
+                            fontFamily = zustFont, fontSize = 12.sp,
                             color = colorResource(id = R.color.black_4),
                             text = "Packaging fee")
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
                             fontWeight = FontWeight.W500,
                             color = colorResource(id = R.color.new_hint_color),
-                            fontFamily = montserrat, fontSize = 12.sp,
+                            fontFamily = zustFont, fontSize = 12.sp,
                             text = rupees + if (value.data.packagingFee != null && value.data.packagingFee == 0.0) {
                                 "0"
                             } else {
@@ -143,7 +142,7 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                             )
                             .padding(horizontal = 8.dp, vertical = 4.dp),
                         color = colorResource(id = R.color.app_black),
-                        fontFamily = montserrat, fontSize = 12.sp,
+                        fontFamily = zustFont, fontSize = 12.sp,
 
                         text = if (value.data.deliveryFee != null && value.data.deliveryFee == 0.0) {
                             eligibleFreeDeliveryText
@@ -163,14 +162,14 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                     Row {
                         Text(
                             fontWeight = FontWeight.W500,
-                            fontFamily = montserrat, fontSize = 14.sp,
+                            fontFamily = zustFont, fontSize = 14.sp,
                             color = colorResource(id = R.color.new_material_primary),
                             text = "Total bill")
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
                             fontWeight = FontWeight.W600,
                             color = colorResource(id = R.color.new_material_primary),
-                            fontFamily = montserrat, fontSize = 14.sp,
+                            fontFamily = zustFont, fontSize = 14.sp,
                             text = rupees + ProductUtils.roundTo1DecimalPlaces((value.data.totalCurrentPrice
                                     + value.data.deliveryPartnerTip + (value.data.deliveryFee ?: 0.0) + (value.data.packagingFee ?: 0.0))))
                     }
@@ -181,14 +180,14 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                         Row {
                             Text(
                                 fontWeight = FontWeight.W500,
-                                fontFamily = montserrat, fontSize = 14.sp,
+                                fontFamily = zustFont, fontSize = 14.sp,
                                 color = colorResource(id = R.color.new_material_primary),
                                 text = "Total bill")
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
                                 fontWeight = FontWeight.W600,
                                 color = colorResource(id = R.color.new_material_primary),
-                                fontFamily = montserrat, fontSize = 14.sp,
+                                fontFamily = zustFont, fontSize = 14.sp,
                                 text = rupees + ProductUtils.roundTo1DecimalPlaces((value.data.totalCurrentPrice
                                         + value.data.deliveryPartnerTip + (value.data.deliveryFee ?: 0.0) + (value.data.packagingFee ?: 0.0))))
                         }

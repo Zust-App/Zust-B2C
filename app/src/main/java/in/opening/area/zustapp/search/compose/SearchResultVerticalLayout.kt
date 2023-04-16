@@ -1,7 +1,6 @@
-package `in`.opening.area.zustapp.orderSummary.compose
+package `in`.opening.area.zustapp.search.compose
 
-import `in`.opening.area.zustapp.R.color
-import `in`.opening.area.zustapp.R.string
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.product.addIcon
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.product.removeIcon
@@ -18,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -35,29 +33,10 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
-val modifierType1 = Modifier
-    .fillMaxWidth()
-    .background(shape = RoundedCornerShape(topStart = 12.dp,
-        topEnd = 12.dp), color = Color(0xffffffff))
-    .height(12.dp)
-
-val modifierType2 = Modifier
-    .fillMaxWidth()
-    .background(shape = RoundedCornerShape(bottomStart = 12.dp,
-        bottomEnd = 12.dp), color = Color(0xffffffff))
-    .height(12.dp)
-
-
-val modifierType4 = Modifier
-    .fillMaxWidth()
-    .wrapContentHeight()
-    .background(color = Color(0xffffffff))
-    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp)
-
 @Composable
-fun SelectedCartVerticalItemUi(
-    cartItem: ProductSingleItem, modifier: Modifier = Modifier,
-    canShowDivider: Boolean,
+fun SearchResultVerticalLayout(
+    cartItem: ProductSingleItem,
+    modifier: Modifier = Modifier,
     incrementCallback: (ProductSingleItem) -> Unit,
     decrementCallback: (ProductSingleItem) -> Unit,
     detailsCallback: (ProductSingleItem) -> Unit,
@@ -66,7 +45,7 @@ fun SelectedCartVerticalItemUi(
         detailsCallback.invoke(cartItem)
     })
     {
-        val (image, title, quantity, priceText, mrpText, incDecContainer,addItemContainer) = createRefs()
+        val (image, title, quantity, priceText, mrpText, incDecContainer, addItemContainer) = createRefs()
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(cartItem.thumbnail)
@@ -75,7 +54,7 @@ fun SelectedCartVerticalItemUi(
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .size(60.dp)
+                .size(80.dp)
                 .clip(MaterialTheme.shapes.medium)
                 .constrainAs(image) {
                     top.linkTo(parent.top)
@@ -85,7 +64,7 @@ fun SelectedCartVerticalItemUi(
         )
 
         Text(
-            overflow = TextOverflow.Ellipsis, maxLines = 1,
+            overflow = TextOverflow.Ellipsis, maxLines = 2,
             text = cartItem.productName,
             modifier = Modifier
                 .constrainAs(title) {
@@ -94,10 +73,10 @@ fun SelectedCartVerticalItemUi(
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 },
-            color = colorResource(id = color.app_black),
-            style = ZustTypography.body1,
-            fontSize = 14.sp,
+            color = colorResource(id = R.color.app_black),
+            style = ZustTypography.body2,
         )
+
         Text(text = buildString {
             append(ProductUtils.getNumberDisplayValue(cartItem.quantity))
             append(" ")
@@ -105,42 +84,36 @@ fun SelectedCartVerticalItemUi(
         }, modifier = Modifier.constrainAs(quantity) {
             top.linkTo(title.bottom, dp_8)
             start.linkTo(image.end, dp_10)
-        }, color = colorResource(id = color.new_hint_color),
+        }, color = colorResource(id = R.color.new_hint_color),
             style = ZustTypography.body2,
             fontSize = 12.sp)
 
         Text(
-            overflow = TextOverflow.Ellipsis, maxLines = 1,
             modifier = Modifier
                 .constrainAs(priceText) {
                     top.linkTo(quantity.bottom, dp_8)
                     start.linkTo(image.end, dp_10)
-                    bottom.linkTo(parent.bottom, dp_8)
                 },
             text = buildString {
-                append(stringResource(id = string.ruppes))
+                append(stringResource(id = R.string.ruppes))
                 append(ProductUtils.roundTo1DecimalPlaces(cartItem.price))
             },
-            color = colorResource(id = color.app_black),
+            color = colorResource(id = R.color.app_black),
             style = ZustTypography.body1,
             fontSize = 14.sp,
         )
 
         Text(
-            overflow = TextOverflow.Ellipsis, maxLines = 1,
             modifier = Modifier
                 .constrainAs(mrpText) {
-                    top.linkTo(priceText.top)
-                    bottom.linkTo(priceText.bottom)
-                    start.linkTo(priceText.end, dp_16)
-                    end.linkTo(incDecContainer.start)
-                    width = Dimension.fillToConstraints
+                    top.linkTo(priceText.bottom)
+                    start.linkTo(image.end, dp_10)
                 },
             text = buildString {
-                append(stringResource(id = string.ruppes))
+                append(stringResource(id = R.string.ruppes))
                 append(ProductUtils.roundTo1DecimalPlaces(cartItem.mrp))
             },
-            color = colorResource(id = color.new_hint_color),
+            color = colorResource(id = R.color.new_hint_color),
             fontFamily = zustFont,
             fontWeight = FontWeight.W500,
             fontSize = 12.sp,
@@ -151,19 +124,19 @@ fun SelectedCartVerticalItemUi(
             Row(horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .border(border = BorderStroke(width = 1.dp,
-                        color = colorResource(id = color.light_green)),
+                        color = colorResource(id = R.color.light_green)),
                         shape = RoundedCornerShape(4.dp))
                     .wrapContentWidth()
                     .height(22.dp)
                     .constrainAs(incDecContainer) {
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
-                        top.linkTo(parent.top)
+                        top.linkTo(priceText.top)
                     }) {
                 Icon(painter = painterResource(removeIcon),
                     contentDescription = "",
                     modifier = Modifier
-                        .background(color = colorResource(id = color.light_green),
+                        .background(color = colorResource(id = R.color.light_green),
                             shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp))
                         .clip(RoundedCornerShape(topStart = 4.dp,
                             bottomStart = 4.dp))
@@ -171,7 +144,7 @@ fun SelectedCartVerticalItemUi(
                         .clickable {
                             decrementCallback.invoke(cartItem)
                         },
-                    tint = colorResource(id = color.white))
+                    tint = colorResource(id = R.color.white))
 
                 Text(
                     text = cartItem.itemCountByUser.toString(),
@@ -181,7 +154,7 @@ fun SelectedCartVerticalItemUi(
                         .align(Alignment.CenterVertically),
                     style = ZustTypography.body1,
                     fontSize = 12.sp,
-                    color = colorResource(id = color.app_black),
+                    color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,
                 )
 
@@ -191,40 +164,34 @@ fun SelectedCartVerticalItemUi(
                         .size(22.dp)
                         .clip(RoundedCornerShape(topEnd = 4.dp,
                             bottomEnd = 4.dp))
-                        .background(color = colorResource(id = color.light_green),
+                        .background(color = colorResource(id = R.color.light_green),
                             shape = RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp))
                         .clickable {
                             incrementCallback.invoke(cartItem)
                         },
-                    tint = colorResource(id = color.white))
+                    tint = colorResource(id = R.color.white))
 
             }
-        }else{
+        } else {
             Button(modifier = Modifier
                 .constrainAs(addItemContainer) {
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                    top.linkTo(parent.top)
+                    top.linkTo(priceText.top)
                 }
-                .background(color = colorResource(id = color.light_green), shape = RoundedCornerShape(4.dp))
+                .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(4.dp))
                 .height(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = color.light_green),
-                    contentColor = colorResource(id = color.light_green)),
+                    backgroundColor = colorResource(id = R.color.light_green),
+                    contentColor = colorResource(id = R.color.light_green)),
                 contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
                 onClick = {
                     incrementCallback.invoke(cartItem)
                 }) {
-                Text(text = stringResource(string.add),
-                    fontWeight = FontWeight.W600, color = colorResource(id = color.white),
+                Text(text = stringResource(R.string.add),
+                    fontWeight = FontWeight.W600, color = colorResource(id = R.color.white),
                     fontFamily = zustFont, fontSize = 12.sp)
             }
         }
-
-    }
-    if (canShowDivider) {
-        Divider(modifier = Modifier
-            .height(1.dp)
-            .fillMaxWidth())
     }
 }

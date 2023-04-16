@@ -15,35 +15,64 @@ class FontManager {
         val fontSemiBold = Font(R.font.okra_semibold, FontWeight.SemiBold)
         val fontBold = Font(R.font.okra_semibold, FontWeight.Bold)
         val okraFontFamily = FontFamily(fontRegular, fontMedium, fontSemiBold, fontBold, fontLight)
-
     }
 }
 
-val montserrat = FontFamily(Font(R.font.montserrat_light, FontWeight.W300),
-    Font(R.font.montserrat_regular, FontWeight.W400), Font(R.font.montserrat_medium, FontWeight.W500),
-    Font(R.font.montserrat_semibold, FontWeight.W600), Font(R.font.montserrat_bold, FontWeight.W700))
+val okraFontFamily = FontFamily(
+    FontManager.fontRegular,
+    FontManager.fontMedium,
+    FontManager.fontSemiBold,
+    FontManager.fontBold,
+    FontManager.fontLight)
 
-val Typography_Montserrat by lazy {
+val montserratFontFamily = FontFamily(
+    Font(R.font.montserrat_light, FontWeight.W300),
+    Font(R.font.montserrat_regular, FontWeight.W400),
+    Font(R.font.montserrat_medium, FontWeight.W500),
+    Font(R.font.montserrat_semibold, FontWeight.W600),
+    Font(R.font.montserrat_bold, FontWeight.W700))
+
+
+val openSansFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300),
+    Font(R.font.open_sans_regular, FontWeight.W400), Font(R.font.open_sans_medium, FontWeight.W500),
+    Font(R.font.open_sans_semibold, FontWeight.W600), Font(R.font.open_sans_bold, FontWeight.W700))
+
+val Typography_Mons by lazy {
     androidx.compose.material.Typography(
         body1 = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = zustFont,
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         ),
         body2 = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = zustFont,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = montserrat,
+        subtitle1 = TextStyle(fontFamily = zustFont,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
 }
 
+val Typography_OpenSans by lazy {
+    androidx.compose.material.Typography(
+        body1 = TextStyle(
+            fontFamily = openSansFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W600
+        ),
+        body2 = TextStyle(
+            fontFamily = openSansFontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W500
+        ),
+        subtitle1 = TextStyle(fontFamily = openSansFontFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400
+        ))
+}
 
-
-val okraFontFamily = FontFamily(FontManager.fontRegular, FontManager.fontMedium, FontManager.fontSemiBold, FontManager.fontBold, FontManager.fontLight)
 
 val Typography_Okra by lazy {
     androidx.compose.material.Typography(
@@ -63,26 +92,7 @@ val Typography_Okra by lazy {
         ))
 }
 
-
-val openSansFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300),
-    Font(R.font.open_sans_regular, FontWeight.W400), Font(R.font.open_sans_medium, FontWeight.W500),
-    Font(R.font.open_sans_semibold, FontWeight.W600), Font(R.font.open_sans_bold, FontWeight.W700))
+val ZustTypography = Typography_OpenSans
+val zustFont = openSansFontFamily
 
 
-val Typography_OpenSans by lazy {
-    androidx.compose.material.Typography(
-        body1 = TextStyle(
-            fontFamily = openSansFontFamily,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.W600
-        ),
-        body2 = TextStyle(
-            fontFamily = openSansFontFamily,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.W500
-        ),
-        subtitle1 = TextStyle(fontFamily = openSansFontFamily,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.W400
-        ))
-}

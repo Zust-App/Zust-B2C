@@ -1,5 +1,5 @@
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,7 +19,7 @@ fun TypewriterText(text: String, modifier: Modifier = Modifier, textSize: TextUn
             index++
         }
     }
-    Text(text = textToShow, modifier = modifier, style = Typography_Montserrat.body1,
+    Text(text = textToShow, modifier = modifier, style = ZustTypography.body1,
         fontSize = textSize,
         color = colorResource(id = R.color.new_material_primary))
 }

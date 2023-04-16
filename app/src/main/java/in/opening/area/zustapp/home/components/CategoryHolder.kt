@@ -1,22 +1,16 @@
 package `in`.opening.area.zustapp.home.components
 
 import `in`.opening.area.zustapp.home.models.HomePageGenericData
-import `in`.opening.area.zustapp.product.ProductListingActivity
-import `in`.opening.area.zustapp.product.ProductListingActivity.Companion.CATEGORY_ID
-import `in`.opening.area.zustapp.product.ProductListingActivity.Companion.CATEGORY_NAME
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.navigateToProductListing
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -60,10 +54,11 @@ fun LazyListScope.categoryHolder(dataList: List<HomePageGenericData>?) {
 }
 
 private val categoryModifier = Modifier
-    .height(140.dp)
+    .wrapContentHeight()
     .padding(vertical = 6.dp,
-        horizontal = 16.dp)
+        horizontal = 12.dp)
     .clip(RoundedCornerShape(16.dp))
+    .fillMaxWidth()
 
 @Composable
 private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
@@ -77,7 +72,7 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
                 AppUtility.showToast(context, "Available soon")
             }
         }
-        .fillMaxWidth()) {
+    ) {
         val (categoryImage, categoryTitle, currentStatus) = createRefs()
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -87,24 +82,26 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
+                .height(90.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .constrainAs(categoryImage) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top, dp_6)
                     bottom.linkTo(categoryTitle.top)
-                    height = Dimension.fillToConstraints
                 }
         )
 
         Text(text = categoryItem.name ?: "",
-            modifier = Modifier.constrainAs(categoryTitle) {
-                start.linkTo(parent.start, dp_8)
-                end.linkTo(parent.end, dp_8)
-                top.linkTo(categoryImage.bottom, dp_8)
-                bottom.linkTo(parent.bottom, dp_8)
-                width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body2,
+            modifier = Modifier
+                .height(32.dp)
+                .constrainAs(categoryTitle) {
+                    start.linkTo(parent.start, dp_8)
+                    end.linkTo(parent.end, dp_8)
+                    top.linkTo(categoryImage.bottom, dp_8)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                }, style = ZustTypography.body2,
             textAlign = TextAlign.Center,
             fontSize = 12.sp,
             color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black))
@@ -128,7 +125,7 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
                             ))
                         .padding(vertical = 4.dp), contentAlignment = Alignment.Center
                 ) {
-                    Text(text = it, style = Typography_Montserrat.subtitle1,
+                    Text(text = it, style = ZustTypography.subtitle1,
                         fontSize = 10.sp, fontWeight = FontWeight.W600,
                         color = colorResource(id = `in`.opening.area.zustapp.R.color.app_black),
                         textAlign = TextAlign.Center)

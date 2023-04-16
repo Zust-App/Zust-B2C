@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.home.components
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +21,7 @@ fun LazyListScope.homeSuggestProductUi(callback: (ACTION) -> Unit) {
         Column(modifier = padding_16Modifier) {
             Spacer(modifier = Modifier.height(70.dp))
             Text(text = "Oops, Didn't find were you\n" +
-                    "are looking for?", style = Typography_Montserrat.body1,
+                    "are looking for?", style = ZustTypography.body1,
                 fontSize = 20.sp, color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(8.dp))
             Button(
@@ -33,7 +33,7 @@ fun LazyListScope.homeSuggestProductUi(callback: (ACTION) -> Unit) {
                     .wrapContentHeight()
                     .clip(RoundedCornerShape(12.dp)),
             ) {
-                Text(text = "Suggest items", style = Typography_Montserrat.body1,
+                Text(text = "Suggest items", style = ZustTypography.body1,
                     color = colorResource(id = R.color.new_material_primary))
             }
         }

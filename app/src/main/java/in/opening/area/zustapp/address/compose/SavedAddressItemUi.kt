@@ -42,7 +42,7 @@ fun SavedAddressItemUi(modifier: Modifier, addressItem: AddressItem, callback: (
                 end.linkTo(parent.end)
                 bottom.linkTo(addressText.top)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body2,
+            }, style = ZustTypography.body2,
             color = colorResource(id = R.color.app_black))
 
         Text(text = addressItem.getDisplayString(),
@@ -53,7 +53,7 @@ fun SavedAddressItemUi(modifier: Modifier, addressItem: AddressItem, callback: (
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
             }, color = Color(0xCC1F1F1F),
-            style = Typography_Montserrat.subtitle1)
+            style = ZustTypography.subtitle1)
 
     }
 }

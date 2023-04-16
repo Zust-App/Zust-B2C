@@ -2,9 +2,8 @@ package `in`.opening.area.zustapp.orderHistory.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeLottie
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.utility.proceedToHomePage
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -29,7 +27,7 @@ fun NoOrderFoundContainer() {
         verticalArrangement = Arrangement.Center) {
         Text(text = "Oops, No order placed yet",
             color = colorResource(id = R.color.light_black),
-            style = Typography_Montserrat.body1)
+            style = ZustTypography.body1)
         ComposeLottie(rawId = R.raw.no_order1,
             modifier = Modifier
                 .size(200.dp)
@@ -40,7 +38,7 @@ fun NoOrderFoundContainer() {
             .clip(RoundedCornerShape(4.dp)),
             colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
             Text(text = "Order now",
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 color = colorResource(id = R.color.white))
         }
     }

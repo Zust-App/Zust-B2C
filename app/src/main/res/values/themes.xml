@@ -23,7 +23,7 @@
 
     <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/new_material_primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/zust_white_text</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/zust_app_white_text</item>
         <item name="windowSplashScreenAnimationDuration">600</item>
         <item name="backgroundColor">@color/new_material_primary</item>
         <item name="colorAccent">@color/new_material_primary</item>

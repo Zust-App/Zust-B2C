@@ -20,7 +20,7 @@ fun ProfileSubTitleInfo(profileStaticItem: ProfileStaticItem) {
         .padding(top = 24.dp, start = 16.dp, end = 16.dp)) {
         val (title) = createRefs()
         Text(text = profileStaticItem.text,
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             color = colorResource(id = R.color.app_black), modifier = Modifier
                 .constrainAs(title) {
                     top.linkTo(parent.top)

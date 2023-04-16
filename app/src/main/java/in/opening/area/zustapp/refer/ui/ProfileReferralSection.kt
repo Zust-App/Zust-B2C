@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.refer.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.profile.models.Refer
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -48,13 +48,13 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
 
         Text(text = refer.title ?: ("Save upto " + stringResource(id = R.string.ruppes) + "100"),
             fontSize = 20.sp,
-            style = Typography_Montserrat.body2,
+            style = ZustTypography.body2,
             color = colorResource(id = R.color.app_black))
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = refer.description!!,
-            fontSize = 16.sp, style = Typography_Montserrat.body2,
+            fontSize = 16.sp, style = ZustTypography.body2,
             color = Color(0x991E1E1E))
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -67,7 +67,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
             }
             .fillMaxWidth()
             .padding(12.dp)) {
-            Text(text = refer.code, style = Typography_Montserrat.body2,
+            Text(text = refer.code, style = ZustTypography.body2,
                 color = colorResource(id = R.color.app_black))
             Spacer(Modifier.weight(1f))
 
@@ -75,7 +75,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
                 contentDescription = null, modifier = Modifier.clickable {
                 AppUtility.copyToClipboard(context, refer.code, "referral code")
             })
-            Text(text = stringResource(R.string.copy_code), style = Typography_Montserrat.body2,
+            Text(text = stringResource(R.string.copy_code), style = ZustTypography.body2,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .clickable {
@@ -93,7 +93,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
                 Icon(painter = painterResource(id = R.drawable.share_icon),
                     contentDescription = "share", tint = colorResource(id = R.color.white))
                 Spacer(modifier = Modifier.width(dp_8))
-                Text(text = "Share", style = Typography_Montserrat.body1, color = colorResource(id = R.color.white))
+                Text(text = "Share", style = ZustTypography.body1, color = colorResource(id = R.color.white))
             }
         }, colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary)))
     }

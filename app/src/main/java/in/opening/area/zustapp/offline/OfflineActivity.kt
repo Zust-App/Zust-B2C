@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.offline
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeLottieWithoutScope
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import android.content.Intent
 import android.os.Build
@@ -48,7 +48,7 @@ class OfflineActivity : AppCompatActivity() {
                         start.linkTo(parent.start, dp_16)
                         end.linkTo(parent.end, dp_16)
                         width = Dimension.fillToConstraints
-                    }, textAlign = TextAlign.Center, style = Typography_Montserrat.body1)
+                    }, textAlign = TextAlign.Center, style = ZustTypography.body1)
                 Button(modifier = Modifier
                     .constrainAs(settingBtn) {
                         top.linkTo(noInternetLottie.bottom, dp_16)
@@ -62,7 +62,7 @@ class OfflineActivity : AppCompatActivity() {
                         startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
                     }
                 }, colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
-                    Text(text = "Open settings", style = Typography_Montserrat.body1,
+                    Text(text = "Open settings", style = ZustTypography.body1,
                         color = colorResource(id = R.color.white))
                 }
             }

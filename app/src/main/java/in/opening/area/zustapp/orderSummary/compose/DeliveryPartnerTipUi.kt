@@ -61,10 +61,10 @@ fun DeliveryPartnerTipUi(orderSummaryViewModel: OrderSummaryViewModel) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Tip to your partner", style = Typography_Montserrat.body1, color = colorResource(id = R.color.app_black), modifier = deliveryPartnerTipModifier)
+        Text(text = "Tip to your partner", style = ZustTypography.body1, color = colorResource(id = R.color.app_black), modifier = deliveryPartnerTipModifier)
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = "100% cancellation fee will be applicable if you decide to cancel th order anytime after order placement. Avoid cancellation as it leads to food wastage ", fontSize = 12.sp, color = colorResource(id = R.color.new_hint_color), fontFamily = montserrat, modifier = deliveryPartnerTipModifier, fontWeight = FontWeight.W500)
+        Text(text = "100% cancellation fee will be applicable if you decide to cancel th order anytime after order placement. Avoid cancellation as it leads to food wastage ", fontSize = 12.sp, color = colorResource(id = R.color.new_hint_color), fontFamily = zustFont, modifier = deliveryPartnerTipModifier, fontWeight = FontWeight.W500)
 
         Spacer(modifier = Modifier.height(16.dp))
         when (val data = deliveryPartnerTipData) {
@@ -91,7 +91,7 @@ fun DeliveryPartnerTipUi(orderSummaryViewModel: OrderSummaryViewModel) {
                                     })
 
                                 Text(text = rupees + data.amountList[it],
-                                    style = Typography_Montserrat.body1,
+                                    style = ZustTypography.body1,
                                     fontSize = 12.sp, modifier = Modifier
                                         .constrainAs(deliveryTipText) {
                                             top.linkTo(parent.top)

@@ -2,9 +2,8 @@ package `in`.opening.area.zustapp.orderHistory.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
-import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
 import androidx.compose.foundation.clickable
@@ -53,7 +52,7 @@ fun RatingDialog(canShowDialog: Boolean, orderId: Int, viewModel: MyOrdersListVi
             onDismissRequest = { showDialog = false },
             title = {
                 Text("Rate your order $PREFIX_ORDER_ID$orderId",
-                    style = Typography_Montserrat.body1,
+                    style = ZustTypography.body1,
                     color = colorResource(id = R.color.app_black))
             },
             text = {
@@ -107,12 +106,12 @@ fun RatingDialog(canShowDialog: Boolean, orderId: Int, viewModel: MyOrdersListVi
                     }
                 }) {
                     Text("Submit",
-                        color = colorResource(id = R.color.new_material_primary), style = Typography_Montserrat.body2)
+                        color = colorResource(id = R.color.new_material_primary), style = ZustTypography.body2)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("Cancel", color = colorResource(id = R.color.red_primary), style = Typography_Montserrat.body2)
+                    Text("Cancel", color = colorResource(id = R.color.red_primary), style = ZustTypography.body2)
                 }
             }
         )

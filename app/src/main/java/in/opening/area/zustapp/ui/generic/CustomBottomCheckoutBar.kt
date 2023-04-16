@@ -26,7 +26,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -95,7 +94,7 @@ fun CustomBottomBarView(
                         start.linkTo(parent.start, dp_16)
                         top.linkTo(parent.top, dp_4)
                     }, color = colorResource(id = R.color.white),
-                        style = Typography_Montserrat.subtitle1)
+                        style = ZustTypography.subtitle1)
 
                     Text(text = stringResource(id = R.string.ruppes) +
                             ProductUtils.roundTo1DecimalPlaces(addToCart.calculatedPrice),
@@ -104,7 +103,7 @@ fun CustomBottomBarView(
                             top.linkTo(itemCount.bottom, dp_4)
                             bottom.linkTo(parent.bottom, dp_4)
                         }, color = colorResource(id = R.color.white),
-                        style = Typography_Montserrat.body1,
+                        style = ZustTypography.body1,
                         fontSize = 14.sp)
 
                     Text(text = stringResource(R.string.view_cart),
@@ -113,7 +112,7 @@ fun CustomBottomBarView(
                             top.linkTo(parent.top, dp_20)
                             bottom.linkTo(parent.bottom, dp_20)
                         }, color = colorResource(id = R.color.white),
-                        style = Typography_Montserrat.body1)
+                        style = ZustTypography.body1)
 
                     Icon(painter = painterResource(id = R.drawable.arrow_right_icon),
                         contentDescription = "", modifier = Modifier.constrainAs(viewCartIcon) {

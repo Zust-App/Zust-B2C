@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.orderSummary.compose
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -63,7 +63,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                                 top.linkTo(parent.top)
 
                             }, tint = colorResource(id = R.color.new_material_primary))
-                        Text(text = stringResource(R.string.delivery_to), style = Typography_Montserrat.body1,
+                        Text(text = stringResource(R.string.delivery_to), style = ZustTypography.body1,
                             color = colorResource(id = R.color.app_black), modifier = Modifier.constrainAs(locationTag) {
                                 top.linkTo(parent.top)
                                 start.linkTo(locationIcon.end, dp_12)
@@ -71,7 +71,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                                 width = Dimension.fillToConstraints
                             })
                         Text(text = addressLine,
-                            style = Typography_Montserrat.subtitle1,
+                            style = ZustTypography.subtitle1,
                             color = Color(0xCC1F1F1F),
                             modifier = Modifier.constrainAs(savedLocationText) {
                                 top.linkTo(locationTag.bottom, dp_6)
@@ -80,7 +80,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                                 width = Dimension.fillToConstraints
                             }, maxLines = 1, overflow = TextOverflow.Ellipsis)
 
-                        Text(text = "Change", style = Typography_Montserrat.subtitle1, fontWeight = FontWeight.W600,
+                        Text(text = "Change", style = ZustTypography.subtitle1, fontWeight = FontWeight.W600,
                             color = colorResource(id = R.color.new_material_primary),
                             modifier = Modifier
                                 .constrainAs(changeLocationTag) {
@@ -106,7 +106,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                             }, tint = colorResource(id = R.color.new_material_primary))
 
                         Text(text = "Select Address",
-                            style = Typography_Montserrat.body1,
+                            style = ZustTypography.body1,
                             color = colorResource(id = R.color.app_black),
                             modifier = Modifier
                                 .constrainAs(selectAddressTag) {
@@ -141,7 +141,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                             },
                         colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
                         Column {
-                            Text(text = "Pay", style = Typography_Montserrat.subtitle1,
+                            Text(text = "Pay", style = ZustTypography.subtitle1,
                                 color = colorResource(id = R.color.white))
                             Text(text = stringResource(id = R.string.ruppes) +
                                     ProductUtils.roundTo1DecimalPlaces(
@@ -149,14 +149,14 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                                                 (cartData.data.deliveryPartnerTip) +
                                                 (cartData.data.deliveryFee ?: 0.0)
                                                 + (cartData.data.packagingFee ?: 0.0)),
-                                style = Typography_Montserrat.body1,
+                                style = ZustTypography.body1,
                                 color = colorResource(id = R.color.white))
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Text(text = "Place order",
                             textAlign = TextAlign.Center,
                             color = colorResource(id = R.color.white),
-                            style = Typography_Montserrat.body1)
+                            style = ZustTypography.body1)
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(painter = painterResource(id = R.drawable.arrow_right_icon),
                             contentDescription = "",

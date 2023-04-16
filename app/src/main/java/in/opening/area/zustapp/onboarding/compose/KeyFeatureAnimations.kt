@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.onboarding.compose
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -85,7 +85,7 @@ fun KeyFeatureItem(text: String, canShowDivider: Boolean) {
             top.linkTo(icon.top)
             bottom.linkTo(icon.bottom)
             width = Dimension.fillToConstraints
-        }, style = Typography_Montserrat.body2)
+        }, style = ZustTypography.body2)
 
         val animatedHeight by remember { mutableStateOf(20f) }
 

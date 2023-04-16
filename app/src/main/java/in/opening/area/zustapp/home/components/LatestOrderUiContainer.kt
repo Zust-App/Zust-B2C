@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.home.components
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.orderDetail.models.convertToDisplayText
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -69,7 +69,7 @@ fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> U
                             end.linkTo(viewDetails.start, dp_4)
                             width = Dimension.fillToConstraints
                         }, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            style = Typography_Montserrat.body2,
+                            style = ZustTypography.body2,
                             color = colorResource(id = R.color.app_black), fontSize = 14.sp)
                     }
 
@@ -100,7 +100,7 @@ fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> U
                                 .background(color = colorResource(id = R.color.red_primary), shape = RoundedCornerShape(4.dp))
                                 .padding(horizontal = 12.dp, vertical = 4.dp),
                             color = colorResource(id = R.color.white),
-                            style = Typography_Montserrat.body2, fontSize = 12.sp)
+                            style = ZustTypography.body2, fontSize = 12.sp)
 
                         Icon(painter = painterResource(id = R.drawable.cross_red_outline), contentDescription = stringResource(R.string.close),
                             modifier = Modifier

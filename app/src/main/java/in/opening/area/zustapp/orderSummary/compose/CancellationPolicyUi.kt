@@ -3,7 +3,6 @@ package `in`.opening.area.zustapp.orderSummary.compose
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
 import `in`.opening.area.zustapp.orderSummary.model.CancellationPolicyUiModel
-import `in`.opening.area.zustapp.ui.theme.montserrat
 import `in`.opening.area.zustapp.ui.theme.okraFontFamily
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
 import androidx.compose.foundation.background

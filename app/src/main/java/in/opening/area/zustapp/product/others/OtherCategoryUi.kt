@@ -108,7 +108,7 @@ fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: I
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = combinedModifier
-                .size(60.dp)
+                .size(40.dp)
                 .constrainAs(image) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -116,7 +116,7 @@ fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: I
                 }
         )
         Text(
-            fontSize = 12.sp, fontFamily = montserrat,
+            fontSize = 14.sp, fontFamily = zustFont,
             fontWeight = if (isSelectedItem) {
                 FontWeight.W600
             } else {

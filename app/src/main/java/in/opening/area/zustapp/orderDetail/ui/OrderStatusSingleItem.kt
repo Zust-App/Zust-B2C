@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.orderDetail.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.orderDetail.models.OrderStatus
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,7 +20,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -37,7 +35,7 @@ fun OrderStatusTitleContainer() {
         .background(color = Color.White, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))) {
         val (title) = createRefs()
         Text(text = "Order status",
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             color = colorResource(id = R.color.app_black),
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top, dp_16)
@@ -95,7 +93,7 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
         }
 
         Text(text = orderStatus.orderStatusType?.firstLetterCapitalOtherSmall() ?: "",
-            style = Typography_Montserrat.body2,
+            style = ZustTypography.body2,
             color = if (!orderStatus.createdDateTime.isNullOrEmpty()) {
                 colorResource(id = R.color.app_black)
             } else {
@@ -108,7 +106,7 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
             })
 
         Text(text = orderStatus.createdDateTime ?: "",
-            style = Typography_Montserrat.subtitle1,
+            style = ZustTypography.subtitle1,
             color = colorResource(id = R.color.new_hint_color),
             modifier = Modifier.constrainAs(orderTime) {
                 start.linkTo(orderStatusTag.end, dp_8)

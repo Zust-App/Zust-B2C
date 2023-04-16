@@ -1,10 +1,8 @@
 package `in`.opening.area.zustapp.address.compose
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.locationManager.models.CustomLocationModel
 import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.uiModels.CurrentLocationUi
@@ -115,7 +113,7 @@ fun AddNewAddressUi(
                 }
         )
         Text(text = "Please enter your address",
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             color = colorResource(id = R.color.app_black),
             modifier = modifier.constrainAs(titleText) {
                 top.linkTo(parent.top, dp_20)
@@ -130,7 +128,7 @@ fun AddNewAddressUi(
                 start.linkTo(parent.start, dp_20)
                 end.linkTo(parent.end, dp_20)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.subtitle1,
+            }, style = ZustTypography.subtitle1,
             fontWeight = FontWeight.W400,
             color = colorResource(id = R.color.app_black))
 
@@ -159,22 +157,22 @@ fun AddNewAddressUi(
                 Text(text = "Use current location",
                     modifier = modifier.padding(vertical = 6.dp),
                     color = colorResource(id = R.color.white),
-                    style = Typography_Montserrat.body2)
+                    style = ZustTypography.body2)
             }
             if (!customLocationModel.addressLine.isNullOrEmpty()) {
                 Spacer(modifier = modifier.height(8.dp))
                 Text(text = customLocationModel.addressLine!!,
-                    style = Typography_Montserrat.body2,
+                    style = ZustTypography.body2,
                     color = colorResource(id = R.color.app_black))
             }
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Enter PinCode*",
-                style = Typography_Montserrat.subtitle1,
+                style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
             TextField(value = inputPinCode,
-                textStyle = Typography_Montserrat.body2,
+                textStyle = ZustTypography.body2,
                 onValueChange = {
                     inputPinCode = it
                 }, modifier = modifier
@@ -185,11 +183,11 @@ fun AddNewAddressUi(
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Enter Complete Address*",
-                style = Typography_Montserrat.subtitle1,
+                style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
             TextField(value = houseAndFloor,
-                textStyle = Typography_Montserrat.body2,
+                textStyle = ZustTypography.body2,
                 onValueChange = {
                     houseAndFloor = it
                 }, modifier = modifier
@@ -228,7 +226,7 @@ fun AddNewAddressUi(
                 Text(text = "Save Address",
                     modifier = modifier.padding(vertical = 6.dp),
                     color = colorResource(id = R.color.white),
-                    style = Typography_Montserrat.body1)
+                    style = ZustTypography.body1)
             }
         }
         if (isLoading) {

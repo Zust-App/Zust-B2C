@@ -1,8 +1,7 @@
 package `in`.opening.area.zustapp.onboarding.compose
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.compose.ComposeLottie
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,7 @@ fun OnBoardingSingleItemUi(index: Int) {
         Text(text = listOfOnBoardingText[index],
             color = colorResource(id = R.color.new_material_primary),
             fontSize = 18.sp,
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(16.dp))
     }

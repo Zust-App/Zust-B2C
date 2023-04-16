@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.productDetails.compose
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import androidx.compose.foundation.background
@@ -46,7 +46,7 @@ fun ProductDetailTopBarUi(
                 bottom.linkTo(parent.bottom)
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body1)
+            }, style = ZustTypography.body1)
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = colorResource(id = R.color.white),

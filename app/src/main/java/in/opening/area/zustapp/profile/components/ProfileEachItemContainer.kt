@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.profile.components
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.profile.models.ProfileStaticItem
-import `in`.opening.area.zustapp.ui.theme.montserrat
+import `in`.opening.area.zustapp.ui.theme.zustFont
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -44,7 +44,7 @@ fun ProfileEachItemContainer(profileStaticItem: ProfileStaticItem, clickEvent: (
                 end = 16.dp, top = 16.dp), style = TextStyle(
                 color = colorResource(id = R.color.black_3),
                 fontSize = 14.sp,
-                fontFamily = montserrat,
+                fontFamily = zustFont,
                 fontWeight = FontWeight.W500
             ))
         Spacer(modifier = Modifier.weight(1.0f))

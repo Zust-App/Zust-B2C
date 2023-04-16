@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.orderDetail.ui
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -27,7 +27,7 @@ fun ZustAppReason(reason: String) {
                 start.linkTo(parent.start, dp_16)
                 end.linkTo(parent.end, dp_16)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body1)
+            }, style = ZustTypography.body1)
         Text(text = reason, color = colorResource(id = R.color.white),
             modifier = Modifier.constrainAs(body) {
                 top.linkTo(title.bottom, dp_8)
@@ -35,6 +35,6 @@ fun ZustAppReason(reason: String) {
                 end.linkTo(parent.end, dp_16)
                 bottom.linkTo(parent.bottom, dp_12)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body2)
+            }, style = ZustTypography.body2)
     }
 }

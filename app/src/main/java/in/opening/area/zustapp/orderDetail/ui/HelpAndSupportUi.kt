@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.orderDetail.ui
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_14
 import `in`.opening.area.zustapp.ui.theme.dp_16
@@ -59,7 +59,7 @@ fun HelpAndSupportUi() {
                     start.linkTo(chatIcon.end, dp_12)
                     width = Dimension.fillToConstraints
                 },
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
         )
 
         Icon(painter = painterResource(id = R.drawable.arrow_right_icon),

@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.address.compose
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.uiModels.UserSavedAddressUi
@@ -47,7 +47,7 @@ fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, p
                         top.linkTo(parent.top, dp_16)
                         end.linkTo(parent.end, dp_20)
                         width = Dimension.fillToConstraints
-                    }, style = Typography_Montserrat.body1, color = colorResource(id = R.color.app_black))
+                    }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
                     LazyColumn(modifier = modifier
                         .fillMaxWidth()
                         .constrainAs(list) {
@@ -86,7 +86,7 @@ fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, p
                         Text(text = "Add New Address",
                             modifier = modifier.padding(vertical = 6.dp),
                             color = colorResource(id = R.color.white),
-                            style = Typography_Montserrat.body1)
+                            style = ZustTypography.body1)
                     }
                 } else {
 

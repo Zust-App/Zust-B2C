@@ -96,7 +96,7 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
                         placeholder = {
                             Text(
                                 text = "Enter Coupon here",
-                                style = Typography_Montserrat.body2,
+                                style = ZustTypography.body2,
                                 color = Color(0xffB2B2B2)
                             )
                         },
@@ -113,14 +113,14 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
                                 setResult(Activity.RESULT_OK, intent)
                                 finish()
                             },
-                        style = Typography_Montserrat.body2,
+                        style = ZustTypography.body2,
                         color = colorResource(id = R.color.app_black)
                     )
                 }
             }
             Text(
                 text = "Available Coupons",
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 modifier = Modifier.constrainAs(titleText) {
                     top.linkTo(manualCouponContainer.bottom, dp_24)
                     start.linkTo(parent.start, dp_16)

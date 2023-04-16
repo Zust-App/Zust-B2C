@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.orderDetail.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ fun OrderDetailsTopAppBar(
                 end.linkTo(parent.end)
                 bottom.linkTo(subTitle.top)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body1,
+            }, style = ZustTypography.body1,
             fontSize = 16.sp)
 
         Text(text = "Order number - $PREFIX_ORDER_ID$orderId",
@@ -59,7 +59,7 @@ fun OrderDetailsTopAppBar(
                 start.linkTo(navIcon.end, dp_12)
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.subtitle1,
+            }, style = ZustTypography.subtitle1,
             fontWeight = FontWeight.W500)
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),

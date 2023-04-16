@@ -1,10 +1,8 @@
 package `in`.opening.area.zustapp.home.components
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
-import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_8
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
@@ -15,7 +13,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
-import androidx.constraintlayout.compose.Dimension
 
 @Composable
 fun HomePageErrorUi(
@@ -38,7 +35,7 @@ fun HomePageErrorUi(
             Spacer(modifier = Modifier.height(60.dp))
             Text(text = "Something went wrong please try again",
                 color = colorResource(id = R.color.red_primary),
-                style = Typography_Montserrat.body2)
+                style = ZustTypography.body2)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -47,7 +44,7 @@ fun HomePageErrorUi(
             }) {
                 Text(text = "Retry",
                     color = colorResource(id = R.color.app_black),
-                    style = Typography_Montserrat.body1)
+                    style = ZustTypography.body1)
             }
 
         }

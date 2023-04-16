@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.productDetails.models
 
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
+import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.utility.UserCustomError
 import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
@@ -30,6 +31,7 @@ data class ProductPriceDetails(
     val productPriceId: String? = null,
     val quantity: Double? = null,
     val unit: String? = null,
+    val mrp: Double? = null,
 )
 
 fun ProductDetailData.convertToProductSingleItems(): ArrayList<ProductSingleItem>? {
@@ -43,14 +45,14 @@ fun ProductDetailData.convertToProductSingleItems(): ArrayList<ProductSingleItem
             brand = brand!!,
             description = description!!,
             categoryId = categoryId!!,
-            mrp = it.price!!,
+            mrp = it.mrp!!,
             discountPercentage = it.discountPercentage!!,
             thumbnail = thumbnail!!,
             subcategoryId = subcategoryId!!,
             itemInStock = it.itemInStock!!,
             isOutOfStock = false,
             productName = name!!,
-            price = it.price,
+            price = it.price!!,
             quantityUnit = it.unit!!,
             quantity = it.quantity,
             productGroupId = productId!!,

@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.compose
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -53,13 +53,13 @@ fun ComposeCustomTopAppBar(
                     top.linkTo(parent.top)
                 }
                 start.linkTo(backArrowImage.end, dp_16)
-            }, style = Typography_Montserrat.body1,
+            }, style = ZustTypography.body1,
             maxLines = 1, overflow = TextOverflow.Ellipsis)
         if (!subTitleText.isNullOrEmpty()) {
             Text(
                 text = subTitleText,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
-                style = Typography_Montserrat.subtitle1,
+                style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.white),
                 modifier = modifier.constrainAs(subTitleTag) {
                     top.linkTo(titleTag.bottom, dp_4)
@@ -124,13 +124,13 @@ fun ComposeTopAppBarProductList(
                     top.linkTo(parent.top)
                 }
                 start.linkTo(backArrowImage.end, dp_16)
-            }, style = Typography_Montserrat.body1,
+            }, style = ZustTypography.body1,
             maxLines = 1, overflow = TextOverflow.Ellipsis)
         if (!subTitleText.isNullOrEmpty()) {
             Text(
                 text = subTitleText,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
-                style = Typography_Montserrat.subtitle1,
+                style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.white),
                 modifier = modifier.constrainAs(subTitleTag) {
                     top.linkTo(titleTag.bottom, dp_4)

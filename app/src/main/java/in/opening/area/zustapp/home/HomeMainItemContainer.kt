@@ -55,7 +55,6 @@ fun HomeMainItemContainer(
                         }
                     }
                     if (homeData.type == "BANNER") {
-                        homePageBrandTagUi()
                         homePageSectionTitleUi(homeData.title)
                         if (!homeData.data.isNullOrEmpty()) {
                             customAutoScrollImageUi(homeData.data)
@@ -83,5 +82,7 @@ fun HomeMainItemContainer(
     }
 }
 
+
+////                        homePageBrandTagUi()
 
 

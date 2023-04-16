@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.profile
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -70,7 +70,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
             },
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             color = colorResource(id = R.color.black_2))
 
         Text(text = stringResource(R.string.dinot_find_what_are_you_looking_for),
@@ -80,13 +80,13 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
             }, textAlign = TextAlign.Center,
-            style = Typography_Montserrat.body2,
+            style = ZustTypography.body2,
             fontWeight = FontWeight.W400,
             color = colorResource(id = R.color.grey_color_2))
 
         TextField(
             placeholder = {
-                Text(text = stringResource(R.string.type_items), style = Typography_Montserrat.body2)
+                Text(text = stringResource(R.string.type_items), style = ZustTypography.body2)
             },
             value = inputText,
             onValueChange = {
@@ -129,7 +129,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
         ) {
             Text(text = stringResource(R.string.send),
                 color = Color.White,
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 fontSize = 18.sp)
         }
 

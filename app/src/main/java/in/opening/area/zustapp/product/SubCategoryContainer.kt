@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.product
 
 import `in`.opening.area.zustapp.product.model.SingleSubCategory
 import `in`.opening.area.zustapp.product.model.SubCategoryDataMode
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,7 +82,7 @@ private fun SingleSubCategoryItem(itemValue: SingleSubCategory?, callback: (Sing
                 .aspectRatio(1f)
                 .clip(MaterialTheme.shapes.medium))
 
-            Text(text = itemValue.name ?: "Title", style = Typography_Montserrat.body2, modifier = Modifier
+            Text(text = itemValue.name ?: "Title", style = ZustTypography.body2, modifier = Modifier
                 .width(60.dp)
                 .constrainAs(title) {
                     top.linkTo(image.bottom)

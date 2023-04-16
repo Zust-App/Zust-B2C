@@ -34,7 +34,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import java.util.*
 
 @Composable
 fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickListeners) {
@@ -53,7 +52,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
                     start.linkTo(parent.start, dp_12)
                     end.linkTo(parent.end, dp_12)
                 })
-        Text(text = product.productName, style = Typography_Montserrat.body1,
+        Text(text = product.productName, style = ZustTypography.body1,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp, modifier = Modifier.constrainAs(productName) {
                 top.linkTo(productImage.bottom, dp_4)
@@ -65,7 +64,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
             append(ProductUtils.getNumberDisplayValue(product.quantity))
             append(" ")
             append(product.quantityUnit.lowercase())
-        }, style = Typography_Montserrat.body2,
+        }, style = ZustTypography.body2,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.new_hint_color),
             fontSize = 12.sp,
@@ -76,7 +75,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
         Text(text = buildString {
             append(stringResource(id = R.string.ruppes))
             append(product.price.toInt())
-        }, style = Typography_Montserrat.body1,
+        }, style = ZustTypography.body1,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp,
             modifier = Modifier.constrainAs(productPrice) {
@@ -90,7 +89,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
         }, style = TextStyle(textDecoration = TextDecoration.LineThrough,
             fontSize = 12.sp,
             fontWeight = FontWeight.W500,
-            fontFamily = montserrat),
+            fontFamily = zustFont),
             color = colorResource(id = R.color.new_hint_color),
             modifier = Modifier.constrainAs(productMrp) {
                 top.linkTo(productPrice.top)
@@ -129,7 +128,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = Typography_Montserrat.body1,
+                    style = ZustTypography.body1,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,

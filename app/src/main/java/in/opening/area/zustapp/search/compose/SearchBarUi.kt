@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.search.compose
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.search.SearchProductActivity
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
 import `in`.opening.area.zustapp.viewmodels.SearchProductViewModel
@@ -40,7 +40,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import kotlinx.coroutines.android.awaitFrame
@@ -84,7 +83,7 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
             onValueChange = { newText ->
                 searchInput = newText
             },
-            textStyle = Typography_Montserrat.body2,
+            textStyle = ZustTypography.body2,
             singleLine = true,
             decorationBox = { innerTextField ->
                 Box(
@@ -94,7 +93,7 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier, viewModel: SearchProduc
                     if (searchInput.isEmpty()) {
                         Text(
                             text = "Search products...",
-                            style = Typography_Montserrat.body2,
+                            style = ZustTypography.body2,
                             color = colorResource(id = R.color.new_hint_color)
                         )
                     }

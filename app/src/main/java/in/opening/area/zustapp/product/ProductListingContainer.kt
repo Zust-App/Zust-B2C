@@ -12,14 +12,13 @@ import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -48,6 +47,7 @@ import java.util.*
 
 const val KEY_BANNER = "banner"
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductListingContainer(
     layoutScope: ConstraintLayoutScope,
@@ -82,22 +82,16 @@ fun ProductListingContainer(
             }
             is ProductListUi.ProductListSuccess -> {
                 if (!response.data.productItems.isNullOrEmpty()) {
-                    LazyVerticalGrid(columns = GridCells.Fixed(2),
+                    LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2),
                         modifier = Modifier.constrainAs(productList) {
-                            top.linkTo(otherCategoryUi.bottom, dp_8)
+                            top.linkTo(otherCategoryUi.bottom, dp_12)
                             bottom.linkTo(parent.bottom, 8.dp)
                             start.linkTo(parent.start, dp_20)
                             end.linkTo(parent.end, dp_20)
                             width = Dimension.fillToConstraints
                             height = Dimension.fillToConstraints
                         }) {
-                        item(span = { GridItemSpan(currentLineSpan = 2) }) {
-                            Text(text = "Items", style = Typography_Montserrat.body1,
-                                color = colorResource(id = R.color.app_black))
-                        }
-                        item(span = { GridItemSpan(currentLineSpan = 2) }) {
-                            Spacer(modifier = Modifier.height(24.dp))
-                        }
+
                         response.data.productItems?.forEach { productSingleItem: ProductSingleItem ->
                             item(productSingleItem.productPriceId) {
                                 ProductSingleItem(productSingleItem, listener)
@@ -132,25 +126,29 @@ fun ProductListingContainer(
     }
 }
 
+private val productListingItemModifier = Modifier
+    .padding(end = 6.dp,
+        bottom = 8.dp)
+    .background(color = Color.White,
+        shape = RoundedCornerShape(8.dp))
+    .padding(bottom = 10.dp, top = 10.dp, end = 10.dp)
+    .wrapContentHeight()
+
 @Composable
 private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: ProductSelectionListener) {
-    ConstraintLayout(modifier = Modifier
-        .padding(end = 6.dp,
-            bottom = 10.dp)
+    ConstraintLayout(modifier = productListingItemModifier
         .clip(MaterialTheme.shapes.small)
-        .background(color = colorResource(id = color.white), shape = RoundedCornerShape(8.dp))
-        .padding(bottom = 10.dp, top = 10.dp, end = 10.dp)
         .clickable {
             callback.didTapOnContainerClick(productSingleItem)
         }
-        .wrapContentHeight()) {
+    ) {
         val (imageIcon, titleText, priceText, mrpText, offerPercentage, quantityUnitText, incDecContainer, addItemContainer) = createRefs()
         AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(productSingleItem.thumbnail).allowHardware(true).build(),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .height(80.dp)
-                .width(80.dp)
+                .height(90.dp)
+                .width(90.dp)
                 .constrainAs(imageIcon) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -162,9 +160,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
             end.linkTo(parent.end)
             top.linkTo(imageIcon.bottom, dp_8)
             width = Dimension.fillToConstraints
-        }, fontFamily = montserrat,
-            fontWeight = FontWeight.W600,
-            fontSize = 14.sp)
+        }, style = ZustTypography.body2)
 
         Text(text = ProductUtils.getNumberDisplayValue(productSingleItem.quantity) + " " + productSingleItem.quantityUnit.lowercase(),
             color = colorResource(id = color.new_hint_color),
@@ -173,32 +169,34 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                 end.linkTo(parent.end)
                 top.linkTo(titleText.bottom, dp_12)
                 width = Dimension.fillToConstraints
-            }, fontFamily = montserrat,
+            }, fontFamily = zustFont,
             fontWeight = FontWeight.W600,
             fontSize = 12.sp)
 
-        Text(text = stringResource(id = string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.price), modifier = Modifier.constrainAs(priceText) {
-            start.linkTo(parent.start, dp_10)
-            top.linkTo(quantityUnitText.bottom, dp_8)
-        }, fontFamily = montserrat,
+        Text(text = stringResource(id = string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.price),
+            modifier = Modifier.constrainAs(priceText) {
+                start.linkTo(parent.start, dp_10)
+                top.linkTo(quantityUnitText.bottom, dp_8)
+            }, fontFamily = zustFont,
             fontWeight = FontWeight.W600,
             fontSize = 14.sp,
             color = colorResource(id = color.app_black))
 
-        Text(
-            text = stringResource(id = string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.mrp),
-            modifier = Modifier.constrainAs(mrpText) {
-                start.linkTo(priceText.end, dp_8)
-                top.linkTo(priceText.top)
-                bottom.linkTo(priceText.bottom)
-                width = Dimension.fillToConstraints
-            },
-            style = TextStyle(textDecoration = TextDecoration.LineThrough,
-                fontFamily = montserrat,
-                fontWeight = FontWeight.W400,
-                fontSize = 12.sp),
-            color = colorResource(id = color.new_hint_color),
-        )
+        if (productSingleItem.discountPercentage > 0) {
+            Text(
+                text = stringResource(id = string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.mrp),
+                modifier = Modifier.constrainAs(mrpText) {
+                    start.linkTo(parent.start, dp_10)
+                    top.linkTo(priceText.bottom)
+                    width = Dimension.fillToConstraints
+                },
+                style = TextStyle(textDecoration = TextDecoration.LineThrough,
+                    fontFamily = zustFont,
+                    fontWeight = FontWeight.W400,
+                    fontSize = 12.sp),
+                color = colorResource(id = color.new_hint_color),
+            )
+        }
 
         if (productSingleItem.itemCountByUser > 0) {
 
@@ -210,7 +208,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                     .wrapContentWidth()
                     .height(24.dp)
                     .constrainAs(incDecContainer) {
-                        top.linkTo(priceText.bottom, dp_12)
+                        top.linkTo(priceText.top)
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                     }) {
@@ -233,7 +231,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = Typography_Montserrat.body1,
+                    style = ZustTypography.body1,
                     fontSize = 12.sp,
                     color = colorResource(id = color.app_black),
                     textAlign = TextAlign.Center,
@@ -256,7 +254,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
         } else {
             Button(modifier = Modifier
                 .constrainAs(addItemContainer) {
-                    top.linkTo(priceText.bottom, dp_12)
+                    top.linkTo(priceText.top)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
@@ -271,21 +269,21 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                 }) {
                 Text(text = stringResource(string.add),
                     fontWeight = FontWeight.W600, color = colorResource(id = color.white),
-                    fontFamily = montserrat, fontSize = 12.sp)
+                    fontFamily = zustFont, fontSize = 12.sp)
             }
         }
 
         if (productSingleItem.discountPercentage > 0.0) {
             Text(text = productSingleItem.discountPercentage.toInt().toString() + "% OFF", modifier = Modifier
-                .background(color = colorResource(id = color.new_material_primary), shape = RoundedCornerShape(4.dp))
-                .padding(horizontal = 8.dp,
+                .background(color = colorResource(id = color.light_offer_color), shape = RoundedCornerShape(4.dp))
+                .padding(horizontal = 4.dp,
                     vertical = 2.dp)
                 .constrainAs(offerPercentage) {
                     start.linkTo(parent.start, 5.dp)
                     top.linkTo(parent.top)
                 }, color = Color.White,
                 fontSize = 10.sp,
-                fontFamily = montserrat,
+                fontFamily = zustFont,
                 fontWeight = FontWeight.W600)
         }
     }

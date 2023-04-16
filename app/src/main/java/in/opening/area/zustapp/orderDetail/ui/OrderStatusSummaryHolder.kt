@@ -39,7 +39,7 @@ fun OrderStatusSummaryHolder(data: OrderDetailData?) {
                 })
 
         Text(text = data.expectedTimeToDelivery ?: "",
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             fontWeight = FontWeight.W700,
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_material_primary),

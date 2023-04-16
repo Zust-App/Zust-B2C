@@ -4,24 +4,19 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.home.models.HomePageGenericData
 import `in`.opening.area.zustapp.ui.theme.*
-import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import coil.compose.AsyncImage
 
 const val KEY_DELIVERY_ALERT = "delivery_alert"
 fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callback: (ACTION) -> Unit) {
@@ -34,7 +29,7 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
             val (alertTextTitle, alertTextBody, waIcon, callUs) = createRefs()
             Text(text = "Delivery Alert",
                 color = colorResource(id = R.color.white),
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 modifier = Modifier
                     .constrainAs(alertTextTitle) {
                         start.linkTo(parent.start, dp_16)
@@ -46,7 +41,7 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
 
             Text(text = data[0].description ?: "For now you can call or whatsapp us",
                 color = colorResource(id = R.color.white),
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 modifier = Modifier
                     .wrapContentHeight()
                     .constrainAs(alertTextBody) {

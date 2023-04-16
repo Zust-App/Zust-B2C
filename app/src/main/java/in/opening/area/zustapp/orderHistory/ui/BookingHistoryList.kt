@@ -40,7 +40,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -149,7 +148,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
         Text(text = buildString {
             append(PREFIX_ORDER_ID)
             append(userBooking.orderId.toString())
-        }, style = Typography_Montserrat.body2,
+        }, style = ZustTypography.body2,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.app_black),
             modifier = Modifier.constrainAs(orderId) {
@@ -165,7 +164,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
                 end.linkTo(parent.end, dp_16)
                 top.linkTo(bagIcon.top)
                 bottom.linkTo(bagIcon.bottom)
-            }, style = Typography_Montserrat.body2,
+            }, style = ZustTypography.body2,
             color = colorAndStatusPair.first,
             fontWeight = FontWeight.W600)
 
@@ -175,7 +174,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
         }, modifier = Modifier.constrainAs(orderItemCount) {
             top.linkTo(bagIcon.bottom, dp_4)
             start.linkTo(orderId.start)
-        }, color = Color(0xBF1E1E1E), fontWeight = FontWeight.W500, style = Typography_Montserrat.subtitle1)
+        }, color = Color(0xBF1E1E1E), fontWeight = FontWeight.W500, style = ZustTypography.subtitle1)
         val (divider) = createRefs()
 
         Divider(modifier = Modifier
@@ -192,15 +191,15 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
             modifier = Modifier.constrainAs(orderAmount) {
             end.linkTo(parent.end, dp_16)
             top.linkTo(divider.bottom, dp_12)
-        }, color = colorResource(id = R.color.app_black), style = Typography_Montserrat.body2, fontWeight = FontWeight.W600)
+        }, color = colorResource(id = R.color.app_black), style = ZustTypography.body2, fontWeight = FontWeight.W600)
 
         Text(text = userBooking.orderedDateAndTime, modifier = Modifier.constrainAs(orderTime) {
             top.linkTo(divider.bottom, dp_12)
             start.linkTo(parent.start, dp_16)
-        }, color = Color(0xBF1E1E1E), style = Typography_Montserrat.subtitle1, fontWeight = FontWeight.W500)
+        }, color = Color(0xBF1E1E1E), style = ZustTypography.subtitle1, fontWeight = FontWeight.W500)
 
         val (detailsBtn) = createRefs()
-        Text(style = Typography_Montserrat.body2,
+        Text(style = ZustTypography.body2,
             textAlign = TextAlign.Center, text = "Details",
             color = colorResource(id = R.color.white), modifier = Modifier
                 .width(80.dp)
@@ -235,12 +234,12 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
                 }
             }, verticalAlignment = Alignment.CenterVertically) {
             if (userBooking.rating == 0) {
-                Text(text = "Rate order", style = Typography_Montserrat.body2,
+                Text(text = "Rate order", style = ZustTypography.body2,
                     color = colorResource(id = R.color.new_material_primary), modifier = Modifier.clickable {
                         canShowRatingDialog = true
                     })
             } else {
-                Text(text = "Rating", style = Typography_Montserrat.body2,
+                Text(text = "Rating", style = ZustTypography.body2,
                     color = colorResource(id = R.color.black_2))
                 Spacer(modifier = Modifier.width(12.dp))
                 repeat(5) {

@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.orderSummary.compose
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,7 +31,7 @@ fun ExpectedDeliveryTimeTag(orderSummaryViewModel: OrderSummaryViewModel) {
         Text(text = expectedDeliveryTimeData ?: "Get your order in 45 mins",
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_material_primary),
-            style = Typography_Montserrat.body1, modifier = Modifier
+            style = ZustTypography.body1, modifier = Modifier
                 .constrainAs(timeText) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)

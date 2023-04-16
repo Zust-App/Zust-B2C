@@ -12,8 +12,9 @@ import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
 import `in`.opening.area.zustapp.search.compose.SearchBarUi
+import `in`.opening.area.zustapp.search.compose.SearchResultVerticalLayout
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.ui.theme.dp_4
@@ -104,7 +105,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                         start.linkTo(parent.start, dp_20)
                         end.linkTo(parent.end, dp_20)
                         width = Dimension.fillToConstraints
-                    }, style = Typography_Montserrat.body1)
+                    }, style = ZustTypography.body1)
                     if (data.data.productItems.isNullOrEmpty()) {
                         NoProductFoundErrorPage(layoutScope = this, topReference = searchSection) {
                             showSuggestProductSheet()
@@ -113,7 +114,8 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                         if (!data.data.productItems.isNullOrEmpty()) {
                             LazyColumn(modifier = modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 20.dp)
+                                .padding(horizontal = 16.dp,
+                                    vertical = 8.dp)
                                 .constrainAs(searchResult) {
                                     top.linkTo(resultTitleText.bottom, dp_16)
                                     end.linkTo(parent.end)
@@ -122,7 +124,8 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                                     height = Dimension.fillToConstraints
                                 }) {
                                 items(data.data.productItems!!) {
-                                    SelectedCartVerticalItemUi(it, searchResultModifier, true, { product ->
+                                    SearchResultVerticalLayout(it, searchResultModifier,
+                                         { product ->
                                         didTapOnIncrementCount(product)
                                     }, { product ->
                                         didTapOnDecrementCount(product)
@@ -204,6 +207,9 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
 
 private val searchResultModifier = Modifier
     .fillMaxWidth()
-    .wrapContentHeight()
+    .wrapContentHeight().padding(bottom = 8.dp)
     .background(color = Color(0xffffffff))
-    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp)
+    .padding(start = 12.dp,
+        end = 16.dp,
+        top = 12.dp,
+        bottom = 12.dp)

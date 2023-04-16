@@ -47,7 +47,7 @@ fun NoProductFoundErrorPage(
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(text = "Oops, Didn't find what you\n" +
                         "are looking for?",
-                    style = Typography_Montserrat.body1,
+                    style = ZustTypography.body1,
                     fontSize = 18.sp, color = Color(0xBF1E1E1E))
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
@@ -59,7 +59,7 @@ fun NoProductFoundErrorPage(
                         .wrapContentHeight()
                         .clip(RoundedCornerShape(12.dp)),
                 ) {
-                    Text(text = "Suggest items", style = Typography_Montserrat.body1,
+                    Text(text = "Suggest items", style = ZustTypography.body1,
                         color = colorResource(id = R.color.new_material_primary))
                 }
             }

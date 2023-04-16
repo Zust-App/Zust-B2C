@@ -36,7 +36,7 @@ fun DeliveryAddressContainer(data: OrderDetailData?) {
             top.linkTo(parent.top, dp_12)
             bottom.linkTo(addressTag.top)
             width = Dimension.fillToConstraints
-        }, style = Typography_Montserrat.body1, color = colorResource(id = R.color.app_black))
+        }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
 
         Text(text = buildString {
             append(address.landmark)
@@ -48,7 +48,7 @@ fun DeliveryAddressContainer(data: OrderDetailData?) {
             bottom.linkTo(parent.bottom, dp_8)
             top.linkTo(titleTag.bottom, dp_6)
             width = Dimension.fillToConstraints
-        }, style = Typography_Montserrat.subtitle1,
+        }, style = ZustTypography.subtitle1,
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_hint_color))
     }

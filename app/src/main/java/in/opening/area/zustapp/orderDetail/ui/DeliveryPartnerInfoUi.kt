@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.orderDetail.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.orderDetail.models.RiderDetails
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
@@ -32,7 +32,7 @@ fun DeliveryPartnerInfoUi(riderDetails: RiderDetails) {
             .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(dp_8))) {
             val (text, icon) = createRefs()
             Text(text = riderDetails.riderName + " is your Delivery Partner",
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 color = colorResource(id = R.color.app_black),
                 modifier = Modifier
                     .wrapContentHeight()

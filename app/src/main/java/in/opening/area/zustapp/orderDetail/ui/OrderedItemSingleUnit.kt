@@ -56,7 +56,7 @@ fun OrderedItemSingleUnit(item: Item) {
                 end.linkTo(productNumItems.start, dp_12)
                 top.linkTo(parent.top, dp_12)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body1,
+            }, style = ZustTypography.body1,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp)
 
@@ -70,7 +70,7 @@ fun OrderedItemSingleUnit(item: Item) {
             start.linkTo(productImage.end, dp_12)
             end.linkTo(parent.end, dp_12)
             width = Dimension.fillToConstraints
-        }, style = Typography_Montserrat.body1,
+        }, style = ZustTypography.body1,
             fontSize = 12.sp,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.new_hint_color))
@@ -84,7 +84,7 @@ fun OrderedItemSingleUnit(item: Item) {
             end.linkTo(parent.end, dp_12)
             bottom.linkTo(parent.bottom, dp_12)
             width = Dimension.fillToConstraints
-        }, style = Typography_Montserrat.body1,
+        }, style = ZustTypography.body1,
             fontSize = 14.sp)
 
         Text(text = buildString {
@@ -93,7 +93,7 @@ fun OrderedItemSingleUnit(item: Item) {
         }, modifier = Modifier.constrainAs(productNumItems) {
             end.linkTo(parent.end, dp_12)
             top.linkTo(parent.top, dp_12)
-        }, style = Typography_Montserrat.body2,
+        }, style = ZustTypography.body2,
             color = colorResource(id = R.color.new_hint_color),
             fontSize = 12.sp)
     }

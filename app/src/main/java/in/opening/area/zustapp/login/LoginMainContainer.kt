@@ -9,8 +9,7 @@ import `in`.opening.area.zustapp.const.MOBILE_NUM_THRESHOLD
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.extensions.getNumberKeyboardOptions
 import `in`.opening.area.zustapp.login.model.UserLoginModel
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
-import `in`.opening.area.zustapp.ui.theme.primaryColor
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.moveToInAppWebPage
@@ -27,7 +26,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,7 +90,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
             modifier = Modifier.fillMaxWidth(), textSize = 16.sp)
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(R.string.enter_your_mobile_number),
-            style = Typography_Montserrat.subtitle1,
+            style = ZustTypography.subtitle1,
             color = colorResource(id = R.color.app_black))
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -115,7 +112,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 SetDrawableImage(R.drawable.india_flag_icon)
             },
             colors = setTextFiledColors(),
-            textStyle = Typography_Montserrat.body2, trailingIcon = {
+            textStyle = ZustTypography.body2, trailingIcon = {
                 if (user.mobileNum.length == MOBILE_NUM_THRESHOLD) {
                     SetDrawableImage(R.drawable.ic_outline_check_circle_outline_24)
                 }
@@ -134,7 +131,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 Spacer(modifier = Modifier.width(4.dp))
             }
             Text(text = "NEXT", textAlign = TextAlign.Center,
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 color = Color.White, modifier = Modifier
                     .padding(6.dp)
                     .padding(0.dp))
@@ -142,7 +139,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ClickableText(text = annotatedStringTAndC, style = Typography_Montserrat.subtitle1,
+        ClickableText(text = annotatedStringTAndC, style = ZustTypography.subtitle1,
             onClick = { offset ->
                 annotatedStringTAndC.getStringAnnotations(tag = "policy",
                     start = offset, end = offset).firstOrNull()?.let {

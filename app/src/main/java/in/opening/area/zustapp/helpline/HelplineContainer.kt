@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.helpline
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -54,7 +54,7 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
             Text(text = stringResource(R.string.help_and_support),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 fontSize = 18.sp,
                 color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +62,7 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
             Text(
                 text = stringResource(R.string.contact_nmber),
                 color = colorResource(id = R.color.green),
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 fontSize = 14.sp,
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -70,7 +70,7 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
             profileViewModel.getSupportCsDetail()?.phoneNos?.forEach {
                 Text(
                     text = it, color = colorResource(id = R.color.light_black),
-                    style = Typography_Montserrat.body2,
+                    style = ZustTypography.body2,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openCallIntent(context, it)
                     })
@@ -78,12 +78,12 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Email", color = colorResource(id = R.color.green),
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 fontSize = 14.sp)
             Spacer(modifier = Modifier.height(4.dp))
             profileViewModel.getSupportCsDetail()?.email?.forEach {
                 Text(text = it, color = colorResource(id = R.color.light_black),
-                    style = Typography_Montserrat.body2,
+                    style = ZustTypography.body2,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openEmailIntent(context, it)
                     })

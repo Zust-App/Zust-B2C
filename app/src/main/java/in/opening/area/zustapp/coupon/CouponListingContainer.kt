@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.coupon
 
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.uiModels.CouponListUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.CouponListingViewModel
@@ -34,7 +34,7 @@ fun CouponListingContainer(
         is CouponListUi.CouponSuccess -> {
             if (response.data.isEmpty()) {
                 Text(text = "No coupon available right now",
-                    style = Typography_Montserrat.body2,
+                    style = ZustTypography.body2,
                     color = colorResource(id = `in`.opening.area.zustapp.R.color.light_black), modifier = modifier
                         .fillMaxWidth(), textAlign = TextAlign.Center)
             } else {

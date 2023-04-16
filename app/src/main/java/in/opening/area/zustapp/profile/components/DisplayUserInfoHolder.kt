@@ -47,11 +47,11 @@ fun DisplayUserInfo(user: User?) {
                         bottom.linkTo(phoneNum.bottom)
                     },
                 text = displayText, color = Color.White,
-                style = Typography_Montserrat.body2
+                style = ZustTypography.body2
             )
 
             Text(text = user?.userName ?: stringResource(R.string.my_account),
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 modifier = Modifier
                     .padding()
                     .constrainAs(titleText) {
@@ -63,7 +63,7 @@ fun DisplayUserInfo(user: User?) {
                     }, color = colorResource(id = R.color.app_black))
             if (!user?.phoneNo.isNullOrEmpty()) {
                 Text(text = "+91 " + user?.phoneNo,
-                    style = Typography_Montserrat.body2,
+                    style = ZustTypography.body2,
                     modifier = Modifier
                         .padding()
                         .constrainAs(phoneNum) {

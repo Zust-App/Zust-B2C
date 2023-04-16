@@ -3,7 +3,7 @@ package `in`.opening.area.zustapp.coupon
 import `in`.opening.area.zustapp.R.color
 import `in`.opening.area.zustapp.R.drawable
 import `in`.opening.area.zustapp.coupon.model.Coupon
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import androidx.compose.foundation.background
@@ -45,7 +45,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
                 })
 
         Text(text = item.couponName,
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             modifier = modifier.constrainAs(couponName) {
                 top.linkTo(parent.top, dp_16)
                 start.linkTo(couponIcon.end, dp_8)
@@ -54,7 +54,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
             }, color = Color(0xD91E1E1E))
 
         Text(text = item.description,
-            style = Typography_Montserrat.subtitle1,
+            style = ZustTypography.subtitle1,
             color = Color(0xBF1E1E1E),
             modifier = Modifier.constrainAs(descriptionText) {
                 start.linkTo(couponName.start)
@@ -81,7 +81,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
         ) {
             Text(text = item.couponCode,
                 color = Color(0xff7B2AFF),
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 textAlign = TextAlign.Center,
                 modifier = modifier
                     .padding(horizontal = 16.dp, vertical = 4.dp))
@@ -90,7 +90,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
 
         Text(text = "APPLY",
             color = colorResource(id = color.new_material_primary),
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             fontSize = 14.sp,
             modifier = modifier
                 .constrainAs(applyText) {

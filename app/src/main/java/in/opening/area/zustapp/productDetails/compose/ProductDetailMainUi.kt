@@ -74,7 +74,7 @@ fun ProductDetailMainUi(
                         .padding(vertical = 16.dp)) {
                         item {
                             Text(text = data.productPriceSingleItems[0].productName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }, color = colorResource(id = R.color.app_black),
-                                fontFamily = montserrat,
+                                fontFamily = zustFont,
                                 fontWeight = FontWeight.W600,
                                 fontSize = 16.sp, modifier = Modifier.padding(horizontal = 16.dp))
                             Spacer(modifier = Modifier.height(24.dp))
@@ -103,7 +103,7 @@ fun ProductDetailMainUi(
                         item {
                             Divider(modifier = Modifier
                                 .fillMaxWidth()
-                                .height(2.dp)
+                                .height(1.dp)
                                 .background(color = colorResource(id = com.google.android.material.R.color.material_divider_color)))
                             Spacer(modifier = Modifier.height(24.dp))
                             Text(
@@ -135,7 +135,7 @@ fun ProductDetailMainUi(
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = data.productPriceSingleItems[0].description,
-                                style = Typography_Montserrat.body2,
+                                style = ZustTypography.body2,
                                 color = colorResource(id = R.color.new_hint_color), modifier = Modifier.padding(horizontal = 16.dp)
                             )
                         }
@@ -177,37 +177,39 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
             start.linkTo(parent.start, dp_12)
             top.linkTo(parent.top, dp_16)
             bottom.linkTo(parent.bottom, dp_16)
-        }, fontFamily = montserrat,
+        }, fontFamily = zustFont,
             fontWeight = FontWeight.W500,
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_hint_color))
 
-        Text(text = stringResource(id = R.string.ruppes) + " " + productSingleItem.price.toString(),
+        Text(text = stringResource(id = R.string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.price),
             modifier = Modifier.constrainAs(priceText) {
                 start.linkTo(quantityUnitText.start, dp_8)
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
                 end.linkTo(incDecContainer.start, dp_8)
-            }, fontFamily = montserrat,
+            }, fontFamily = zustFont,
             fontWeight = FontWeight.W600,
             fontSize = 16.sp,
             color = colorResource(id = R.color.app_black))
 
-        Text(
-            text = stringResource(id = R.string.ruppes) + " " + productSingleItem.mrp.toString(),
-            modifier = Modifier.constrainAs(mrpText) {
-                start.linkTo(priceText.end, dp_8)
-                top.linkTo(priceText.top)
-                bottom.linkTo(priceText.bottom)
-                end.linkTo(incDecContainer.start, dp_8)
-                width = Dimension.fillToConstraints
-            },
-            style = TextStyle(textDecoration = TextDecoration.LineThrough,
-                fontFamily = montserrat,
-                fontWeight = FontWeight.W400,
-                fontSize = 12.sp),
-            color = colorResource(id = R.color.new_hint_color),
-        )
+        if (productSingleItem.discountPercentage > 0) {
+            Text(
+                text = stringResource(id = R.string.ruppes) + " " + ProductUtils.roundTo1DecimalPlaces(productSingleItem.mrp),
+                modifier = Modifier.constrainAs(mrpText) {
+                    start.linkTo(priceText.end, dp_8)
+                    top.linkTo(priceText.top)
+                    bottom.linkTo(priceText.bottom)
+                    end.linkTo(incDecContainer.start, dp_8)
+                    width = Dimension.fillToConstraints
+                },
+                style = TextStyle(textDecoration = TextDecoration.LineThrough,
+                    fontFamily = zustFont,
+                    fontWeight = FontWeight.W500,
+                    fontSize = 12.sp),
+                color = colorResource(id = R.color.new_hint_color),
+            )
+        }
 
         if (productSingleItem.itemCountByUser > 0) {
             Row(horizontalArrangement = Arrangement.Center,
@@ -234,7 +236,7 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                     modifier = Modifier.padding(start = dp_8,
                         end = dp_8),
                     fontWeight = FontWeight.W600,
-                    fontFamily = montserrat, fontSize = 14.sp,
+                    fontFamily = zustFont, fontSize = 14.sp,
                     color = colorResource(id = R.color.white),
                     textAlign = TextAlign.Center)
 
@@ -263,7 +265,7 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                 }) {
                 Text(text = stringResource(R.string.add),
                     fontWeight = FontWeight.W600, color = colorResource(id = R.color.white),
-                    fontFamily = montserrat, fontSize = 12.sp)
+                    fontFamily = zustFont, fontSize = 12.sp)
             }
         }
 

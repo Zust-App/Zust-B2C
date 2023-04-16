@@ -32,7 +32,7 @@ fun OrderSecretCodeContainer(data: OrderDetailData?) {
         if (!data.secretCode.isNullOrEmpty()) {
             val (secretCodeTv, warningText) = createRefs()
             Text(text = Html.fromHtml("Secret code: <b>${data.secretCode}</b>").toString(),
-                style = Typography_Montserrat.body1,
+                style = ZustTypography.body1,
                 modifier = Modifier
                     .constrainAs(secretCodeTv) {
                         end.linkTo(parent.end, dp_12)
@@ -45,7 +45,7 @@ fun OrderSecretCodeContainer(data: OrderDetailData?) {
                     }, color = colorResource(id = R.color.new_material_primary))
 
             Text(text = stringResource(R.string.warning_secret_code),
-                style = Typography_Montserrat.body2,
+                style = ZustTypography.body2,
                 modifier = Modifier.constrainAs(warningText) {
                     end.linkTo(parent.end, dp_12)
                     top.linkTo(secretCodeTv.bottom, dp_8)

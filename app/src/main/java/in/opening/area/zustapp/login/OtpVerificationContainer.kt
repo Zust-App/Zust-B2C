@@ -5,7 +5,7 @@ import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.login.model.UserLoginModel
 import `in`.opening.area.zustapp.ui.generic.CustomUpBtn
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.uiModels.login.GetOtpLoginUi
 import `in`.opening.area.zustapp.uiModels.login.VerifyOtpUi
@@ -138,13 +138,13 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
 
         Text(text = buildString {
             append("Enter OTP")
-        }, color = colorResource(id = R.color.app_black), style = Typography_Montserrat.body1, modifier = Modifier.fillMaxWidth())
+        }, color = colorResource(id = R.color.app_black), style = ZustTypography.body1, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = buildString {
             append("Please enter the 4-digit OTP sent to you at ${obscureMobileNumber(user.mobileNum)}")
             //append(user.mobileNum)
-        }, style = Typography_Montserrat.subtitle1, fontSize = 14.sp, color = Color(0xff1E1E1E), modifier = Modifier.fillMaxWidth())
+        }, style = ZustTypography.subtitle1, fontSize = 14.sp, color = Color(0xff1E1E1E), modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -172,7 +172,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     top.linkTo(infoIcon.top)
                     start.linkTo(infoIcon.end, dp_4)
                     bottom.linkTo(infoIcon.bottom)
-                }, fontWeight = FontWeight.W500, color = colorResource(id = R.color.red_primary), style = Typography_Montserrat.subtitle1)
+                }, fontWeight = FontWeight.W500, color = colorResource(id = R.color.red_primary), style = ZustTypography.subtitle1)
             }
             if (!resendOtpTimeLeft.isNullOrEmpty()) {
                 Text(text = "Resend OTP in $resendOtpTimeLeft", modifier = Modifier.constrainAs(resendOtp) {
@@ -180,7 +180,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }, fontWeight = FontWeight.W500,
-                    style = Typography_Montserrat.subtitle1, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
+                    style = ZustTypography.subtitle1, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
             } else {
                 Text(text = "Resend OTP", modifier = Modifier
                     .constrainAs(resendTimer) {
@@ -197,7 +197,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                         }
                     }, fontWeight = FontWeight.W500,
                     color = colorResource(id = R.color.new_material_primary),
-                    fontSize = 12.sp, style = Typography_Montserrat.subtitle1)
+                    fontSize = 12.sp, style = ZustTypography.subtitle1)
             }
         }
 
@@ -209,7 +209,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
             Row(modifier = Modifier.wrapContentHeight()) {
                 Spacer(modifier = Modifier.width(4.dp))
             }
-            Text(text = "Verify OTP", textAlign = TextAlign.Center, style = Typography_Montserrat.body1, color = Color.White, modifier = Modifier
+            Text(text = "Verify OTP", textAlign = TextAlign.Center, style = ZustTypography.body1, color = Color.White, modifier = Modifier
                 .padding(6.dp)
                 .padding(0.dp))
         }

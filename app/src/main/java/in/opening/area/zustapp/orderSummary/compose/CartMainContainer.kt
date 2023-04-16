@@ -4,7 +4,7 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
 import `in`.opening.area.zustapp.orderSummary.OrderItemsClickListeners
-import `in`.opening.area.zustapp.ui.theme.Typography_Montserrat
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.uiModels.orderSummary.OrderSummaryUi
 import `in`.opening.area.zustapp.utility.startProductDetailPage
 import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
@@ -45,7 +45,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
                     }
                     item {
                         Text(text = "Items Added",
-                            style = Typography_Montserrat.body1,
+                            style = ZustTypography.body1,
                             color = colorResource(id = R.color.app_black))
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -79,7 +79,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
                     if (!cartResponse.data.suggestedProducts.isNullOrEmpty()) {
                         item {
                             Spacer(modifier = Modifier.height(28.dp))
-                            Text(text = "Before you checkout", style = Typography_Montserrat.body1, color = colorResource(id = R.color.app_black))
+                            Text(text = "Before you checkout", style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
                             Spacer(modifier = Modifier.height(24.dp))
                             UpSellingUi(cartResponse.data.suggestedProducts, listeners)
                         }
@@ -93,7 +93,7 @@ fun CartMainContainer(orderSummaryViewModel: OrderSummaryViewModel, listeners: O
                     item {
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(text = "Cancellation Policy",
-                            style = Typography_Montserrat.body1,
+                            style = ZustTypography.body1,
                             color = colorResource(id = R.color.app_black))
                         CancellationPolicyUi(orderSummaryViewModel)
                     }

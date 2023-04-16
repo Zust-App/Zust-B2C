@@ -37,7 +37,7 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                 start.linkTo(parent.start)
                 end.linkTo(invoiceDownloadIcon.start, dp_12)
                 width = Dimension.fillToConstraints
-            }, style = Typography_Montserrat.body1,
+            }, style = ZustTypography.body1,
             fontWeight = FontWeight.W700,
             fontSize = 18.sp,
             color = colorResource(id = color.app_black))
@@ -60,12 +60,12 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                 .clickable {
                     PdfViewer.openPdfUsingOrderId("", context)
                 },
-            style = Typography_Montserrat.body1,
+            style = ZustTypography.body1,
             fontSize = 12.sp)
 
         Text(text = "Your order has been successfully processed.",
             color = colorResource(id = color.black_3),
-            style = Typography_Montserrat.body2, modifier = Modifier
+            style = ZustTypography.body2, modifier = Modifier
                 .padding(end = 12.dp)
                 .constrainAs(subTitleText) {
                     top.linkTo(titleText.bottom, dp_8)

@@ -59,7 +59,7 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
         val (lottieAnimation) = createRefs()
 
         Image(
-            painter = painterResource(id = R.drawable.zust_white_text),
+            painter = painterResource(id = R.drawable.zust_app_white_text),
             contentDescription = "Zust App",
             modifier = Modifier
                 .clip(CircleShape)
@@ -69,8 +69,8 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .width(200.dp)
-                .height(200.dp)
+                .width(240.dp)
+                .height(240.dp)
                 .scale(scale.value),
             contentScale = ContentScale.FillWidth,
         )

@@ -2,11 +2,10 @@ package `in`.opening.area.zustapp.home.components
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.DrawDashLine
-import `in`.opening.area.zustapp.ui.theme.montserrat
+import `in`.opening.area.zustapp.ui.theme.zustFont
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -32,7 +31,7 @@ fun LazyListScope.homePageBrandPromiseUi() {
             DrawDashLine()
             Spacer(modifier = Modifier.height(20.dp))
             Text(color = colorResource(id = R.color.nobel),
-                inlineContent = inlineContent, text = text, style = TextStyle(fontFamily = montserrat,
+                inlineContent = inlineContent, text = text, style = TextStyle(fontFamily = zustFont,
                     fontWeight = FontWeight.W700, fontSize = 32.sp))
             Spacer(modifier = Modifier.height(30.dp))
         }
