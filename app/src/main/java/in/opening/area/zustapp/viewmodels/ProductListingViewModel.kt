@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductListingViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager, private val productRepo: ProductRepo) : OrderSummaryNetworkVM(apiRequestManager) {
+class ProductListingViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager,
+                                                  private val productRepo: ProductRepo) : OrderSummaryNetworkVM(apiRequestManager) {
     internal val subCategoryFlow = MutableStateFlow(SubCategoryDataMode())
     internal var headingData = MutableStateFlow("")
 

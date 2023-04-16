@@ -7,10 +7,7 @@ import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -50,8 +47,7 @@ fun ProductDetailTopBarUi(
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = colorResource(id = R.color.white),
-            contentDescription = stringResource(R.string.arrow), modifier = Modifier
-                .size(20.dp)
+            contentDescription = stringResource(R.string.arrow), modifier = Modifier.wrapContentHeight().wrapContentWidth()
                 .constrainAs(profileIcon) {
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start, dp_16)

@@ -32,6 +32,13 @@ val montserratFontFamily = FontFamily(
     Font(R.font.montserrat_semibold, FontWeight.W600),
     Font(R.font.montserrat_bold, FontWeight.W700))
 
+val anuphanFontFamily = FontFamily(
+    Font(R.font.anuphan_light, FontWeight.W300),
+    Font(R.font.anuhan_regular, FontWeight.W400),
+    Font(R.font.anuphan_medium, FontWeight.W500),
+    Font(R.font.anuphan_medium, FontWeight.W600),
+    Font(R.font.anuphan_bold, FontWeight.W700))
+
 
 val openSansFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300),
     Font(R.font.open_sans_regular, FontWeight.W400), Font(R.font.open_sans_medium, FontWeight.W500),
@@ -87,6 +94,25 @@ val Typography_Okra by lazy {
             fontWeight = FontWeight.W500
         ),
         subtitle1 = TextStyle(fontFamily = okraFontFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400
+        ))
+}
+
+
+val Typography_Anuphan by lazy {
+    androidx.compose.material.Typography(
+        body1 = TextStyle(
+            fontFamily = anuphanFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W600
+        ),
+        body2 = TextStyle(
+            fontFamily = anuphanFontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W500
+        ),
+        subtitle1 = TextStyle(fontFamily = anuphanFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))

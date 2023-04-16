@@ -3,10 +3,7 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.product.Utils
-import `in`.opening.area.zustapp.product.model.CreateCartReqModel
-import `in`.opening.area.zustapp.product.model.ProductApiResponse
-import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.product.model.convertProductToCreateOrder
+import `in`.opening.area.zustapp.product.model.*
 import `in`.opening.area.zustapp.repository.ProductRepo
 import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -22,7 +19,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchProductViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager, private val productRepo: ProductRepo) : OrderSummaryNetworkVM(apiRequestManager) {
+class SearchProductViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager,
+                                                 private val productRepo: ProductRepo) : OrderSummaryNetworkVM(apiRequestManager) {
 
     internal val productListUiState = MutableStateFlow<ProductListUi>(ProductListUi.InitialUi(false))
     internal var searchTextCache: String = ""

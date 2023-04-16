@@ -125,11 +125,11 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                                 }) {
                                 items(data.data.productItems!!) {
                                     SearchResultVerticalLayout(it, searchResultModifier,
-                                         { product ->
-                                        didTapOnIncrementCount(product)
-                                    }, { product ->
-                                        didTapOnDecrementCount(product)
-                                    }) { product ->
+                                        { product ->
+                                            didTapOnIncrementCount(product)
+                                        }, { product ->
+                                            didTapOnDecrementCount(product)
+                                        }) { product ->
                                         context.startProductDetailPage(product)
                                     }
                                 }
@@ -207,7 +207,8 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
 
 private val searchResultModifier = Modifier
     .fillMaxWidth()
-    .wrapContentHeight().padding(bottom = 8.dp)
+    .wrapContentHeight()
+    .padding(bottom = 8.dp)
     .background(color = Color(0xffffffff))
     .padding(start = 12.dp,
         end = 16.dp,

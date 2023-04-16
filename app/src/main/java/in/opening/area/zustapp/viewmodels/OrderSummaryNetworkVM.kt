@@ -3,6 +3,7 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.product.model.CreateCartReqModel
+import `in`.opening.area.zustapp.repository.ProductRepo
 import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
 import `in`.opening.area.zustapp.uiModels.VALUE
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -28,7 +29,7 @@ open class OrderSummaryNetworkVM @Inject constructor(private val apiRequestManag
             when (val response = apiRequestManager.createCartWithServer(addToCartFlow.value)) {
                 is ResultWrapper.Success -> {
                     if (response.value.createCartData != null) {
-                        createCartUiState.update { CreateCartResponseUi.CartSuccess(false, response.value.createCartData,value) }
+                        createCartUiState.update { CreateCartResponseUi.CartSuccess(false, response.value.createCartData, value) }
                     } else {
                         createCartUiState.update { CreateCartResponseUi.ErrorUi(false, errorMsg = response.value.message, errors = response.value.errors) }
                     }
