@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.product
 
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.product.model.SingleSubCategory
 import `in`.opening.area.zustapp.product.model.SubCategoryDataMode
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
@@ -31,8 +32,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun SubCategoryContainer(layoutScope: ConstraintLayoutScope, subCategoryList: ConstrainedLayoutReference, productList: ConstrainedLayoutReference,
-                         productListingViewModel: ProductListingViewModel) {
+fun SubCategoryContainer(
+    layoutScope: ConstraintLayoutScope, subCategoryList: ConstrainedLayoutReference, productList: ConstrainedLayoutReference,
+    productListingViewModel: ProductListingViewModel,
+) {
     val subCategory by productListingViewModel.subCategoryFlow.collectAsState(initial = SubCategoryDataMode())
 
     layoutScope.apply {

@@ -1,9 +1,13 @@
 package `in`.opening.area.zustapp.repository
 
 import `in`.opening.area.zustapp.abstraction.TransactionRunnerDao
+import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.storage.db.dao.AddToCartDao
 import `in`.opening.area.zustapp.viewmodels.ACTION
+import androidx.room.Transaction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -55,5 +59,19 @@ class DbAddToCartRepository @Inject constructor(private var addToCartDao: AddToC
 
     private suspend fun increaseCount(productId: String) = addToCartDao.increaseUserProductCount(productId)
     private suspend fun decreaseCount(productId: String) = addToCartDao.decreaseUserProductCount(productId)
+
+    suspend fun updateCartPrice(createCartData: CreateCartData): Boolean {
+        return try {
+            runInTransaction {
+                createCartData.items.forEach {
+                    addToCartDao.updateProductPriceAndMrp(it.productPriceId.toString(), it.mrp, it.payablePrice)
+                }
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 
 }

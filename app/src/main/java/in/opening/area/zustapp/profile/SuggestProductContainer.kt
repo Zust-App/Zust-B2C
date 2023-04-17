@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.profile
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
@@ -8,6 +9,7 @@ import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.ProfileViewModel
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -115,6 +117,9 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
             onClick = {
                 if (inputText.isNotEmpty()) {
                     rememberLoadingState = true
+                    val bundle = Bundle()
+                    bundle.putString("product_name", inputText)
+                    FirebaseAnalytics.logEvents(FirebaseAnalytics.SUGGEST_PRODUCT, bundle)
                     profileViewModel.sendUserSuggestProduct(SuggestProductReqModel(inputText))
                 } else {
                     AppUtility.showToast(context, context.getString(R.string.please_wirte_any_address))

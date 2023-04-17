@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 open class ProductRepo @Inject constructor(
     val apiRequestManager: ApiRequestManager,
-    private val dbRepo: DbAddToCartRepository,
+    val dbRepo: DbAddToCartRepository,
 ) {
 
     suspend fun insertOrUpdateProduct(product: ProductSingleItem, action: ACTION) {

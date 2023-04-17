@@ -1,7 +1,6 @@
 package `in`.opening.area.zustapp.viewmodels
 
 import `in`.opening.area.zustapp.address.model.getDisplayString
-import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.orderDetail.models.Address
 import `in`.opening.area.zustapp.orderSummary.model.CancellationPolicyUiModel
@@ -29,9 +28,8 @@ val IO = Dispatchers.IO
 
 @HiltViewModel
 class OrderSummaryViewModel @Inject constructor(
-    private val apiRequestManager: ApiRequestManager,
     private val productRepo: ProductRepo,
-) : OrderSummaryNetworkVM(apiRequestManager) {
+) : OrderSummaryNetworkVM(productRepo) {
 
     @Inject
     lateinit var sharedPrefManager: SharedPrefManager
@@ -148,7 +146,7 @@ class OrderSummaryViewModel @Inject constructor(
             val lockOrderSummaryModel = LockOrderSummaryModel(addressId = addressItemCache!!.id,
                 lockOrderSummaryItems = lockOrderSummaryItems,
                 merchantId = 1, orderId = orderId, deliveryPartnerTip = deliveryPartnerTipAmount)
-            when (val response = apiRequestManager.syncUserCartWithServerAndLock(lockOrderSummaryModel)) {
+            when (val response = productRepo.apiRequestManager.syncUserCartWithServerAndLock(lockOrderSummaryModel)) {
                 is ResultWrapper.Success -> {
                     if (response.value.lockOrderResponseData != null) {
                         lockedCartUiState.update {
@@ -215,7 +213,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     private fun getUpsellingProducts(params: String) = viewModelScope.launch {
-        when (val response = apiRequestManager.getUpsellingProducts(params)) {
+        when (val response = productRepo.apiRequestManager.getUpsellingProducts(params)) {
             is ResultWrapper.Success -> {
                 if (response.value.data?.productItems?.isEmpty() == false) {
                     upSellingProductsCache = (response.value.data.productItems as ArrayList<ProductSingleItem>?)!!

@@ -5,6 +5,7 @@ import `in`.opening.area.zustapp.address.AddressAddSelectActivity
 import `in`.opening.area.zustapp.address.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
@@ -135,11 +136,13 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
             AppUtility.showToast(this, getString(R.string.common_error_message))
             return
         }
+
         val itemCount = data.items.sumOf {
             it.numberOfItem
         }
         orderSummaryViewModel.lockedCartUiState.update { LockOrderCartUi.InitialUi(false) }
         val reqData = PaymentActivityReqData()
+        val bundle = Bundle()
         reqData.apply {
             orderId = data.orderId
             itemPrice = data.itemTotalPrice
@@ -150,6 +153,11 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
             expectedDelivery = data.expectedDelivery
             isFreeDelivery = data.isFreeDelivery
         }
+        bundle.putInt("item_count", itemCount)
+        bundle.putInt("order_id", data.orderId)
+        bundle.putDouble("delivery_fee", data.deliveryFee)
+        bundle.putDouble("item_total", data.itemTotalPrice)
+        FirebaseAnalytics.logEvents(FirebaseAnalytics.OPEN_PAYMENT_PAGE,bundle)
         val paymentIntent = Intent(this, PaymentActivity::class.java)
         paymentIntent.putExtra(PAYMENT_MODEL_KEY, reqData)
         paymentIntent.putExtra(TOTAL_ITEMS_IN_CART, itemCount)

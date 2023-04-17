@@ -50,7 +50,12 @@ interface AddToCartDao {
             insertSingleCart(addToCartModel)
         }
     }
+
     @Query(query_select_all)
     fun getAllCartItemWithoutFlow(): List<ProductSingleItem>
+
+
+    @Query("UPDATE cart SET price = :newPrice, mrp=:mrp WHERE productPriceId = :productPriceId")
+    fun updateProductPriceAndMrp(productPriceId: String, mrp: Double, newPrice: Double)
 
 }

@@ -1,6 +1,9 @@
 package `in`.opening.area.zustapp.refer.ui
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.REFERRAL_CODE_COPY
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.REFER_AND_EARN_BTN
 import `in`.opening.area.zustapp.profile.models.Refer
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
@@ -73,7 +76,8 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
 
             Icon(painter = painterResource(id = R.drawable.ic_round_content_copy_24),
                 contentDescription = null, modifier = Modifier.clickable {
-                AppUtility.copyToClipboard(context, refer.code, "referral code")
+                    FirebaseAnalytics.logEvents(REFERRAL_CODE_COPY)
+                    AppUtility.copyToClipboard(context, refer.code, "referral code")
             })
             Text(text = stringResource(R.string.copy_code), style = ZustTypography.body2,
                 modifier = Modifier
@@ -84,6 +88,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
         }
         Spacer(modifier = Modifier.height(dp_16))
         Button(onClick = {
+            FirebaseAnalytics.logEvents(REFER_AND_EARN_BTN)
             val getText = AppUtility.getSharableTextOfReferralCode(refer.code)
             AppUtility.showShareIntent(context, getText)
         }, modifier = Modifier

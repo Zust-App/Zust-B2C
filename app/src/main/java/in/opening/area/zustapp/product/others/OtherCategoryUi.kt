@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.product.others
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.product.compose.OtherCategoryShimmerUi
 import `in`.opening.area.zustapp.product.model.OtherCategoriesUiModel
 import `in`.opening.area.zustapp.product.model.SingleCategoryData
@@ -85,6 +86,7 @@ fun OptionalCategoryItem(categoryItem: SingleCategoryData, selectedCategoryId: I
     }
     val isSelectedItem = categoryItem.id == selectedCategoryId
     ConstraintLayout(modifier = Modifier.clickable {
+        FirebaseAnalytics.logEvents(FirebaseAnalytics.PRODUCT_LISTING_CATEGORY_CLICK)
         clickCallback.invoke(categoryItem)
     }) {
         val (image, title) = createRefs()

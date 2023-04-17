@@ -4,6 +4,8 @@ import `in`.opening.area.zustapp.address.AddressAddSelectActivity
 import `in`.opening.area.zustapp.address.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.ORDER_HISTORY_CLICK_BTM_NAV
 import `in`.opening.area.zustapp.compose.CustomBottomNavigation
 import `in`.opening.area.zustapp.compose.CustomTopBar
 import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
@@ -261,6 +263,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private fun handleBottomNavCallback(homeBottomNavTypes: HomeBottomNavTypes, data: Any?) {
         if (homeBottomNavTypes == HomeBottomNavTypes.Orders) {
+            FirebaseAnalytics.logEvents(ORDER_HISTORY_CLICK_BTM_NAV,null)
             this.startMyOrders()
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -273,6 +276,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private fun startOrderSummaryActivity(createCartData: CreateCartData) {
         homeViewModel.createCartUiState.update { CreateCartResponseUi.InitialUi(false) }
+        FirebaseAnalytics.logEvents(FirebaseAnalytics.CLICK_ON_VIEW_CART_SUCCESS_MOVE)
         val intent = Intent(this, OrderSummaryActivity::class.java)
         val paymentActivityReqData = PaymentActivityReqData()
         paymentActivityReqData.apply {
@@ -287,6 +291,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         }
         intent.putExtra(PaymentActivity.PAYMENT_MODEL_KEY, paymentActivityReqData)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
 }

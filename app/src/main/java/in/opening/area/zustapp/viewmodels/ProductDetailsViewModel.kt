@@ -1,7 +1,5 @@
 package `in`.opening.area.zustapp.viewmodels
 
-import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
-import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.product.Utils
 import `in`.opening.area.zustapp.product.model.CreateCartReqModel
@@ -9,6 +7,7 @@ import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.product.model.convertProductToCreateOrder
 import `in`.opening.area.zustapp.productDetails.models.convertToProductSingleItems
 import `in`.opening.area.zustapp.repository.ProductRepo
+import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductDetailsViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager, private val productRepo: ProductRepo) : OrderSummaryNetworkVM(apiRequestManager) {
+class ProductDetailsViewModel @Inject constructor(private val productRepo: ProductRepo) : OrderSummaryNetworkVM(productRepo) {
     private var productId: String? = null
     private var merchantId: String? = null
     internal val singleItemUiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.InitialUi(false))
@@ -59,7 +58,7 @@ class ProductDetailsViewModel @Inject constructor(private val apiRequestManager:
             singleItemUiState.update {
                 ProductDetailsUiState.InitialUi(true)
             }
-            when (val response = apiRequestManager.getProductDetails(merchantId = merchantId!!.toLong(), productId = productId!!.toLong())) {
+            when (val response = productRepo.apiRequestManager.getProductDetails(merchantId = merchantId!!.toLong(), productId = productId!!.toLong())) {
                 is ResultWrapper.Success -> {
                     response.value.data?.let {
                         productVariants = it.convertToProductSingleItems()

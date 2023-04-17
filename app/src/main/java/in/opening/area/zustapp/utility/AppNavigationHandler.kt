@@ -1,6 +1,12 @@
 package `in`.opening.area.zustapp.utility
 
 import `in`.opening.area.zustapp.HomeLandingActivity
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_CATEGORY_CLICK
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_CALL
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_WA_ORDER
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PRODUCT_DETAIL_CLICK
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.START_SEARCH_ACTIVITY
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
@@ -15,10 +21,15 @@ import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
     if (categoryId != null) {
+        val bundle = Bundle()
+        bundle.putString("name", categoryName)
+        bundle.putInt("id", categoryId)
+        FirebaseAnalytics.logEvents(HOME_CATEGORY_CLICK, bundle)
         val intent = Intent(this, ProductListingActivity::class.java)
         intent.putExtra(ProductListingActivity.CATEGORY_ID, categoryId)
         if (categoryName != null) {
@@ -29,6 +40,10 @@ fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
 }
 
 fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
+    val bundle = Bundle()
+    bundle.putString("name", productSingleItem.productName)
+    bundle.putString("id", productSingleItem.productPriceId)
+    FirebaseAnalytics.logEvents(PRODUCT_DETAIL_CLICK, bundle)
     val productDetailIntent = Intent(this, ProductDetailsActivity::class.java)
     productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_ID, productSingleItem.productGroupId)
     productDetailIntent.putExtra(ProductDetailsActivity.MERCHANT_ID, "1")
@@ -90,6 +105,7 @@ fun Context.proceedToOrderDetails(orderId: Int?) {
 }
 
 fun Context.startSearchActivity() {
+    FirebaseAnalytics.logEvents(START_SEARCH_ACTIVITY)
     val searchIntent = Intent(this, SearchProductActivity::class.java)
     startActivity(searchIntent)
 }
@@ -100,6 +116,7 @@ fun Context.startUserProfileActivity() {
 }
 
 fun Context.openWhatsAppOrderIntent() {
+    FirebaseAnalytics.logEvents(OPEN_WA_ORDER)
     val sendIntent = Intent(Intent.ACTION_VIEW)
     sendIntent.data = Uri.parse(AppUtility.getWhatsappHelpUrl())
     if (AppUtility.isAppInstalled(AppUtility.WA_PACKAGE_NAME)) {
@@ -110,6 +127,7 @@ fun Context.openWhatsAppOrderIntent() {
 }
 
 fun Context?.openCallIntent(phoneNumber: String) {
+    FirebaseAnalytics.logEvents(OPEN_CALL)
     try {
         val phone = if (phoneNumber.contains("+91")) {
             phoneNumber

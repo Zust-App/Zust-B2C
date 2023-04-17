@@ -15,6 +15,7 @@ import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.moveToInAppWebPage
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import android.content.Context
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.update
 
+
+const val APP_TC_URL = "https://zustapp.com/term-and-condition"
+const val APP_PRIVACY_URL = "https://zustapp.com/privacy-policy.html"
+
 @Composable
 fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String) -> Unit) {
     val user by loginViewModel.userLoginModelFlow.collectAsState(initial = UserLoginModel())
@@ -57,6 +62,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
         }
         is GetOtpLoginUi.OtpGetSuccess -> {
             if (response.data.isNotificationSent == true) {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.LOGIN_GET_OTP_SUCCESS)
                 canShowProgressbar = false
                 navigationAction.invoke(LoginNav.MOVE_TO_OTP)
                 loginViewModel.getOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
@@ -65,6 +71,9 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
             }
         }
         is GetOtpLoginUi.ErrorUi -> {
+            val bundle = Bundle()
+            bundle.putString("phone_num", user.mobileNum)
+            FirebaseAnalytics.logEvents(FirebaseAnalytics.LOGIN_GET_OTP_ERROR, bundle)
             if (!response.errorMsg.isNullOrEmpty()) {
                 AppUtility.showToast(context, response.errorMsg)
             } else {
@@ -182,10 +191,5 @@ fun proceedToGetOtp(mobileNumber: String?, context: Context?, loginViewModel: Lo
         loginViewModel.makeLoginRequestForGetOtp(mobileNumber)
     }
 }
-
-
-const val APP_TC_URL = "https://zustapp.com/term-and-condition"
-const val APP_PRIVACY_URL = "https://zustapp.com/privacy-policy.html"
-
 
 

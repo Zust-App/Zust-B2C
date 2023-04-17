@@ -1,6 +1,7 @@
 package `in`.opening.area.zustapp.ui.generic
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.CreateCartReqModel
@@ -50,6 +51,7 @@ fun CustomBottomBarView(
 
         when (val response = cartUiState) {
             is CreateCartResponseUi.ErrorUi -> {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.CLICK_ON_VIEW_CART_ERROR)
                 if (!response.errorMsg.isNullOrEmpty()) {
                     AppUtility.showToast(context, response.errorMsg)
                 } else {
@@ -58,6 +60,7 @@ fun CustomBottomBarView(
             }
             is CreateCartResponseUi.CartSuccess -> {
                 if (response.value == type) {
+                    FirebaseAnalytics.logEvents(FirebaseAnalytics.CLICK_ON_VIEW_CART_SUCCESS)
                     successCallback.invoke(response.data)
                 }
             }
@@ -81,6 +84,7 @@ fun CustomBottomBarView(
             BottomAppBar(
                 modifier = Modifier
                     .clickable {
+                        FirebaseAnalytics.logEvents(FirebaseAnalytics.CLICK_ON_VIEW_CART)
                         proceedToCartClick.invoke()
                     }
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp, 0.dp, 0.dp)),
@@ -88,7 +92,7 @@ fun CustomBottomBarView(
             ) {
                 ConstraintLayout(modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)) {
+                    .height(36.dp)) {
                     val (itemCount, price, viewCart, progressBar, viewCartIcon) = createRefs()
                     Text(text = addToCart.totalItemCount.toString() + " Items", modifier = Modifier.constrainAs(itemCount) {
                         start.linkTo(parent.start, dp_16)
@@ -100,7 +104,7 @@ fun CustomBottomBarView(
                             ProductUtils.roundTo1DecimalPlaces(addToCart.calculatedPrice),
                         modifier = Modifier.constrainAs(price) {
                             start.linkTo(parent.start, dp_16)
-                            top.linkTo(itemCount.bottom, dp_4)
+                            top.linkTo(itemCount.bottom, dp_8)
                             bottom.linkTo(parent.bottom, dp_4)
                         }, color = colorResource(id = R.color.white),
                         style = ZustTypography.body1,
@@ -109,16 +113,16 @@ fun CustomBottomBarView(
                     Text(text = stringResource(R.string.view_cart),
                         modifier = Modifier.constrainAs(viewCart) {
                             end.linkTo(viewCartIcon.start, dp_12)
-                            top.linkTo(parent.top, dp_20)
-                            bottom.linkTo(parent.bottom, dp_20)
+                            top.linkTo(parent.top, dp_8)
+                            bottom.linkTo(parent.bottom, dp_8)
                         }, color = colorResource(id = R.color.white),
                         style = ZustTypography.body1)
 
                     Icon(painter = painterResource(id = R.drawable.arrow_right_icon),
                         contentDescription = "", modifier = Modifier.constrainAs(viewCartIcon) {
-                            end.linkTo(parent.end, dp_20)
-                            top.linkTo(parent.top, dp_20)
-                            bottom.linkTo(parent.bottom, 20.dp)
+                            end.linkTo(parent.end, dp_8)
+                            top.linkTo(viewCart.top)
+                            bottom.linkTo(viewCart.bottom)
                         }, tint = colorResource(id = R.color.white))
 
                     if (cartUiState.isLoading) {

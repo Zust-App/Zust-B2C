@@ -1,6 +1,5 @@
 package `in`.opening.area.zustapp.viewmodels
 
-import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.product.Utils
 import `in`.opening.area.zustapp.product.model.*
@@ -12,13 +11,15 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductListingViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager,
-                                                  private val productRepo: ProductRepo) : OrderSummaryNetworkVM(apiRequestManager) {
+class ProductListingViewModel @Inject constructor(private val productRepo: ProductRepo) : OrderSummaryNetworkVM(productRepo) {
     internal val subCategoryFlow = MutableStateFlow(SubCategoryDataMode())
     internal var headingData = MutableStateFlow("")
 
@@ -103,7 +104,7 @@ class ProductListingViewModel @Inject constructor(private val apiRequestManager:
     }
 
     internal fun getSubCategoryListFromServer(categoryId: Int) = viewModelScope.launch {
-        val response = apiRequestManager.getSubCategoryFromServer(categoryId)
+        val response = productRepo.apiRequestManager.getSubCategoryFromServer(categoryId)
         if (response is ResultWrapper.Success) {
             val value = response.value
             if (value.data != null) {
@@ -139,7 +140,7 @@ class ProductListingViewModel @Inject constructor(private val apiRequestManager:
             OtherCategoriesUiModel.InitialUi(true)
         }
         if (allCategoryCache.isNullOrEmpty()) {
-            when (val response = apiRequestManager.getAllCategory()) {
+            when (val response = productRepo.apiRequestManager.getAllCategory()) {
                 is ResultWrapper.Success -> {
                     allCategoryCache = response.value.data as ArrayList<SingleCategoryData>?
                     categoryListUiState.update {

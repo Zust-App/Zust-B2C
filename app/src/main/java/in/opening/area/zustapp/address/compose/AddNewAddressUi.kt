@@ -1,6 +1,9 @@
 package `in`.opening.area.zustapp.address.compose
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.NEW_ADDRESS_ADD
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.NEW_ADDRESS_ADD_ERROR
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.locationManager.models.CustomLocationModel
@@ -10,6 +13,7 @@ import `in`.opening.area.zustapp.uiModels.SaveUserAddressUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import android.content.Context
+import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -65,6 +69,7 @@ fun AddNewAddressUi(
                 callback.invoke(data.data)
                 AppUtility.showToast(context, "Address saved successfully")
             } else {
+                FirebaseAnalytics.logEvents(NEW_ADDRESS_ADD_ERROR)
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
@@ -80,7 +85,7 @@ fun AddNewAddressUi(
             if (currentLocation.data != null) {
                 customLocationModel = currentLocation.data
                 if (!currentLocation.data.pinCode.isNullOrEmpty()) {
-                  //  inputPinCode = currentLocation.data.pinCode!!
+                    //  inputPinCode = currentLocation.data.pinCode!!
                 }
             }
         }
@@ -200,6 +205,13 @@ fun AddNewAddressUi(
             OutlinedButton(onClick = {
                 if (validateAddressLocally(inputPinCode, houseAndFloor, landmarkAndArea, context)) {
                     if (!viewModel.checkIsSaveAddressAlreadyGoing()) {
+                        val bundle = Bundle()
+                        bundle.putString("pincode", inputPinCode)
+                        bundle.putString("houseAndFloor", houseAndFloor)
+                        bundle.putString("landmark", landmarkAndArea)
+                        bundle.putDouble("latitude", customLocationModel.lat ?: 0.0)
+                        bundle.putDouble("longitude", customLocationModel.lng ?: 0.0)
+                        FirebaseAnalytics.logEvents(NEW_ADDRESS_ADD, bundle)
                         viewModel.userAddressInputCache.apply {
                             pinCode = inputPinCode
                             houseNumberAndFloor = houseAndFloor

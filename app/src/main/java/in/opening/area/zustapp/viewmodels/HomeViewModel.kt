@@ -5,12 +5,11 @@ import `in`.opening.area.zustapp.address.model.getDisplayString
 import `in`.opening.area.zustapp.home.models.HomeData
 import `in`.opening.area.zustapp.home.models.HomePageApiResponse
 import `in`.opening.area.zustapp.locationManager.UserLocationDetails
-import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.orderDetail.models.Address
 import `in`.opening.area.zustapp.product.Utils
 import `in`.opening.area.zustapp.product.model.*
-import `in`.opening.area.zustapp.repository.DbAddToCartRepository
+import `in`.opening.area.zustapp.repository.ProductRepo
 import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.HomePageResUi
@@ -18,15 +17,17 @@ import `in`.opening.area.zustapp.uiModels.LatestOrderUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val apiRequestManager: ApiRequestManager,
-    private val dbAddToCartRepository: DbAddToCartRepository,
-) : OrderSummaryNetworkVM(apiRequestManager) {
+    private val productRepo: ProductRepo,
+) : OrderSummaryNetworkVM(productRepo) {
     internal val userLocationFlow = MutableStateFlow(UserLocationDetails())
     internal val homePageUiState = MutableStateFlow<HomePageResUi>(HomePageResUi.InitialUi(false))
     internal val latestOrderUiState = MutableStateFlow<LatestOrderUi>(LatestOrderUi.InitialUi(false))
@@ -54,9 +55,9 @@ class HomeViewModel @Inject constructor(
     internal fun getHomePageData(lat: Double?, lng: Double?) = viewModelScope.launch {
         homePageUiState.update { HomePageResUi.InitialUi(true) }
         if (lat != null && lng != null) {
-            val trendingProductsResponse = apiRequestManager.getTrendingProductsWithFlow()
-            val homePageResponse = apiRequestManager.getHomePageDataWithFlow(lat, lng)
-            val addToCartProducts = dbAddToCartRepository.getAllCartItems()
+            val trendingProductsResponse = productRepo.apiRequestManager.getTrendingProductsWithFlow()
+            val homePageResponse = productRepo.apiRequestManager.getHomePageDataWithFlow(lat, lng)
+            val addToCartProducts = productRepo.dbRepo.getAllCartItems()
             combine(trendingProductsResponse, homePageResponse, addToCartProducts) { trend, homePage, localProducts ->
                 localProductCountMap = localProducts.associate { it.productPriceId to it.itemCountByUser }
                 mergeHomePageResponse(trend, homePage)
@@ -125,7 +126,7 @@ class HomeViewModel @Inject constructor(
         latestOrderUiState.update {
             LatestOrderUi.InitialUi(true)
         }
-        when (val response = apiRequestManager.getLatestOrderWhichNotDelivered()) {
+        when (val response = productRepo.apiRequestManager.getLatestOrderWhichNotDelivered()) {
             is ResultWrapper.Success -> {
                 if (response.value.statusCode == 401) {
                     moveToLoginPage.update { true }
@@ -153,7 +154,7 @@ class HomeViewModel @Inject constructor(
             return
         } else {
             viewModelScope.launch {
-                dbAddToCartRepository.insertOrUpdate(product, action)
+                productRepo.dbRepo.insertOrUpdate(product, action)
             }
         }
     }
@@ -187,7 +188,7 @@ class HomeViewModel @Inject constructor(
     }
 
     internal fun getAppMetaData() = viewModelScope.launch {
-        when (val response = apiRequestManager.getMetaData()) {
+        when (val response = productRepo.apiRequestManager.getMetaData()) {
             is ResultWrapper.Success -> {
                 response.value.data?.let {
                     if (it.isAppUpdateAvail == true) {

@@ -1,8 +1,10 @@
 package `in`.opening.area.zustapp.network
 
 import `in`.opening.area.zustapp.BuildConfig
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.utility.DeviceInfo
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import io.ktor.client.*
@@ -57,15 +59,24 @@ val ktorHttpClient = HttpClient(CIO) {
             }
         }
         level = LogLevel.ALL
-        install(ResponseObserver) {
-            onResponse { response ->
-                if (BuildConfig.DEBUG) {
-                    Log.e("Zust", "${response.status.value}")
-                }
+    }
+
+    install(ResponseObserver) {
+        onResponse { response ->
+            try {
+                val bundle = Bundle()
+                bundle.putString("url", response.call.request.url.toString())
+                bundle.putString("response_time", response.responseTime.toString())
+                bundle.putInt("response_status_code", response.status.value)
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.API_RESPONSE, bundle)
+            } catch (e: Exception) {
+                FirebaseAnalytics.logEvents(FirebaseAnalytics.API_ANDROID_EXCEPTION)
+            }
+            if (BuildConfig.DEBUG) {
+                Log.e("Zust code-->", "${response.status.value}")
             }
         }
     }
-
     install(DefaultRequest) {
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         headers {

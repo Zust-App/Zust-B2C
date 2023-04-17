@@ -19,11 +19,11 @@ class FontManager {
 }
 
 val okraFontFamily = FontFamily(
+    FontManager.fontLight,
     FontManager.fontRegular,
     FontManager.fontMedium,
     FontManager.fontSemiBold,
-    FontManager.fontBold,
-    FontManager.fontLight)
+    FontManager.fontBold)
 
 val montserratFontFamily = FontFamily(
     Font(R.font.montserrat_light, FontWeight.W300),
@@ -36,7 +36,7 @@ val anuphanFontFamily = FontFamily(
     Font(R.font.anuphan_light, FontWeight.W300),
     Font(R.font.anuhan_regular, FontWeight.W400),
     Font(R.font.anuphan_medium, FontWeight.W500),
-    Font(R.font.anuphan_medium, FontWeight.W600),
+    Font(R.font.anuphan_semibold, FontWeight.W600),
     Font(R.font.anuphan_bold, FontWeight.W700))
 
 
@@ -98,7 +98,6 @@ val Typography_Okra by lazy {
             fontWeight = FontWeight.W400
         ))
 }
-
 
 val Typography_Anuphan by lazy {
     androidx.compose.material.Typography(

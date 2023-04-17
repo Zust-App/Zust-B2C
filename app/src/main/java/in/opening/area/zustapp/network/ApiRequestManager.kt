@@ -1,15 +1,15 @@
 package `in`.opening.area.zustapp.network
 
+import `in`.opening.area.zustapp.BuildConfig
 import `in`.opening.area.zustapp.address.model.*
 import `in`.opening.area.zustapp.coupon.model.AppliedCouponResponse
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
-import `in`.opening.area.zustapp.payment.models.Payment
 import `in`.opening.area.zustapp.coupon.model.CouponModel
 import `in`.opening.area.zustapp.data.AppMetaDataResponse
 import `in`.opening.area.zustapp.fcm.FcmReqBodyModel
 import `in`.opening.area.zustapp.home.models.HomePageApiResponse
-import `in`.opening.area.zustapp.login.model.UpdateUserProfileResponse
 import `in`.opening.area.zustapp.login.model.GetOtpResponseModel
+import `in`.opening.area.zustapp.login.model.UpdateUserProfileResponse
 import `in`.opening.area.zustapp.login.model.VerifyOtpResponseModel
 import `in`.opening.area.zustapp.network.NetworkUtility.Companion.UPSELLING_PRODUCTS
 import `in`.opening.area.zustapp.network.requestBody.AuthVerificationBody
@@ -20,16 +20,13 @@ import `in`.opening.area.zustapp.orderHistory.models.RatingResponseModel
 import `in`.opening.area.zustapp.orderHistory.models.UserOrderHistoryModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderResponseModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryModel
-import `in`.opening.area.zustapp.payment.models.AvailTimeSlotsResponse
-import `in`.opening.area.zustapp.payment.models.CreatePaymentReqBodyModel
-import `in`.opening.area.zustapp.payment.models.CreatePaymentResponseModel
-import `in`.opening.area.zustapp.payment.models.PaymentMethodResponseModel
+import `in`.opening.area.zustapp.payment.models.*
 import `in`.opening.area.zustapp.product.model.*
 import `in`.opening.area.zustapp.productDetails.models.ProductDetailsModel
-import `in`.opening.area.zustapp.productDetails.models.ProductPriceDetails
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.profile.models.UserProfileResponse
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
+import `in`.opening.area.zustapp.utility.DeviceInfo
 import com.google.android.gms.maps.model.LatLng
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -40,12 +37,13 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiRequestManager @Inject constructor() {
-    companion object {
-        const val Authorization = "Authorization"
-    }
 
     @Inject
     lateinit var sharedPrefManager: SharedPrefManager
+
+    companion object {
+        const val Authorization = "Authorization"
+    }
 
     suspend inline fun makeLoginRequestForGetOtp(mobileNumber: String) = universalApiRequestManager {
         ktorHttpClient.get<GetOtpResponseModel>(NetworkUtility.END_POINT_REGISTER) {
@@ -54,7 +52,7 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend inline fun postAuthVerification(mobileNumber: String, otp: String) = universalApiRequestManager {
-        val authVerificationBody = AuthVerificationBody(deviceId = "123", otp = otp, phoneNo = mobileNumber)
+        val authVerificationBody = AuthVerificationBody(deviceId = DeviceInfo.getDeviceIdInfo(), otp = otp, phoneNo = mobileNumber)
         ktorHttpClient.post<VerifyOtpResponseModel>(NetworkUtility.END_POINT_AUTH_VERIFICATION) {
             contentType(ContentType.Application.Json)
             body = authVerificationBody
@@ -204,7 +202,7 @@ class ApiRequestManager @Inject constructor() {
     suspend fun verifyPaymentWithServer(paymentBody: Payment) = universalApiRequestManager {
         ktorHttpClient.post<String>(NetworkUtility.VERIFY_PAYMENT) {
             headers {
-                this.append(Authorization, "Basic e7rc0cb7ffdbYlHQlvgUAw==")
+                this.append(Authorization, BuildConfig.PAYMENT_TOKEN)
             }
             body = paymentBody
         }
