@@ -241,6 +241,13 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         if (intent.hasExtra(CustomFcmService.DEEP_LINK_DATA)) {
             AppDeepLinkHandler.handleDeepLink(intent, this)
         }
+        if (intent.data != null) {
+            if (homeViewModel.sharedPrefManager.checkIsProfileCreate()) {
+                AppDeepLinkHandler.handleWebLink(uri = intent.data, this)
+            } else {
+                moveToLoginActivity()
+            }
+        }
     }
 
 
@@ -263,7 +270,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private fun handleBottomNavCallback(homeBottomNavTypes: HomeBottomNavTypes, data: Any?) {
         if (homeBottomNavTypes == HomeBottomNavTypes.Orders) {
-            FirebaseAnalytics.logEvents(ORDER_HISTORY_CLICK_BTM_NAV,null)
+            FirebaseAnalytics.logEvents(ORDER_HISTORY_CLICK_BTM_NAV, null)
             this.startMyOrders()
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }

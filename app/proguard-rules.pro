@@ -39,11 +39,14 @@
 -keep class in.opening.area.zustapp.address.model.** { *; }
 -keep class in.opening.area.zustapp.utility.UserCustomError{ *; }
 -keep class in.opening.area.zustapp.utility.PagingMetadata{ *; }
+-keep class in.opening.area.zustapp.productDetails.models.**{ *; }
 
 -keepclassmembers class in.opening.area.zustapp.BuildConfig {
     public static java.lang.String DEV_BASE_URL;
     public static java.lang.String PROD_BASE_URL;
+    public static java.lang.String PAYMENT_TOKEN;
 }
+
 -renamesourcefileattribute SourceFile
 
 

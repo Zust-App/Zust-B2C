@@ -9,9 +9,11 @@ import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.ui.theme.zustFont
 import `in`.opening.area.zustapp.ui.theme.okraFontFamily
+import `in`.opening.area.zustapp.utility.AppUtility
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -42,6 +44,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
         setContent {
             MainUiContainer(completeOrderId)
         }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     @Composable
@@ -72,7 +75,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
                     fontFamily = zustFont,
                     color = colorResource(id = color.new_material_primary),
                     textAlign = TextAlign.Center)
-                ComposeLottieWithCallback(rawId = `in`.opening.area.zustapp.R.raw.success, modifier = Modifier
+                ComposeLottieWithCallback(rawId = R.raw.success, modifier = Modifier
                     .constrainAs(successAnimation) {
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
@@ -97,6 +100,12 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
         orderDetailIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(orderDetailIntent)
         overridePendingTransition(anim.slide_in_right, anim.slide_out_left)
+    }
+
+    private var onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            AppUtility.showToast(this@OrderConfirmationIntermediateActivity, "Please wait while")
+        }
     }
 }
 

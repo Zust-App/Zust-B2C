@@ -6,6 +6,8 @@ import `in`.opening.area.zustapp.home.models.HomePageGenericData
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -55,6 +57,30 @@ class AppDeepLinkHandler @Inject constructor() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+
+        /**
+         * format --> https://www.zustapp.com/pageName
+         */
+        private const val ORDER_DETAIL_PAGE = "orderDetails"
+        fun handleWebLink(uri: Uri? = null, context: Context?) {
+            if (uri == null || context == null) {
+                return
+            }
+            try {
+                val pathSegments = uri.pathSegments
+                if (pathSegments.isNotEmpty()) {
+                    val pageName = pathSegments[0]
+                    if (pageName.contains(ORDER_DETAIL_PAGE, true)) {
+                        val orderId = uri.getQueryParameter("orderId")
+                        if (orderId != null) {
+                            context.proceedToOrderDetails(orderId.toInt())
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                print(e.printStackTrace())
             }
         }
     }

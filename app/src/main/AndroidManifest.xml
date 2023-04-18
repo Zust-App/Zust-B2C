@@ -63,6 +63,7 @@
             android:theme="@style/Theme.CustomSplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -70,21 +71,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-            <intent-filter
-                android:autoVerify="true"
-                android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data
-                    android:host="www.zustapp.com"
-                    android:pathPrefix="/" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".productDetails.presentation.ProductDetailsActivity"
@@ -177,12 +163,34 @@
         </activity>
         <activity
             android:name=".HomeLandingActivity"
-            android:exported="false"
+            android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.ZustApp">
+            <tools:validation testUrl="https://www.zustapp.com/orderDetails/orderId?=12" />
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="www.zustapp.com" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.zustapp.com" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".search.SearchProductActivity"
