@@ -193,6 +193,7 @@ class HomeViewModel @Inject constructor(
                 response.value.data?.let {
                     if (it.isAppUpdateAvail == true) {
                         sharedPrefManager.saveFreeDeliveryBasePrice(it.freeDeliveryFee)
+                        sharedPrefManager.saveDeliveryFee(it.deliveryCharge)
                         isAppUpdateAvail.update { true }
                     }else{
                         isAppUpdateAvail.update { false }

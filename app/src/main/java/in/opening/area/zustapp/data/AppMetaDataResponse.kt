@@ -15,6 +15,7 @@ data class AppMetaData(
     val deliveryTip: DeliveryTip? = null,
     val projectBaseUrl: String,
     val testBaseUrl: String,
+    val deliveryCharge: Double? = 10.0,
     val isAppUpdateAvail: Boolean? = false,
     val freeDeliveryFee: Double? = 99.0,
 )

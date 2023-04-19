@@ -22,25 +22,16 @@ import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-private const val APP_VERSION_CODE = "version_code"
-private const val APP_VERSION_NAME = "version_name"
-private const val DEVICE_ID = "device_id"
+private const val APP_VERSION_CODE = "versionCode"
+private const val APP_VERSION_NAME = "versionName"
+private const val DEVICE_ID = "deviceId"
 private const val SOURCE = "ZUST_B2C"
-private const val OS_MODEL = "os_model"
-private const val DEVICE_MODEL = "device_model"
+private const val OS_MODEL = "osModel"
+private const val DEVICE_MODEL = "deviceModel"
 private const val BRAND = "brand"
 
 val ktorHttpClient = HttpClient(CIO) {
-//    engine {
-//        https {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                val customTrustManager = CustomX509TrustManager()
-//                val sslContext = SSLContext.getInstance("TLS")
-//                sslContext.init(null, arrayOf<TrustManager>(customTrustManager), SecureRandom())
-//                this.trustManager = customTrustManager
-//            }
-//        }
-//    }
+
     install(JsonFeature) {
         serializer = GsonSerializer()
     }
@@ -95,4 +86,13 @@ val ktorHttpClient = HttpClient(CIO) {
     }
 }
 
-
+//    engine {
+//        https {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                val customTrustManager = CustomX509TrustManager()
+//                val sslContext = SSLContext.getInstance("TLS")
+//                sslContext.init(null, arrayOf<TrustManager>(customTrustManager), SecureRandom())
+//                this.trustManager = customTrustManager
+//            }
+//        }
+//    }

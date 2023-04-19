@@ -39,7 +39,11 @@ fun DeliveryAddressContainer(data: OrderDetailData?) {
         }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
 
         Text(text = buildString {
-            append(address.landmark)
+            append(address.houseNumberAndFloor)
+            append(" ")
+            if (!address.landmark.equals("no",ignoreCase = true)) {
+                append(address.landmark)
+            }
             append(" ")
             append(address.description)
         }, modifier = Modifier.constrainAs(addressTag) {

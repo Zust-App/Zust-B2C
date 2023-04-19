@@ -1,8 +1,10 @@
 package `in`.opening.area.zustapp.webpage
 
 import `in`.opening.area.zustapp.databinding.ActivityInAppWebBinding
+import `in`.opening.area.zustapp.utility.AppUtility
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -14,18 +16,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
+
+@AndroidEntryPoint
 class InAppWebActivity : AppCompatActivity() {
 
     companion object {
         const val WEB_URL = "web_url"
         const val TITLE_TEXT = "title_text"
+        const val ORDER_ID = "order_id"
     }
 
     private var binding: ActivityInAppWebBinding? = null
 
     private var titleString: String? = null
     private var webUrl: String? = null
+    private val viewModel: InAppWebViewModel by viewModels()
+    private var orderId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +44,7 @@ class InAppWebActivity : AppCompatActivity() {
         receiveDataFromIntent()
         setUpTitleText()
         setUpData()
+        setUpObservers()
     }
 
     private fun receiveDataFromIntent() {
@@ -43,10 +54,13 @@ class InAppWebActivity : AppCompatActivity() {
         if (intent.hasExtra(WEB_URL)) {
             webUrl = intent.getStringExtra(WEB_URL)
         }
+        if (intent.hasExtra(ORDER_ID)) {
+            orderId = intent.getIntExtra(ORDER_ID, -1);
+        }
     }
 
     private fun setUpTitleText() {
-        if (webUrl.isNullOrEmpty()) {
+        if (webUrl.isNullOrEmpty() && (orderId == null || orderId == -1)) {
             finish()
             return
         }
@@ -67,13 +81,18 @@ class InAppWebActivity : AppCompatActivity() {
 
     private fun setUpWebView() {
         if (webUrl != null) {
-            binding?.customWebView?.webViewExtension(webUrl!!, this, {
-                binding?.composeView?.setContent {
-                    SetUpComposeView(it)
-                }
-            }, {
-                showHideLoader(it)
-            })
+            if (orderId == null) {
+                binding?.customWebView?.webViewExtension(webUrl!!, this, {
+                    binding?.composeView?.setContent {
+                        SetUpComposeView(it)
+                    }
+                }, {
+                    showHideLoader(it)
+                })
+            }
+            if (orderId != null && orderId != -1) {
+                viewModel.getInvoiceBasedOnOrder(orderId!!)
+            }
         } else {
             finish()
         }
@@ -125,4 +144,34 @@ class InAppWebActivity : AppCompatActivity() {
             webUrl = savedInstanceState.getString(WEB_URL)
         }
     }
+
+    private fun setUpObservers() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.orderUiResponse.collectLatest {
+                parseInvoiceResponse(it)
+            }
+        }
+    }
+
+    private fun parseInvoiceResponse(invoiceOrderUiState: InvoiceOrderUiState) {
+        showHideLoader(invoiceOrderUiState.isLoading)
+        when (invoiceOrderUiState) {
+            is InvoiceOrderUiState.Success -> {
+                if (invoiceOrderUiState.invoiceHtml != null) {
+                    binding?.customWebView?.loadData(invoiceOrderUiState.invoiceHtml, "text/html", "UTF-8");
+                } else {
+                    finish()
+                }
+            }
+            is InvoiceOrderUiState.Initial -> {
+                //leave as empty
+            }
+            is InvoiceOrderUiState.ErrorUi -> {
+                AppUtility.showToast(this, invoiceOrderUiState.errorMsg)
+                finish()
+            }
+        }
+    }
+
+
 }

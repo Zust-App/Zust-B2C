@@ -27,6 +27,7 @@ import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.profile.models.UserProfileResponse
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.utility.DeviceInfo
+import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
 import com.google.android.gms.maps.model.LatLng
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -390,6 +391,16 @@ class ApiRequestManager @Inject constructor() {
             }
             parameter("merchantId", merchantId)
             parameter("productId", productId)
+        }
+    }
+
+    suspend fun getInvoice(orderId: Int) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<InvoiceResponseModel>(NetworkUtility.ORDER_INVOICE) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("orderId", orderId)
         }
     }
 

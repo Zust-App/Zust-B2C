@@ -5,7 +5,10 @@ import `in`.opening.area.zustapp.R.color
 import `in`.opening.area.zustapp.orderDetail.models.OrderDetailData
 import `in`.opening.area.zustapp.orderDetail.utils.PdfViewer
 import `in`.opening.area.zustapp.ui.theme.*
+import `in`.opening.area.zustapp.utility.moveToInAppWebPage
+import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,10 +46,10 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
             color = colorResource(id = color.app_black))
         Icon(painter = painterResource(id = R.drawable.download_icon), contentDescription = "download",
             modifier = Modifier.constrainAs(invoiceDownloadIcon) {
-            top.linkTo(invoice.top)
-            bottom.linkTo(invoice.bottom)
-            start.linkTo(titleText.end)
-        })
+                top.linkTo(invoice.top)
+                bottom.linkTo(invoice.bottom)
+                start.linkTo(titleText.end)
+            })
         Text(text = "Download Bill",
             color = colorResource(id = color.new_material_primary),
             modifier = Modifier
@@ -58,7 +61,12 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                     start.linkTo(invoiceDownloadIcon.end, dp_6)
                 }
                 .clickable {
-                    PdfViewer.openPdfUsingOrderId("", context)
+                    val inAppWebActivity = Intent(context, InAppWebActivity::class.java).apply {
+                        putExtra(InAppWebActivity.WEB_URL, "")
+                        putExtra(InAppWebActivity.TITLE_TEXT, "Invoice")
+                        putExtra(InAppWebActivity.ORDER_ID, data.orderId)
+                    }
+                    context.startActivity(inAppWebActivity)
                 },
             style = ZustTypography.body1,
             fontSize = 12.sp)
@@ -75,7 +83,11 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                     width = Dimension.fillToConstraints
                 }
                 .clickable {
-                    PdfViewer.openPdfUsingOrderId("", context)
+                    val inAppWebActivity = Intent(context, InAppWebActivity::class.java)
+                    inAppWebActivity.putExtra(InAppWebActivity.WEB_URL, "")
+                    inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, "Invoice")
+                    inAppWebActivity.putExtra(InAppWebActivity.ORDER_ID, data.orderId)
+                    context.startActivity(inAppWebActivity)
                 })
     }
 }

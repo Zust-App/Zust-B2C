@@ -23,6 +23,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val SELECTED_LANG = "select_lang"
         const val USER_MOBILE_NUM = "user_mobile_num"
         const val FREE_DELIVERY_BASE_PRICE = "free_delivery_base_price"
+        const val DELIVERY_FEE_PRICE = "delivery_fee_price"
 
         const val SUPPORT_WA_NUM = "support_wa_num"
         const val SUPPORT_EMAIL = "support_email"
@@ -115,6 +116,15 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
 
     fun getFreeDeliveryBasePrice(): Int {
         return sharedPreferences.getFloat(FREE_DELIVERY_BASE_PRICE, 99f).toInt()
+    }
+
+
+    fun saveDeliveryFee(deliveryFee: Double?) {
+        sharedPreferences.edit().putFloat(DELIVERY_FEE_PRICE, (deliveryFee?.toFloat()) ?: 10f).apply()
+    }
+
+    fun getDeliveryFee(): Int {
+        return sharedPreferences.getFloat(DELIVERY_FEE_PRICE, 10f).toInt()
     }
 
     fun getSupportPhoneNumber(): String {

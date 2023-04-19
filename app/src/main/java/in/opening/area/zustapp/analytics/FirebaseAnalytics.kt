@@ -13,8 +13,8 @@ class FirebaseAnalytics @Inject constructor() {
         const val PRIVACY_POLICY_CLICK = "privacy_policy_view"
         const val TERM_VIEW = "term_condition_view"
         const val LOGIN_PROCEED = "login_proceed"
-        const val LOGIN_GET_OTP_ERROR="login_get_otp_error"
-        const val LOGIN_GET_OTP_SUCCESS="login_get_otp_success"
+        const val LOGIN_GET_OTP_ERROR = "login_get_otp_error"
+        const val LOGIN_GET_OTP_SUCCESS = "login_get_otp_success"
         const val RESEND_OTP_CLICK = "resend_otp_click"
         const val RESEND_OTP_SUCCESS = "resend_otp_success"
         const val RESEND_OTP_ERROR = "resend_otp_error"
@@ -60,14 +60,14 @@ class FirebaseAnalytics @Inject constructor() {
         const val OPEN_PAYMENT_PAGE = "open_payment_page"
         const val CLICK_ON_VIEW_CART_SUCCESS_MOVE = "click_on_view_cart_success_move"
         const val CLICK_ON_VIEW_CART_SUCCESS = "click_on_view_cart_success"
-        const val CLICK_ON_VIEW_CART="click_on_view_cart"
-        const val CLICK_ON_VIEW_CART_ERROR="click_on_view_cart_error"
-        const val PRODUCT_LISTING_CATEGORY_CLICK="product_listing_category_click"
-        const val START_SEARCH_ACTIVITY="start_search_activity"
-        const val OPEN_WA_ORDER="open_whatsapp_order"
-        const val OPEN_CALL="open_call"
-        const val REFER_AND_EARN_BTN="refer_and_earn_button"
-        const val REFERRAL_CODE_COPY="referral_code_copy"
+        const val CLICK_ON_VIEW_CART = "click_on_view_cart"
+        const val CLICK_ON_VIEW_CART_ERROR = "click_on_view_cart_error"
+        const val PRODUCT_LISTING_CATEGORY_CLICK = "product_listing_category_click"
+        const val START_SEARCH_ACTIVITY = "start_search_activity"
+        const val OPEN_WA_ORDER = "open_whatsapp_order"
+        const val OPEN_CALL = "open_call"
+        const val REFER_AND_EARN_BTN = "refer_and_earn_button"
+        const val REFERRAL_CODE_COPY = "referral_code_copy"
         fun logEvents(eventName: String?, bundle: Bundle? = null) {
             if (eventName != null) {
                 if (bundle != null) {
@@ -76,14 +76,6 @@ class FirebaseAnalytics @Inject constructor() {
                     FirebaseAnalytics.getInstance(MyApplication.appContext).logEvent(eventName, null)
                 }
             }
-        }
-    }
-
-    fun logFirebaseApiEvents(url: String?, statusCode: String?) {
-        if (url != null && statusCode != null) {
-            val bundle = Bundle()
-            bundle.putString(url, statusCode)
-            FirebaseAnalytics.getInstance(MyApplication.appContext).logEvent(KEY_API_EVENTS, bundle)
         }
     }
 

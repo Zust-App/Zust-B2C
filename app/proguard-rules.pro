@@ -40,6 +40,7 @@
 -keep class in.opening.area.zustapp.utility.UserCustomError{ *; }
 -keep class in.opening.area.zustapp.utility.PagingMetadata{ *; }
 -keep class in.opening.area.zustapp.productDetails.models.**{ *; }
+-keep class in.opening.area.zustapp.webpage.model.**{ *; }
 
 -keepclassmembers class in.opening.area.zustapp.BuildConfig {
     public static java.lang.String DEV_BASE_URL;

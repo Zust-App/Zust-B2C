@@ -50,17 +50,6 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
         isRefreshing = userBookingItems.loadState.refresh is LoadState.Loading,
     )
     val context= LocalContext.current
-    userBookingItems.apply {
-        if (userBookingItems.loadState.refresh is LoadState.Error) {
-            val error = (userBookingItems.loadState.refresh as LoadState.Error).error
-            if (error is NoPageFoundException) {
-                NoOrderFoundContainer()
-            }
-            if (error is LoadingError) {
-                AppUtility.showToast(context,"Something went wrong please try again")
-            }
-        }
-    }
     SwipeRefresh(
         state = state,
         onRefresh = {
@@ -99,6 +88,18 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
                     }
                 }
 
+            }
+        }
+    }
+
+    userBookingItems.apply {
+        if (userBookingItems.loadState.refresh is LoadState.Error) {
+            val error = (userBookingItems.loadState.refresh as LoadState.Error).error
+            if (error is NoPageFoundException) {
+                NoOrderFoundContainer()
+            }
+            if (error is LoadingError) {
+                AppUtility.showToast(context,"Something went wrong please try again")
             }
         }
     }

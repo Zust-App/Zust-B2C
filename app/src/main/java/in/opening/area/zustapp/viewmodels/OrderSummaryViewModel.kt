@@ -57,7 +57,7 @@ class OrderSummaryViewModel @Inject constructor(
     private var upSellingItemsId: Set<String> = hashSetOf()
     internal val addressLineData = MutableStateFlow("")
     private var freeDeliveryPrice: Int = 99
-
+    private var deliveryCharge :Int= 10
 
     init {
         cancellationPolicyCacheData.update {
@@ -115,7 +115,7 @@ class OrderSummaryViewModel @Inject constructor(
                     deliveryFee = if (totalCurrentPrice > freeDeliveryPrice) {
                         0.0
                     } else {
-                        paymentActivityReqData?.deliveryFee
+                        deliveryCharge.toDouble()
                     }, packagingFee = paymentActivityReqData?.packagingFee ?: 0.0))
         }
     }
@@ -237,6 +237,7 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun setFreeDeliveryBasePrice() {
         freeDeliveryPrice = sharedPrefManager.getFreeDeliveryBasePrice()
+        deliveryCharge = sharedPrefManager.getDeliveryFee()
     }
 
 

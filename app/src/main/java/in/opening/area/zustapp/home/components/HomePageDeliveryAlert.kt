@@ -19,15 +19,16 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
 const val KEY_DELIVERY_ALERT = "delivery_alert"
+const val DELIVERY_ALERT="Delivery Alert!!"
 fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callback: (ACTION) -> Unit) {
     item(key = KEY_DELIVERY_ALERT) {
         ConstraintLayout(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp)
             .wrapContentHeight()
-            .background(color = colorResource(id = R.color.light_green))) {
+            .background(color = colorResource(id = R.color.red_secondary))) {
             val (alertTextTitle, alertTextBody, waIcon, callUs) = createRefs()
-            Text(text = "Delivery Alert",
+            Text(text = DELIVERY_ALERT,
                 color = colorResource(id = R.color.white),
                 style = ZustTypography.body1,
                 modifier = Modifier

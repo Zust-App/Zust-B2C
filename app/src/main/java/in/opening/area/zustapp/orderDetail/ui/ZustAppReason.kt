@@ -19,7 +19,7 @@ import androidx.constraintlayout.compose.Dimension
 fun ZustAppReason(reason: String) {
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
-        .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(dp_8))) {
+        .background(color = colorResource(id = R.color.red_secondary), shape = RoundedCornerShape(dp_8))) {
         val (title, body) = createRefs()
         Text(text = "What we did mistake!!", color = colorResource(id = R.color.white),
             modifier = Modifier.constrainAs(title) {

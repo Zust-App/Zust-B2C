@@ -31,7 +31,7 @@ fun OrderSecretCodeContainer(data: OrderDetailData?) {
             shape = RoundedCornerShape(8.dp))) {
         if (!data.secretCode.isNullOrEmpty()) {
             val (secretCodeTv, warningText) = createRefs()
-            Text(text = Html.fromHtml("Secret code: <b>${data.secretCode}</b>").toString(),
+            Text(text = Html.fromHtml("Order OTP: <b>${data.secretCode}</b>").toString(),
                 style = ZustTypography.body1,
                 modifier = Modifier
                     .constrainAs(secretCodeTv) {
