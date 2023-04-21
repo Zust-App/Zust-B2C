@@ -6,6 +6,7 @@ import `in`.opening.area.zustapp.address.AddressSearchAndGoogleMapActivity.Compa
 import `in`.opening.area.zustapp.address.compose.SearchAddressMainUi
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.model.SearchPlacesDataModel
+import `in`.opening.area.zustapp.address.utils.AddressUtils
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import android.content.Context
 import android.content.Intent
@@ -27,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddressSearchFragment : Fragment() {
     private val viewModel: AddressViewModel by activityViewModels()
 
-    private var listener: AddressBtmSheetCallback? = null
+    private var listener: SearchPlaceAndLocationListeners? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(requireContext()).apply {
@@ -45,7 +46,7 @@ class AddressSearchFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is AddressBtmSheetCallback) {
+        if (context is SearchPlaceAndLocationListeners) {
             listener = context
         }
     }
@@ -55,13 +56,13 @@ class AddressSearchFragment : Fragment() {
             return
         }
         if (context != null) {
-            val mapActivity = Intent(context, AddressSearchAndGoogleMapActivity::class.java)
-            mapActivity.putExtra(ADDRESS_TEXT, address)
-            startActivity(mapActivity)
+            listener?.didReceivedSearchResult(address)
         }
     }
-    private fun processSelectedSearchAddress(searchPlacesDataModel: SearchPlacesDataModel) {
 
+    private fun processSelectedSearchAddress(searchPlacesDataModel: SearchPlacesDataModel) {
+        val address = AddressUtils.getLocationFromAddress(searchPlacesDataModel.description, context)
+        processWhenReceiveLatLng(address)
     }
 
     companion object {
@@ -74,6 +75,11 @@ class AddressSearchFragment : Fragment() {
         }
     }
 
+}
+
+interface SearchPlaceAndLocationListeners {
+    fun didTapOnSavedAddress(savedAddress: AddressItem)
+    fun didReceivedSearchResult(address: Address?)
 }
 
 interface AddressBtmSheetCallback {

@@ -2,19 +2,22 @@ package `in`.opening.area.zustapp.address
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.AddNewAddressActivity.Companion.ADDRESS_EDIT_KEY
+import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.model.SearchAddressModel
 import `in`.opening.area.zustapp.address.v2.AddressGoogleMapFragment
 import `in`.opening.area.zustapp.address.v2.AddressSearchFragment
+import `in`.opening.area.zustapp.address.v2.SearchPlaceAndLocationListeners
 import `in`.opening.area.zustapp.databinding.ActivityAddressSearchBinding
 import `in`.opening.area.zustapp.utility.ShowToast
 import android.content.Intent
+import android.location.Address
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class AddressSearchAndGoogleMapActivity : AppCompatActivity(), ShowToast {
+class AddressSearchAndGoogleMapActivity : AppCompatActivity(), SearchPlaceAndLocationListeners {
     private var binding: ActivityAddressSearchBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,17 +38,23 @@ class AddressSearchAndGoogleMapActivity : AppCompatActivity(), ShowToast {
         }
     }
 
-
     companion object {
         const val PLACES_SEARCH_THRESHOLD = 3
         const val ADDRESS_TEXT = "address_text"
     }
 
-
     private fun startAddressInputActivity(searchAddressModel: SearchAddressModel) {
         val inputAddressActivity = Intent(this, AddNewAddressActivity::class.java)
         inputAddressActivity.putExtra(ADDRESS_EDIT_KEY, searchAddressModel)
         startActivity(inputAddressActivity)
+    }
+
+    override fun didTapOnSavedAddress(savedAddress: AddressItem) {
+
+    }
+
+    override fun didReceivedSearchResult(address: Address?) {
+        showFragments(2)
     }
 
 
