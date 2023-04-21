@@ -60,7 +60,7 @@ class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
         binding?.mapView?.getMapAsync(this)
         fusedLocationClient = this.activity?.let { LocationServices.getFusedLocationProviderClient(it) };
         showHideLocationData(false)
-
+        address=viewModel.searchedAddress;
     }
 
     private fun processWithCurrentLocation() {

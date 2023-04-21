@@ -6,6 +6,7 @@ import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.uiModels.AddressValidationUi
 import `in`.opening.area.zustapp.uiModels.SearchPlacesUi
 import `in`.opening.area.zustapp.utility.AddressUtils.Companion.parseSearchResult
+import android.location.Address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ open class SearchAddressViewModel @Inject constructor(private val apiRequestMana
 
     internal val validLatLngUiState = MutableStateFlow<AddressValidationUi>(AddressValidationUi.InitialUi(false, ""))
     private var job: Job? = null
+    internal var searchedAddress: Address? = null
 
     internal fun getSearchPlacesResult(inputString: String) {
         job?.cancel()

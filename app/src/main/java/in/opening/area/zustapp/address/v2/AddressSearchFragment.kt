@@ -56,6 +56,7 @@ class AddressSearchFragment : Fragment() {
             return
         }
         if (context != null) {
+            viewModel.searchedAddress = address
             listener?.didReceivedSearchResult(address)
         }
     }
