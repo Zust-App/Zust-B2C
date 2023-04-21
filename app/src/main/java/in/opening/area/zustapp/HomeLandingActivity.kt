@@ -1,8 +1,9 @@
 package `in`.opening.area.zustapp
 
-import `in`.opening.area.zustapp.address.AddressAddSelectActivity
-import `in`.opening.area.zustapp.address.AddressBottomSheetV2
-import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
+import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.address.AddressSearchAndGoogleMapActivity
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.ORDER_HISTORY_CLICK_BTM_NAV
@@ -198,7 +199,12 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     }
 
     private fun openNewAddressActivity() {
-        val newAddressIntent = Intent(this, AddressAddSelectActivity::class.java)
+//        val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
+//        startAddNewAddressActivity.launch(newAddressIntent)
+        openAddressSearchActivity()
+    }
+    private fun openAddressSearchActivity(){
+        val newAddressIntent = Intent(this, AddressSearchAndGoogleMapActivity::class.java)
         startAddNewAddressActivity.launch(newAddressIntent)
     }
 
@@ -206,7 +212,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val selectedAddressId = result.data?.getIntExtra(AddressAddSelectActivity.KEY_SELECTED_ADDRESS_ID, -1)
+            val selectedAddressId = result.data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
             if (selectedAddressId != null && selectedAddressId != -1) {
                 homeViewModel.getUserSavedAddress()
             }

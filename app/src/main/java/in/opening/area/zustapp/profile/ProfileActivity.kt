@@ -1,13 +1,12 @@
 package `in`.opening.area.zustapp.profile
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.AddressAddSelectActivity
-import `in`.opening.area.zustapp.address.AddressBottomSheetV2
-import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
+import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PROFILE_ABOUT_US
-import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PROFILE_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PROFILE_FAQ
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PROFILE_HELP_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PROFILE_LOGOUT_CLICK
@@ -25,14 +24,12 @@ import `in`.opening.area.zustapp.helpline.HelplineBtmSheet
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.inappreview.InAppReview
 import `in`.opening.area.zustapp.login.LoginActivity
-import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.profile.components.ProfileMainContainer
 import `in`.opening.area.zustapp.utility.moveToInAppWebPage
 import `in`.opening.area.zustapp.utility.navigateToReferAndEarn
 import `in`.opening.area.zustapp.utility.proceedToLoginActivity
 import `in`.opening.area.zustapp.utility.startMyOrders
 import `in`.opening.area.zustapp.viewmodels.ProfileViewModel
-import `in`.opening.area.zustapp.webpage.InAppWebActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -188,7 +185,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
 
 
     override fun didTapOnAddNewAddress() {
-        val newAddressIntent = Intent(this, AddressAddSelectActivity::class.java)
+        val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
         startActivity(newAddressIntent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }

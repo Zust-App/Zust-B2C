@@ -4,8 +4,6 @@ import `in`.opening.area.zustapp.BaseActivityWithLocation
 import `in`.opening.area.zustapp.address.compose.*
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.model.CustomAddress
-import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
-import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.locationManager.LocationUtility
 import `in`.opening.area.zustapp.uiModels.CurrentLocationUi
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
@@ -25,24 +23,25 @@ import kotlinx.coroutines.flow.update
 
 
 @AndroidEntryPoint
-class AddressAddSelectActivity : BaseActivityWithLocation() {
+class AddNewAddressActivity : BaseActivityWithLocation() {
     private val viewModel: AddressViewModel by viewModels()
 
     companion object {
         const val KEY_SELECTED_ADDRESS_ID = "selected_address_id"
+        const val ADDRESS_EDIT_KEY="address_edit_key"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold {
-                AddressAddSelectContainer(it)
+                NewAddressAddContainer(it)
             }
         }
     }
 
     @Composable
-    fun AddressAddSelectContainer(paddingValues: PaddingValues) {
+    fun NewAddressAddContainer(paddingValues: PaddingValues) {
         AddNewAddressUi(modifier = Modifier.padding(paddingValues), viewModel) {
             handleAction(it)
         }

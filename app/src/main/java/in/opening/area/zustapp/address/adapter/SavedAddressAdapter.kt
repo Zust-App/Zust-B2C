@@ -2,15 +2,18 @@ package `in`.opening.area.zustapp.address.adapter
 
 
 import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.address.viewholder.SavedAddressViewHolder
+import `in`.opening.area.zustapp.address.model.getDisplayString
+import `in`.opening.area.zustapp.databinding.SavedAddressItemBinding
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
-class SavedAddressAdapter(private val callback:(AddressItem)->Unit) : RecyclerView.Adapter<SavedAddressViewHolder>() {
+class SavedAddressAdapter(private val callback: (AddressItem) -> Unit) : RecyclerView.Adapter<SavedAddressViewHolder>() {
 
     private val addressListDiffer = AsyncListDiffer(this, addressDiff)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedAddressViewHolder {
         return SavedAddressViewHolder.from(parent)
     }
@@ -29,8 +32,26 @@ class SavedAddressAdapter(private val callback:(AddressItem)->Unit) : RecyclerVi
     fun submitList(addresses: List<AddressItem>) {
         addressListDiffer.submitList(addresses)
     }
+}
+
+class SavedAddressViewHolder(private val binding: SavedAddressItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bindData(addressItem: AddressItem) {
+        binding.savedAddressNameTv.text = addressItem.getDisplayString()
+        if (addressItem.addressType != null) {
+            binding.addressLabelText.text = addressItem.addressType
+        }
+    }
+
+    companion object {
+        fun from(parent: ViewGroup): SavedAddressViewHolder {
+            val layoutInflater = LayoutInflater.from(parent.context)
+            val binding = SavedAddressItemBinding.inflate(layoutInflater, parent, false)
+            return SavedAddressViewHolder(binding)
+        }
+    }
 
 }
+
 
 private val addressDiff = object : DiffUtil.ItemCallback<AddressItem>() {
     override fun areItemsTheSame(oldItem: AddressItem, newItem: AddressItem): Boolean {

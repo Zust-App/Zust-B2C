@@ -277,8 +277,10 @@ class ApiRequestManager @Inject constructor() {
     }
 
     suspend fun searchPlaces(input: String) = universalApiRequestManager {
-        val url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyB0oGlRPsaQr0xC-GGk5jHXgCmr0cMsjvI&components=country:in&input=$input"
-        ktorHttpClient.get<String>(url)
+        val url = NetworkUtility.PLACES_SEARCH_NAME
+        ktorHttpClient.get<String>(url) {
+            parameter("input", input)
+        }
     }
 
     suspend fun checkIsServiceAvail(lat: Double, lng: Double) = universalApiRequestManager {

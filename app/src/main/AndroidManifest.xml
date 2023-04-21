@@ -51,7 +51,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".address.AddressAddSelectActivity"
+            android:name=".address.AddNewAddressActivity"
             android:exported="false"
             android:theme="@style/Theme.ZustApp">
             <meta-data
@@ -130,7 +130,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".address.AddressSearchActivity"
+            android:name=".address.AddressSearchAndGoogleMapActivity"
             android:exported="false"
             android:theme="@style/Theme.ZustApp">
             <meta-data

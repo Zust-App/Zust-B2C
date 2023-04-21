@@ -1,9 +1,9 @@
 package `in`.opening.area.zustapp.orderSummary
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.AddressAddSelectActivity
-import `in`.opening.area.zustapp.address.AddressBottomSheetV2
-import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
+import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
@@ -203,7 +203,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
     }
 
     private fun openNewAddressActivity() {
-        val newAddressIntent = Intent(this, AddressAddSelectActivity::class.java)
+        val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
         startAddNewAddressActivity.launch(newAddressIntent)
     }
 
@@ -211,7 +211,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val selectedAddressId = result.data?.getIntExtra(AddressAddSelectActivity.KEY_SELECTED_ADDRESS_ID, -1)
+            val selectedAddressId = result.data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
             if (selectedAddressId != null && selectedAddressId != -1) {
                 checkAddressThenUpdateCart()
             }

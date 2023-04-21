@@ -1,7 +1,6 @@
 package `in`.opening.area.zustapp.address.v2
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.AddressFragmentCommunicator
 import `in`.opening.area.zustapp.address.adapter.SavedAddressAdapter
 import `in`.opening.area.zustapp.uiModels.UserSavedAddressUi
 import `in`.opening.area.zustapp.utility.AppUtility

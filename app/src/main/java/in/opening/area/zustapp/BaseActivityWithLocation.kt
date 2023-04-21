@@ -2,10 +2,8 @@ package `in`.opening.area.zustapp
 
 import `in`.opening.area.zustapp.HomeLandingActivity.Companion.ACTION_PERMISSION_GPS
 import `in`.opening.area.zustapp.HomeLandingActivity.Companion.MY_PERMISSIONS_REQUEST_LOCATION
-import `in`.opening.area.zustapp.address.AddressBottomSheetV2
-import `in`.opening.area.zustapp.address.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
 import `in`.opening.area.zustapp.locationManager.CustomLocationListener
 import `in`.opening.area.zustapp.locationManager.CustomLocationManager
 import `in`.opening.area.zustapp.locationManager.LocationUtility

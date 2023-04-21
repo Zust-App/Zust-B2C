@@ -52,7 +52,7 @@ class AppUtility @Inject constructor() {
             if (context == null) {
                 return
             }
-            if (msg == null) {
+            if (msg.isNullOrEmpty()) {
                 return
             }
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()

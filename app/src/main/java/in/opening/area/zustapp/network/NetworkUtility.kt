@@ -59,9 +59,9 @@ class NetworkUtility {
         val HOME_PAGE_V1 = "$baseUrl/products/home-page1"
         val USER_ORDERS = "$baseUrl/orders"
         val UPDATE_RATING = "$baseUrl/orders/update-rating"
-        val PRODUCT_DETAILS="$baseUrl/products/products-by-productid"
-        val ORDER_INVOICE="$baseUrl/orders/invoice"
-
+        val PRODUCT_DETAILS = "$baseUrl/products/products-by-productid"
+        val ORDER_INVOICE = "$baseUrl/orders/invoice"
+        val PLACES_SEARCH_NAME = "$baseUrl/places/autocomplete"
 
     }
 }

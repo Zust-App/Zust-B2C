@@ -1,8 +1,7 @@
-package `in`.opening.area.zustapp.address
+package `in`.opening.area.zustapp.address.v2
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.address.v2.AlreadySavedAddressFragment
 import `in`.opening.area.zustapp.databinding.AddressBtmSheetV2Binding
 import android.app.Dialog
 import android.content.Context
@@ -23,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddressBottomSheetV2 : BottomSheetDialogFragment(), AddressFragmentCommunicator {
     private var binding: AddressBtmSheetV2Binding? = null
     private var listener: AddressBtmSheetCallback? = null
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = AddressBtmSheetV2Binding.inflate(layoutInflater)
@@ -128,5 +126,4 @@ interface AddressFragmentCommunicator {
     fun showAlreadyAddedFragment()
     fun didTapOnSavedAddress(savedAddress: AddressItem)
     fun didTapOnCurrentLocation()
-
 }

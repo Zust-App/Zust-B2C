@@ -173,3 +173,19 @@ package `in`.opening.area.zustapp
 ////            }
 ////        }
 ////    }
+
+// override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = BottomSheetDialog(requireContext())
+//        dialog.setOnShowListener {
+//            val bottomSheetDialog = it as BottomSheetDialog
+//            val parentLayout = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+//            parentLayout?.background = context?.let { it1 -> ContextCompat.getDrawable(it1, android.R.color.transparent) }
+//            parentLayout?.let { pLayout ->
+//                val behaviour = BottomSheetBehavior.from(pLayout)
+//                setupFullHeight(pLayout)
+//                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+//                behaviour.isDraggable = false
+//            }
+//        }
+//        return dialog
+//    }
