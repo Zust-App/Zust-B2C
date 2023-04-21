@@ -111,4 +111,5 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
 
     }
 
+
 }

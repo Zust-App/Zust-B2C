@@ -4,22 +4,18 @@ import `in`.opening.area.zustapp.address.CustomMaterialDialog
 import `in`.opening.area.zustapp.address.model.SearchAddressModel
 import `in`.opening.area.zustapp.databinding.FragmentAddressGoogleMapBinding
 import `in`.opening.area.zustapp.uiModels.AddressValidationUi
+import `in`.opening.area.zustapp.uiModels.LocationAddressUi
 import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.viewmodels.SearchAddressViewModel
-import android.Manifest
-import android.content.pm.PackageManager
+import `in`.opening.area.zustapp.viewmodels.AddressViewModel
+import android.content.Context
 import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -32,15 +28,22 @@ import org.json.JSONObject
 @AndroidEntryPoint
 class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
     private var binding: FragmentAddressGoogleMapBinding? = null
-    private val viewModel: SearchAddressViewModel by activityViewModels()
+    private val viewModel: AddressViewModel by activityViewModels()
     private var googleMap: GoogleMap? = null
-    private var fusedLocationClient: FusedLocationProviderClient? = null
     private var address: Address? = null
     private var latLng: LatLng? = null
+    private var listener: SearchPlaceAndLocationListeners? = null
 
     private val customMaterialDialog: CustomMaterialDialog by lazy {
         CustomMaterialDialog {
 
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SearchPlaceAndLocationListeners) {
+            listener = context
         }
     }
 
@@ -49,7 +52,8 @@ class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        binding = FragmentAddressGoogleMapBinding.inflate(layoutInflater)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,68 +62,10 @@ class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
         setUpObservers()
         binding?.mapView?.onCreate(savedInstanceState)
         binding?.mapView?.getMapAsync(this)
-        fusedLocationClient = this.activity?.let { LocationServices.getFusedLocationProviderClient(it) };
-        showHideLocationData(false)
-        address=viewModel.searchedAddress;
-    }
-
-    private fun processWithCurrentLocation() {
-        if (googleMap != null && context!=null) {
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return
-            }
+        binding?.showHideLocationData(false)
+        if (viewModel.searchedAddress.value is LocationAddressUi.Success) {
+            address = (viewModel.searchedAddress.value as LocationAddressUi.Success).data
         }
-    }
-
-    private fun getAddressFromLatLng(latitude: Double, longitude: Double): Address? {
-        val addresses = coder.getFromLocation(latitude, longitude, 1)
-        return addresses!![0]
-    }
-
-    private fun moveMap(latitude: Double, longitude: Double) {
-        showHideLocationData(true)
-        val latLng = LatLng(latitude, longitude)
-        googleMap?.addMarker(MarkerOptions()
-            .position(latLng)
-            .draggable(true)
-            .title("Location"))?.showInfoWindow()
-        googleMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        googleMap?.animateCamera(CameraUpdateFactory.zoomTo(18f))
-        googleMap?.uiSettings?.isZoomControlsEnabled = true
-    }
-
-    private val coder by lazy { Geocoder(requireContext()) }
-
-
-
-    private fun showHideLocationData(canShow: Boolean) {
-        if (canShow) {
-            binding?.progressBar?.visibility = View.GONE
-            binding?.shimmerFrameLayout?.visibility = View.GONE
-            binding?.locationDetailContainer?.visibility = View.VISIBLE
-        } else {
-            binding?.progressBar?.visibility = View.VISIBLE
-            binding?.shimmerFrameLayout?.visibility = View.VISIBLE
-            binding?.locationDetailContainer?.visibility = View.GONE
-        }
-    }
-
-    private fun showHideProgressBar(canShow: Boolean) {
-        if (canShow) {
-            binding?.progressBar?.visibility = View.VISIBLE
-        } else {
-            binding?.progressBar?.visibility = View.GONE
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        binding?.mapView?.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding?.mapView?.onResume()
     }
 
     private fun setLocationText(location: String?) {
@@ -139,16 +85,15 @@ class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun parseLatLngValidation(response: AddressValidationUi) {
+        binding?.showHideProgressBar(response.isLoading)
         when (response) {
             is AddressValidationUi.AddressValidation -> {
-                showHideProgressBar(response.isLoading)
                 validateSuccessResponse(response.data)
             }
             is AddressValidationUi.InitialUi -> {
-                showHideProgressBar(response.isLoading)
+
             }
             else -> {
-                showHideProgressBar(response.isLoading)
                 AppUtility.showToast(context, response.errorMessage)
             }
         }
@@ -178,19 +123,26 @@ class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
                     val searchAddressModel = SearchAddressModel(latitude, longitude, addressLine, postalCode)
                     viewModel.searchAddressModel = searchAddressModel
                     if (latitude != null && longitude != null) {
-                        showHideProgressBar(true)
+                        binding?.showHideProgressBar(true)
                         viewModel.checkServiceAvailBasedOnLatLng(latitude, longitude)
                     } else {
-                        //start address input activity
+
                     }
                 }
             }
         }
+        binding?.currentLocationIcon?.setOnClickListener {
+            listener?.didTapOnCurrentLocation()
+        }
     }
+
 
     override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
-        val boundsIndia = LatLngBounds(LatLng(23.63936, 68.14712), LatLng(28.20453, 97.34466))
+        val boundsIndia = LatLngBounds(
+            LatLng(8.0686, 68.8212),  // Southwest bound
+            LatLng(37.0902, 97.3447) // Northeast bound
+        )
         googleMap?.setLatLngBoundsForCameraTarget(boundsIndia)
         if (address != null) {
             latLng = LatLng(address!!.latitude, address!!.longitude)
@@ -199,14 +151,72 @@ class AddressGoogleMapFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-    companion object{
-        fun newInstance():AddressGoogleMapFragment {
+
+    private fun moveMap(latitude: Double, longitude: Double) {
+        binding?.showHideLocationData(true)
+        val latLng = LatLng(latitude, longitude)
+        googleMap?.addMarker(MarkerOptions()
+            .position(latLng)
+            .draggable(true)
+            .title("Location"))?.showInfoWindow()
+        googleMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        googleMap?.animateCamera(CameraUpdateFactory.zoomTo(16f))
+        googleMap?.uiSettings?.isZoomControlsEnabled = true
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        binding?.mapView?.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding?.mapView?.onResume()
+    }
+
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+
+    companion object {
+        fun newInstance(): AddressGoogleMapFragment {
             val args = Bundle()
-            val fragment =AddressGoogleMapFragment ()
+            val fragment = AddressGoogleMapFragment()
             fragment.arguments = args
             return fragment
         }
     }
+}
 
 
+private fun FragmentAddressGoogleMapBinding?.showHideLocationData(canShow: Boolean) {
+    if (this == null) {
+        return
+    }
+    if (canShow) {
+        progressBar.visibility = View.GONE
+        shimmerFrameLayout.visibility = View.GONE
+        locationDetailContainer.visibility = View.VISIBLE
+    } else {
+        progressBar.visibility = View.VISIBLE
+        shimmerFrameLayout.visibility = View.VISIBLE
+        locationDetailContainer.visibility = View.GONE
+    }
+}
+
+private fun FragmentAddressGoogleMapBinding.showHideProgressBar(canShow: Boolean) {
+    if (canShow) {
+        progressBar.visibility = View.VISIBLE
+    } else {
+        progressBar.visibility = View.GONE
+    }
 }

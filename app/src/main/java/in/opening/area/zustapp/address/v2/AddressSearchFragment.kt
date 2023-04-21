@@ -1,15 +1,12 @@
 package `in`.opening.area.zustapp.address.v2
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.AddressSearchAndGoogleMapActivity
-import `in`.opening.area.zustapp.address.AddressSearchAndGoogleMapActivity.Companion.ADDRESS_TEXT
 import `in`.opening.area.zustapp.address.compose.SearchAddressMainUi
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.model.SearchPlacesDataModel
 import `in`.opening.area.zustapp.address.utils.AddressUtils
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import android.content.Context
-import android.content.Intent
 import android.location.Address
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -81,6 +78,7 @@ class AddressSearchFragment : Fragment() {
 interface SearchPlaceAndLocationListeners {
     fun didTapOnSavedAddress(savedAddress: AddressItem)
     fun didReceivedSearchResult(address: Address?)
+    fun didTapOnCurrentLocation()
 }
 
 interface AddressBtmSheetCallback {
