@@ -7,7 +7,6 @@ import `in`.opening.area.zustapp.uiModels.AddressValidationUi
 import `in`.opening.area.zustapp.uiModels.LocationAddressUi
 import `in`.opening.area.zustapp.uiModels.SearchPlacesUi
 import `in`.opening.area.zustapp.utility.AddressUtils.Companion.parseSearchResult
-import android.location.Address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,11 +21,14 @@ import javax.inject.Inject
 open class SearchAddressViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) : ViewModel() {
     internal val searchPlacesUiState = MutableStateFlow<SearchPlacesUi>(SearchPlacesUi.InitialUi("", false))
 
-    internal var searchAddressModel: SearchAddressModel? = null
-
     internal val validLatLngUiState = MutableStateFlow<AddressValidationUi>(AddressValidationUi.InitialUi(false, ""))
     private var job: Job? = null
+
+    //address field
     internal var searchedAddress = MutableStateFlow<LocationAddressUi>(LocationAddressUi.InitialUi(false))
+
+    //map activity uses
+    internal var searchAddressModel: SearchAddressModel? = null
 
     internal fun getSearchPlacesResult(inputString: String) {
         job?.cancel()
@@ -41,7 +43,7 @@ open class SearchAddressViewModel @Inject constructor(private val apiRequestMana
                     searchPlacesUiState.update { SearchPlacesUi.SearchPlaceResult(false, "", result) }
                 }
                 is ResultWrapper.GenericError -> {
-                    searchPlacesUiState.update { SearchPlacesUi.ErrorUi(false, response.error?.error ?: "User token expired") }
+                    searchPlacesUiState.update { SearchPlacesUi.ErrorUi(false, response.error?.error ?: "Something went wrong") }
                 }
                 is ResultWrapper.UserTokenNotFound -> {
                     searchPlacesUiState.update { SearchPlacesUi.SearchPlaceResult(false, "User token expired") }
@@ -54,22 +56,24 @@ open class SearchAddressViewModel @Inject constructor(private val apiRequestMana
         }
     }
 
-    fun checkServiceAvailBasedOnLatLng(lat: Double, lng: Double) = viewModelScope.launch {
-        validLatLngUiState.update { AddressValidationUi.InitialUi(true, "") }
-        when (val response = apiRequestManager.checkIsServiceAvail(lat, lng)) {
-            is ResultWrapper.Success -> {
-                val jsonObject = JSONObject(response.value)
-                validLatLngUiState.update { AddressValidationUi.AddressValidation(false, "", jsonObject, "") }
-            }
-            is ResultWrapper.NetworkError -> {
-                validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Something went wrong") }
-            }
-            is ResultWrapper.UserTokenNotFound -> {
-                validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Auth Error") }
-            }
-            is ResultWrapper.GenericError -> {
-                validLatLngUiState.update { AddressValidationUi.ErrorUi(false, response.error?.error ?: "Something went wrong") }
+    internal fun checkServiceAvailBasedOnLatLng(lat: Double?, lng: Double?, postalCode: String?) =
+        viewModelScope.launch {
+            validLatLngUiState.update { AddressValidationUi.InitialUi(true, "") }
+            when (val response = apiRequestManager.checkIsServiceAvail(lat, lng, postalCode)) {
+                is ResultWrapper.Success -> {
+                    val jsonObject = JSONObject(response.value)
+                    validLatLngUiState.update { AddressValidationUi.AddressValidation(false, "", jsonObject, "") }
+                }
+                is ResultWrapper.NetworkError -> {
+                    validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Something went wrong") }
+                }
+                is ResultWrapper.UserTokenNotFound -> {
+                    validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Auth Error") }
+                }
+                is ResultWrapper.GenericError -> {
+                    validLatLngUiState.update { AddressValidationUi.ErrorUi(false, response.error?.error ?: "Something went wrong") }
+                }
             }
         }
-    }
+
 }

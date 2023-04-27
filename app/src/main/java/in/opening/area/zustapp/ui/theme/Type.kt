@@ -46,17 +46,22 @@ val openSansFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300
 
 val Typography_Mons by lazy {
     androidx.compose.material.Typography(
+        h1 = TextStyle(
+            fontFamily = montserratFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W700
+        ),
         body1 = TextStyle(
-            fontFamily = zustFont,
+            fontFamily = montserratFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         ),
         body2 = TextStyle(
-            fontFamily = zustFont,
+            fontFamily = montserratFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = zustFont,
+        subtitle1 = TextStyle(fontFamily = montserratFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
@@ -64,6 +69,11 @@ val Typography_Mons by lazy {
 
 val Typography_OpenSans by lazy {
     androidx.compose.material.Typography(
+        h1 = TextStyle(
+            fontFamily = anuphanFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W700
+        ),
         body1 = TextStyle(
             fontFamily = openSansFontFamily,
             fontSize = 16.sp,
@@ -82,7 +92,13 @@ val Typography_OpenSans by lazy {
 
 
 val Typography_Okra by lazy {
+
     androidx.compose.material.Typography(
+        h1 = TextStyle(
+            fontFamily = anuphanFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W700
+        ),
         body1 = TextStyle(
             fontFamily = okraFontFamily,
             fontSize = 16.sp,
@@ -101,6 +117,11 @@ val Typography_Okra by lazy {
 
 val Typography_Anuphan by lazy {
     androidx.compose.material.Typography(
+        h1 = TextStyle(
+            fontFamily = anuphanFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W700
+        ),
         body1 = TextStyle(
             fontFamily = anuphanFontFamily,
             fontSize = 16.sp,
@@ -121,3 +142,7 @@ val ZustTypography = Typography_OpenSans
 val zustFont = openSansFontFamily
 
 
+//h1 is for title
+//body1
+//body1
+//subtitl1

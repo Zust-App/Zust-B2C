@@ -1,38 +1,41 @@
 package `in`.opening.area.zustapp.address
 
-import `in`.opening.area.zustapp.BaseActivityWithLocation
 import `in`.opening.area.zustapp.address.compose.*
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.model.CustomAddress
-import `in`.opening.area.zustapp.locationManager.LocationUtility
+import `in`.opening.area.zustapp.address.model.SearchAddressModel
+import `in`.opening.area.zustapp.locationManager.models.CustomLocationModel
 import `in`.opening.area.zustapp.uiModels.CurrentLocationUi
 import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import android.content.Intent
-import android.location.Location
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
 
 
 @AndroidEntryPoint
-class AddNewAddressActivity : BaseActivityWithLocation() {
+class AddNewAddressActivity : AppCompatActivity() {
     private val viewModel: AddressViewModel by viewModels()
+    private var searchAddressModel: SearchAddressModel? = null
+    private val customLocationModel = CustomLocationModel()
 
     companion object {
         const val KEY_SELECTED_ADDRESS_ID = "selected_address_id"
-        const val ADDRESS_EDIT_KEY="address_edit_key"
+        const val ADDRESS_EDIT_KEY = "address_edit_key"
+        const val ADDRESS_KEY="address_key"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getDataFromIntent()
         setContent {
             Scaffold {
                 NewAddressAddContainer(it)
@@ -40,10 +43,27 @@ class AddNewAddressActivity : BaseActivityWithLocation() {
         }
     }
 
+    private fun getDataFromIntent() {
+        if (intent.hasExtra(ADDRESS_EDIT_KEY)) {
+            searchAddressModel = intent.getParcelableExtra(ADDRESS_EDIT_KEY)
+        }
+    }
+
     @Composable
     fun NewAddressAddContainer(paddingValues: PaddingValues) {
-        AddNewAddressUi(modifier = Modifier.padding(paddingValues), viewModel) {
-            handleAction(it)
+        if (searchAddressModel == null) {
+            AddNewAddressUi(modifier = Modifier.padding(paddingValues), viewModel) {
+                handleAction(it)
+            }
+        }
+        if (searchAddressModel != null) {
+            customLocationModel.addressLine = searchAddressModel!!.addressDesc
+            customLocationModel.pinCode = searchAddressModel!!.postalCode
+            customLocationModel.lat = searchAddressModel!!.lat
+            customLocationModel.lng = searchAddressModel!!.longitude
+            AddNewAddressUiV2(modifier = Modifier.padding(paddingValues), viewModel, customLocationModel) {
+                handleAction(it)
+            }
         }
     }
 
@@ -67,7 +87,6 @@ class AddNewAddressActivity : BaseActivityWithLocation() {
                     viewModel.currentLocationUiState.update {
                         CurrentLocationUi.InitialUi(true)
                     }
-                    clickOnUseCurrentLocation()
                 }
                 FINISH_PAGE -> {
                     finish()
@@ -83,24 +102,5 @@ class AddNewAddressActivity : BaseActivityWithLocation() {
         }
     }
 
-    override fun receiveLocation(location: Location?) {
-        if (location != null) {
-            val customLocationModel = LocationUtility.getAddress(latLng = LatLng(location.latitude, location.longitude), context = this)
-            viewModel.currentLocationUiState.update {
-                CurrentLocationUi.ReceivedCurrentLocation(false, data = customLocationModel)
-            }
-        } else {
-            viewModel.currentLocationUiState.update {
-                CurrentLocationUi.ReceivedCurrentLocation(false, data = null)
-            }
-        }
-    }
-
-    override fun didReceiveError(error: String?) {
-        super.didReceiveError(error)
-        viewModel.currentLocationUiState.update {
-            CurrentLocationUi.ErrorState(false, message = error)
-        }
-    }
 
 }

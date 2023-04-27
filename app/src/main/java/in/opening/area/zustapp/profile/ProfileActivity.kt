@@ -2,6 +2,7 @@ package `in`.opening.area.zustapp.profile
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.AddressSearchActivity
 import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
@@ -185,7 +186,18 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
 
 
     override fun didTapOnAddNewAddress() {
+        //startAddNewAddressActivity()
+        startAddressSearchActivity()
+    }
+
+    private fun startAddNewAddressActivity(){
         val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
+        startActivity(newAddressIntent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
+    private fun startAddressSearchActivity(){
+        val newAddressIntent = Intent(this, AddressSearchActivity::class.java)
         startActivity(newAddressIntent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }

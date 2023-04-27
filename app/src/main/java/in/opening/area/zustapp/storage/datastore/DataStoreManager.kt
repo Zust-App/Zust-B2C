@@ -35,27 +35,5 @@ class DataStoreManager @Inject constructor() {
         }
     }
 
-     fun getLatestAddress():Flow<Address>{
-        return dataStoreWrapper.getLatestSavedAddress().map {
-            gson.fromJson(it, Address::class.java)
-        }
-    }
-
-    suspend fun saveLatestAddress(address:Address?){
-        try {
-            if (address == null) {
-                return
-            }
-            val string = gson.toJson(address, Address::class.java)
-            dataStoreWrapper.saveLatestAddress(string)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    suspend fun removeLatestOrderKey(){
-        dataStoreWrapper.removeKeyLatestAddress()
-    }
-
 
 }

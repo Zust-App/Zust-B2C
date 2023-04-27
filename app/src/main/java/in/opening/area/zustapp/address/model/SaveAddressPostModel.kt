@@ -11,7 +11,7 @@ data class SaveAddressPostModel(
     var pinCode: String? = null,
     var houseNumberAndFloor: String? = null,
     var landmark: String? = null,
-    var description: String? = "no",
+    var description: String? = "",
     var latitude: Double? = 0.0,
     var longitude: Double? = 0.0,
     var addressType: String? = "HOME",
@@ -37,7 +37,7 @@ data class CustomAddress(
             id ?: -1,
             landmark,
             latitude,
-            longitude)
+            longitude, pincode = pinCode)
     }
 
 }

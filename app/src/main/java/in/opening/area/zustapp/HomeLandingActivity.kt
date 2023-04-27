@@ -3,7 +3,7 @@ package `in`.opening.area.zustapp
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
 import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
-import `in`.opening.area.zustapp.address.AddressSearchAndGoogleMapActivity
+import `in`.opening.area.zustapp.address.AddressSearchActivity
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.ORDER_HISTORY_CLICK_BTM_NAV
@@ -172,12 +172,6 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    companion object {
-        const val MY_PERMISSIONS_REQUEST_LOCATION = 109
-        const val ACTION_PERMISSION_GPS = 110
-    }
-
-
     private fun showSuggestProductSheet() {
         supportFragmentManager.showBottomSheetIsNotPresent(
             SuggestProductBtmSheet.newInstance(),
@@ -195,16 +189,17 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     }
 
     override fun didTapOnAddNewAddress() {
-        openNewAddressActivity()
+       // openNewAddressActivity()
+        openAddressSearchActivity()
     }
 
     private fun openNewAddressActivity() {
-//        val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
-//        startAddNewAddressActivity.launch(newAddressIntent)
-        openAddressSearchActivity()
+        val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
+        startAddNewAddressActivity.launch(newAddressIntent)
     }
+
     private fun openAddressSearchActivity(){
-        val newAddressIntent = Intent(this, AddressSearchAndGoogleMapActivity::class.java)
+        val newAddressIntent = Intent(this, AddressSearchActivity::class.java)
         startAddNewAddressActivity.launch(newAddressIntent)
     }
 

@@ -25,6 +25,7 @@ import `in`.opening.area.zustapp.product.model.*
 import `in`.opening.area.zustapp.productDetails.models.ProductDetailsModel
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.profile.models.UserProfileResponse
+import `in`.opening.area.zustapp.rapidwallet.model.RWUserExistWalletResponse
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.utility.DeviceInfo
 import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
@@ -283,10 +284,11 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun checkIsServiceAvail(lat: Double, lng: Double) = universalApiRequestManager {
+    suspend fun checkIsServiceAvail(lat: Double?, lng: Double?, postalCode: String?) = universalApiRequestManager {
         ktorHttpClient.get<String>(NetworkUtility.VERIFY_DELIVERABLE_ADDRESS) {
             parameter("latitude", lat)
             parameter("longitude", lng)
+            parameter("pincode", postalCode)
         }
     }
 
@@ -405,5 +407,16 @@ class ApiRequestManager @Inject constructor() {
             parameter("orderId", orderId)
         }
     }
+
+    suspend fun checkRapidWalletAndBalance(rapidUserId: String) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<RWUserExistWalletResponse>(NetworkUtility.RAPID_WALLET_VERIFY_USER) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("rapidUserId", rapidUserId)
+        }
+    }
+
 
 }

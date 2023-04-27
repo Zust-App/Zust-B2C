@@ -29,14 +29,18 @@ data class AddressItem(
     val id: Int,
     val landmark: String?,
     val latitude: Double?,
-    val longitude: Double?
+    val longitude: Double?,
+    val pinCode:String?
 ) {
    fun convertToAddress():Address{
        return Address(addressLevel,
            addressType,
            description,
            houseNumberAndFloor,
-           id,landmark,latitude,longitude)
+           id,landmark
+           ,latitude
+           ,longitude,
+           pinCode)
    }
 }
 

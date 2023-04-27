@@ -1,7 +1,6 @@
 package `in`.opening.area.zustapp
 
-import `in`.opening.area.zustapp.HomeLandingActivity.Companion.ACTION_PERMISSION_GPS
-import `in`.opening.area.zustapp.HomeLandingActivity.Companion.MY_PERMISSIONS_REQUEST_LOCATION
+import `in`.opening.area.zustapp.address.AddNewAddressActivity
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.locationManager.CustomLocationListener
@@ -9,6 +8,7 @@ import `in`.opening.area.zustapp.locationManager.CustomLocationManager
 import `in`.opening.area.zustapp.locationManager.LocationUtility
 import `in`.opening.area.zustapp.utility.AppUtility
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ResolvableApiException
@@ -29,6 +30,13 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    companion object {
+        const val MY_PERMISSIONS_REQUEST_LOCATION = 109
+        const val ACTION_PERMISSION_GPS = 110
+        const val REQ_CODE_GOOGLE_MAP = 102
+        const val REQ_CODE_NEW_ADDRESS = 103
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -55,11 +63,28 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ACTION_PERMISSION_GPS) {
-            locationManager.initiate()
-        } else {
-            AppUtility.showToast(this, getString(R.string.please_allow_location_permission))
+            if (resultCode == Activity.RESULT_OK) {
+                locationManager.initiate()
+            } else {
+                AppUtility.showToast(this, getString(R.string.please_allow_location_permission))
+            }
+        } else if (requestCode == REQ_CODE_NEW_ADDRESS) {
+            if (resultCode == Activity.RESULT_OK) {
+                val selectedAddressId = data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+                if (selectedAddressId != null && selectedAddressId != -1) {
+                    setBackDataIfAddressAdded(selectedAddressId)
+                }
+            }
+        } else if (requestCode == REQ_CODE_GOOGLE_MAP) {
+            if (resultCode == Activity.RESULT_OK) {
+                val selectedAddressId = data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+                if (selectedAddressId != null && selectedAddressId != -1) {
+                    setBackDataIfAddressAdded(selectedAddressId)
+                }
+            }
         }
     }
+
 
     override fun receiveLocation(location: Location?) {
         if (location != null) {
@@ -82,7 +107,7 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
     }
 
     override fun didReceiveError(error: String?) {
-
+        AppUtility.showToast(this, "Please allow location permission")
     }
 
     private fun requestLocationAccess() {
@@ -93,11 +118,12 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
         }
     }
 
+
     private fun requestLocationPermission() {
+        didReceiveError(null)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION)
         return
     }
-
 
     override fun clickOnUseCurrentLocation() {
         requestLocationAccess()
@@ -111,5 +137,11 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
 
     }
 
+    open fun setBackDataIfAddressAdded(selectedAddressId: Int) {
+        val intent = Intent()
+        intent.putExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, selectedAddressId)
+        setResult(RESULT_OK, intent)
+        finish()
+    }
 
 }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +31,7 @@ open class OrderSummaryNetworkVM @Inject constructor(private val productRepo: Pr
         if (addToCartFlow.value.createCartReqItems.isNotEmpty()) {
             when (val response = productRepo.apiRequestManager.createCartWithServer(addToCartFlow.value)) {
                 is ResultWrapper.Success -> {
-                     if (response.value.createCartData != null) {
+                    if (response.value.createCartData != null) {
                         val updateCartCall = async { productRepo.dbRepo.updateCartPrice(response.value.createCartData) }
                         if (updateCartCall.await()) {
                             createCartUiState.update { CreateCartResponseUi.CartSuccess(false, response.value.createCartData, value) }
@@ -55,6 +56,7 @@ open class OrderSummaryNetworkVM @Inject constructor(private val productRepo: Pr
             createCartUiState.update { CreateCartResponseUi.ErrorUi(false, errorMsg = "Cart item is empty") }
         }
     }
+
 
     internal fun isCreateCartOnGoing(): Boolean {
         return createCartUiState.value.isLoading

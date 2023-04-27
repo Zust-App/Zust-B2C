@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import kotlinx.serialization.json.Json
+import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -187,6 +189,10 @@ class AppUtility @Inject constructor() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+
+        fun getMerchantIdFromJSON(json: JSONObject) {
+
         }
     }
 }

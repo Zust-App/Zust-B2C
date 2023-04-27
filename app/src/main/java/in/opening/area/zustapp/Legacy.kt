@@ -1,5 +1,9 @@
 package `in`.opening.area.zustapp
 
+import android.app.Activity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+
 //import `in`.opening.area.zustapp.ui.theme.montserrat
 //import androidx.compose.foundation.layout.Row
 //import androidx.compose.foundation.layout.Spacer
@@ -189,3 +193,54 @@ package `in`.opening.area.zustapp
 //        }
 //        return dialog
 //    }
+
+
+//                paymentActivityReqData?.couponDiscount = 0.0
+//                couponHolder?.setCouponData(null, null)
+// paymentBillingHolder?.setUpData(paymentActivityReqData)
+
+//
+//private val startAddNewAddressActivity = registerForActivityResult(
+//    ActivityResultContracts.StartActivityForResult()
+//) { result: ActivityResult ->
+//    if (result.resultCode == Activity.RESULT_OK) {
+//        val selectedAddressId = result.data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+//        if (selectedAddressId != null && selectedAddressId != -1) {
+//            setBackDataIfAddressAdded(selectedAddressId)
+//        }
+//    }
+//}
+
+
+//    override fun receiveLocation(location: Location?) {
+//        if (location != null) {
+//            val customLocationModel = LocationUtility.getAddress(latLng = LatLng(location.latitude, location.longitude), context = this)
+//            viewModel.currentLocationUiState.update {
+//                CurrentLocationUi.ReceivedCurrentLocation(false, data = customLocationModel)
+//            }
+//        } else {
+//            viewModel.currentLocationUiState.update {
+//                CurrentLocationUi.ReceivedCurrentLocation(false, data = null)
+//            }
+//        }
+//    }
+
+//    override fun didReceiveError(error: String?) {
+//        super.didReceiveError(error)
+//        viewModel.currentLocationUiState.update {
+//            CurrentLocationUi.ErrorState(false, message = error)
+//        }
+//    }
+
+// private val startAddNewAddressActivity = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) { result: ActivityResult ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val selectedAddressId = result.data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+//            if (selectedAddressId != null && selectedAddressId != -1) {
+//                setBackDataIfAddressAdded(selectedAddressId)
+//            }
+//        }
+//    }
+
+// startAddNewAddressActivity.launch(addressInputIntent)

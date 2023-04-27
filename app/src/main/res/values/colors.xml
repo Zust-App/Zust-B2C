@@ -26,5 +26,6 @@
     <color name="black_4">#969696</color>
     <color name="language_default">#991A1A1A</color>
     <color name="light_offer_color">#538cee</color>
+    <color name="input_field_bg_color">#EFEFEF</color>
 <!--    <color name="orange">#bdea09</color>-->
 </resources>

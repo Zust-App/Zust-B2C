@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import org.json.JSONObject
 import javax.inject.Inject
 
 val IO = Dispatchers.IO
@@ -57,7 +59,7 @@ class OrderSummaryViewModel @Inject constructor(
     private var upSellingItemsId: Set<String> = hashSetOf()
     internal val addressLineData = MutableStateFlow("")
     private var freeDeliveryPrice: Int = 99
-    private var deliveryCharge :Int= 10
+    private var deliveryCharge: Int = 10
 
     init {
         cancellationPolicyCacheData.update {
@@ -71,7 +73,7 @@ class OrderSummaryViewModel @Inject constructor(
         }
         productRepo.getAllLocalProducts().stateIn(viewModelScope).collectLatest { list ->
             if (upSellingProductsCache == null) {
-                getUpsellingProducts(list.joinToString(separator = ",") { it.productGroupId })
+                // getUpsellingProducts(list.joinToString(separator = ",") { it.productGroupId })
             }
             proceedWithCollectedResponse(list)
         }
@@ -132,47 +134,88 @@ class OrderSummaryViewModel @Inject constructor(
         productRepo.deleteProduct(product)
     }
 
-
     internal fun updateUserCartWithServer(orderId: Int) = viewModelScope.launch {
         lockedCartUiState.update { LockOrderCartUi.InitialUi(true) }
         if (addressItemCache == null) {
             lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = "Please select address") }
             return@launch
         }
+
         if (lockOrderSummaryItems.isEmpty()) {
             lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = "May be something wrong with cart") }
             return@launch
         } else {
-            val lockOrderSummaryModel = LockOrderSummaryModel(addressId = addressItemCache!!.id,
-                lockOrderSummaryItems = lockOrderSummaryItems,
-                merchantId = 1, orderId = orderId, deliveryPartnerTip = deliveryPartnerTipAmount)
-            when (val response = productRepo.apiRequestManager.syncUserCartWithServerAndLock(lockOrderSummaryModel)) {
-                is ResultWrapper.Success -> {
-                    if (response.value.lockOrderResponseData != null) {
-                        lockedCartUiState.update {
-                            saveLatestAddress(response.value.lockOrderResponseData.address)
-                            LockOrderCartUi.SuccessLocked(false, data = response.value.lockOrderResponseData)
-                        }
-                    } else {
-                        lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = response.value.message, errors = response.value.errors) }
-                    }
-                }
-                is ResultWrapper.NetworkError -> {
-                    lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = "Something went wrong") }
-                }
-                is ResultWrapper.GenericError -> {
-                    lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = response.error?.error ?: "Something went wrong") }
-                }
-                is ResultWrapper.UserTokenNotFound -> {
-                    lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }
-                }
-            }
-
+            checkServiceAvailBasedOnLatLng(addressItemCache, orderId)
         }
     }
 
     internal fun isLockedCartOnGoing(): Boolean {
         return lockedCartUiState.value.isLoading
+    }
+
+    private suspend fun proceedWithCartItemsAndUpdateServer(orderId: Int, merchantId: Int) {
+        val lockOrderSummaryModel = LockOrderSummaryModel(addressId = addressItemCache!!.id,
+            lockOrderSummaryItems = lockOrderSummaryItems,
+            merchantId = merchantId, orderId = orderId, deliveryPartnerTip = deliveryPartnerTipAmount)
+        when (val response = productRepo.apiRequestManager.syncUserCartWithServerAndLock(lockOrderSummaryModel)) {
+            is ResultWrapper.Success -> {
+                if (response.value.lockOrderResponseData != null) {
+                    lockedCartUiState.update {
+                        saveLatestAddress(response.value.lockOrderResponseData.address)
+                        LockOrderCartUi.SuccessLocked(false, data = response.value.lockOrderResponseData)
+                    }
+                } else {
+                    lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = response.value.message, errors = response.value.errors) }
+                }
+            }
+            is ResultWrapper.NetworkError -> {
+                lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = "Something went wrong") }
+            }
+            is ResultWrapper.GenericError -> {
+                lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = response.error?.error ?: "Something went wrong") }
+            }
+            is ResultWrapper.UserTokenNotFound -> {
+                lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }
+            }
+        }
+
+    }
+
+    private fun checkServiceAvailBasedOnLatLng(address: Address?, orderId: Int) = viewModelScope.launch {
+        supervisorScope {
+            if (((address?.latitude != null && address.longitude != null) && (address.latitude != 0.0 && address.longitude != 0.0)) || !address?.pincode.isNullOrEmpty()) {
+                when (val response = productRepo.apiRequestManager.checkIsServiceAvail(address?.latitude, address?.longitude, address?.pincode)) {
+                    is ResultWrapper.Success -> {
+                        val jsonObject = JSONObject(response.value)
+                        if (jsonObject.has("data")) {
+                            val dataJson = jsonObject.getJSONObject("data")
+                            if (dataJson.has("isDeliverablePinCode") && dataJson.getBoolean("isDeliverablePinCode")) {
+                                if (dataJson.has("merchantId")) {
+                                    val merchantId = dataJson.getInt("merchantId")
+                                    proceedWithCartItemsAndUpdateServer(orderId, merchantId)
+                                } else {
+                                    lockedCartUiState.update { LockOrderCartUi.ErrorUi(false,
+                                        errorMessage = "Sorry we are not delivering in your area") }
+                                }
+                            } else {
+                                lockedCartUiState.update { LockOrderCartUi.ErrorUi(false,
+                                    errorMessage = "Sorry we are not delivering in your area") }
+                            }
+                        }else{
+                            lockedCartUiState.update { LockOrderCartUi.ErrorUi(false,
+                                errorMessage = "Something went wrong") }
+                        }
+                    }
+                    else -> {
+                        lockedCartUiState.update { LockOrderCartUi.ErrorUi(false,
+                            errorMessage = "Something went wrong") }
+                    }
+                }
+            }else{
+                lockedCartUiState.update { LockOrderCartUi.ErrorUi(false,
+                    errorMessage = "Please add Address") }
+            }
+        }
     }
 
     internal fun updateDeliveryPartnerTip(amount: Int? = null) {
@@ -239,7 +282,6 @@ class OrderSummaryViewModel @Inject constructor(
         freeDeliveryPrice = sharedPrefManager.getFreeDeliveryBasePrice()
         deliveryCharge = sharedPrefManager.getDeliveryFee()
     }
-
 
 }
 

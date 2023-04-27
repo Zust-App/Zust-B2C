@@ -7,10 +7,7 @@ import `in`.opening.area.zustapp.payment.models.*
 import `in`.opening.area.zustapp.repository.DbAddToCartRepository
 import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
-import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
-import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
-import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
-import `in`.opening.area.zustapp.uiModels.ValidateCouponUi
+import `in`.opening.area.zustapp.uiModels.*
 import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,7 +31,6 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
 
     @Inject
     internal lateinit var sharedPrefManager: SharedPrefManager
-
 
     internal var appliedCoupon: String = ""
     fun getPaymentMethodsFromServer() = viewModelScope.launch(Dispatchers.IO) {
@@ -180,4 +176,6 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
     internal fun isCreatePaymentOnGoing(): Boolean {
         return createPaymentUiState.value.isLoading
     }
+
+
 }

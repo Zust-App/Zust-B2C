@@ -19,6 +19,8 @@ data class AppMetaData(
     val isAppUpdateAvail: Boolean? = false,
     val freeDeliveryFee: Double? = 99.0,
 )
+//for 1 open address search--> map--> add location input
+//for 2 direct open add location input
 
 data class DeliveryFeePolicy(
     val deliveryFeePolicyEn: String,

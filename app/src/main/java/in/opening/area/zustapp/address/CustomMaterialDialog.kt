@@ -6,8 +6,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CustomMaterialDialog(private val callback:()->Unit) {
     companion object {
-        const val TITLE = "Sorry"
-        const val MESSAGE = "Sorry currently we are not deliver in your area."
+        const val TITLE = "Hold On!!"
+        const val MESSAGE = "We will back in your area"
 
     }
 

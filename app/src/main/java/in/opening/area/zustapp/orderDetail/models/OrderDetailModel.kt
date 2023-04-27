@@ -15,7 +15,7 @@ data class OrderDetailModel(
 
 @Keep
 data class OrderDetailData(
-    val address: Address?=null,
+    val address: Address? = null,
     val couponDiscountPrice: Double,
     val deliveryFee: Double,
     val itemTotalPrice: Double,
@@ -23,7 +23,7 @@ data class OrderDetailData(
     val orderId: Int,
     val orderStatuses: List<OrderStatus>? = null,
     val packagingFee: Double,
-    val paymentMethod: String?=null,
+    val paymentMethod: String? = null,
     val secretCode: String? = null,
     val verificationCode: String? = null,
     val expectedTimeToDelivery: String? = null,
@@ -65,6 +65,7 @@ data class Address(
     val landmark: String?,
     val latitude: Double? = 0.0,
     val longitude: Double? = 0.0,
+    val pincode: String? = null,
 )
 
 fun Address?.convertAsStringText(): String {

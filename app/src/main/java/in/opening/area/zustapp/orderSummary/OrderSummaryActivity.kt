@@ -2,6 +2,7 @@ package `in`.opening.area.zustapp.orderSummary
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.AddressSearchActivity
 import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.address.model.AddressItem
@@ -174,7 +175,8 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
     }
 
     override fun didTapOnAddNewAddress() {
-        openNewAddressActivity()
+        //openNewAddressActivity()
+        openAddressSearchActivity()
     }
 
     private fun checkAddressThenUpdateCart() {
@@ -204,6 +206,11 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
 
     private fun openNewAddressActivity() {
         val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
+        startAddNewAddressActivity.launch(newAddressIntent)
+    }
+
+    private fun openAddressSearchActivity() {
+        val newAddressIntent = Intent(this, AddressSearchActivity::class.java)
         startAddNewAddressActivity.launch(newAddressIntent)
     }
 

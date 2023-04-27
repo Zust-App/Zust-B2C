@@ -27,7 +27,6 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
@@ -43,6 +42,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".RapidWalletActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".OrderConfirmationIntermediateActivity"
             android:exported="false"
             android:theme="@style/Theme.ZustApp">
@@ -52,6 +58,22 @@
         </activity>
         <activity
             android:name=".address.AddNewAddressActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".rapidwallet.RapidWalletActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".address.GoogleMapsAddressActivity"
             android:exported="false"
             android:theme="@style/Theme.ZustApp">
             <meta-data
@@ -122,15 +144,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".address.AddressInputActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ZustApp">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".address.AddressSearchAndGoogleMapActivity"
+            android:name=".address.AddressSearchActivity"
             android:exported="false"
             android:theme="@style/Theme.ZustApp">
             <meta-data
@@ -165,8 +179,8 @@
         <activity
             android:name=".HomeLandingActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.ZustApp">
             <meta-data
                 android:name="android.app.lib_name"
@@ -278,7 +292,6 @@
             android:name="com.google.firebase.messaging.FirebaseMessagingService"
             android:exported="false"
             tools:node="replace">
-
             <intent-filter android:priority="-500">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -293,6 +306,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name="com.razorpay.CheckoutActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

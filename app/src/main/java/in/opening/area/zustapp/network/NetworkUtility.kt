@@ -62,6 +62,8 @@ class NetworkUtility {
         val PRODUCT_DETAILS = "$baseUrl/products/products-by-productid"
         val ORDER_INVOICE = "$baseUrl/orders/invoice"
         val PLACES_SEARCH_NAME = "$baseUrl/places/autocomplete"
+        val RAPID_WALLET_VERIFY_USER = "$baseUrl/auth/rapid-verify"
+
 
     }
 }

@@ -26,6 +26,9 @@ class PaymentMethodViewHolder(val binding: PaymentMethodItemsBinding, val contex
             "cod" -> {
                 binding.paymentMethodIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.card_pay_mode))
             }
+            "rapid" -> {
+                binding.paymentMethodIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.rapid_bazar_icon))
+            }
         }
         binding.paymentMethodItemRdBtn.isChecked = paymentMethod.isSelected == true
     }

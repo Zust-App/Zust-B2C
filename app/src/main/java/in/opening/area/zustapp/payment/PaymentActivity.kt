@@ -18,12 +18,13 @@ import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
 import `in`.opening.area.zustapp.uiModels.ValidateCouponUi
-import `in`.opening.area.zustapp.utility.CustomDividerItemDecoration
-import `in`.opening.area.zustapp.utility.ProductUtils
-import `in`.opening.area.zustapp.utility.ShowToast
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
 import `in`.opening.area.zustapp.databinding.ActivityPaymentBinding
-import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
+import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity.Companion.ORDER_ID_KEY
+import `in`.opening.area.zustapp.rapidwallet.RapidWalletBtmSheet
+import `in`.opening.area.zustapp.utility.*
+import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -47,7 +48,8 @@ import org.json.JSONObject
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint
-class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, PaymentMethodClickListeners, ShowToast {
+class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
+    PaymentMethodClickListeners {
     private var binding: ActivityPaymentBinding? = null
 
     private val paymentViewModel: PaymentActivityViewModel by viewModels()
@@ -98,7 +100,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
 
     private fun setUpClickListeners() {
         binding?.paymentPageBottomBar?.orderPlaceContainer?.setOnClickListener {
-            proceedToPaymentFirstApiCall()
+            if (paymentMethod?.key == "rapid") {
+
+            } else {
+                proceedToPaymentFirstApiCall(null)
+            }
         }
     }
 
@@ -134,11 +140,10 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
         timingSavingHolder?.setData(paymentActivityReqData)
     }
 
-
-    private fun proceedToPaymentFirstApiCall() {
+    private fun proceedToPaymentFirstApiCall(rapidUserId: String?) {
         if (paymentMethod?.key != null && paymentActivityReqData?.totalAmount != null) {
             if (paymentViewModel.isCreatePaymentOnGoing()) {
-                AppUtility.showToast(this, "Please wait")
+                showToast(this, "Please wait")
                 return
             }
             showHidePgBar(true)
@@ -146,6 +151,9 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
                 paymentActivityReqData?.totalAmount,
                 order_id = paymentActivityReqData?.orderId,
                 paymentMethod = paymentMethod?.key!!)
+            if (rapidUserId != null) {
+                createPayment.rapidBazaarUserId = rapidUserId
+            }
             paymentViewModel.invokePaymentToGetId(createPayment)
         } else {
             Toast.makeText(this, "Please select a payment mode", Toast.LENGTH_LONG).show()
@@ -159,11 +167,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
                     parsePaymentMethodResponse(it)
                 }
             }
-            launch {
+            launch(block = { ->
                 paymentViewModel.createPaymentUiState.collectLatest {
                     parseCreatePaymentResponse(it)
                 }
-            }
+            })
             launch {
                 paymentViewModel.paymentValidationUiState.collect {
                     parsePaymentValidation(it)
@@ -222,7 +230,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             if (data.has("payment")) {
                 val payment = data.getJSONObject("payment")
                 if (payment.has("status") && payment.getString("status").equals("captured", ignoreCase = true)) {
-                    delay(500)
+                    delay(200)
                     moveToOrderConfIntermediatePage()
                 } else {
                     showToast(this, "status not captured")
@@ -262,9 +270,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
                 } else {
                     showToast(this, response.message)
                 }
-//                paymentActivityReqData?.couponDiscount = 0.0
-//                couponHolder?.setCouponData(null, null)
-                // paymentBillingHolder?.setUpData(paymentActivityReqData)
                 binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
             }
             is ValidateCouponUi.AppliedSuccessfully -> {
@@ -275,6 +280,9 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
 
     override fun didTapOnPaymentMethods(paymentMethod: PaymentMethod) {
         this.paymentMethod = paymentMethod
+        if (paymentMethod.key == "rapid") {
+            openRapidBazaarWallet()
+        }
     }
 
     private fun processAfterSuccessfulPayment(paymentData: PaymentData?) {
@@ -287,7 +295,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
         val payment = Payment(razorPayOrderId, signatureId, paymentId)
         paymentViewModel.verifyPaymentWithServer(payment)
     }
-
 
     private fun initializePayments(id: String, activity: Activity) {
         if (checkout == null) {
@@ -331,10 +338,10 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
 
     private fun startCouponListingActivity() {
         val couponListingIntent = Intent(this, CouponListingActivity::class.java)
-        launchCouponActivity.launch(couponListingIntent)
+        launchIntentionalActivity.launch(couponListingIntent)
     }
 
-    private val launchCouponActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val launchIntentionalActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result == null) {
             return@registerForActivityResult
         }
@@ -345,6 +352,9 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
             val couponValue = result.data?.getStringExtra(CouponListingActivity.INTENT_KEY_COUPON_VALUE)
             showHidePgBar(true)
             validateCouponFromIntent(couponValue, false)
+        }
+        if (result.data?.hasExtra(RapidWalletActivity.RAPID_WALLET_SUCCESS) == true) {
+
         }
     }
 
@@ -439,10 +449,19 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener, Paym
         }
     }
 
+    private fun openRapidBazaarWallet() {
+        if (paymentActivityReqData != null) {
+            val intent = Intent(this, RapidWalletActivity::class.java)
+            intent.putExtra(PAYMENT_MODEL_KEY, paymentActivityReqData)
+            intent.putExtra(TOTAL_ITEMS_IN_CART, cartItemCount)
+            launchIntentionalActivity.launch(intent)
+        }
+    }
 
     companion object {
         const val PAYMENT_MODEL_KEY = "payment_model_key"
         const val TOTAL_ITEMS_IN_CART = "items_in_cart"
     }
+
 
 }

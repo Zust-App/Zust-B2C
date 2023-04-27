@@ -10,7 +10,7 @@ data class CreatePaymentResponseModel(
     val statusCode: Int? = null,
     @SerializedName("data")
     val data: CreatePaymentDataModel? = null,
-    val errors: List<UserCustomError> = arrayListOf()
+    val errors: List<UserCustomError> = arrayListOf(),
 )
 
 data class CreatePaymentDataModel(
@@ -30,5 +30,5 @@ data class PaymentOrder(
     @SerializedName("id")
     val rzrPayOrderId: String,
     val notes: List<UserCustomError>,
-    val status: String
+    val status: String,
 )

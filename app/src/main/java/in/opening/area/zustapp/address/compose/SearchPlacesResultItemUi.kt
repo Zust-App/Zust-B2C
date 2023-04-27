@@ -6,11 +6,9 @@ import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,7 +36,6 @@ fun SearchPlacesResultItemUi(data: SearchPlacesDataModel, callback: (SearchPlace
         }
     ) {
         val (locationIcon, placesTitleTextView, placesDescriptionTextView) = createRefs()
-
         Image(
             painter = painterResource(id = R.drawable.ic_outline_location_on_24),
             contentDescription = null,
@@ -50,7 +47,6 @@ fun SearchPlacesResultItemUi(data: SearchPlacesDataModel, callback: (SearchPlace
                     bottom.linkTo(parent.bottom)
                 }
         )
-
         Text(
             text = data.mainText ?: "",
             maxLines = 1,
@@ -85,5 +81,6 @@ fun SearchPlacesResultItemUi(data: SearchPlacesDataModel, callback: (SearchPlace
                     width = Dimension.fillToConstraints
                 }
         )
+
     }
 }

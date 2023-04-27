@@ -64,7 +64,7 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
     //first check deliverable area and then save address
     internal fun checkAndSaveAddressWithServer() {
         if (!userAddressInputCache.pinCode.isNullOrEmpty()) {
-            checkIsDeliverablePinCodeOrNot(userAddressInputCache.pinCode!!)
+            checkIsDeliverablePinCodeOrNot(userAddressInputCache.pinCode!!,userAddressInputCache.latitude,userAddressInputCache.longitude)
         } else {
             //
         }
@@ -74,9 +74,9 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
         return saveUserAddressUiState.value.isLoading
     }
 
-    internal fun checkIsDeliverablePinCodeOrNot(inputPinCode: String) = viewModelScope.launch {
+    private fun checkIsDeliverablePinCodeOrNot(inputPinCode: String, latitude: Double?, longitude: Double?) = viewModelScope.launch {
         saveUserAddressUiState.update { SaveUserAddressUi.InitialUi(true) }
-        when (val response = apiRequestManager.checkPinCodeIsDeliverableOrNot(inputPinCode)) {
+        when (val response = apiRequestManager.checkPinCodeIsDeliverableOrNot(inputPinCode,latitude,longitude)) {
             is ResultWrapper.Success -> {
                 if (response.value.data?.isDeliverablePinCode == true) {
                     saveAddressUserAddress(saveAddressPostModel = userAddressInputCache)
@@ -86,7 +86,6 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
             }
             is ResultWrapper.NetworkError -> {
                 saveUserAddressUiState.update { SaveUserAddressUi.ErrorUi(false, getAuthErrorArrayList()) }
-
             }
             is ResultWrapper.GenericError -> {
                 saveUserAddressUiState.update { SaveUserAddressUi.ErrorUi(false, getAuthErrorArrayList()) }
@@ -99,7 +98,7 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
 
     }
 
-    internal fun saveAddressUserAddress(saveAddressPostModel: SaveAddressPostModel) {
+    private fun saveAddressUserAddress(saveAddressPostModel: SaveAddressPostModel) {
         saveUserAddressUiState.update { SaveUserAddressUi.InitialUi(true) }
         viewModelScope.launch {
             when (val response = apiRequestManager.saveUserAddress(saveAddressPostModel)) {

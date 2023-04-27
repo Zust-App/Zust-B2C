@@ -34,7 +34,7 @@ sealed interface LocationAddressUi {
 
     data class ErrorUi(
         override val isLoading: Boolean,
-        val timeStamp: Long = System.currentTimeMillis(),
+        val message: String? = null,
     ) : LocationAddressUi
 
     data class InitialUi(
