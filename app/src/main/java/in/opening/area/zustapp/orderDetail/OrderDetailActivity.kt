@@ -30,6 +30,7 @@ class OrderDetailActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             orderId = intent.getIntExtra(ORDER_ID, -1)
+            myOrdersListViewModel.orderIdCache = orderId
             if (intent.hasExtra(JUST_ORDERED)) {
                 justOrdered = intent.getBooleanExtra(JUST_ORDERED, false)
             }
@@ -40,11 +41,13 @@ class OrderDetailActivity : ComponentActivity() {
                         handleAction(it)
                     }
                 }) {
-                ConstraintLayout(modifier = Modifier
-                    .padding(it)
-                    .background(colorResource(id = R.color.screen_surface_color))
-                    .fillMaxWidth()
-                    .fillMaxHeight()) {
+                ConstraintLayout(
+                    modifier = Modifier
+                        .padding(it)
+                        .background(colorResource(id = R.color.screen_surface_color))
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
                     OrderedDetailsContainer(myOrdersListViewModel, this) {
                         justOrdered = true
                         handleAction(ACTION.NAV_BACK)

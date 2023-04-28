@@ -23,25 +23,45 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) : ViewModel() {
-    internal var userBookingFlow: Flow<PagingData<OrderHistoryItem>> = Pager(PagingConfig(pageSize = 10, enablePlaceholders = false)) {
-        UserBookingDataSource(apiRequestManager)
-    }.flow.cachedIn(viewModelScope)
+class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) :
+    ViewModel() {
+    internal var userBookingFlow: Flow<PagingData<OrderHistoryItem>> =
+        Pager(PagingConfig(pageSize = 10, enablePlaceholders = false)) {
+            UserBookingDataSource(apiRequestManager)
+        }.flow.cachedIn(viewModelScope)
     internal val orderDetailFlow = MutableStateFlow<OrderDetailUi>(OrderDetailUi.InitialUi(false))
-    internal val ratingOrderFlow = MutableStateFlow<RatingOrderUiState>(RatingOrderUiState.InitialState(false))
+    internal val ratingOrderFlow =
+        MutableStateFlow<RatingOrderUiState>(RatingOrderUiState.InitialState(false))
+
+    internal var orderIdCache: Int? = null
 
     internal fun getOrderDetails(orderId: Int) = viewModelScope.launch {
         orderDetailFlow.update { OrderDetailUi.InitialUi(true) }
         when (val response = apiRequestManager.getOrderDetails(orderId)) {
             is ResultWrapper.NetworkError -> {
-                orderDetailFlow.update { OrderDetailUi.ErrorUi(false, AppUtility.getAuthErrorArrayList()) }
+                orderDetailFlow.update {
+                    OrderDetailUi.ErrorUi(
+                        false,
+                        AppUtility.getAuthErrorArrayList()
+                    )
+                }
             }
             is ResultWrapper.UserTokenNotFound -> {
-                orderDetailFlow.update { OrderDetailUi.ErrorUi(false, AppUtility.getAuthErrorArrayList()) }
+                orderDetailFlow.update {
+                    OrderDetailUi.ErrorUi(
+                        false,
+                        AppUtility.getAuthErrorArrayList()
+                    )
+                }
             }
             is ResultWrapper.Success -> {
                 if (response.value.data == null) {
-                    orderDetailFlow.update { OrderDetailUi.ErrorUi(false, response.value.errors ?: arrayListOf()) }
+                    orderDetailFlow.update {
+                        OrderDetailUi.ErrorUi(
+                            false,
+                            response.value.errors ?: arrayListOf()
+                        )
+                    }
                 } else {
                     val displayOrderStatus = ArrayList<OrderStatus>()
                     response.value.data.apply {
@@ -54,12 +74,26 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                                     for (j in orderStatuses.indices) {
                                         if (allStatusList[i] == orderStatuses[j].orderStatusType) {
                                             isContains = true
-                                            displayOrderStatus.add(OrderStatus(orderStatuses[j].createdDateTime,
-                                                orderStatuses[j].orderStatusType?.replace("_", " ")))
+                                            displayOrderStatus.add(
+                                                OrderStatus(
+                                                    orderStatuses[j].createdDateTime,
+                                                    orderStatuses[j].orderStatusType?.replace(
+                                                        "_",
+                                                        " "
+                                                    )
+                                                )
+                                            )
                                         }
                                     }
                                     if (!isContains) {
-                                        displayOrderStatus.add(OrderStatus(orderStatusType = allStatusList[i].replace("_", " ")))
+                                        displayOrderStatus.add(
+                                            OrderStatus(
+                                                orderStatusType = allStatusList[i].replace(
+                                                    "_",
+                                                    " "
+                                                )
+                                            )
+                                        )
                                     }
                                 }
                             }
@@ -70,7 +104,13 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                 }
             }
             is ResultWrapper.GenericError -> {
-                orderDetailFlow.update { OrderDetailUi.ErrorUi(false, arrayListOf(), response.error?.error ?: "Something went wrong") }
+                orderDetailFlow.update {
+                    OrderDetailUi.ErrorUi(
+                        false,
+                        arrayListOf(),
+                        response.error?.error ?: "Something went wrong"
+                    )
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ class NetworkUtility {
 
     companion object {
 
-        private const val isProd = true
+        private const val isProd = false
 
         private fun getCompleteBaseUrl(): String {
             return if (!BuildConfig.DEBUG) {
@@ -62,7 +62,10 @@ class NetworkUtility {
         val PRODUCT_DETAILS = "$baseUrl/products/products-by-productid"
         val ORDER_INVOICE = "$baseUrl/orders/invoice"
         val PLACES_SEARCH_NAME = "$baseUrl/places/autocomplete"
-        val RAPID_WALLET_VERIFY_USER = "$baseUrl/auth/rapid-verify"
+        val RAPID_WALLET_VERIFY_USER = "$baseUrl/auth/rapid-verify"//TODO()
+        val RAPID_WALLET_SEND_OTP="$baseUrl/rapid/send-otp"
+        val RAPID_DO_PAYMENT="$baseUrl/rapid/rapid-transaction"
+
 
 
     }

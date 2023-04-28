@@ -1,9 +1,14 @@
 package `in`.opening.area.zustapp.orderDetail.ui
 
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
+import `in`.opening.area.zustapp.compose.ErrorRetryCaseUiForProductList
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.home.components.HomePageErrorUi
 import `in`.opening.area.zustapp.orderDetail.models.OrderStatus
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.uiModels.OrderDetailUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
@@ -14,18 +19,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
 
 @Composable
-fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutScope: ConstraintLayoutScope, callback: () -> Unit) {
-    val orderDetail = viewModel.orderDetailFlow.collectAsState(initial = OrderDetailUi.InitialUi(false))
+fun OrderedDetailsContainer(
+    viewModel: MyOrdersListViewModel,
+    constraintLayoutScope: ConstraintLayoutScope,
+    callback: () -> Unit
+) {
+    val orderDetail =
+        viewModel.orderDetailFlow.collectAsState(initial = OrderDetailUi.InitialUi(false))
     val context: Context = LocalContext.current
     constraintLayoutScope.apply {
         val (list) = createRefs()
@@ -58,10 +72,12 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                     if (!response.data.items.isNullOrEmpty()) {
                         items(response.data.items) { item ->
                             OrderedItemSingleUnit(item)
-                            Divider(modifier = Modifier
-                                .width(1.dp)
-                                .fillMaxWidth()
-                                .background(color = Color(0xFFA0A0A0)))
+                            Divider(
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .fillMaxWidth()
+                                    .background(color = Color(0xFFA0A0A0))
+                            )
                         }
                     }
 
@@ -71,7 +87,11 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                             OrderStatusTitleContainer()
                         }
                         itemsIndexed(response.data.displayOrderStatus!!) { index, item: OrderStatus ->
-                            OrderStatusSingleItem(item, index, response.data.displayOrderStatus!!.size)
+                            OrderStatusSingleItem(
+                                item,
+                                index,
+                                response.data.displayOrderStatus!!.size
+                            )
                         }
                         item {
                             OrderStatusBottomContainer()
@@ -133,6 +153,11 @@ fun OrderedDetailsContainer(viewModel: MyOrdersListViewModel, constraintLayoutSc
                 } else {
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
+                RetryOrderDetails {
+                    viewModel.orderIdCache?.let { orderId ->
+                        viewModel.getOrderDetails(orderId)
+                    }
+                }
             }
             is OrderDetailUi.InitialUi -> {
 
@@ -153,5 +178,35 @@ fun ShowLoadMore(constraintLayoutScope: ConstraintLayoutScope) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             })
+    }
+}
+
+@Composable
+private fun RetryOrderDetails(retryCallback: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(60.dp))
+        Text(
+            text = "Something went wrong please try again",
+            color = colorResource(id = R.color.red_primary),
+            style = ZustTypography.body2
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedButton(onClick = {
+            retryCallback.invoke()
+        }) {
+            Text(
+                text = "Retry",
+                color = colorResource(id = R.color.app_black),
+                style = ZustTypography.body1
+            )
+        }
+
     }
 }

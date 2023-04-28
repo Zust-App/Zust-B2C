@@ -25,7 +25,10 @@ import `in`.opening.area.zustapp.product.model.*
 import `in`.opening.area.zustapp.productDetails.models.ProductDetailsModel
 import `in`.opening.area.zustapp.profile.models.SuggestProductReqModel
 import `in`.opening.area.zustapp.profile.models.UserProfileResponse
+import `in`.opening.area.zustapp.rapidwallet.model.RWCreatePaymentModel
 import `in`.opening.area.zustapp.rapidwallet.model.RWUserExistWalletResponse
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletPaymentResponse
+import `in`.opening.area.zustapp.rapidwallet.model.RwSendOTPResponse
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.utility.DeviceInfo
 import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
@@ -47,22 +50,33 @@ class ApiRequestManager @Inject constructor() {
         const val Authorization = "Authorization"
     }
 
-    suspend inline fun makeLoginRequestForGetOtp(mobileNumber: String) = universalApiRequestManager {
-        ktorHttpClient.get<GetOtpResponseModel>(NetworkUtility.END_POINT_REGISTER) {
-            parameter("phoneNo", mobileNumber)
+    suspend inline fun makeLoginRequestForGetOtp(mobileNumber: String) =
+        universalApiRequestManager {
+            ktorHttpClient.get<GetOtpResponseModel>(NetworkUtility.END_POINT_REGISTER) {
+                parameter("phoneNo", mobileNumber)
+            }
         }
-    }
 
-    suspend inline fun postAuthVerification(mobileNumber: String, otp: String) = universalApiRequestManager {
-        val authVerificationBody = AuthVerificationBody(deviceId = DeviceInfo.getDeviceIdInfo(), otp = otp, phoneNo = mobileNumber)
-        ktorHttpClient.post<VerifyOtpResponseModel>(NetworkUtility.END_POINT_AUTH_VERIFICATION) {
-            contentType(ContentType.Application.Json)
-            body = authVerificationBody
+    suspend inline fun postAuthVerification(mobileNumber: String, otp: String) =
+        universalApiRequestManager {
+            val authVerificationBody = AuthVerificationBody(
+                deviceId = DeviceInfo.getDeviceIdInfo(),
+                otp = otp,
+                phoneNo = mobileNumber
+            )
+            ktorHttpClient.post<VerifyOtpResponseModel>(NetworkUtility.END_POINT_AUTH_VERIFICATION) {
+                contentType(ContentType.Application.Json)
+                body = authVerificationBody
+            }
         }
-    }
 
-    suspend inline fun postUpdateUserProfile(userName: String, userEmail: String?, referralCode: String?) = universalApiRequestManager {
-        val userProfileUpdateBody = UserProfileUpdateBody(name = userName, userEmail = userEmail, referCode = referralCode)
+    suspend inline fun postUpdateUserProfile(
+        userName: String,
+        userEmail: String?,
+        referralCode: String?
+    ) = universalApiRequestManager {
+        val userProfileUpdateBody =
+            UserProfileUpdateBody(name = userName, userEmail = userEmail, referCode = referralCode)
         val token = sharedPrefManager.getUserAuthToken()
 
         ktorHttpClient.put<UpdateUserProfileResponse>(NetworkUtility.END_POINT_UPDATE_PROFILE) {
@@ -96,15 +110,16 @@ class ApiRequestManager @Inject constructor() {
         emit(getHomePageDataFromServer(lat, lng))
     }
 
-    private suspend fun getHomePageDataFromServer(lat: Double, lng: Double) = universalApiRequestManager {
-        val token = sharedPrefManager.getUserAuthToken()
-        val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE_V1) {
-            headers {
-                this.append(Authorization, "Bearer $token")
+    private suspend fun getHomePageDataFromServer(lat: Double, lng: Double) =
+        universalApiRequestManager {
+            val token = sharedPrefManager.getUserAuthToken()
+            val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE_V1) {
+                headers {
+                    this.append(Authorization, "Bearer $token")
+                }
             }
+            value
         }
-        value
-    }
 
     suspend fun getTrendingProductsWithFlow() = flow {
         emit(getTrendingProducts())
@@ -131,13 +146,14 @@ class ApiRequestManager @Inject constructor() {
     suspend fun productListFromServer(categoryId: Int) = flow {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
-            val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.PRODUCT_LIST_BY_CATEGORY) {
-                headers {
-                    this.append(Authorization, "Bearer $authToken")
+            val value =
+                ktorHttpClient.get<ProductApiResponse>(NetworkUtility.PRODUCT_LIST_BY_CATEGORY) {
+                    headers {
+                        this.append(Authorization, "Bearer $authToken")
+                    }
+                    parameter("categoryId", categoryId)
+                    parameter("merchantId", 1)
                 }
-                parameter("categoryId", categoryId)
-                parameter("merchantId", 1)
-            }
             emit(ResultWrapper.Success(value))
         } catch (e: Throwable) {
             print(e.message)
@@ -146,16 +162,17 @@ class ApiRequestManager @Inject constructor() {
     }
 
 
-    suspend fun createCartWithServer(orderRequestBody: CreateCartReqModel) = universalApiRequestManager {
-        val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<CreateCartResponseModel>(NetworkUtility.ORDERS_CART) {
-            headers(fun HeadersBuilder.() {
-                this.append(Authorization, "Bearer $authToken")
-            })
-            orderRequestBody.addressId = sharedPrefManager.getUserAddress()?.id ?: -1
-            body = orderRequestBody
+    suspend fun createCartWithServer(orderRequestBody: CreateCartReqModel) =
+        universalApiRequestManager {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            ktorHttpClient.post<CreateCartResponseModel>(NetworkUtility.ORDERS_CART) {
+                headers(fun HeadersBuilder.() {
+                    this.append(Authorization, "Bearer $authToken")
+                })
+                orderRequestBody.addressId = sharedPrefManager.getUserAddress()?.id ?: -1
+                body = orderRequestBody
+            }
         }
-    }
 
     suspend fun getCouponsFromServer() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
@@ -191,15 +208,16 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun invokePaymentToGetId(createPayment: CreatePaymentReqBodyModel) = universalApiRequestManager {
-        val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<CreatePaymentResponseModel>(NetworkUtility.CREATE_PAYMENT) {
-            headers {
-                this.append(Authorization, "Bearer $authToken")
+    suspend fun invokePaymentToGetId(createPayment: CreatePaymentReqBodyModel) =
+        universalApiRequestManager {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            ktorHttpClient.post<CreatePaymentResponseModel>(NetworkUtility.CREATE_PAYMENT) {
+                headers {
+                    this.append(Authorization, "Bearer $authToken")
+                }
+                body = createPayment
             }
-            body = createPayment
         }
-    }
 
     suspend fun verifyPaymentWithServer(paymentBody: Payment) = universalApiRequestManager {
         ktorHttpClient.post<String>(NetworkUtility.VERIFY_PAYMENT) {
@@ -258,15 +276,16 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun saveUserAddress(saveAddressPostModel: SaveAddressPostModel) = universalApiRequestManager {
-        val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<SaveAddressPostResponse>(NetworkUtility.ADDRESS) {
-            headers {
-                this.append(Authorization, "Bearer $authToken")
+    suspend fun saveUserAddress(saveAddressPostModel: SaveAddressPostModel) =
+        universalApiRequestManager {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            ktorHttpClient.post<SaveAddressPostResponse>(NetworkUtility.ADDRESS) {
+                headers {
+                    this.append(Authorization, "Bearer $authToken")
+                }
+                body = saveAddressPostModel
             }
-            body = saveAddressPostModel
         }
-    }
 
     suspend fun deleteAddress(id: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
@@ -284,13 +303,14 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun checkIsServiceAvail(lat: Double?, lng: Double?, postalCode: String?) = universalApiRequestManager {
-        ktorHttpClient.get<String>(NetworkUtility.VERIFY_DELIVERABLE_ADDRESS) {
-            parameter("latitude", lat)
-            parameter("longitude", lng)
-            parameter("pincode", postalCode)
+    suspend fun checkIsServiceAvail(lat: Double?, lng: Double?, postalCode: String?) =
+        universalApiRequestManager {
+            ktorHttpClient.get<String>(NetworkUtility.VERIFY_DELIVERABLE_ADDRESS) {
+                parameter("latitude", lat)
+                parameter("longitude", lng)
+                parameter("pincode", postalCode)
+            }
         }
-    }
 
     suspend fun getUserProfileDetails() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
@@ -301,15 +321,16 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun sendSuggestProductResponse(suggestProductReqModel: SuggestProductReqModel) = universalApiRequestManager {
-        val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<String>(NetworkUtility.SUGGEST_PRODUCT) {
-            headers {
-                this.append(Authorization, "Bearer $authToken")
+    suspend fun sendSuggestProductResponse(suggestProductReqModel: SuggestProductReqModel) =
+        universalApiRequestManager {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            ktorHttpClient.post<String>(NetworkUtility.SUGGEST_PRODUCT) {
+                headers {
+                    this.append(Authorization, "Bearer $authToken")
+                }
+                body = suggestProductReqModel
             }
-            body = suggestProductReqModel
         }
-    }
 
     suspend fun getLatestOrderWhichNotDelivered() = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
@@ -320,29 +341,40 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun syncUserCartWithServerAndLock(lockOrderSummary: LockOrderSummaryModel) = universalApiRequestManager {
-        val authToken = sharedPrefManager.getUserAuthToken()
-        ktorHttpClient.post<LockOrderResponseModel>(NetworkUtility.USER_CART) {
-            headers {
-                this.append(Authorization, "Bearer $authToken")
+    suspend fun syncUserCartWithServerAndLock(lockOrderSummary: LockOrderSummaryModel) =
+        universalApiRequestManager {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            ktorHttpClient.post<LockOrderResponseModel>(NetworkUtility.USER_CART) {
+                headers {
+                    this.append(Authorization, "Bearer $authToken")
+                }
+                body = lockOrderSummary
             }
-            body = lockOrderSummary
         }
-    }
 
     suspend fun getDirections(origin: LatLng, destination: LatLng): String {
         return ktorHttpClient.get("https://maps.googleapis.com/maps/api/directions/json") {
             parameter("origin", origin.latitude.toString() + "," + origin.longitude.toString())
-            parameter("destination", destination.latitude.toString() + "," + destination.longitude.toString())
+            parameter(
+                "destination",
+                destination.latitude.toString() + "," + destination.longitude.toString()
+            )
             parameter("waypoints", "")//waypoints=lat2,lng2
             parameter("key", "AIzaSyB0oGlRPsaQr0xC-GGk5jHXgCmr0cMsjvI")
         }
     }
 
-    suspend fun getDirectionsWithWayPoints(origin: LatLng, destination: LatLng, between: LatLng): String {
+    suspend fun getDirectionsWithWayPoints(
+        origin: LatLng,
+        destination: LatLng,
+        between: LatLng
+    ): String {
         return ktorHttpClient.get("https://maps.googleapis.com/maps/api/directions/json") {
             parameter("origin", origin.latitude.toString() + "," + origin.longitude.toString())
-            parameter("destination", destination.latitude.toString() + "," + destination.longitude.toString())
+            parameter(
+                "destination",
+                destination.latitude.toString() + "," + destination.longitude.toString()
+            )
             parameter("waypoints", between.latitude.toString() + "," + between.longitude.toString())
             parameter("key", "AIzaSyB0oGlRPsaQr0xC-GGk5jHXgCmr0cMsjvI")
         }
@@ -418,5 +450,31 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
+    suspend fun sendRapidWalletOTP(rapidUserId: String) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<RwSendOTPResponse>(NetworkUtility.RAPID_WALLET_SEND_OTP) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("phoneNo", rapidUserId)
+        }
+    }
+
+    suspend fun createPaymentWithRapidWallet(
+        rapidUserId: String,
+        payableAmount: Double? = null,
+        walletType: String,
+        transactionId: String
+    ) = universalApiRequestManager{
+        val authToken = sharedPrefManager.getUserAuthToken()
+        val createRapidWalletPaymentModel =
+            RWCreatePaymentModel(rapidUserId, payableAmount, walletType, transactionId)
+        ktorHttpClient.post<RapidWalletPaymentResponse>(NetworkUtility.RAPID_DO_PAYMENT) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = createRapidWalletPaymentModel
+        }
+    }
 
 }

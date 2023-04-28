@@ -244,3 +244,60 @@ import androidx.activity.result.contract.ActivityResultContracts
 //    }
 
 // startAddNewAddressActivity.launch(addressInputIntent)
+
+
+//val (title1, subtitle1, balance1, radioBtn1) = createRefs()
+//            successData.rapidBank?.bankBalance?.let {
+//                Text(
+//                    text = "Rapid Bank",
+//                    modifier = Modifier.constrainAs(title1) {
+//                        top.linkTo(parent.top, dp_8)
+//                        start.linkTo(parent.start)
+//                        end.linkTo(radioBtn1.start, dp_8)
+//                        width = Dimension.fillToConstraints
+//                    },
+//                    style = ZustTypography.body1,
+//                    color = colorResource(id = R.color.app_black)
+//                )
+//                Text(
+//                    text = "Available Balance:- ",
+//                    modifier = Modifier
+//                        .constrainAs(subtitle1) {
+//                            top.linkTo(title1.bottom, dp_8)
+//                            start.linkTo(parent.start)
+//                        }
+//                        .clickable {
+//                            currentRapidMethod = RAPID_BANK
+//                        },
+//                    style = ZustTypography.body2,
+//                    color = colorResource(id = R.color.black_2)
+//                )
+//                Text(
+//                    text = it.toString(),
+//                    modifier = Modifier.constrainAs(balance1) {
+//                        top.linkTo(subtitle1.top)
+//                        start.linkTo(subtitle1.end, dp_12)
+//                        bottom.linkTo(subtitle1.bottom)
+//                        end.linkTo(radioBtn1.start, dp_8)
+//                        width = Dimension.fillToConstraints
+//                    },
+//                    style = ZustTypography.body1,
+//                    color = colorResource(id = R.color.new_material_primary)
+//                )
+//
+//                RadioButton(
+//                    selected = currentRapidMethod == RAPID_BANK,
+//                    onClick = {
+//                        currentRapidMethod = RAPID_BANK
+//                    },
+//                    modifier = Modifier.constrainAs(radioBtn1) {
+//                        top.linkTo(title1.top)
+//                        bottom.linkTo(balance1.bottom)
+//                        end.linkTo(parent.end)
+//                    },
+//                    colors = RadioButtonDefaults.colors(
+//                        selectedColor = colorResource(id = R.color.new_material_primary),
+//                        unselectedColor = colorResource(id = R.color.new_hint_color)
+//                    ),
+//                )
+//            }

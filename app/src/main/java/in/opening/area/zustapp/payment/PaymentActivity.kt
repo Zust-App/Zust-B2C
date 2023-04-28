@@ -21,8 +21,7 @@ import `in`.opening.area.zustapp.uiModels.ValidateCouponUi
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
 import `in`.opening.area.zustapp.databinding.ActivityPaymentBinding
 import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
-import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity.Companion.ORDER_ID_KEY
-import `in`.opening.area.zustapp.rapidwallet.RapidWalletBtmSheet
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.utility.*
 import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
 import android.annotation.SuppressLint
@@ -81,7 +80,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
 
     @SuppressLint("SetTextI18n")
     private fun setUpPaymentHolder() {
-        paymentBillingHolder = PaymentBillingHolder(binding?.paymentBillingContainer, layoutInflater)
+        paymentBillingHolder =
+            PaymentBillingHolder(binding?.paymentBillingContainer, layoutInflater)
         paymentBillingHolder?.setUpData(paymentActivityReqData)
         binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = getString(R.string.ruppes) +
                 ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
@@ -126,7 +126,12 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         binding?.paymentMethodContainer?.paymentModeRecyclerView?.apply {
             layoutManager = LinearLayoutManager(this@PaymentActivity)
             adapter = paymentMethodAdapter
-            addItemDecoration(CustomDividerItemDecoration(this@PaymentActivity, R.drawable.divider_1dp))
+            addItemDecoration(
+                CustomDividerItemDecoration(
+                    this@PaymentActivity,
+                    R.drawable.divider_1dp
+                )
+            )
         }
         setUpPaymentHolder()
         paymentViewModel.appliedCoupon = paymentActivityReqData?.couponString ?: ""
@@ -150,7 +155,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             val createPayment = CreatePaymentReqBodyModel(
                 paymentActivityReqData?.totalAmount,
                 order_id = paymentActivityReqData?.orderId,
-                paymentMethod = paymentMethod?.key!!)
+                paymentMethod = paymentMethod?.key!!
+            )
             if (rapidUserId != null) {
                 createPayment.rapidBazaarUserId = rapidUserId
             }
@@ -229,7 +235,9 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         if (data.has("success") && data.getBoolean("success")) {
             if (data.has("payment")) {
                 val payment = data.getJSONObject("payment")
-                if (payment.has("status") && payment.getString("status").equals("captured", ignoreCase = true)) {
+                if (payment.has("status") && payment.getString("status")
+                        .equals("captured", ignoreCase = true)
+                ) {
                     delay(200)
                     moveToOrderConfIntermediatePage()
                 } else {
@@ -270,7 +278,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
                 } else {
                     showToast(this, response.message)
                 }
-                binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
+                binding?.paymentPageBottomBar?.totalPayableAmountTv?.text =
+                    ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
             }
             is ValidateCouponUi.AppliedSuccessfully -> {
                 updateCouponFiled(response.data, response.isCouponRemoved)
@@ -341,28 +350,52 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         launchIntentionalActivity.launch(couponListingIntent)
     }
 
-    private val launchIntentionalActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result == null) {
-            return@registerForActivityResult
+    private val launchIntentionalActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result == null) {
+                return@registerForActivityResult
+            }
+            if (result.data == null) {
+                return@registerForActivityResult
+            }
+            if (result.data?.hasExtra(CouponListingActivity.INTENT_KEY_COUPON_VALUE) == true) {
+                val couponValue =
+                    result.data?.getStringExtra(CouponListingActivity.INTENT_KEY_COUPON_VALUE)
+                showHidePgBar(true)
+                validateCouponFromIntent(couponValue, false)
+            }
+            if (result.data?.hasExtra(RapidWalletActivity.RAPID_WALLET_SUCCESS) == true) {
+                val rapidWalletResult: RapidWalletResult? =
+                    result.data?.getParcelableExtra(RapidWalletActivity.RAPID_WALLET_SUCCESS)
+                rapidWalletResult?.let {
+                    when (it.status) {
+                        1 -> {
+                            moveToOrderConfirmIntermediatePage(it.orderId)
+                        }
+                        -1 -> {
+                            showToast(this@PaymentActivity, "Payment declined")
+                        }
+                        else -> {
+                            showToast(this@PaymentActivity, "Something went wrong")
+                        }
+                    }
+                } ?: run {
+                    showToast(this@PaymentActivity, "Something went wrong")
+                }
+            }
         }
-        if (result.data == null) {
-            return@registerForActivityResult
-        }
-        if (result.data?.hasExtra(CouponListingActivity.INTENT_KEY_COUPON_VALUE) == true) {
-            val couponValue = result.data?.getStringExtra(CouponListingActivity.INTENT_KEY_COUPON_VALUE)
-            showHidePgBar(true)
-            validateCouponFromIntent(couponValue, false)
-        }
-        if (result.data?.hasExtra(RapidWalletActivity.RAPID_WALLET_SUCCESS) == true) {
-
-        }
-    }
 
     private fun validateCouponFromIntent(couponValue: String?, removeCoupon: Boolean) {
         if (couponValue == null) {
             return
         }
-        paymentViewModel.validateCoupon(ApplyCouponReqBody(couponValue, paymentActivityReqData?.orderId, removeCoupon))
+        paymentViewModel.validateCoupon(
+            ApplyCouponReqBody(
+                couponValue,
+                paymentActivityReqData?.orderId,
+                removeCoupon
+            )
+        )
     }
 
     private fun showHidePgBar(canShow: Boolean) {
@@ -384,37 +417,67 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             if (createPaymentResponseModel.order == null) {
                 moveToOrderConfIntermediatePage()
             } else {
-                initializePayments(createPaymentResponseModel.order.rzrPayOrderId, this@PaymentActivity)
+                initializePayments(
+                    createPaymentResponseModel.order.rzrPayOrderId,
+                    this@PaymentActivity
+                )
             }
         }
     }
 
-    private fun updateCouponFiled(appliedCouponResponse: AppliedCouponData, isCouponRemoved: Boolean) {
+    private fun updateCouponFiled(
+        appliedCouponResponse: AppliedCouponData,
+        isCouponRemoved: Boolean
+    ) {
         if (isCouponRemoved) {
             paymentActivityReqData?.couponDiscount = 0.0
             couponHolder?.setCouponData(null, null)
             paymentBillingHolder?.setUpData(paymentActivityReqData)
             paymentViewModel.appliedCoupon = ""
-            binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
+            binding?.paymentPageBottomBar?.totalPayableAmountTv?.text =
+                ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
         } else {
             val discountAmount: Double = appliedCouponResponse.discountAmount
             paymentActivityReqData?.couponDiscount = discountAmount
             couponHolder?.setCouponData(discountAmount, appliedCouponResponse.couponCode)
             paymentBillingHolder?.setUpData(paymentActivityReqData)
             paymentViewModel.appliedCoupon = appliedCouponResponse.couponCode
-            binding?.paymentPageBottomBar?.totalPayableAmountTv?.text = ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
+            binding?.paymentPageBottomBar?.totalPayableAmountTv?.text =
+                ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
         }
     }
 
     private fun moveToOrderConfIntermediatePage() {
         if (paymentActivityReqData?.orderId != null) {
             paymentViewModel.clearCartItems()
-            val orderConfirmationPage: Intent? by lazy { Intent(this, OrderConfirmationIntermediateActivity::class.java) }
+            val orderConfirmationPage: Intent? by lazy {
+                Intent(
+                    this,
+                    OrderConfirmationIntermediateActivity::class.java
+                )
+            }
             orderConfirmationPage?.putExtra(ORDER_ID, paymentActivityReqData?.orderId)
-            orderConfirmationPage?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            orderConfirmationPage?.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(orderConfirmationPage)
         }
     }
+
+
+    private fun moveToOrderConfirmIntermediatePage(orderId: Int) {
+        paymentViewModel.clearCartItems()
+        val orderConfirmationPage: Intent? by lazy {
+            Intent(
+                this,
+                OrderConfirmationIntermediateActivity::class.java
+            )
+        }
+        orderConfirmationPage?.putExtra(ORDER_ID, orderId)
+        orderConfirmationPage?.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(orderConfirmationPage)
+    }
+
 
     private fun setUpAddressDetails(address: Address?) {
         if (address == null) {

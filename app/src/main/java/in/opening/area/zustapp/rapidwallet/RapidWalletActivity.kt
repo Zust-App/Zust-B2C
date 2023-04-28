@@ -1,16 +1,22 @@
 package `in`.opening.area.zustapp.rapidwallet
 
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.address.AddNewAddressActivity
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
 import `in`.opening.area.zustapp.payment.PaymentActivity
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletUiRepresentationModel
 import `in`.opening.area.zustapp.rapidwallet.model.RwUserExistWalletData
 import `in`.opening.area.zustapp.ui.theme.*
 import `in`.opening.area.zustapp.uiModels.RWUserWalletUiState
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.ProductUtils
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
@@ -33,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,22 +49,24 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
+import java.util.*
 
 @AndroidEntryPoint
 class RapidWalletActivity : AppCompatActivity() {
     companion object {
         const val RAPID_WALLET_SUCCESS = "rapid_wallet_success"
-        const val ORDER_ID_KEY = "ORDER_ID"
     }
 
     private val rapidWalletViewModel: RapidWalletViewModel by viewModels()
     private var paymentWarningDialog: PaymentWarningDialog? = null
+    private var enableBackBtn = false
 
-    private var onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            showWarningDialog()
+    private var onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleBackPressed()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,189 +75,361 @@ class RapidWalletActivity : AppCompatActivity() {
             Scaffold(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(), topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = "Rapid Wallet", callback = {
-                    finish()
-                })
+                ComposeCustomTopAppBar(
+                    modifier = Modifier,
+                    titleText = "Rapid Wallet",
+                    callback = {
+                        handleBackPressed()
+                    })
             }) { padding ->
-                RapidWalletMainUi(padding, rapidWalletViewModel)
+                RapidWalletMainUi(padding, rapidWalletViewModel) { rapidWalletResult ->
+                    val intent = Intent()
+                    intent.putExtra(RAPID_WALLET_SUCCESS, rapidWalletResult)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    private fun getDataFromIntent() {
-        if (intent.hasExtra(PaymentActivity.PAYMENT_MODEL_KEY)) {
-            rapidWalletViewModel.paymentActivityReqData = intent.getParcelableExtra(PaymentActivity.PAYMENT_MODEL_KEY)
-        }
-        if (intent.hasExtra(PaymentActivity.TOTAL_ITEMS_IN_CART)) {
-            rapidWalletViewModel.itemCartCount = intent.getIntExtra(PaymentActivity.TOTAL_ITEMS_IN_CART, 0)
+    private fun handleBackPressed() {
+        if (enableBackBtn) {
+            rapidWalletViewModel.getOrderId()
+            val intent = Intent()
+            intent.putExtra(
+                RAPID_WALLET_SUCCESS,
+                RapidWalletResult(rapidWalletViewModel.getOrderId()!!, -1)
+            )
+            AppUtility.showToast(this@RapidWalletActivity, "Payment cancelled")
+            setResult(RESULT_CANCELED, intent)
+            finish()
+        } else {
+            AppUtility.showToast(this@RapidWalletActivity, "Please wait")
         }
     }
 
-    private fun showWarningDialog() {
-        if (paymentWarningDialog == null) {
-            paymentWarningDialog = PaymentWarningDialog()
+    private fun getDataFromIntent() {
+        if (intent.hasExtra(PaymentActivity.PAYMENT_MODEL_KEY)) {
+            rapidWalletViewModel.paymentActivityReqData =
+                intent.getParcelableExtra(PaymentActivity.PAYMENT_MODEL_KEY)
         }
-        if (paymentWarningDialog?.isAdded == true && paymentWarningDialog?.isVisible == true) {
+        if (intent.hasExtra(PaymentActivity.TOTAL_ITEMS_IN_CART)) {
+            rapidWalletViewModel.itemCartCount =
+                intent.getIntExtra(PaymentActivity.TOTAL_ITEMS_IN_CART, 0)
+        }
+        rapidWalletViewModel.rapidUserExistUiState.update {
+            RWUserWalletUiState.ShowUserIdInput(false)
+        }
+    }
+
+    private fun showWarningDialog(title: String? = null, subTitle: String? = null) {
+        if (paymentWarningDialog == null) {
+            paymentWarningDialog = PaymentWarningDialog.newInstance(title, subTitle)
+        }
+        if (paymentWarningDialog?.isAdded == true) {
             return
         }
-        paymentWarningDialog?.isCancelable = true
+        if (paymentWarningDialog?.isVisible == true) {
+            return
+        }
+        paymentWarningDialog?.isCancelable = false
         paymentWarningDialog?.show(supportFragmentManager, PaymentWarningDialog.PAYMENT_WARNING_TAG)
     }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Composable
+    private fun RapidWalletMainUi(
+        padding: PaddingValues,
+        rapidWalletViewModel: RapidWalletViewModel,
+        paymentState: (RapidWalletResult) -> Unit
+    ) {
+        val rwUserExistWalletData by rapidWalletViewModel.rapidUserExistUiState.collectAsState(
+            RWUserWalletUiState.InitialUi(false)
+        )
+
+        val context = LocalContext.current
+
+        var canShowPgBar by remember {
+            mutableStateOf(false)
+        }
+
+        val currentUiState by rapidWalletViewModel.rapidWalletUiView.collectAsState(
+            RapidWalletUiRepresentationModel.EnterUserIdUI(null)
+        )
+
+        canShowPgBar = rwUserExistWalletData.isLoading
+        val keyboard = LocalSoftwareKeyboardController.current
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(padding)
+                .background(color = colorResource(id = R.color.white)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            OrderInformation(rapidWalletViewModel)
+            when (currentUiState) {
+                is RapidWalletUiRepresentationModel.EnterUserIdUI -> {
+                    enableBackBtn = true
+                    ShowEnterUserId(keyboard, rapidWalletViewModel, context) { ->
+                        rapidWalletViewModel.apply {
+                            if (!rapidUserIdCache.isNullOrEmpty()) {
+                                showWarningDialog(subTitle = "Fetching wallet details...")
+                                verifyRapidWalletAndBalance()
+                            } else {
+                                AppUtility.showToast(context, "Please enter Rapid User Id")
+                            }
+                        }
+                    }
+                }
+                is RapidWalletUiRepresentationModel.WalletDetailsUI -> {
+                    enableBackBtn = true
+                    val data =
+                        (currentUiState as RapidWalletUiRepresentationModel.WalletDetailsUI).x
+                    ShowWalletBalances(data) {
+                        if (it == EDIT_NUMBER) {
+                            rapidWalletViewModel.rapidUserExistUiState.update {
+                                RWUserWalletUiState.ShowUserIdInput(false)
+                            }
+                        }
+                        if (it == SEND_OTP) {
+                            enableBackBtn = false
+                            showWarningDialog(subTitle = "We are sending OTP to your mobile number...")
+                            rapidWalletViewModel.sendOtpToRapidUser(rapidWalletViewModel.rapidUserIdCache)
+                        }
+                    }
+                }
+                is RapidWalletUiRepresentationModel.OtpUi -> {
+                    rapidWalletViewModel.rapidUserIdCache?.let {
+                        RapidUserOTPUi(it, keyboard, { userInputOTP ->
+                            if (rapidWalletViewModel.verifyUserInputOTP(userInputOTP)) {
+                                enableBackBtn = false
+                                showWarningDialog(subTitle = "Please Don't back pressed or close the app. We are processing your payment with Rapid Wallet")
+                                rapidWalletViewModel.createPaymentWithRapidWallet()
+                            } else {
+                                enableBackBtn = true
+                                canShowPgBar = false
+                                AppUtility.showToast(context, "Entered invalid otp")
+                            }
+                        }) {
+                            //change Id
+                            enableBackBtn = true
+                            canShowPgBar = false
+                            rapidWalletViewModel.rapidUserExistUiState.update {
+                                RWUserWalletUiState.ShowUserIdInput(false)
+                            }
+                        }
+                    }
+                }
+            }
+            RapidWalletTerms()
+        }
+
+        LaunchedEffect(key1 = rwUserExistWalletData, block = {
+            when (rwUserExistWalletData) {
+                is RWUserWalletUiState.ShowUserIdInput -> {
+                    rapidWalletViewModel.rapidWalletUiView.update {
+                        RapidWalletUiRepresentationModel.EnterUserIdUI(null)
+                    }
+                }
+
+                is RWUserWalletUiState.Success -> {
+                    val successData: RwUserExistWalletData? =
+                        (rwUserExistWalletData as RWUserWalletUiState.Success).data
+                    rapidWalletViewModel.rapidWalletUiView.update {
+                        RapidWalletUiRepresentationModel.WalletDetailsUI(successData)
+                    }
+                }
+
+                is RWUserWalletUiState.GetRapidWalletOtp -> {
+                    rapidWalletViewModel.rapidWalletUiView.update {
+                        RapidWalletUiRepresentationModel.OtpUi(null)
+                    }
+                    AppUtility.showToast(context, "Otp sent successfully")
+                }
+
+                is RWUserWalletUiState.InitialUi -> {
+
+                }
+
+                is RWUserWalletUiState.ErrorUi -> {
+                    (rwUserExistWalletData as RWUserWalletUiState.ErrorUi).message?.let {
+                        AppUtility.showToast(
+                            context,
+                            it
+                        )
+                    } ?: kotlin.run {
+                        AppUtility.showToast(
+                            context,
+                            (rwUserExistWalletData as RWUserWalletUiState.ErrorUi).errors?.getTextMsg()
+                        )
+                    }
+                }
+                is RWUserWalletUiState.CreatePaymentSuccess -> {
+                    (rwUserExistWalletData as RWUserWalletUiState.CreatePaymentSuccess).data?.let {
+                        AppUtility.showToast(context, it.message)
+                        when (it.status) {
+                            "success" -> {
+                                rapidWalletViewModel.getOrderId()?.let { orderId ->
+                                    paymentState.invoke(RapidWalletResult(orderId = orderId, 1))
+                                }
+                            }
+                            "failure" -> {
+                                rapidWalletViewModel.getOrderId()?.let { orderId ->
+                                    paymentState.invoke(RapidWalletResult(orderId = orderId, 2))
+                                }
+                            }
+                            else -> {
+
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        if (!canShowPgBar) {
+            paymentWarningDialog?.dismiss()
+            paymentWarningDialog = null
+        }
+    }
 }
+
+private const val RAPID_BANK = 0
+private const val RAPID_WALLET = 1
+private const val EDIT_NUMBER = 12
+private const val SEND_OTP = 13
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun RapidWalletMainUi(padding: PaddingValues, rapidWalletViewModel: RapidWalletViewModel) {
-    val rwUserExistWalletData by rapidWalletViewModel.rapidUserExistUiState.collectAsState(RWUserWalletUiState.InitialUi(false))
-    val context = LocalContext.current
+private fun ShowEnterUserId(
+    keyboard: SoftwareKeyboardController?,
+    rapidWalletViewModel: RapidWalletViewModel,
+    context: Context, getWalletDetails: () -> Unit
+) {
     var rapidUserId by remember {
         mutableStateOf("")
     }
-    var canShowInputFiled by remember {
-        mutableStateOf(true)
-    }
-
-    var canShowPgBar by remember {
-        mutableStateOf(false)
-    }
-
-    canShowPgBar = rwUserExistWalletData.isLoading
-    val keyboard = LocalSoftwareKeyboardController.current
-
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .padding(padding)
-        .background(color = colorResource(id = R.color.white)),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        OrderInformation(rapidWalletViewModel)
-        AnimatedVisibility(visible = canShowInputFiled) {
-            Card(modifier = Modifier
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .wrapContentHeight(), elevation = 2.dp
+    )
+    {
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .wrapContentHeight(), elevation = 2.dp)
-            {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
-                    .wrapContentHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Enter Rapid Wallet User ID*", style = ZustTypography.body2,
-                        color = colorResource(id = R.color.black_2), modifier = Modifier.fillMaxWidth())
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BasicTextField(
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .wrapContentHeight(), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Enter Rapid Wallet User ID*",
+                style = ZustTypography.body2,
+                color = colorResource(id = R.color.black_2),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            BasicTextField(modifier = Modifier
+                .background(
+                    color = colorResource(id = R.color.input_field_bg_color),
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboard?.hide()
+                }),
+                value = rapidUserId,
+                onValueChange = { newText ->
+                    rapidUserId = newText
+                },
+                textStyle = ZustTypography.body1,
+                singleLine = true,
+                decorationBox = { innerTextField ->
+                    Box(
                         modifier = Modifier
-                            .background(
-                                color = colorResource(id = R.color.input_field_bg_color),
-                                shape = RoundedCornerShape(8.dp))
-                            .padding(vertical = 12.dp, horizontal = 16.dp),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(onDone = {
-                            keyboard?.hide()
-                        }),
-                        value = rapidUserId,
-                        onValueChange = { newText ->
-                            rapidUserId = newText
-                        },
-                        textStyle = ZustTypography.body1,
-                        singleLine = true,
-                        decorationBox = { innerTextField ->
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                            ) {
-                                innerTextField()
-                            }
-                        })
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Button(modifier = Modifier.background(color = colorResource(id = R.color.new_material_primary),
-                        shape = RoundedCornerShape(8.dp)), onClick = {
-                        if (rapidUserId.isEmpty()) {
-                            AppUtility.showToast(context, "Please enter correct User ID")
-                            return@Button
-                        }
-                        if (!rapidWalletViewModel.rapidUserExistUiState.value.isLoading) {
-                            keyboard?.hide()
-                            rapidWalletViewModel.verifyRapidWalletAndBalance(rapidUserId)
-                        } else {
-                            AppUtility.showToast(context, "Please wait")
-                        }
-                    }, colors = ButtonDefaults.buttonColors(backgroundColor =
-                    colorResource(id = R.color.new_material_primary))) {
-                        Spacer(modifier = Modifier.width(24.dp))
-                        Text(text = "Next", color = colorResource(id = R.color.white),
-                            style = ZustTypography.body1)
-                        Spacer(modifier = Modifier.width(24.dp))
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                    ) {
+                        innerTextField()
                     }
-                }
-            }
-        }
-        when (rwUserExistWalletData) {
-            is RWUserWalletUiState.Success -> {
-                canShowInputFiled = false
-                val successData = (rwUserExistWalletData as RWUserWalletUiState.Success).data
-                ShowWalletBalances(successData) {
-                    rapidWalletViewModel.rapidUserExistUiState.update {
-                        RWUserWalletUiState.InitialUi(false)
+                })
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                modifier = Modifier.background(
+                    color = colorResource(id = R.color.new_material_primary),
+                    shape = RoundedCornerShape(8.dp)
+                ), onClick = {
+                    if (rapidUserId.isEmpty()) {
+                        AppUtility.showToast(context, "Please enter correct User ID")
+                        return@Button
                     }
-                }
-            }
-
-            is RWUserWalletUiState.ErrorUi -> {
-                canShowInputFiled = true
-                AppUtility.showToast(context, (rwUserExistWalletData as RWUserWalletUiState.ErrorUi).errors?.getTextMsg())
-            }
-
-            is RWUserWalletUiState.InitialUi -> {
-                canShowInputFiled = true
+                    if (!rapidWalletViewModel.rapidUserExistUiState.value.isLoading) {
+                        keyboard?.hide()
+                        rapidWalletViewModel.rapidUserIdCache = rapidUserId
+                        getWalletDetails.invoke()
+                    } else {
+                        AppUtility.showToast(context, "Please wait")
+                    }
+                }, colors = ButtonDefaults.buttonColors(
+                    backgroundColor = colorResource(id = R.color.new_material_primary)
+                )
+            ) {
+                Spacer(modifier = Modifier.width(24.dp))
+                Text(
+                    text = "Next",
+                    color = colorResource(id = R.color.white),
+                    style = ZustTypography.body1
+                )
+                Spacer(modifier = Modifier.width(24.dp))
             }
         }
-        if (canShowPgBar) {
-            CustomAnimatedProgressBar(modifier = Modifier)
-        }
-        RapidWalletTerms()
     }
 }
 
-const val RAPID_BANK = 0
-const val RAPID_WALLET = 1
-
 @Composable
-private fun ShowWalletBalances(successData: RwUserExistWalletData?, editUserIdCallback: () -> Unit) {
+private fun ShowWalletBalances(
+    successData: RwUserExistWalletData?, userActionCallback: (Int) -> Unit
+) {
     var currentRapidMethod by remember {
-        mutableStateOf(RAPID_BANK)
+        mutableStateOf(RAPID_WALLET)
     }
 
     if (successData?.rapidWallet?.userId.isNullOrEmpty()) {
         return
     }
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 16.dp)
-        .wrapContentHeight(), elevation = 2.dp, shape = RoundedCornerShape(8.dp)) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .wrapContentHeight(),
+        elevation = 2.dp, shape = RoundedCornerShape(8.dp)
+    ) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
                 .wrapContentHeight(),
         ) {
-            val (title1, subtitle1, balance1, radioBtn1) = createRefs()
-            val (title2, subtitle2, balance2, radioBtn2) = createRefs()
-            val (divider) = createRefs()
             val (nextBtn) = createRefs()
-
             val (rapidUserId, editUserId) = createRefs()
-            Text(text = successData?.rapidWallet?.userId!!,
+
+            Text(
+                text = successData?.rapidWallet?.userId!!,
                 modifier = Modifier.constrainAs(rapidUserId) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
-                }, style = ZustTypography.h1, color = colorResource(id = R.color.new_material_primary))
+                },
+                style = ZustTypography.h1,
+                color = colorResource(id = R.color.new_material_primary)
+            )
 
             Text(text = "Edit", modifier = Modifier
                 .constrainAs(editUserId) {
@@ -256,80 +437,48 @@ private fun ShowWalletBalances(successData: RwUserExistWalletData?, editUserIdCa
                     end.linkTo(parent.end)
                 }
                 .clickable {
-                    editUserIdCallback.invoke()
-                }, style = ZustTypography.body2,
-                color = colorResource(id = R.color.green))
+                    userActionCallback.invoke(EDIT_NUMBER)
+                }, style = ZustTypography.body2, color = colorResource(id = R.color.green)
+            )
 
-            successData.rapidBank?.bankBalance?.let {
-                Text(text = "Rapid Bank", modifier = Modifier.constrainAs(title1) {
-                    top.linkTo(rapidUserId.bottom, dp_12)
-                    start.linkTo(parent.start)
-                    end.linkTo(radioBtn1.start, dp_8)
-                    width = Dimension.fillToConstraints
-                }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
+            val (title2, subtitle2, balance2, radioBtn2) = createRefs()
 
-                Text(text = "Available Balance:- ", modifier = Modifier
-                    .constrainAs(subtitle1) {
-                        top.linkTo(title1.bottom, dp_8)
-                        start.linkTo(parent.start)
-                    }
-                    .clickable {
-                        currentRapidMethod = RAPID_BANK
-                    }, style = ZustTypography.body2, color = colorResource(id = R.color.black_2))
-                Text(text = it.toString(), modifier = Modifier.constrainAs(balance1) {
-                    top.linkTo(subtitle1.top)
-                    start.linkTo(subtitle1.end, dp_12)
-                    bottom.linkTo(subtitle1.bottom)
-                    end.linkTo(radioBtn1.start, dp_8)
-                    width = Dimension.fillToConstraints
-                }, style = ZustTypography.body1, color = colorResource(id = R.color.new_material_primary))
-
-                RadioButton(
-                    selected = currentRapidMethod == RAPID_BANK,
-                    onClick = {
-                        currentRapidMethod = RAPID_BANK
-                    },
-                    modifier = Modifier.constrainAs(radioBtn1) {
-                        top.linkTo(title1.top)
-                        bottom.linkTo(balance1.bottom)
-                        end.linkTo(parent.end)
-                    },
-                    colors = RadioButtonDefaults.colors(
-                        selectedColor = colorResource(id = R.color.new_material_primary),
-                        unselectedColor = colorResource(id = R.color.new_hint_color)
-                    ),
-                )
-            }
-
-            Divider(modifier = Modifier
-                .height(1.dp)
-                .constrainAs(divider) {
-                    top.linkTo(balance1.bottom, dp_16)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                })
             successData.rapidWallet.walletBalance?.let {
-                Text(text = "Rapid Wallet", modifier = Modifier.constrainAs(title2) {
-                    top.linkTo(divider.bottom, dp_16)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
-
-                Text(text = "Available Balance:- ", modifier = Modifier
-                    .constrainAs(subtitle2) {
-                        top.linkTo(title2.bottom, dp_8)
+                Text(
+                    text = "Rapid Wallet",
+                    modifier = Modifier.constrainAs(title2) {
+                        top.linkTo(rapidUserId.bottom, dp_20)
                         start.linkTo(parent.start)
-                    }
-                    .clickable {
-                        currentRapidMethod = RAPID_WALLET
-                    }, style = ZustTypography.body2, color = colorResource(id = R.color.black_2))
-                Text(text = it.toString(), modifier = Modifier.constrainAs(balance2) {
-                    top.linkTo(subtitle2.top)
-                    start.linkTo(subtitle2.end, dp_12)
-                    bottom.linkTo(subtitle2.bottom)
-                    width = Dimension.fillToConstraints
-                }, style = ZustTypography.body1, color = colorResource(id = R.color.new_material_primary))
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    },
+                    style = ZustTypography.body1,
+                    color = colorResource(id = R.color.app_black)
+                )
+
+                Text(text = "Available Balance:- ",
+                    modifier = Modifier
+                        .constrainAs(subtitle2) {
+                            top.linkTo(title2.bottom, dp_8)
+                            start.linkTo(parent.start)
+                        }
+                        .clickable {
+                            currentRapidMethod = RAPID_WALLET
+                        },
+                    style = ZustTypography.body2,
+                    color = colorResource(id = R.color.black_2)
+                )
+                Text(
+                    text = it.toString(),
+                    modifier = Modifier.constrainAs(balance2) {
+                        top.linkTo(subtitle2.top)
+                        start.linkTo(subtitle2.end, dp_12)
+                        bottom.linkTo(subtitle2.bottom)
+                        width = Dimension.fillToConstraints
+                    },
+                    style = ZustTypography.body1,
+                    color = colorResource(id = R.color.new_material_primary)
+                )
 
                 RadioButton(
                     selected = currentRapidMethod == RAPID_WALLET,
@@ -348,6 +497,7 @@ private fun ShowWalletBalances(successData: RwUserExistWalletData?, editUserIdCa
                 )
             }
 
+
             Button(modifier = Modifier
                 .constrainAs(nextBtn) {
                     top.linkTo(balance2.bottom, dp_24)
@@ -355,14 +505,21 @@ private fun ShowWalletBalances(successData: RwUserExistWalletData?, editUserIdCa
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
-                .background(color = colorResource(id = R.color.new_material_primary),
-                    shape = RoundedCornerShape(8.dp)), onClick = {
-
-            }, colors = ButtonDefaults.buttonColors(backgroundColor =
-            colorResource(id = R.color.new_material_primary))) {
+                .background(
+                    color = colorResource(id = R.color.new_material_primary),
+                    shape = RoundedCornerShape(8.dp)
+                ), onClick = {
+                userActionCallback.invoke(SEND_OTP)
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = colorResource(id = R.color.new_material_primary)
+            )
+            ) {
                 Spacer(modifier = Modifier.width(24.dp))
-                Text(text = "Next", color = colorResource(id = R.color.white),
-                    style = ZustTypography.body1)
+                Text(
+                    text = "Send OTP",
+                    color = colorResource(id = R.color.white),
+                    style = ZustTypography.body1
+                )
                 Spacer(modifier = Modifier.width(24.dp))
             }
         }
@@ -377,31 +534,48 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
     if (rapidWalletViewModel.paymentActivityReqData?.orderId == null) {
         return
     }
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 16.dp)
-        .wrapContentHeight(),
-        elevation = 2.dp, shape = RoundedCornerShape(8.dp)) {
-        Column(modifier = Modifier
+    Card(
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 16.dp)
-            .wrapContentHeight()) {
+            .wrapContentHeight(), elevation = 2.dp, shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .wrapContentHeight()
+        ) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "OrderId:- ", style = ZustTypography.body1, modifier = Modifier, color = colorResource(id = R.color.new_material_primary))
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = PREFIX_ORDER_ID + rapidWalletViewModel.paymentActivityReqData?.orderId.toString(),
+                Text(
+                    text = "OrderId:- ",
                     style = ZustTypography.body1,
-                    modifier = Modifier)
+                    modifier = Modifier,
+                    color = colorResource(id = R.color.new_material_primary)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = PREFIX_ORDER_ID + rapidWalletViewModel.paymentActivityReqData?.orderId.toString(),
+                    style = ZustTypography.body1,
+                    modifier = Modifier
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Payable Amount:- ",
-                    style = ZustTypography.body1, modifier = Modifier, color = colorResource(id = R.color.new_material_primary))
+                Text(
+                    text = "Payable Amount:- ",
+                    style = ZustTypography.body1,
+                    modifier = Modifier,
+                    color = colorResource(id = R.color.new_material_primary)
+                )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(rapidWalletViewModel.getPayablePrice()), style = ZustTypography.body1,
-                    modifier = Modifier)
+                Text(
+                    text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(
+                        rapidWalletViewModel.getPayablePrice()
+                    ), style = ZustTypography.body1, modifier = Modifier
+                )
             }
 
         }
@@ -410,11 +584,14 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
 
 @Composable
 private fun RapidWalletTerms() {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
         val (rapidIcon) = createRefs()
-        Image(painter = painterResource(id = R.drawable.rapid_bazar_icon), contentDescription = "rapid_bazaar",
+        Image(painter = painterResource(id = R.drawable.rapid_bazar_icon),
+            contentDescription = "rapid_bazaar",
             modifier = Modifier
                 .size(60.dp)
                 .clip(RoundedCornerShape(12.dp))
@@ -427,3 +604,145 @@ private fun RapidWalletTerms() {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun RapidUserOTPUi(
+    userId: String,
+    keyboard: SoftwareKeyboardController?,
+    verifyUserOTP: (String) -> Unit,
+    changeIdCallback: () -> Unit
+) {
+    val context: Context = LocalContext.current
+    var rapidUserInputOTP by remember {
+        mutableStateOf("")
+    }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .wrapContentHeight(), elevation = 2.dp, shape = RoundedCornerShape(8.dp)
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            val (rapidUserId, editUserId, otpField, enterOTPTitle, verifyBtn) = createRefs()
+            Text(
+                text = userId,
+                modifier = Modifier.constrainAs(rapidUserId) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                },
+                style = ZustTypography.h1,
+                color = colorResource(id = R.color.new_material_primary)
+            )
+
+            Text(text = "Change ID", modifier = Modifier
+                .constrainAs(editUserId) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }
+                .clickable {
+                    changeIdCallback.invoke()
+                }, style = ZustTypography.body2,
+                color = colorResource(id = R.color.green)
+            )
+
+            Text(text = "Enter OTP", modifier = Modifier.constrainAs(enterOTPTitle) {
+                top.linkTo(rapidUserId.bottom, dp_20)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+            }, style = ZustTypography.body2)
+
+            BasicTextField(modifier = Modifier
+                .constrainAs(otpField) {
+                    top.linkTo(enterOTPTitle.bottom, dp_8)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .background(
+                    color = colorResource(id = R.color.input_field_bg_color),
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboard?.hide()
+                }),
+                value = rapidUserInputOTP,
+                onValueChange = { newText ->
+                    rapidUserInputOTP = newText
+                },
+                textStyle = ZustTypography.body1,
+                singleLine = true,
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                    ) {
+                        innerTextField()
+                    }
+                })
+
+            Button(modifier = Modifier
+                .background(
+                    color = colorResource(id = R.color.new_material_primary),
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .constrainAs(verifyBtn) {
+                    top.linkTo(otpField.bottom, dp_20)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }, onClick = {
+                if (rapidUserInputOTP.isNotEmpty()) {
+                    verifyUserOTP.invoke(rapidUserInputOTP)
+                } else {
+                    AppUtility.showToast(context = context, "Please enter OTP")
+                }
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = colorResource(id = R.color.new_material_primary)
+            )
+            ) {
+                Spacer(modifier = Modifier.width(24.dp))
+                Text(
+                    text = stringResource(id = R.string.verify_otp),
+                    color = colorResource(id = R.color.white),
+                    style = ZustTypography.body1
+                )
+                Spacer(modifier = Modifier.width(24.dp))
+            }
+        }
+    }
+}
+
+
+@Composable
+fun PaymentWindow(closeWindow: () -> Unit) {
+    val secondsRemaining by remember { mutableStateOf(300) }
+    Text(
+        text = "Time remaining: ${secondsRemaining / 60}:${secondsRemaining % 60}"
+    )
+
+    if (secondsRemaining == 0) {
+        closeWindow.invoke()
+    }
+    LaunchedEffect(key1 = Unit, block = {
+        startPaymentTimer() {
+
+        }
+    })
+}
+
+//5 minutes payment window
+private fun startPaymentTimer(onComplete: () -> Unit) {
+    Timer().schedule(object : TimerTask() {
+        override fun run() {
+            onComplete()
+        }
+    }, 300000)
+}
