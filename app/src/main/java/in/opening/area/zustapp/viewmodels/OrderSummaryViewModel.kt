@@ -190,7 +190,7 @@ class OrderSummaryViewModel @Inject constructor(
                         val jsonObject = JSONObject(response.value)
                         if (jsonObject.has("data")) {
                             val dataJson = jsonObject.getJSONObject("data")
-                            if (dataJson.has("isDeliverablePinCode") && !dataJson.getBoolean("isDeliverablePinCode")) {
+                            if (dataJson.has("isDeliverablePinCode") && dataJson.getBoolean("isDeliverablePinCode")) {
                                 if (dataJson.has("merchantId")) {
                                     val merchantId = dataJson.getInt("merchantId")
                                     proceedWithCartItemsAndUpdateServer(orderId, merchantId)

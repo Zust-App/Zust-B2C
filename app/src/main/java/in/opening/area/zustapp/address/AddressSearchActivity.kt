@@ -75,6 +75,9 @@ class AddressSearchActivity : BaseActivityWithLocation() {
     }
 
     private fun startAddressInputActivity(address: Address) {
+        addressViewModel.searchedAddress.update {
+            LocationAddressUi.InitialUi(false)
+        }
         val addressGoogleMapActivity = Intent(this, GoogleMapsAddressActivity::class.java)
         addressGoogleMapActivity.putExtra(ADDRESS_KEY, address)
         startActivityForResult(addressGoogleMapActivity, REQ_CODE_GOOGLE_MAP)

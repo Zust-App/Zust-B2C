@@ -64,7 +64,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
     private var couponHolder: CouponHolder? = null
     private var deliveryAddressHolder: DeliveryAddressHolder? = null
     private var timingSavingHolder: TimingSavingHolder? = null
-    private var cartItemCount: Int = 0;
+    private var cartItemCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
