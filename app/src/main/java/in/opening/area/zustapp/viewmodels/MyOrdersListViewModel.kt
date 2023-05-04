@@ -66,9 +66,18 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                     val displayOrderStatus = ArrayList<OrderStatus>()
                     response.value.data.apply {
                         if (orderStatuses != null) {
+                            val lastStatus = orderStatuses.last()
+
                             val allStatusSeq = this.statusSeq
                             val allStatusList: List<String>? = allStatusSeq?.split(",")
                             if (allStatusList != null) {
+                                var index = -1
+
+                                for (i in allStatusList.indices) {
+                                    if (allStatusList[i] == lastStatus.orderStatusType) {
+                                        index = i
+                                    }
+                                }
                                 for (i in allStatusList.indices) {
                                     var isContains = false
                                     for (j in orderStatuses.indices) {
@@ -91,7 +100,11 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                                                 orderStatusType = allStatusList[i].replace(
                                                     "_",
                                                     " "
-                                                )
+                                                ), createdDateTime = if (i <= index) {
+                                                    "-1"
+                                                } else {
+                                                    null
+                                                }
                                             )
                                         )
                                     }
