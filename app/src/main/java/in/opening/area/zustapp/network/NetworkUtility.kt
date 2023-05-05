@@ -10,7 +10,8 @@ class NetworkUtility {
 
         private fun getCompleteBaseUrl(): String {
             return if (!BuildConfig.DEBUG) {
-                BuildConfig.PROD_BASE_URL
+                // BuildConfig.PROD_BASE_URL
+                BuildConfig.DEV_BASE_URL
             } else {
                 if (isProd) {
                     BuildConfig.PROD_BASE_URL
@@ -62,11 +63,9 @@ class NetworkUtility {
         val PRODUCT_DETAILS = "$baseUrl/products/products-by-productid"
         val ORDER_INVOICE = "$baseUrl/orders/invoice"
         val PLACES_SEARCH_NAME = "$baseUrl/places/autocomplete"
-        val RAPID_WALLET_VERIFY_USER = "$baseUrl/auth/rapid-verify"//TODO()
-        val RAPID_WALLET_SEND_OTP="$baseUrl/rapid/send-otp"
-        val RAPID_DO_PAYMENT="$baseUrl/rapid/rapid-transaction"
-
-
+        val RAPID_WALLET_VERIFY_USER = "$baseUrl/auth/rapid-verify"
+        val RAPID_WALLET_SEND_OTP = "$baseUrl/rapid/send-otp"
+        val RAPID_DO_PAYMENT = "$baseUrl/rapid/rapid-transaction"
 
     }
 }

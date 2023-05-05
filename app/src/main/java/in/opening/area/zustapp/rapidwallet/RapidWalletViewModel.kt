@@ -27,7 +27,7 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
         RapidWalletUiRepresentationModel.EnterUserIdUI(null))
 
     internal var rapidUserIdCache: String? = null
-    private var rapidServerOTP: String? = null
+    internal var rapidServerOTP: String? = null
     private var walletTypeCache: String = "1"
 
     internal fun verifyRapidWalletAndBalance() = viewModelScope.launch {

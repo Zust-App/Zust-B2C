@@ -203,6 +203,7 @@ class RapidWalletActivity : AppCompatActivity() {
                 }
                 is RapidWalletUiRepresentationModel.OtpUi -> {
                     rapidWalletViewModel.rapidUserIdCache?.let {
+                        AppUtility.showToast(context,rapidWalletViewModel.rapidServerOTP)
                         RapidUserOTPUi(it, keyboard, { userInputOTP ->
                             if (rapidWalletViewModel.verifyUserInputOTP(userInputOTP)) {
                                 enableBackBtn = false
