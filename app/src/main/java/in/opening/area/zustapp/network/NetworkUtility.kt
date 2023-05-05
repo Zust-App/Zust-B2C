@@ -6,12 +6,11 @@ class NetworkUtility {
 
     companion object {
 
-        private const val isProd = false
+        private const val isProd = true
 
         private fun getCompleteBaseUrl(): String {
             return if (!BuildConfig.DEBUG) {
-                // BuildConfig.PROD_BASE_URL
-                BuildConfig.DEV_BASE_URL
+                 BuildConfig.PROD_BASE_URL
             } else {
                 if (isProd) {
                     BuildConfig.PROD_BASE_URL
