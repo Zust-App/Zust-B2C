@@ -1,12 +1,13 @@
 package `in`.opening.area.zustapp.payment
 
-import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.MyApplication
 import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.coupon.CouponListingActivity
 import `in`.opening.area.zustapp.coupon.model.AppliedCouponData
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.databinding.ActivityPaymentBinding
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity.Companion.ORDER_ID
 import `in`.opening.area.zustapp.orderDetail.models.Address
 import `in`.opening.area.zustapp.orderDetail.models.convertAsStringText
@@ -14,24 +15,25 @@ import `in`.opening.area.zustapp.payment.adapter.PaymentMethodAdapter
 import `in`.opening.area.zustapp.payment.adapter.PaymentMethodClickListeners
 import `in`.opening.area.zustapp.payment.holder.*
 import `in`.opening.area.zustapp.payment.models.*
+import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
 import `in`.opening.area.zustapp.uiModels.ValidateCouponUi
-import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
-import `in`.opening.area.zustapp.databinding.ActivityPaymentBinding
-import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
-import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.utility.*
 import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
+import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -100,11 +102,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
 
     private fun setUpClickListeners() {
         binding?.paymentPageBottomBar?.orderPlaceContainer?.setOnClickListener {
-            if (paymentMethod?.key == "rapid") {
-
-            } else {
-                proceedToPaymentFirstApiCall(null)
-            }
+            proceedToPaymentFirstApiCall()
         }
     }
 
@@ -145,21 +143,22 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         timingSavingHolder?.setData(paymentActivityReqData)
     }
 
-    private fun proceedToPaymentFirstApiCall(rapidUserId: String?) {
+    private fun proceedToPaymentFirstApiCall() {
         if (paymentMethod?.key != null && paymentActivityReqData?.totalAmount != null) {
             if (paymentViewModel.isCreatePaymentOnGoing()) {
                 showToast(this, "Please wait")
                 return
             }
             showHidePgBar(true)
+            if (paymentMethod?.key == "rapid") {
+                openRapidBazaarWallet()
+                return
+            }
             val createPayment = CreatePaymentReqBodyModel(
                 paymentActivityReqData?.totalAmount,
                 order_id = paymentActivityReqData?.orderId,
                 paymentMethod = paymentMethod?.key!!
             )
-            if (rapidUserId != null) {
-                createPayment.rapidBazaarUserId = rapidUserId
-            }
             paymentViewModel.invokePaymentToGetId(createPayment)
         } else {
             Toast.makeText(this, "Please select a payment mode", Toast.LENGTH_LONG).show()
@@ -365,6 +364,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
                 validateCouponFromIntent(couponValue, false)
             }
             if (result.data?.hasExtra(RapidWalletActivity.RAPID_WALLET_SUCCESS) == true) {
+                showHidePgBar(false)
                 val rapidWalletResult: RapidWalletResult? =
                     result.data?.getParcelableExtra(RapidWalletActivity.RAPID_WALLET_SUCCESS)
                 rapidWalletResult?.let {
@@ -373,10 +373,10 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
                             moveToOrderConfirmIntermediatePage(it.orderId)
                         }
                         -1 -> {
-                            showToast(this@PaymentActivity, "Payment declined")
+                            showRapidPaymentDeclinedDialog()
                         }
                         else -> {
-                            showToast(this@PaymentActivity, "Something went wrong")
+                            showRapidPaymentDeclinedDialog()
                         }
                     }
                 } ?: run {
@@ -519,6 +519,21 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             intent.putExtra(TOTAL_ITEMS_IN_CART, cartItemCount)
             launchIntentionalActivity.launch(intent)
         }
+    }
+
+    private fun showRapidPaymentDeclinedDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Alert!")
+            .setMessage("Rapid wallet payment declined or cancelled. Please try again if amount is not deducted from your wallet") // Specifying a listener allows you to take an action before dismissing the dialog.
+            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setPositiveButton(
+                "Ok"
+            ) { dialog, _ ->
+                dialog?.dismiss()
+            } // A null listener allows the button to dismiss the dialog and take no further action.
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
     }
 
     companion object {

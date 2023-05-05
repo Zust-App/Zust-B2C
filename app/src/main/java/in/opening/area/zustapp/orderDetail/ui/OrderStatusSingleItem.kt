@@ -30,9 +30,14 @@ import java.util.*
 
 @Composable
 fun OrderStatusTitleContainer() {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .background(color = Color.White, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+            )
+    ) {
         val (title) = createRefs()
         Text(text = "Order status",
             style = ZustTypography.body1,
@@ -51,19 +56,25 @@ fun OrderStatusTitleContainer() {
 
 @Composable
 fun OrderStatusBottomContainer() {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .background(color = Color.White,
-            shape = RoundedCornerShape(bottomEnd = 8.dp, bottomStart = 8.dp))) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(bottomEnd = 8.dp, bottomStart = 8.dp)
+            )
+    ) {
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
 @Composable
 fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .background(color = Color.White)) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.White)
+    ) {
         val (orderStatusTag, orderTime, divider, statusIcon) = createRefs()
 
         if (!orderStatus.createdDateTime.isNullOrEmpty()) {
@@ -105,7 +116,11 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
                 bottom.linkTo(parent.bottom, dp_16)
             })
 
-        Text(text = orderStatus.createdDateTime ?: "",
+        Text(text = if (orderStatus.createdDateTime != "-1") {
+            orderStatus.createdDateTime
+        } else {
+            ""
+        } ?: "",
             style = ZustTypography.subtitle1,
             color = colorResource(id = R.color.new_hint_color),
             modifier = Modifier.constrainAs(orderTime) {
@@ -114,7 +129,8 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
                 top.linkTo(orderStatusTag.top)
                 bottom.linkTo(orderStatusTag.bottom)
                 width = Dimension.fillToConstraints
-            }, fontSize = 12.sp, maxLines = 1)
+            }, fontSize = 12.sp, maxLines = 1
+        )
 
         if (index != size - 1) {
             Divider(modifier = Modifier
