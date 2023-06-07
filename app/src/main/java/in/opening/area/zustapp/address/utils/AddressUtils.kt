@@ -16,7 +16,6 @@ class AddressUtils {
             }
             val coder = Geocoder(context)
             val addressList: List<Address>?
-            val locationLatLng: LatLng?
             try {
                 addressList = coder.getFromLocationName(strAddress, 5)
                 if (addressList == null) {

@@ -1,28 +1,12 @@
 package `in`.opening.area.zustapp.rapidwallet
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.AddNewAddressActivity
-import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
-import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
-import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
-import `in`.opening.area.zustapp.payment.PaymentActivity
-import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
-import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletUiRepresentationModel
-import `in`.opening.area.zustapp.rapidwallet.model.RwUserExistWalletData
-import `in`.opening.area.zustapp.ui.theme.*
-import `in`.opening.area.zustapp.uiModels.RWUserWalletUiState
-import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.utility.ProductUtils
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedVisibility
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +32,18 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
+import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
+import `in`.opening.area.zustapp.payment.PaymentActivity
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
+import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletUiRepresentationModel
+import `in`.opening.area.zustapp.rapidwallet.model.RwUserExistWalletData
+import `in`.opening.area.zustapp.ui.theme.*
+import `in`.opening.area.zustapp.uiModels.RWUserWalletUiState
+import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.ProductUtils
 import kotlinx.coroutines.flow.update
 import java.util.*
 
@@ -255,6 +251,7 @@ class RapidWalletActivity : AppCompatActivity() {
                 }
 
                 is RWUserWalletUiState.ErrorUi -> {
+                    enableBackBtn=true
                     (rwUserExistWalletData as RWUserWalletUiState.ErrorUi).message?.let {
                         AppUtility.showToast(
                             context,
@@ -268,6 +265,7 @@ class RapidWalletActivity : AppCompatActivity() {
                     }
                 }
                 is RWUserWalletUiState.CreatePaymentSuccess -> {
+
                     (rwUserExistWalletData as RWUserWalletUiState.CreatePaymentSuccess).data?.let {
                         AppUtility.showToast(context, it.message)
                         when (it.status) {
@@ -277,6 +275,7 @@ class RapidWalletActivity : AppCompatActivity() {
                                 }
                             }
                             "failure" -> {
+                                enableBackBtn=true
                                 rapidWalletViewModel.getOrderId()?.let { orderId ->
                                     paymentState.invoke(RapidWalletResult(orderId = orderId, 2))
                                 }

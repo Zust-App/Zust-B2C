@@ -67,9 +67,10 @@ class CustomLocationManager(private val activity: AppCompatActivity, private val
             locationRequest!!
         } else {
             locationRequest = LocationRequest.create()
-            locationRequest?.interval = 1000
-            locationRequest?.fastestInterval = 500
+            locationRequest?.interval = 5000
+            locationRequest?.fastestInterval = 2000
             locationRequest?.priority = 100
+            locationRequest?.priority=LocationRequest.PRIORITY_HIGH_ACCURACY
             return locationRequest!!
         }
     }

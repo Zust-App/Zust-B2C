@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.IOException
+import java.util.Locale
 
 class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback {
     private var binding: FragmentAddressGoogleMapBinding? = null
@@ -37,7 +39,7 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
         }
     }
 
-    private val coder by lazy { Geocoder(this) }
+    private val coder by lazy { Geocoder(this, Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,9 +88,11 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
             is AddressValidationUi.AddressValidation -> {
                 validateSuccessResponse(response.data)
             }
+
             is AddressValidationUi.InitialUi -> {
 
             }
+
             else -> {
                 AppUtility.showToast(this, response.errorMessage)
             }
@@ -104,9 +108,11 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
                 }
                 setLocationText(locationAddressUi.data?.getAddressLine(0))
             }
+
             is LocationAddressUi.InitialUi -> {
 
             }
+
             is LocationAddressUi.ErrorUi -> {
 
             }
@@ -236,9 +242,17 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
         }
     }
 
+
     private fun getAddressFromLatLng(latitude: Double, longitude: Double): Address? {
-        val addresses = coder.getFromLocation(latitude, longitude, 1)
-        return addresses!![0]
+        try {
+            val addresses = coder.getFromLocation(latitude, longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                return addresses[0]
+            }
+        } catch (e: IOException) {
+            AppUtility.showToast(this, "Location Error")
+        }
+        return null
     }
 
 }

@@ -120,7 +120,7 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
         return rapidServerOTP?.trim() == userInputOTP.trim()
     }
 
-    //userId,//amount//orderId//status--> "success","failure","pending"//message
+
     internal fun createPaymentWithRapidWallet() = viewModelScope.launch {
         if (rapidUserIdCache.isNullOrEmpty()) {
             return@launch

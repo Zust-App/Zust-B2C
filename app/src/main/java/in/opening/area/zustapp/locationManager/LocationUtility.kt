@@ -21,31 +21,5 @@ open class LocationUtility {
             ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
 
-        fun getAddress(latLng: LatLng, context: Context): CustomLocationModel {
-            val customLocationModel = CustomLocationModel()
-            val geocoder = Geocoder(context, Locale.getDefault())
-            val address: Address?
-            var fulladdress = ""
-            val addresses: List<Address>? = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            customLocationModel.lat = latLng.latitude
-            customLocationModel.lng = latLng.longitude
-            if (!addresses.isNullOrEmpty()) {
-                address = addresses[0]
-                fulladdress = address.getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex
-                val city = address.locality;
-                val state = address.adminArea;
-                val country = address.countryName;
-                val postalCode = address.postalCode;
-                val knownName = address.featureName;
-                customLocationModel.addressLine = fulladdress
-                customLocationModel.city = city
-                customLocationModel.country = country
-                customLocationModel.knownName = knownName
-                customLocationModel.pinCode = postalCode
-                customLocationModel.state = state
-                return customLocationModel
-            }
-            return customLocationModel
-        }
     }
 }

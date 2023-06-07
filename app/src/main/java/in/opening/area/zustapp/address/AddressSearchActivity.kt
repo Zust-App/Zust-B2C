@@ -23,6 +23,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.utility.AppUtility
 import kotlinx.coroutines.flow.update
 
 
@@ -68,8 +69,11 @@ class AddressSearchActivity : BaseActivityWithLocation() {
 
     override fun receiveLocation(location: Location?) {
         if (location != null) {
-            addressViewModel.searchedAddress.update {
-                LocationAddressUi.Success(false, getAddressFromLatLng(location.latitude, location.longitude))
+            val parsedLocation = getAddressFromLatLng(location.latitude, location.longitude)
+            if (parsedLocation != null) {
+                addressViewModel.searchedAddress.update {
+                    LocationAddressUi.Success(false, getAddressFromLatLng(location.latitude, location.longitude))
+                }
             }
         }
     }
@@ -84,8 +88,15 @@ class AddressSearchActivity : BaseActivityWithLocation() {
     }
 
     private fun getAddressFromLatLng(latitude: Double, longitude: Double): Address? {
-        val addresses = coder.getFromLocation(latitude, longitude, 1)
-        return addresses!![0]
+        try {
+            val addresses = coder.getFromLocation(latitude, longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                return addresses[0]
+            }
+        } catch (e: Exception) {
+            AppUtility.showToast(this, "Location not found,Retry again")
+        }
+        return null
     }
 
     private var onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -107,6 +118,7 @@ class AddressSearchActivity : BaseActivityWithLocation() {
                 }
                 processWhenReceiveLatLng(data)
             }
+
             null -> {
                 addressViewModel.searchedAddress.update {
                     LocationAddressUi.InitialUi(true)
