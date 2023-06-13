@@ -32,6 +32,7 @@ data class ProductPriceDetails(
     val quantity: Double? = null,
     val unit: String? = null,
     val mrp: Double? = null,
+    val maxItemPurchaseLimit: Int? = -1,
 )
 
 fun ProductDetailData.convertToProductSingleItems(): ArrayList<ProductSingleItem>? {
@@ -58,7 +59,8 @@ fun ProductDetailData.convertToProductSingleItems(): ArrayList<ProductSingleItem
             productGroupId = productId!!,
             productPriceId = it.productPriceId!!,
             wareHouseId = "1",
-            itemCountByUser = 0
+            itemCountByUser = 0,
+            maxItemPurchaseLimit = it.maxItemPurchaseLimit ?: -1
         )
         variants.add(singleItems)
     }

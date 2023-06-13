@@ -181,7 +181,6 @@ class OrderSummaryViewModel @Inject constructor(
 
     }
 
-    //TODO()
     private fun checkServiceAvailBasedOnLatLng(address: Address?, orderId: Int) = viewModelScope.launch {
         supervisorScope {
             if (((address?.latitude != null && address.longitude != null) && (address.latitude != 0.0 && address.longitude != 0.0)) || !address?.pincode.isNullOrEmpty()) {

@@ -72,7 +72,18 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
     }
 
     override fun didTapOnIncrementCount(productSingleItem: ProductSingleItem?) {
-        viewModel.updateProductCount(productSingleItem, ACTION.INCREASE)
+        if (productSingleItem==null){
+            return
+        }
+        if (productSingleItem.maxItemPurchaseLimit > 0) {
+            if (productSingleItem.itemCountByUser <= productSingleItem.maxItemPurchaseLimit) {
+                viewModel.updateProductCount(productSingleItem, ACTION.INCREASE)
+            } else {
+                AppUtility.showToast(this, "You can't add more than ${productSingleItem.maxItemPurchaseLimit}")
+            }
+        }else{
+            viewModel.updateProductCount(productSingleItem, ACTION.INCREASE)
+        }
     }
 
     override fun didTapOnDecrementCount(productSingleItem: ProductSingleItem?) {

@@ -57,26 +57,28 @@ data class ProductSingleItem(
     var wareHouseId: String? = null,
     @ColumnInfo(name = "isOutOfStock")
     val isOutOfStock: Boolean = false,
-):Parcelable {
+    @ColumnInfo(name = "maxItemPurchaseLimit", defaultValue = "-1")
+    var maxItemPurchaseLimit: Int = -1,
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-        parcel.readString()?:"",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readDouble(),
         parcel.readDouble(),
-        parcel.readString()?:"",
+        parcel.readString() ?: "",
         parcel.readDouble(),
         parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.readString()?:"",
+        parcel.readString() ?: "",
         parcel.readInt(),
         parcel.readString(),
         parcel.readInt(),
         parcel.readDouble(),
         parcel.readString(),
-        parcel.readByte() != 0.toByte()) {
+        parcel.readByte() != 0.toByte(), parcel.readInt()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -98,6 +100,7 @@ data class ProductSingleItem(
         parcel.writeDouble(discountPercentage)
         parcel.writeString(wareHouseId)
         parcel.writeByte(if (isOutOfStock) 1 else 0)
+        parcel.writeInt(maxItemPurchaseLimit)
     }
 
     override fun describeContents(): Int {
@@ -113,6 +116,7 @@ data class ProductSingleItem(
             return arrayOfNulls(size)
         }
     }
+
     fun copy(userSelectedItemCount: Int): ProductSingleItem {
         return ProductSingleItem(tableId, brand, categoryId,
             description,
@@ -120,7 +124,8 @@ data class ProductSingleItem(
             mrp, productName,
             price, quantity, quantityUnit, subcategoryId, thumbnail,
             userSelectedItemCount,
-            discountPercentage, wareHouseId, isOutOfStock)
+            discountPercentage, wareHouseId, isOutOfStock,
+            maxItemPurchaseLimit = maxItemPurchaseLimit)
     }
 }
 
@@ -139,7 +144,7 @@ fun ProductSingleItem.copy(): ProductSingleItem {
         subcategoryId, thumbnail,
         itemCountByUser,
         discountPercentage,
-        wareHouseId, isOutOfStock)
+        wareHouseId, isOutOfStock, maxItemPurchaseLimit = maxItemPurchaseLimit)
 }
 
 fun ProductSingleItem?.validateProduct(): Boolean {

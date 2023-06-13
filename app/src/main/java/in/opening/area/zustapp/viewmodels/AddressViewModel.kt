@@ -34,6 +34,7 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
 
     internal val userAddressInputCache = SaveAddressPostModel()
 
+
     internal fun getAllAddress() = viewModelScope.launch {
         userAddressListUiState.update { UserSavedAddressUi.InitialUi(isLoading = true) }
         when (val response = apiRequestManager.getAllAddress()) {

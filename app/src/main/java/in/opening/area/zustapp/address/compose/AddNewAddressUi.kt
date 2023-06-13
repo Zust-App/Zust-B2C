@@ -53,6 +53,10 @@ fun AddNewAddressUi(
         mutableStateOf("")
     }
 
+    var alternateMobileNumber by rememberSaveable() {
+        mutableStateOf("")
+    }
+
     var isLoading by remember {
         mutableStateOf(false)
     }
@@ -73,9 +77,11 @@ fun AddNewAddressUi(
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
+
         is SaveUserAddressUi.ErrorUi -> {
             AppUtility.showToast(context, data.errors.getTextMsg())
         }
+
         is SaveUserAddressUi.InitialUi -> {
         }
     }
@@ -89,9 +95,11 @@ fun AddNewAddressUi(
                 }
             }
         }
+
         is CurrentLocationUi.ErrorState -> {
             customLocationModel = CustomLocationModel()
         }
+
         else -> {}
     }
     ConstraintLayout(modifier = modifier
@@ -187,10 +195,28 @@ fun AddNewAddressUi(
 
             Spacer(modifier = modifier.height(16.dp))
 
-            Text(text = "Enter Complete Address*",
+            Text(text = "Alternate Mobile number",
                 style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
+
+            TextField(value = alternateMobileNumber,
+                textStyle = ZustTypography.body2,
+                onValueChange = {
+                    alternateMobileNumber = it
+                }, modifier = modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(8.dp)),
+                colors = getTextFieldColors(), maxLines = 1)
+
+            Spacer(modifier = modifier.height(16.dp))
+
+            Text(text = "Enter Complete Address*",
+                style = ZustTypography.subtitle1,
+                color = colorResource(id = R.color.black_3))
+
+            Spacer(modifier = modifier.height(6.dp))
+
             TextField(value = houseAndFloor,
                 textStyle = ZustTypography.body2,
                 onValueChange = {
@@ -225,6 +251,7 @@ fun AddNewAddressUi(
                             if (customLocationModel.lng != null) {
                                 longitude = customLocationModel.lng
                             }
+                            optionalMobileNumber = alternateMobileNumber ?: ""
                         }
                         viewModel.checkAndSaveAddressWithServer()
                     } else {
@@ -322,6 +349,10 @@ fun AddNewAddressUiV2(
         mutableStateOf(searchAddressModel)
     }
 
+    var alternateMobileNumber by rememberSaveable() {
+        mutableStateOf("")
+    }
+
     isLoading = saveAddressUiData.isLoading
 
     when (val data = saveAddressUiData) {
@@ -334,9 +365,11 @@ fun AddNewAddressUiV2(
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
+
         is SaveUserAddressUi.ErrorUi -> {
             AppUtility.showToast(context, data.errors.getTextMsg())
         }
+
         is SaveUserAddressUi.InitialUi -> {
         }
     }
@@ -428,6 +461,22 @@ fun AddNewAddressUiV2(
 
             Spacer(modifier = modifier.height(16.dp))
 
+            Text(text = "Alternate Mobile number",
+                style = ZustTypography.subtitle1,
+                color = colorResource(id = R.color.black_3))
+            Spacer(modifier = modifier.height(6.dp))
+
+            TextField(value = alternateMobileNumber,
+                textStyle = ZustTypography.body2,
+                onValueChange = {
+                    alternateMobileNumber = it
+                }, modifier = modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(8.dp)),
+                colors = getTextFieldColors(), maxLines = 1)
+
+            Spacer(modifier = modifier.height(16.dp))
+
             Text(text = "Enter Complete Address*",
                 style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.black_3))
@@ -465,6 +514,7 @@ fun AddNewAddressUiV2(
                             if (customLocationModel.lng != null) {
                                 longitude = customLocationModel.lng
                             }
+                            optionalMobileNumber = alternateMobileNumber ?: ""
                         }
                         viewModel.checkAndSaveAddressWithServer()
                     } else {

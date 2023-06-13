@@ -126,7 +126,15 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                                 items(data.data.productItems!!) {
                                     SearchResultVerticalLayout(it, searchResultModifier,
                                         { product ->
-                                            didTapOnIncrementCount(product)
+                                            if (product.maxItemPurchaseLimit > 0) {
+                                                if (product.itemCountByUser <= product.maxItemPurchaseLimit) {
+                                                    didTapOnIncrementCount(product)
+                                                } else {
+                                                    AppUtility.showToast(context, "You can't add more than ${product.maxItemPurchaseLimit}")
+                                                }
+                                            }else{
+                                                didTapOnIncrementCount(product)
+                                            }
                                         }, { product ->
                                             didTapOnDecrementCount(product)
                                         }) { product ->

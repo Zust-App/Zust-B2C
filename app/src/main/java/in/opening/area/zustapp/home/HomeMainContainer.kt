@@ -40,9 +40,21 @@ fun HomeMainContainer(homeViewModel: HomeViewModel, paddingValues: PaddingValues
                 HomeMainItemContainer(response.homePageGrids?.homeGrids,
                     response.trendingProducts?.productItems,
                     this, callback) { product, action ->
-                    homeViewModel.updateOrInsertItems(product, action)
+                    product?.itemCountByUser?.let { cartItemCount ->
+                        if (product.maxItemPurchaseLimit > 0 && action == `in`.opening.area.zustapp.viewmodels.ACTION.INCREASE) {
+                            if (cartItemCount <= product.maxItemPurchaseLimit) {
+                                homeViewModel.updateOrInsertItems(product, action)
+                                return@let
+                            } else {
+                                AppUtility.showToast(context, "You can't add more than ${product.maxItemPurchaseLimit}")
+                            }
+                        } else {
+                            homeViewModel.updateOrInsertItems(product, action)
+                        }
+                    }
                 }
             }
+
             is HomePageResUi.ErrorUi -> {
                 if (!response.errorMsg.isNullOrEmpty()) {
                     AppUtility.showToast(context, response.errorMsg)
@@ -53,6 +65,7 @@ fun HomeMainContainer(homeViewModel: HomeViewModel, paddingValues: PaddingValues
                     homeViewModel.getHomePageData(0.0, 0.0)
                 }
             }
+
             is HomePageResUi.InitialUi -> {
                 if (response.isLoading) {
 

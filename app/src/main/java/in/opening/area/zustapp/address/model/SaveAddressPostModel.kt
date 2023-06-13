@@ -15,6 +15,7 @@ data class SaveAddressPostModel(
     var latitude: Double? = 0.0,
     var longitude: Double? = 0.0,
     var addressType: String? = "HOME",
+    var optionalMobileNumber: String? = "",
 )
 
 

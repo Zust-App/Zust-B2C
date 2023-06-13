@@ -17,12 +17,17 @@ android {
         applicationId "in.opening.area.zustapp"
         minSdk 23
         targetSdk 33
-        versionCode 17
-        versionName "2023.5.5"
+        versionCode 20
+        versionName "2023.6.13.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
         }
     }
 
