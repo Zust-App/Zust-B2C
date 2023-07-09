@@ -270,6 +270,8 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     }
 
     private fun handleBottomNavCallback(homeBottomNavTypes: HomeBottomNavTypes, data: Any?) {
+        this.startZElectronicsActivity()
+        return
         if (homeBottomNavTypes == HomeBottomNavTypes.Orders) {
             FirebaseAnalytics.logEvents(ORDER_HISTORY_CLICK_BTM_NAV, null)
             this.startMyOrders()

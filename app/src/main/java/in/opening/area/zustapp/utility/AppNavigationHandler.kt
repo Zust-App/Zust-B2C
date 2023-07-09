@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import zustElectronics.zeLanding.ZeEntryPointActivity
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -139,4 +140,9 @@ fun Context?.openCallIntent(phoneNumber: String) {
     } catch (e: Exception) {
         e.printStackTrace()
     }
+}
+
+fun Context?.startZElectronicsActivity() {
+    val orderDetailIntent = Intent(this, ZeEntryPointActivity::class.java)
+    this?.startActivity(orderDetailIntent)
 }
