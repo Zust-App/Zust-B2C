@@ -266,7 +266,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     override fun onStart() {
         super.onStart()
-        homeViewModel.getAppMetaData()
+        //homeViewModel.getAppMetaData()
     }
 
     private fun handleBottomNavCallback(homeBottomNavTypes: HomeBottomNavTypes, data: Any?) {
