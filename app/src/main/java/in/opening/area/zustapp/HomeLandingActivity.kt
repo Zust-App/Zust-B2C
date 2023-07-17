@@ -1,31 +1,6 @@
 package `in`.opening.area.zustapp
 
 import android.Manifest
-import `in`.opening.area.zustapp.address.AddNewAddressActivity
-import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
-import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
-import `in`.opening.area.zustapp.address.AddressSearchActivity
-import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
-import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.ORDER_HISTORY_CLICK_BTM_NAV
-import `in`.opening.area.zustapp.compose.CustomBottomNavigation
-import `in`.opening.area.zustapp.compose.CustomTopBar
-import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
-import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
-import `in`.opening.area.zustapp.fcm.CustomFcmService
-import `in`.opening.area.zustapp.helper.InAppUpdateManager
-import `in`.opening.area.zustapp.helper.SelectLanguageFragment
-import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.home.HomeMainContainer
-import `in`.opening.area.zustapp.offline.ConnectionLiveData
-import `in`.opening.area.zustapp.orderSummary.OrderSummaryActivity
-import `in`.opening.area.zustapp.payment.PaymentActivity
-import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
-import `in`.opening.area.zustapp.product.model.CreateCartData
-import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
-import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
-import `in`.opening.area.zustapp.utility.*
-import `in`.opening.area.zustapp.viewmodels.HomeViewModel
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -36,7 +11,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.LaunchedEffect
@@ -44,9 +18,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.opening.area.zustapp.profile.components.AppVersionInfoHolder
+import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.AddressSearchActivity
+import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
+import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.ORDER_HISTORY_CLICK_BTM_NAV
+import `in`.opening.area.zustapp.appUtils.CustomFirebaseRemoteConfig
+import `in`.opening.area.zustapp.compose.CustomBottomNavigation
+import `in`.opening.area.zustapp.compose.CustomTopBar
+import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
+import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
+import `in`.opening.area.zustapp.fcm.CustomFcmService
+import `in`.opening.area.zustapp.helper.SelectLanguageFragment
+import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.home.HomeMainContainer
+import `in`.opening.area.zustapp.offline.ConnectionLiveData
+import `in`.opening.area.zustapp.orderSummary.OrderSummaryActivity
+import `in`.opening.area.zustapp.payment.PaymentActivity
+import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
+import `in`.opening.area.zustapp.product.model.CreateCartData
+import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
+import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
+import `in`.opening.area.zustapp.utility.AppDeepLinkHandler
+import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.openCallIntent
+import `in`.opening.area.zustapp.utility.openWhatsAppOrderIntent
+import `in`.opening.area.zustapp.utility.proceedToLoginActivity
+import `in`.opening.area.zustapp.utility.startFoodEntryActivity
+import `in`.opening.area.zustapp.utility.startMyOrders
+import `in`.opening.area.zustapp.utility.startSearchActivity
+import `in`.opening.area.zustapp.utility.startUserProfileActivity
+import `in`.opening.area.zustapp.viewmodels.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -57,7 +62,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private var backPressedCount: Int = 0
-    private var inAppUpdateManager: InAppUpdateManager? = null
+    //private var inAppUpdateManager: InAppUpdateManager? = null
 
     private var onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -114,7 +119,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
             }
         }
         handleDeepLinkIntent(intent = intent)
-        inAppUpdateManager = InAppUpdateManager(this, inAppUpdateCallback)
+        // inAppUpdateManager = InAppUpdateManager(this, inAppUpdateCallback)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
@@ -236,7 +241,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     override fun onResume() {
         super.onResume()
         backPressedCount = 0
-        inAppUpdateManager?.onResume()
+        //inAppUpdateManager?.onResume()
     }
 
     override fun onPause() {
@@ -246,7 +251,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     override fun onDestroy() {
         super.onDestroy()
-        inAppUpdateManager?.onDestroy()
+        //inAppUpdateManager?.onDestroy()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -271,15 +276,15 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     }
 
 
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java", ReplaceWith("super.onActivityResult(requestCode, resultCode, data)", "androidx.appcompat.app.AppCompatActivity"))
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        inAppUpdateManager?.onActivityResult(requestCode, resultCode)
+        // inAppUpdateManager?.onActivityResult(requestCode, resultCode)
     }
 
     private val inAppUpdateCallback = fun() {
         AppUtility.showAppUpdateDialog(context = this, false) {
-            inAppUpdateManager?.completeUpdate()
+            //inAppUpdateManager?.completeUpdate()
         }
     }
 

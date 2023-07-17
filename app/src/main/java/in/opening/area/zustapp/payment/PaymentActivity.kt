@@ -22,6 +22,7 @@ import com.cashfree.pg.ui.api.CFPaymentComponent
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.appUtils.CustomFirebaseRemoteConfig
 import `in`.opening.area.zustapp.coupon.CouponListingActivity
 import `in`.opening.area.zustapp.coupon.model.AppliedCouponData
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
@@ -36,6 +37,7 @@ import `in`.opening.area.zustapp.payment.holder.*
 import `in`.opening.area.zustapp.payment.models.*
 import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
+import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
 import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
@@ -45,6 +47,7 @@ import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -148,21 +151,17 @@ class PaymentActivity : AppCompatActivity(),
 
     private fun proceedToPaymentFirstApiCall() {
         if (paymentMethod?.key != null && paymentActivityReqData?.totalAmount != null) {
-
             if (paymentViewModel.isCreatePaymentOnGoing()) {
                 showToast(this, "Please wait")
                 return
             }
             if (paymentMethod?.key == "cod") {
                 paymentMethodWarningDialog.showDialog(this, {
-                    //confirmation callback
                     createPaymentWithServerToGetId()
                 }, {
                     //cancel callback
                     showToast(this, "Payment Declined or Cancelled")
                 })
-            } else {
-                createPaymentWithServerToGetId()
             }
             if (paymentMethod?.key == "rapid") {
                 openRapidBazaarWallet()

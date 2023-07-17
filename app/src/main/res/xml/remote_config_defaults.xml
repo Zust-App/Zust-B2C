@@ -4,4 +4,8 @@
         <key>show_bill</key>
         <value>false</value>
     </entry>
+    <entry>
+        <key>order_enable</key>
+        <value>true</value>
+    </entry>
 </defaultsMap>
