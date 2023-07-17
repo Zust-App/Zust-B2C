@@ -96,7 +96,6 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
             }
 
         }
-
     }
 
     private fun saveAddressUserAddress(saveAddressPostModel: SaveAddressPostModel) {

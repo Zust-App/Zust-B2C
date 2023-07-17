@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp
 
+import android.Manifest
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
 import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
@@ -27,19 +28,25 @@ import `in`.opening.area.zustapp.utility.*
 import `in`.opening.area.zustapp.viewmodels.HomeViewModel
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.profile.components.AppVersionInfoHolder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -63,6 +70,14 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         }
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (!isGranted) {
+            AppUtility.showToast(this, "Please allow notification Permission")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -79,8 +94,10 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
                 },
                 backgroundColor = colorResource(id = R.color.screen_surface_color),
                 content = { paddingValue ->
-                    HomeMainContainer(homeViewModel, paddingValue) {
+                    HomeMainContainer(homeViewModel, paddingValue, {
                         handleActionIntent(it)
+                    }) {
+                        handleActionIntent(ACTION.OPEN_LOCATION)
                     }
                 },
             )
@@ -103,7 +120,6 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private fun initialDataManagement() {
         homeViewModel.getUserSavedAddress()
-        homeViewModel.getHomePageData(0.0, 0.0)
         lifecycleScope.launchWhenCreated {
             launch {
                 homeViewModel.moveToLoginPage.collectLatest {
@@ -116,6 +132,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
             launch {
                 homeViewModel.isAppUpdateAvail.collectLatest {
                     if (it) {
+                        homeViewModel.clearAllDataFromCart()
                         AppUtility.openPlayStore(this@HomeLandingActivity)
                     }
                 }
@@ -139,30 +156,38 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
                 val bottomSheetV2 = AddressBottomSheetV2.newInstance()
                 supportFragmentManager.showBottomSheetIsNotPresent(bottomSheetV2, AddressBottomSheetV2.SHEET_TAG)
             }
+
             ACTION.OPEN_USER_BOOKING -> {
                 this.startUserProfileActivity()
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
+
             ACTION.SEARCH_PRODUCT -> {
                 this.startSearchActivity()
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
+
             ACTION.SUGGEST_PRODUCT -> {
                 showSuggestProductSheet()
             }
+
             ACTION.OPEN_PROFILE -> {
                 this.startUserProfileActivity()
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
+
             ACTION.ORDER_WA -> {
                 this.openWhatsAppOrderIntent()
             }
+
             ACTION.LANGUAGE_DIALOG -> {
                 showLanguageSelectionDialog()
             }
+
             ACTION.PHONE_CALL -> {
                 this.openCallIntent("74564062907")
             }
+
             else -> {}
         }
     }
@@ -189,16 +214,10 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     }
 
     override fun didTapOnAddNewAddress() {
-       // openNewAddressActivity()
         openAddressSearchActivity()
     }
 
-    private fun openNewAddressActivity() {
-        val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
-        startAddNewAddressActivity.launch(newAddressIntent)
-    }
-
-    private fun openAddressSearchActivity(){
+    private fun openAddressSearchActivity() {
         val newAddressIntent = Intent(this, AddressSearchActivity::class.java)
         startAddNewAddressActivity.launch(newAddressIntent)
     }
@@ -267,6 +286,7 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     override fun onStart() {
         super.onStart()
         homeViewModel.getAppMetaData()
+        checkNotificationPermission()
     }
 
     private fun handleBottomNavCallback(homeBottomNavTypes: HomeBottomNavTypes, data: Any?) {
@@ -279,6 +299,9 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
             if (data != null && data is CreateCartData) {
                 startOrderSummaryActivity(data)
             }
+        }
+        if (homeBottomNavTypes == HomeBottomNavTypes.Food) {
+            startFoodEntryActivity()
         }
     }
 
@@ -300,6 +323,21 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         intent.putExtra(PaymentActivity.PAYMENT_MODEL_KEY, paymentActivityReqData)
         startActivity(intent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+
+                } else {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
     }
 
 }

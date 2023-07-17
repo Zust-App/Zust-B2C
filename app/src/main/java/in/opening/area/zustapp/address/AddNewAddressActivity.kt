@@ -26,11 +26,13 @@ class AddNewAddressActivity : AppCompatActivity() {
     private val viewModel: AddressViewModel by viewModels()
     private var searchAddressModel: SearchAddressModel? = null
     private val customLocationModel = CustomLocationModel()
+    private var intentSource: String? = null
+
 
     companion object {
         const val KEY_SELECTED_ADDRESS_ID = "selected_address_id"
         const val ADDRESS_EDIT_KEY = "address_edit_key"
-        const val ADDRESS_KEY="address_key"
+        const val ADDRESS_KEY = "address_key"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +48,9 @@ class AddNewAddressActivity : AppCompatActivity() {
     private fun getDataFromIntent() {
         if (intent.hasExtra(ADDRESS_EDIT_KEY)) {
             searchAddressModel = intent.getParcelableExtra(ADDRESS_EDIT_KEY)
+        }
+        if (intent.hasExtra(GoogleMapsAddressActivity.SOURCE)) {
+            intentSource = intent.getStringExtra(GoogleMapsAddressActivity.SOURCE)
         }
     }
 
@@ -72,6 +77,9 @@ class AddNewAddressActivity : AppCompatActivity() {
             viewModel.saveLatestAddress(data.convertToAddressItem())
             val intent = Intent()
             intent.putExtra(KEY_SELECTED_ADDRESS_ID, data.id)
+            if (intentSource != null) {
+                intent.putExtra(GoogleMapsAddressActivity.SOURCE,intentSource)
+            }
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -80,14 +88,17 @@ class AddNewAddressActivity : AppCompatActivity() {
                 KEY_SAVED_ADDRESS -> {
 
                 }
+
                 KEY_NEW_ADDRESS -> {
 
                 }
+
                 CURRENT_LOCATION -> {
                     viewModel.currentLocationUiState.update {
                         CurrentLocationUi.InitialUi(true)
                     }
                 }
+
                 FINISH_PAGE -> {
                     finish()
                 }

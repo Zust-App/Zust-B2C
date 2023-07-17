@@ -22,6 +22,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.FOOD_BTM_NAV_CLICK
+import `in`.opening.area.zustapp.zustFood.ZustFoodEntryActivity
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -46,7 +48,6 @@ fun Context.startProductDetailPage(productSingleItem: ProductSingleItem) {
     FirebaseAnalytics.logEvents(PRODUCT_DETAIL_CLICK, bundle)
     val productDetailIntent = Intent(this, ProductDetailsActivity::class.java)
     productDetailIntent.putExtra(ProductDetailsActivity.PRODUCT_ID, productSingleItem.productGroupId)
-    productDetailIntent.putExtra(ProductDetailsActivity.MERCHANT_ID, "1")
     startActivity(productDetailIntent)
 }
 
@@ -139,4 +140,10 @@ fun Context?.openCallIntent(phoneNumber: String) {
     } catch (e: Exception) {
         e.printStackTrace()
     }
+}
+
+fun Context.startFoodEntryActivity() {
+    FirebaseAnalytics.logEvents(FOOD_BTM_NAV_CLICK)
+    val searchIntent = Intent(this, ZustFoodEntryActivity::class.java)
+    startActivity(searchIntent)
 }

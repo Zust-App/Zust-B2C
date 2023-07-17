@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.locationV2.LocationPermissionActivity
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity(), FragmentActionListener {
@@ -34,7 +35,11 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
             action(LoginNav.MOVE_TO_PHONE)
         } else {
             if (loginViewModel.isProfileCreated()) {
-                moveToHomeActivity()
+                if (loginViewModel.getSavedAddressFound()) {
+                    moveToHomeActivity()
+                } else {
+                    proceedToLocationPermissionActivity()
+                }
             } else {
                 action(LoginNav.MOVE_TO_PROFILE)
             }
@@ -52,7 +57,11 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
         currentFragmentTag = name
         hideKeyBoard()
         if (name == LoginNav.MOVE_TO_NEXT) {
-            moveToHomeActivity()
+            if (loginViewModel.getSavedAddressFound()) {
+                moveToHomeActivity()
+            } else {
+                proceedToLocationPermissionActivity()
+            }
         } else {
             onBoardingFragmentManager?.setUpFragmentBasedOnId(name)
         }
@@ -65,9 +74,11 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
                 LoginNav.MOVE_TO_PHONE -> {
                     finish()
                 }
+
                 LoginNav.MOVE_TO_OTP -> {
                     action(LoginNav.MOVE_TO_PHONE)
                 }
+
                 LoginNav.MOVE_TO_PROFILE -> {
                     finish()
                 }
@@ -80,6 +91,12 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
     private fun moveToHomeActivity() {
         val intent = Intent(this@LoginActivity, HomeLandingActivity::class.java)
         startActivity(intent)
+        finish()
+    }
+
+    private fun proceedToLocationPermissionActivity() {
+        val locationPermissionActivity = Intent(this, LocationPermissionActivity::class.java)
+        startActivity(locationPermissionActivity)
         finish()
     }
 

@@ -20,14 +20,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.locationV2.viewModel.LocationPermissionViewModel
+import `in`.opening.area.zustapp.product.model.Address
 
 const val KEY_NEW_ADDRESS = "new"
 const val KEY_SAVED_ADDRESS = "saved"
-const val CURRENT_LOCATION="current_location"
-const val FINISH_PAGE="finish"
+const val CURRENT_LOCATION = "current_location"
+const val FINISH_PAGE = "finish"
 
 @Composable
-fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, paddingValues: PaddingValues, callback: (Any) -> Unit) {
+fun AlreadyAddedAddressListUi(
+    modifier: Modifier, viewModel: LocationPermissionViewModel,
+    paddingValues: PaddingValues, callback: (AddressItem) -> Unit,
+) {
     val savedAddressData by viewModel.userAddressListUiState.collectAsState(initial = UserSavedAddressUi.InitialUi(isLoading = false))
     var isLoading by remember {
         mutableStateOf(false)
@@ -42,8 +48,8 @@ fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, p
             is UserSavedAddressUi.UserAddressResponse -> {
                 if (!data.data?.addresses.isNullOrEmpty()) {
                     val (title, addNewAddressTag, list) = createRefs()
-                    Text(text = "Choose delivery address", modifier = modifier.constrainAs(title) {
-                        start.linkTo(parent.start, dp_20)
+                    Text(text = "Saved Location", modifier = modifier.constrainAs(title) {
+                        start.linkTo(parent.start, dp_16)
                         top.linkTo(parent.top, dp_16)
                         end.linkTo(parent.end, dp_20)
                         width = Dimension.fillToConstraints
@@ -58,7 +64,7 @@ fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, p
                             height = Dimension.fillToConstraints
                         }) {
                         data.data?.addresses?.forEach {
-                            item(it.id) {
+                            item(key = it.id) {
                                 SavedAddressItemUi(modifier = modifier, it) { address ->
                                     callback.invoke(address)
                                 }
@@ -67,41 +73,33 @@ fun AlreadyAddedAddressListUi(modifier: Modifier, viewModel: AddressViewModel, p
                                     .background(color = Color(0xffCDCDCD)))
                             }
                         }
+                        item {
+                            Spacer(modifier = Modifier.height(24.dp))
+                        }
                     }
-                    Button(onClick = {
-                        callback.invoke(KEY_NEW_ADDRESS)
-                    }, modifier = modifier
-                        .clip(shape = RoundedCornerShape(12.dp))
-                        .constrainAs(addNewAddressTag) {
-                            bottom.linkTo(parent.bottom, dp_16)
-                            start.linkTo(parent.start, dp_20)
-                            end.linkTo(parent.end, dp_20)
-                            width = Dimension.fillToConstraints
-                        }, colors =
-                    ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
-                        Icon(painter = painterResource(id = R.drawable.plus_circle),
-                            contentDescription = "",
-                            tint = colorResource(id = R.color.white))
-                        Spacer(modifier = modifier.width(8.dp))
-                        Text(text = "Add New Address",
-                            modifier = modifier.padding(vertical = 6.dp),
-                            color = colorResource(id = R.color.white),
-                            style = ZustTypography.body1)
-                    }
-                } else {
-
                 }
             }
-            is UserSavedAddressUi.ErrorState -> {
 
+            is UserSavedAddressUi.ErrorState -> {
+                val (retryButton) = createRefs()
+                Button(onClick = { viewModel.getAllAddress() },
+                    modifier = Modifier.constrainAs(retryButton) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }) {
+                    Text(text = "Retry Again")
+                }
             }
+
             is UserSavedAddressUi.InitialUi -> {
 
             }
         }
         if (isLoading) {
             CircularProgressIndicator(modifier = modifier
-                .size(40.dp)
+                .size(30.dp)
                 .constrainAs(progressBar) {
                     top.linkTo(parent.top, dp_20)
                     end.linkTo(parent.end, dp_20)

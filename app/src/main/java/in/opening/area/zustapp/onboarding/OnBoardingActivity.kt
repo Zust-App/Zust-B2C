@@ -1,18 +1,18 @@
 package `in`.opening.area.zustapp.onboarding
 
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.HomeLandingActivity
+import `in`.opening.area.zustapp.locationV2.LocationPermissionActivity
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.onboarding.compose.LoginClick
 import `in`.opening.area.zustapp.onboarding.compose.OnBoardingContainer
 import `in`.opening.area.zustapp.viewmodels.OnBoardingViewModel
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.TextSwitcher
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity() {
@@ -34,11 +34,14 @@ class OnBoardingActivity : AppCompatActivity() {
         }
     }
 
-
     private fun checkUserLoginOrNot() {
         if (viewModel.isAuthTokenFound()) {
             if (viewModel.isProfileCreated()) {
-                proceedToHomePage()
+                if (viewModel.getSavedAddressFound()) {
+                    proceedToHomePage()
+                } else {
+                    proceedToLocationPermissionActivity()
+                }
             } else {
                 proceedToLogin()
             }
@@ -48,8 +51,14 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     private fun proceedToHomePage() {
-        val loginActivity = Intent(this, HomeLandingActivity::class.java)
-        startActivity(loginActivity)
+        val homeIntent = Intent(this, HomeLandingActivity::class.java)
+        startActivity(homeIntent)
+        finish()
+    }
+
+    private fun proceedToLocationPermissionActivity() {
+        val locationPermissionActivity = Intent(this, LocationPermissionActivity::class.java)
+        startActivity(locationPermissionActivity)
         finish()
     }
 

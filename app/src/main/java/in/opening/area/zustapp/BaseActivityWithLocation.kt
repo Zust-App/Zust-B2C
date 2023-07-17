@@ -18,11 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ResolvableApiException
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.address.GoogleMapsAddressActivity
 
 @AndroidEntryPoint
 open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListener, AddressBtmSheetCallback {
@@ -58,7 +58,6 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
         }
     }
 
-
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -71,15 +70,31 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
         } else if (requestCode == REQ_CODE_NEW_ADDRESS) {
             if (resultCode == Activity.RESULT_OK) {
                 val selectedAddressId = data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+                var intentSource: String? = null
+                data?.let {
+                    if (it.hasExtra(GoogleMapsAddressActivity.SOURCE)) {
+                        intentSource = it.getStringExtra(GoogleMapsAddressActivity.SOURCE)
+                    }
+                }
                 if (selectedAddressId != null && selectedAddressId != -1) {
-                    setBackDataIfAddressAdded(selectedAddressId)
+                    setBackDataIfAddressAdded(selectedAddressId, intentSource)
                 }
             }
         } else if (requestCode == REQ_CODE_GOOGLE_MAP) {
             if (resultCode == Activity.RESULT_OK) {
                 val selectedAddressId = data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+                var intentSource: String? = null
+                data?.let {
+                    if (it.hasExtra(GoogleMapsAddressActivity.SOURCE)) {
+                        intentSource = it.getStringExtra(GoogleMapsAddressActivity.SOURCE)
+                    }
+                }
                 if (selectedAddressId != null && selectedAddressId != -1) {
-                    setBackDataIfAddressAdded(selectedAddressId)
+                    if (intentSource != null && intentSource == GoogleMapsAddressActivity.SOURCE_LOCATION_PERMISSION) {
+                        startHomeLandingIntent()
+                        return
+                    }
+                    setBackDataIfAddressAdded(selectedAddressId, intentSource)
                 }
             }
         }
@@ -96,13 +111,15 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
     }
 
     override fun didReceiveException(e: Exception?) {
-        didReceiveError(e?.message)
         if (e is ResolvableApiException) {
             try {
                 e.startResolutionForResult(this, ACTION_PERMISSION_GPS)
+                didReceiveError(null)
             } catch (sendEx: IntentSender.SendIntentException) {
                 didReceiveError(sendEx.message)
             }
+        } else {
+            didReceiveError(e?.message)
         }
     }
 
@@ -137,10 +154,19 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
 
     }
 
-    open fun setBackDataIfAddressAdded(selectedAddressId: Int) {
+    open fun setBackDataIfAddressAdded(selectedAddressId: Int, intentSource: String?) {
         val intent = Intent()
         intent.putExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, selectedAddressId)
+        if (intentSource != null) {
+            intent.putExtra(GoogleMapsAddressActivity.SOURCE, intentSource)
+        }
         setResult(RESULT_OK, intent)
+        finish()
+    }
+
+    private fun startHomeLandingIntent() {
+        val homeIntent = Intent(this, HomeLandingActivity::class.java)
+        startActivity(homeIntent)
         finish()
     }
 

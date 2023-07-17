@@ -33,6 +33,7 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
     private val viewModel: AddressViewModel by viewModels()
     private var googleMap: GoogleMap? = null
     private var latLng: LatLng? = null
+    private var intentSource: String? = null
     private val customMaterialDialog: CustomMaterialDialog by lazy {
         CustomMaterialDialog {
 
@@ -40,6 +41,11 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
     }
 
     private val coder by lazy { Geocoder(this, Locale.getDefault()) }
+
+    companion object {
+        const val SOURCE_LOCATION_PERMISSION = "lcp"
+        const val SOURCE = "source"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -202,6 +208,9 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
     }
 
     private fun getDataFromIntent() {
+        if (intent.hasExtra(SOURCE)) {
+            intentSource = intent.getStringExtra(SOURCE)
+        }
         if (intent.hasExtra(ADDRESS_KEY)) {
             val address: Address? = intent.getParcelableExtra(ADDRESS_KEY)
             if (address == null) {
@@ -221,6 +230,9 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
         if (viewModel.searchAddressModel != null) {
             val addressInputIntent = Intent(this, AddNewAddressActivity::class.java)
             addressInputIntent.putExtra(AddNewAddressActivity.ADDRESS_EDIT_KEY, viewModel.searchAddressModel)
+            intentSource?.let {
+                addressInputIntent.putExtra(SOURCE, intentSource)
+            }
             startActivityForResult(addressInputIntent, REQ_CODE_NEW_ADDRESS)
         } else {
             AppUtility.showToast(this, "Something went wrong")

@@ -185,4 +185,13 @@ class LoginViewModel @Inject constructor(private val apiRequestManager: ApiReque
     private var stopped = fun() {
         timerTextFlow.tryEmit("")
     }
+
+    fun getSavedAddressFound():Boolean{
+        sharedPrefManager.getUserAddress()?.let {
+            return true
+        }?: kotlin.run {
+            return false
+        }
+    }
+
 }

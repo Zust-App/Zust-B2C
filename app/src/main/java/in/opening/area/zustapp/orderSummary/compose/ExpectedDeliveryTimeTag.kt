@@ -28,7 +28,7 @@ fun ExpectedDeliveryTimeTag(orderSummaryViewModel: OrderSummaryViewModel) {
         .fillMaxWidth()
         .padding(top = 24.dp)) {
         val (timeText, icon) = createRefs()
-        Text(text = expectedDeliveryTimeData ?: "Get your order in 45 mins",
+        Text(text = expectedDeliveryTimeData ?: "Last minute delivery app",
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_material_primary),
             style = ZustTypography.body1, modifier = Modifier

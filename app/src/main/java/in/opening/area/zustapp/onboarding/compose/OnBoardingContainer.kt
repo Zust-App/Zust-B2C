@@ -1,38 +1,39 @@
 package `in`.opening.area.zustapp.onboarding.compose
 
-import WebsiteLinkText
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.compose.ComposeLottie
-import `in`.opening.area.zustapp.ui.theme.*
-import android.annotation.SuppressLint
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import kotlinx.coroutines.delay
+import `in`.opening.area.zustapp.BuildConfig
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_16
 
 
 enum class LoginClick {
@@ -56,7 +57,7 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
         .fillMaxWidth()
         .fillMaxHeight()
         .background(color = colorResource(id = R.color.new_material_primary))) {
-        val (lottieAnimation) = createRefs()
+        val (lottieAnimation, appVersion) = createRefs()
 
         Image(
             painter = painterResource(id = R.drawable.zust_app_white_text),
@@ -74,6 +75,12 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
                 .scale(scale.value),
             contentScale = ContentScale.FillWidth,
         )
+
+        Text(text = "v" + BuildConfig.VERSION_NAME, modifier = Modifier.constrainAs(appVersion) {
+            bottom.linkTo(parent.bottom, dp_16)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }, style = ZustTypography.body1, color = colorResource(R.color.white))
 
         LaunchedEffect(key1 = Unit, block = {
             animateImageScale(scale)

@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import `in`.opening.area.zustapp.utility.AppUtility
+import java.util.concurrent.TimeUnit
 
 class CustomLocationManager(private val activity: AppCompatActivity, private val listener: CustomLocationListener) :
     LocationListener {
@@ -26,10 +28,12 @@ class CustomLocationManager(private val activity: AppCompatActivity, private val
     }
 
     fun initiate() {
+        listener.showHideProgressBar(true)
         getLocationSetting().addOnSuccessListener {
             getCurrentLocation()
         }.addOnFailureListener {
             listener.didReceiveException(e = it)
+            listener.showHideProgressBar(false)
         }
     }
 
@@ -40,16 +44,19 @@ class CustomLocationManager(private val activity: AppCompatActivity, private val
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
         if (!isLocationPermissionGranted()) {
+            AppUtility.showToast(activity, "Please allow location permission")
+            listener.showHideProgressBar(false)
             return
         }
+        removeLocationUpdates()
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
-                super.onLocationResult(p0)
                 if (p0.lastLocation?.latitude == 0.0 || p0.lastLocation?.longitude == 0.0) {
                     Log.e("ZERO", "onLocationResult: ")
                 } else {
                     listener.receiveLocation(p0.lastLocation)
                     removeLocationUpdates()
+                    listener.showHideProgressBar(false)
                 }
             }
         }
@@ -67,10 +74,9 @@ class CustomLocationManager(private val activity: AppCompatActivity, private val
             locationRequest!!
         } else {
             locationRequest = LocationRequest.create()
-            locationRequest?.interval = 5000
-            locationRequest?.fastestInterval = 2000
-            locationRequest?.priority = 100
-            locationRequest?.priority=LocationRequest.PRIORITY_HIGH_ACCURACY
+            locationRequest?.interval = TimeUnit.SECONDS.toMillis(2)
+            locationRequest?.fastestInterval = TimeUnit.SECONDS.toMillis(1)
+            locationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             return locationRequest!!
         }
     }
@@ -81,12 +87,14 @@ class CustomLocationManager(private val activity: AppCompatActivity, private val
         } else {
             listener.receiveLocation(p0)
             removeLocationUpdates()
+            listener.showHideProgressBar(false)
         }
     }
 
     private fun removeLocationUpdates() {
         if (locationCallback != null) {
             mFusedLocationClient?.removeLocationUpdates(locationCallback!!)
+            locationCallback = null
         }
     }
 }

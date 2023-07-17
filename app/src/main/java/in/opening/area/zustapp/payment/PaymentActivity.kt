@@ -1,6 +1,25 @@
 package `in`.opening.area.zustapp.payment
 
-import `in`.opening.area.zustapp.MyApplication
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.cashfree.pg.api.CFPaymentGatewayService
+import com.cashfree.pg.base.exception.CFException
+import com.cashfree.pg.core.api.CFSession
+import com.cashfree.pg.core.api.CFTheme
+import com.cashfree.pg.core.api.callback.CFCheckoutResponseCallback
+import com.cashfree.pg.core.api.utils.CFErrorResponse
+import com.cashfree.pg.ui.api.CFDropCheckoutPayment
+import com.cashfree.pg.ui.api.CFPaymentComponent
+import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.coupon.CouponListingActivity
@@ -24,23 +43,6 @@ import `in`.opening.area.zustapp.uiModels.ValidateCouponUi
 import `in`.opening.area.zustapp.utility.*
 import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.DialogInterface
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.razorpay.Checkout
-import com.razorpay.PaymentData
-import com.razorpay.PaymentResultWithDataListener
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,8 +51,8 @@ import org.json.JSONObject
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint
-class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
-    PaymentMethodClickListeners {
+class PaymentActivity : AppCompatActivity(),
+    PaymentMethodClickListeners, CFCheckoutResponseCallback {
     private var binding: ActivityPaymentBinding? = null
 
     private val paymentViewModel: PaymentActivityViewModel by viewModels()
@@ -59,7 +61,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
 
     private var paymentBillingHolder: PaymentBillingHolder? = null
 
-    private var checkout: Checkout? = null
     private var paymentActivityReqData: PaymentActivityReqData? = null
 
     private var paymentMethod: PaymentMethod? = null
@@ -67,6 +68,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
     private var deliveryAddressHolder: DeliveryAddressHolder? = null
     private var timingSavingHolder: TimingSavingHolder? = null
     private var cartItemCount: Int = 0
+
+    private val paymentMethodWarningDialog: PaymentMethodWarningDialog by lazy { PaymentMethodWarningDialog() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +80,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         setUpObservers()
         setUpClickListeners()
         setUpTitleBar()
-        Checkout.preload(MyApplication.getApplication())
+        //setUpCashFreePayments()
     }
 
     @SuppressLint("SetTextI18n")
@@ -145,24 +148,39 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
 
     private fun proceedToPaymentFirstApiCall() {
         if (paymentMethod?.key != null && paymentActivityReqData?.totalAmount != null) {
+
             if (paymentViewModel.isCreatePaymentOnGoing()) {
                 showToast(this, "Please wait")
                 return
             }
-            showHidePgBar(true)
+            if (paymentMethod?.key == "cod") {
+                paymentMethodWarningDialog.showDialog(this, {
+                    //confirmation callback
+                    createPaymentWithServerToGetId()
+                }, {
+                    //cancel callback
+                    showToast(this, "Payment Declined or Cancelled")
+                })
+            } else {
+                createPaymentWithServerToGetId()
+            }
             if (paymentMethod?.key == "rapid") {
                 openRapidBazaarWallet()
                 return
             }
-            val createPayment = CreatePaymentReqBodyModel(
-                paymentActivityReqData?.totalAmount,
-                order_id = paymentActivityReqData?.orderId,
-                paymentMethod = paymentMethod?.key!!
-            )
-            paymentViewModel.invokePaymentToGetId(createPayment)
         } else {
             Toast.makeText(this, "Please select a payment mode", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun createPaymentWithServerToGetId() {
+        showHidePgBar(true)
+        val createPayment = CreatePaymentReqBodyModel(
+            paymentActivityReqData?.totalAmount,
+            order_id = paymentActivityReqData?.orderId,
+            paymentMethod = paymentMethod?.key!!
+        )
+        paymentViewModel.invokePaymentToGetId(createPayment)
     }
 
     private fun setUpObservers() {
@@ -198,6 +216,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             is PaymentMethodUi.InitialUi -> {
                 showHidePgBar(response.isLoading)
             }
+
             is PaymentMethodUi.ErrorUi -> {
                 if (!response.errorMsg.isNullOrEmpty()) {
                     showToast(this, response.errorMsg)
@@ -205,6 +224,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
                     showToast(this, response.errors.getTextMsg())
                 }
             }
+
             is PaymentMethodUi.MethodSuccess -> {
                 paymentMethodAdapter.submitList(response.data)
             }
@@ -217,9 +237,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             is PaymentVerificationUi.PaymentSuccess -> {
                 checkPaymentCapturedStatus(response.data)
             }
+
             is PaymentVerificationUi.InitialUi -> {
                 showHidePgBar(response.isLoading)
             }
+
             is PaymentVerificationUi.ErrorUi -> {
                 if (!response.errorMsg.isNullOrEmpty()) {
                     showToast(this, response.errorMsg)
@@ -234,9 +256,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         if (data.has("success") && data.getBoolean("success")) {
             if (data.has("payment")) {
                 val payment = data.getJSONObject("payment")
-                if (payment.has("status") && payment.getString("status")
-                        .equals("captured", ignoreCase = true)
-                ) {
+                if (payment.has("status") && payment.getString("status").equals("captured", ignoreCase = true)) {
                     delay(200)
                     moveToOrderConfIntermediatePage()
                 } else {
@@ -252,9 +272,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             is CreatePaymentUi.CreateSuccess -> {
                 proceedAfterCreatePayment(response.data)
             }
+
             is CreatePaymentUi.InitialUi -> {
                 showHidePgBar(response.isLoading)
             }
+
             is CreatePaymentUi.ErrorUi -> {
                 if (!response.errorMsg.isNullOrEmpty()) {
                     showToast(this, response.errorMsg)
@@ -271,6 +293,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             is ValidateCouponUi.InitialUi -> {
                 showHidePgBar(response.isLoading)
             }
+
             is ValidateCouponUi.ErrorUi -> {
                 if (response.errors.isNotEmpty()) {
                     showToast(this, response.errors.getTextMsg())
@@ -280,6 +303,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
                 binding?.paymentPageBottomBar?.totalPayableAmountTv?.text =
                     ProductUtils.roundTo1DecimalPlaces(paymentActivityReqData?.totalAmount)
             }
+
             is ValidateCouponUi.AppliedSuccessfully -> {
                 updateCouponFiled(response.data, response.isCouponRemoved)
             }
@@ -291,57 +315,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         if (paymentMethod.key == "rapid") {
             openRapidBazaarWallet()
         }
-    }
-
-    private fun processAfterSuccessfulPayment(paymentData: PaymentData?) {
-        if (paymentData == null) {
-            return
-        }
-        val razorPayOrderId = paymentData.orderId
-        val signatureId = paymentData.signature
-        val paymentId = paymentData.paymentId
-        val payment = Payment(razorPayOrderId, signatureId, paymentId)
-        paymentViewModel.verifyPaymentWithServer(payment)
-    }
-
-    private fun initializePayments(id: String, activity: Activity) {
-        if (checkout == null) {
-            checkout = Checkout()
-        }
-        setUpAttributes(id, activity)
-    }
-
-    private fun setUpAttributes(id: String, activity: Activity) {
-        try {
-            val options = JSONObject()
-            options.put("name", "Zust")
-            options.put("description", "Payment")
-            options.put("image", R.drawable.zust_app_black_text)
-            options.put("order_id", id)
-            options.put("theme.color", getColor(R.color.new_material_primary))
-            options.put("prefill.email", "info@grinzy.in")
-            options.put("prefill.contact", paymentViewModel.getUserMobileNumber())
-            if (paymentMethod != null) {
-                options.put("prefill.method", paymentMethod?.key!!)
-            }
-            val retryObj = JSONObject()
-            retryObj.put("enabled", true)
-            retryObj.put("max_count", 2)
-            options.put("retry", retryObj)
-            if (!activity.isFinishing) {
-                checkout?.open(activity, options)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
-        processAfterSuccessfulPayment(p1)
-    }
-
-    override fun onPaymentError(p0: Int, p1: String?, p2: PaymentData?) {
-        showToast(this, "Payment failed")
     }
 
     private fun startCouponListingActivity() {
@@ -372,9 +345,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
                         1 -> {
                             moveToOrderConfirmIntermediatePage(it.orderId)
                         }
+
                         -1 -> {
                             showRapidPaymentDeclinedDialog()
                         }
+
                         else -> {
                             showRapidPaymentDeclinedDialog()
                         }
@@ -417,17 +392,14 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
             if (createPaymentResponseModel.order == null) {
                 moveToOrderConfIntermediatePage()
             } else {
-                initializePayments(
-                    createPaymentResponseModel.order.rzrPayOrderId,
-                    this@PaymentActivity
-                )
+
             }
         }
     }
 
     private fun updateCouponFiled(
         appliedCouponResponse: AppliedCouponData,
-        isCouponRemoved: Boolean
+        isCouponRemoved: Boolean,
     ) {
         if (isCouponRemoved) {
             paymentActivityReqData?.couponDiscount = 0.0
@@ -451,14 +423,10 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         if (paymentActivityReqData?.orderId != null) {
             paymentViewModel.clearCartItems()
             val orderConfirmationPage: Intent? by lazy {
-                Intent(
-                    this,
-                    OrderConfirmationIntermediateActivity::class.java
-                )
+                Intent(this, OrderConfirmationIntermediateActivity::class.java)
             }
             orderConfirmationPage?.putExtra(ORDER_ID, paymentActivityReqData?.orderId)
-            orderConfirmationPage?.flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            orderConfirmationPage?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(orderConfirmationPage)
         }
     }
@@ -541,5 +509,52 @@ class PaymentActivity : AppCompatActivity(), PaymentResultWithDataListener,
         const val TOTAL_ITEMS_IN_CART = "items_in_cart"
     }
 
+    private fun setUpCashFreePayments() {
+        try {
+            CFPaymentGatewayService.getInstance().setCheckoutCallback(this)
+            doDropCheckoutPayment()
+        } catch (e: CFException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onPaymentVerify(orderID: String?) {
+
+    }
+
+    override fun onPaymentFailure(cfErrorResponse: CFErrorResponse?, orderID: String?) {
+
+    }
+
+    private fun doDropCheckoutPayment() {
+        val cfPaymentComponent = CFPaymentComponent.CFPaymentComponentBuilder()
+            .add(CFPaymentComponent.CFPaymentModes.CARD)
+            .add(CFPaymentComponent.CFPaymentModes.UPI)
+            .build()
+        try {
+            val cfSession: CFSession = CFSession.CFSessionBuilder()
+                .setEnvironment(CFSession.Environment.SANDBOX)
+                .setPaymentSessionID("paymentSessionID")
+                .setOrderId("2147712664")
+                .build()
+            val cfTheme = CFTheme.CFThemeBuilder()
+                .setNavigationBarBackgroundColor("#006EE1")
+                .setNavigationBarTextColor("#ffffff")
+                .setButtonBackgroundColor("#006EE1")
+                .setButtonTextColor("#ffffff")
+                .setPrimaryTextColor("#000000")
+                .setSecondaryTextColor("#000000")
+                .build()
+            val cfDropCheckoutPayment = CFDropCheckoutPayment.CFDropCheckoutPaymentBuilder()
+                .setSession(cfSession) //By default all modes are enabled. If you want to restrict the payment modes uncomment the next line
+                //                        .setCFUIPaymentModes(cfPaymentComponent)
+                .setCFNativeCheckoutUITheme(cfTheme)
+                .build()
+            val gatewayService = CFPaymentGatewayService.getInstance()
+            gatewayService.doPayment(this, cfDropCheckoutPayment)
+        } catch (exception: CFException) {
+            exception.printStackTrace()
+        }
+    }
 
 }

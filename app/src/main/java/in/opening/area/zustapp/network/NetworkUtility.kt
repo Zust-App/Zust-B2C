@@ -10,7 +10,7 @@ class NetworkUtility {
 
         private fun getCompleteBaseUrl(): String {
             return if (!BuildConfig.DEBUG) {
-                 BuildConfig.PROD_BASE_URL
+                BuildConfig.PROD_BASE_URL
             } else {
                 if (isProd) {
                     BuildConfig.PROD_BASE_URL
@@ -56,7 +56,7 @@ class NetworkUtility {
         val USER_PROFILE_PAGE = "$baseUrl/users/profile-page"
         val VERIFY_DELIVERABLE_ADDRESS = "$baseUrl/dashboard/warehouses/verify-address"
         val ADDRESS = "$baseUrl/addresses"
-        val HOME_PAGE_V1 = "$baseUrl/products/home-page1"
+        val HOME_PAGE = "$baseUrl/products/home-page"
         val USER_ORDERS = "$baseUrl/orders"
         val UPDATE_RATING = "$baseUrl/orders/update-rating"
         val PRODUCT_DETAILS = "$baseUrl/products/products-by-productid"

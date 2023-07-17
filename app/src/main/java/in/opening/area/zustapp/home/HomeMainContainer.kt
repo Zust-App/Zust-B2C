@@ -16,7 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
-fun HomeMainContainer(homeViewModel: HomeViewModel, paddingValues: PaddingValues, callback: (ACTION) -> Unit) {
+fun HomeMainContainer(homeViewModel: HomeViewModel,
+                      paddingValues: PaddingValues, callback: (ACTION) -> Unit,changeLocationCallback:()->Unit) {
     val homeWidgets by homeViewModel.homePageUiState.collectAsState(HomePageResUi.InitialUi(false))
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier
@@ -61,8 +62,10 @@ fun HomeMainContainer(homeViewModel: HomeViewModel, paddingValues: PaddingValues
                 } else {
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
-                HomePageErrorUi(searchField, notDeliverHere, this) {
-                    homeViewModel.getHomePageData(0.0, 0.0)
+                HomePageErrorUi(response.errorCode, searchField, notDeliverHere, this, {
+                    homeViewModel.getUserSavedAddress()
+                }) {
+                    changeLocationCallback.invoke()
                 }
             }
 

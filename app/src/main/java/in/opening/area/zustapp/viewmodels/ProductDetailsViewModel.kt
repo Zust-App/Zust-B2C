@@ -10,6 +10,7 @@ import `in`.opening.area.zustapp.repository.ProductRepo
 import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -19,6 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(private val productRepo: ProductRepo) : OrderSummaryNetworkVM(productRepo) {
+    @Inject
+    lateinit var sharedPrefManager: SharedPrefManager
     private var productId: String? = null
     private var merchantId: String? = null
     internal val singleItemUiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.InitialUi(false))
@@ -48,9 +51,9 @@ class ProductDetailsViewModel @Inject constructor(private val productRepo: Produ
         }
     }
 
-    internal fun setProductAndMerchantId(productId: String, merchantId: String) {
+    internal fun setProductAndMerchantId(productId: String) {
         this.productId = productId
-        this.merchantId = merchantId
+        this.merchantId = sharedPrefManager.getMerchantId().toString()
     }
 
     internal fun getProductDetails() = viewModelScope.launch {
@@ -69,6 +72,7 @@ class ProductDetailsViewModel @Inject constructor(private val productRepo: Produ
                         }
                     }
                 }
+
                 else -> {
                     singleItemUiState.update {
                         ProductDetailsUiState.ErrorUi(false, "Something went wrong,please try again")

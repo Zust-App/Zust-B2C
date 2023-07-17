@@ -17,6 +17,9 @@ import `in`.opening.area.zustapp.uiModels.LatestOrderUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.opening.area.zustapp.network.ApiRequestManager.Companion.NOT_COVERAGE_ERROR_CODE
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -46,23 +49,34 @@ class HomeViewModel @Inject constructor(
 
     internal val moveToLoginPage = MutableStateFlow(false)
     internal val isAppUpdateAvail = MutableStateFlow(false)
-
+    private var merchantId: Int? = -1
+    private var job: Job? = null
     internal fun getUserSavedAddress() {
         val address = sharedPrefManager.getUserAddress()
         updateAddressItem(address)
+        address?.let {
+            if (address.latitude != null && address.latitude != 0.0) {
+                getHomePageData(address.latitude, address.longitude)
+            } else {
+                homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Invalid address please try other location", errors = arrayListOf(), errorCode = NOT_COVERAGE_ERROR_CODE) }
+            }
+        }
     }
 
-    internal fun getHomePageData(lat: Double?, lng: Double?) = viewModelScope.launch {
-        homePageUiState.update { HomePageResUi.InitialUi(true) }
-        if (lat != null && lng != null) {
-            val trendingProductsResponse = productRepo.apiRequestManager.getTrendingProductsWithFlow()
-            val homePageResponse = productRepo.apiRequestManager.getHomePageDataWithFlow(lat, lng)
-            val addToCartProducts = productRepo.dbRepo.getAllCartItems()
-            combine(trendingProductsResponse, homePageResponse, addToCartProducts) { trend, homePage, localProducts ->
-                localProductCountMap = localProducts.associate { it.productPriceId to it.itemCountByUser }
-                mergeHomePageResponse(trend, homePage)
-                updateAddToCartFlow(localProducts)
-            }.collect()
+    private fun getHomePageData(lat: Double?, lng: Double?) {
+        job?.cancel()
+        job = viewModelScope.launch {
+            homePageUiState.update { HomePageResUi.InitialUi(true) }
+            if (lat != null && lng != null) {
+                val trendingProductsResponse = productRepo.apiRequestManager.getTrendingProductsWithFlow()
+                val homePageResponse = productRepo.apiRequestManager.getHomePageDataWithFlow(lat, lng)
+                val addToCartProducts = productRepo.dbRepo.getAllCartItems()
+                combine(trendingProductsResponse, homePageResponse, addToCartProducts) { trend, homePage, localProducts ->
+                    localProductCountMap = localProducts.associate { it.productPriceId to it.itemCountByUser }
+                    mergeHomePageResponse(trend, homePage)
+                    updateAddToCartFlow(localProducts)
+                }.collect()
+            }
         }
     }
 
@@ -96,9 +110,17 @@ class HomeViewModel @Inject constructor(
                     moveToLoginPage.update { true }
                     return
                 }
+                if (!homePageResponse.value.errors.isNullOrEmpty()) {
+                    homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = homePageResponse.value.message, errors = homePageResponse.value.errors, errorCode = NOT_COVERAGE_ERROR_CODE) }
+                    return
+                }
                 homePageResponseCache = homePageResponse.value.data
                 handleHomePageSuccessState(trendingProductsValueCache)
+                if (merchantId != homePageResponse.value.data?.merchantId) {
+                    sharedPrefManager.saveMerchantId(homePageResponse.value.data?.merchantId)
+                }
             }
+
             is ResultWrapper.GenericError -> {
                 if (homePageResponse.code == 401) {
                     moveToLoginPage.update { true }
@@ -106,9 +128,11 @@ class HomeViewModel @Inject constructor(
                 }
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = homePageResponse.error?.error) }
             }
+
             is ResultWrapper.NetworkError -> {
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Something went wrong") }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 moveToLoginPage.update { true }
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList()) }
@@ -141,6 +165,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
+
             else -> {
                 latestOrderUiState.update {
                     LatestOrderUi.ErrorUi(false, canRemove = true)
@@ -195,14 +220,19 @@ class HomeViewModel @Inject constructor(
                         sharedPrefManager.saveFreeDeliveryBasePrice(it.freeDeliveryFee)
                         sharedPrefManager.saveDeliveryFee(it.deliveryCharge)
                         isAppUpdateAvail.update { true }
-                    }else{
+                    } else {
                         isAppUpdateAvail.update { false }
                     }
                 }
             }
+
             else -> {
                 isAppUpdateAvail.update { false }
             }
         }
+    }
+
+    internal fun clearAllDataFromCart() = viewModelScope.launch(Dispatchers.IO) {
+        productRepo.deleteAllProduct()
     }
 }

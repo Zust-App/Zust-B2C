@@ -3,6 +3,7 @@ package `in`.opening.area.zustapp.storage.datastore
 import `in`.opening.area.zustapp.helper.LanguageManager
 import `in`.opening.area.zustapp.orderDetail.models.Address
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,6 +47,9 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.edit().remove(AUTH_TOKEN).apply()
     }
 
+    open fun removeMerchantId() {
+        sharedPreferences.edit().remove(MERCHANT_ID).apply()
+    }
     open fun removeSavedAddress() {
         sharedPreferences.edit().remove(ADDRESS_KEY).apply()
     }
@@ -158,6 +162,36 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
             return
         }
         sharedPreferences.edit().putString(SUPPORT_WA_NUM, supportWhatsapp).apply()
+    }
+
+    fun saveUserCurrentLocation(address: android.location.Address) {
+        try {
+            val string = gson.toJson(address)
+            sharedPreferences.edit().putString(ADDRESS_KEY, string).apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun getUserCurrentLocation(): android.location.Address? {
+        return try {
+            val addressString = sharedPreferences.getString(ADDRESS_KEY, "")
+            gson.fromJson(addressString, android.location.Address::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun getMerchantId(): Int {
+        return sharedPreferences.getInt(MERCHANT_ID, -1)
+    }
+
+    fun saveMerchantId(merchantId: Int?) {
+        if (merchantId != null) {
+            sharedPreferences.edit().putInt(MERCHANT_ID, merchantId).apply()
+        } else {
+            sharedPreferences.edit().putInt(MERCHANT_ID, -1).apply()
+        }
     }
 
 

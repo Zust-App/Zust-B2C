@@ -63,7 +63,6 @@
     <string name="arrow">arrow</string>
     <string name="common_error_message">Something went wrong. Please try again</string>
     <string name="zust_logo">Zust Logo</string>
-    <string name="just_in_45_min_delivery">Just in 45 Minutes delivery</string>
     <string name="please_allow_location_permission">Please allow location permission</string>
     <string name="permission_not_granted">Permission Not Granted</string>
     <string name="permission_granted">Permission Granted</string>
@@ -78,8 +77,13 @@
     <string name="thanks_for_suggestion">Thanks for suggestion</string>
     <string name="suggest_item">Suggest items</string>
     <string name="dinot_find_what_are_you_looking_for">Did not find what you are looking for? Please suggest the products</string>
-    <string name="type_items">Type items...</string>
+    <string name="type_items">Type items…</string>
     <string name="please_wirte_any_address">Please write Any items</string>
     <string name="send">Send</string>
     <string name="proceed">Proceed</string>
+    <string name="we_don_t_have_your_location_yet">We don\'t have your location, yet!</string>
+    <string name="we_need_your_location_to_find_nearest_store_provide_you_a_seamless_delivery_experience"><![CDATA[We need your location to find nearest store & provide you a seamless delivery experience]]></string>
+    <string name="enable_device_location">Enable device location</string>
+    <string name="last_minute_delivery_app">Last minute delivery app</string>
+
 </resources>

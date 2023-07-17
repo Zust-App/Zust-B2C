@@ -66,28 +66,55 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
                 fontSize = 14.sp,
             )
             Spacer(modifier = Modifier.height(8.dp))
-
-            profileViewModel.getSupportCsDetail()?.phoneNos?.forEach {
+            val phoneNos = profileViewModel.getSupportCsDetail()?.phoneNos
+            phoneNos?.forEach {
                 Text(
                     text = it, color = colorResource(id = R.color.light_black),
                     style = ZustTypography.body2,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openCallIntent(context, it)
                     })
+            } ?: run {
+                Text(
+                    text = "7858906229", color = colorResource(id = R.color.light_black),
+                    style = ZustTypography.body2,
+                    fontSize = 14.sp, modifier = Modifier.clickable {
+                        AppUtility.openCallIntent(context, "7858906229")
+                    })
+                Text(
+                    text = "7564062907", color = colorResource(id = R.color.light_black),
+                    style = ZustTypography.body2,
+                    fontSize = 14.sp, modifier = Modifier.clickable {
+                        AppUtility.openCallIntent(context, "7564062907")
+                    })
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
             Text(text = "Email", color = colorResource(id = R.color.green),
                 style = ZustTypography.body2,
                 fontSize = 14.sp)
             Spacer(modifier = Modifier.height(4.dp))
-            profileViewModel.getSupportCsDetail()?.email?.forEach {
+            val emails = profileViewModel.getSupportCsDetail()?.email
+            emails?.forEach {
                 Text(text = it, color = colorResource(id = R.color.light_black),
                     style = ZustTypography.body2,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openEmailIntent(context, it)
                     })
                 Spacer(modifier = Modifier.height(4.dp))
+            }?:run{
+                Text(text = "zusttapp@gmail.com", color = colorResource(id = R.color.light_black),
+                    style = ZustTypography.body2,
+                    fontSize = 14.sp, modifier = Modifier.clickable {
+                        AppUtility.openEmailIntent(context, "zusttapp@gmail.com")
+                    })
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "contact@zustapp.com", color = colorResource(id = R.color.light_black),
+                    style = ZustTypography.body2,
+                    fontSize = 14.sp, modifier = Modifier.clickable {
+                        AppUtility.openEmailIntent(context, "contact@zustapp.com")
+                    })
             }
 
             Spacer(modifier = Modifier.height(20.dp))

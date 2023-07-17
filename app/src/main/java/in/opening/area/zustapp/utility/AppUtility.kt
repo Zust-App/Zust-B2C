@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.utility
 
+import android.Manifest
 import `in`.opening.area.zustapp.MyApplication
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.offline.OfflineActivity
@@ -191,8 +192,14 @@ class AppUtility @Inject constructor() {
             }
         }
 
-        fun getMerchantIdFromJSON(json: JSONObject) {
-
+        fun checkIsNotificationPermissionAllowed(context: Context?): Boolean {
+            if (context == null) {
+                return false
+            }
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+                return true
+            }
+            return false
         }
     }
 }

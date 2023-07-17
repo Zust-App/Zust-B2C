@@ -1,20 +1,14 @@
 package `in`.opening.area.zustapp.orderDetail.ui
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
-import `in`.opening.area.zustapp.compose.ErrorRetryCaseUiForProductList
-import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.home.components.HomePageErrorUi
-import `in`.opening.area.zustapp.orderDetail.models.OrderStatus
-import `in`.opening.area.zustapp.ui.theme.ZustTypography
-import `in`.opening.area.zustapp.ui.theme.dp_20
-import `in`.opening.area.zustapp.ui.theme.dp_8
-import `in`.opening.area.zustapp.uiModels.OrderDetailUi
-import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -31,6 +25,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
+import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.orderDetail.models.OrderStatus
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.uiModels.OrderDetailUi
+import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
 
 @Composable
 fun OrderedDetailsContainer(

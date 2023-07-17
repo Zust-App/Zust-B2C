@@ -48,6 +48,7 @@ class ApiRequestManager @Inject constructor() {
 
     companion object {
         const val Authorization = "Authorization"
+        const val NOT_COVERAGE_ERROR_CODE = 27
     }
 
     suspend inline fun makeLoginRequestForGetOtp(mobileNumber: String) =
@@ -73,7 +74,7 @@ class ApiRequestManager @Inject constructor() {
     suspend inline fun postUpdateUserProfile(
         userName: String,
         userEmail: String?,
-        referralCode: String?
+        referralCode: String?,
     ) = universalApiRequestManager {
         val userProfileUpdateBody =
             UserProfileUpdateBody(name = userName, userEmail = userEmail, referCode = referralCode)
@@ -113,10 +114,12 @@ class ApiRequestManager @Inject constructor() {
     private suspend fun getHomePageDataFromServer(lat: Double, lng: Double) =
         universalApiRequestManager {
             val token = sharedPrefManager.getUserAuthToken()
-            val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE_V1) {
+            val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE) {
                 headers {
                     this.append(Authorization, "Bearer $token")
                 }
+                parameter("latitude", lat)
+                parameter("longitude", lng)
             }
             value
         }
@@ -152,7 +155,7 @@ class ApiRequestManager @Inject constructor() {
                         this.append(Authorization, "Bearer $authToken")
                     }
                     parameter("categoryId", categoryId)
-                    parameter("merchantId", 1)
+                    parameter("merchantId", sharedPrefManager.getMerchantId())
                 }
             emit(ResultWrapper.Success(value))
         } catch (e: Throwable) {
@@ -187,7 +190,7 @@ class ApiRequestManager @Inject constructor() {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
             val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.PRODUCT_SEARCH) {
-                parameter("merchantId", 1)
+                parameter("merchantId", sharedPrefManager.getMerchantId())
                 parameter("searchText", searchText)
                 headers {
                     this.append(Authorization, "Bearer $authToken")
@@ -367,7 +370,7 @@ class ApiRequestManager @Inject constructor() {
     suspend fun getDirectionsWithWayPoints(
         origin: LatLng,
         destination: LatLng,
-        between: LatLng
+        between: LatLng,
     ): String {
         return ktorHttpClient.get("https://maps.googleapis.com/maps/api/directions/json") {
             parameter("origin", origin.latitude.toString() + "," + origin.longitude.toString())
@@ -464,8 +467,8 @@ class ApiRequestManager @Inject constructor() {
         rapidUserId: String,
         payableAmount: Double? = null,
         walletType: String,
-        transactionId: String
-    ) = universalApiRequestManager{
+        transactionId: String,
+    ) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         val createRapidWalletPaymentModel =
             RWCreatePaymentModel(rapidUserId, payableAmount, walletType, transactionId)

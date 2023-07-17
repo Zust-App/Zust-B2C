@@ -66,14 +66,13 @@
     <string name="arrow">arrow</string>
     <string name="common_error_message">Something went wrong. Please try again</string>
     <string name="zust_logo">Zust Logo</string>
-    <string name="just_in_45_min_delivery">Just in 45 Minutes delivery</string>
     <string name="please_wait">Please wait</string>
     <string name="please_allow_location_permission">Please allow location permission</string>
     <string name="please_retry_current_address">Please Retry current address</string>
     <string name="permission_not_granted">Permission Not Granted</string>
     <string name="permission_granted">Permission Granted</string>
     <string name="thanks_for_using_zust_app">Thanks for using Zust app</string>
-    <string name="order_confirmation_message">Your order %1$s confirmed. Will deliver in %2$d Minutes</string>
+    <string name="order_confirmation_message">Your order %1$s confirmed. Will deliver in %2$d hrs</string>
     <string name="my_profile">My Profile</string>
     <string name="faq">Faq</string>
     <string name="about_us">About us</string>
@@ -89,5 +88,12 @@
     <string name="copied">Successfully Copied to clipboard</string>
     <string name="key_geo">AIzaSyB8PVG4R7uQ_m4Kh_Ixr_PPkn3Uxv2rQOQ</string>
     <string name="proceed">Proceed</string>
+    <string name="search_location_manually">Search location manually</string>
+    <string name="we_don_t_have_your_location_yet">We don\'t have your location, yet!</string>
+    <string name="we_need_your_location_to_find_nearest_store_provide_you_a_seamless_delivery_experience"><![CDATA[We need your location to find nearest store & provide you a seamless delivery experience]]></string>
+    <string name="enable_device_location">Enable device location</string>
+    <string name="last_minute_delivery_app">Last minute delivery app</string>
+    <string name="you_are_selecting_payment_method_cash_on_delivery_cod_if_you_want_to_proceed_please_press_confirm_order" translatable="false">You are selecting payment method Cash On Delivery (COD). If you want to proceed please press <b>Confirm order</b></string>
+    <string name="need_help" translatable="false"><u>Need help?</u></string>
 
 </resources>

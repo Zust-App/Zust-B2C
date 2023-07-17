@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="we_don_t_have_your_location_yet">We don\'t have your location, yet!</string>
+    <string name="we_need_your_location_to_find_nearest_store_provide_you_a_seamless_delivery_experience"><![CDATA[We need your location to find nearest store & provide you a seamless delivery experience]]></string>
+    <string name="enable_device_location">Enable device location</string>
+    <string name="last_minute_delivery_app">Last minute delivery app</string>
+
+</resources>

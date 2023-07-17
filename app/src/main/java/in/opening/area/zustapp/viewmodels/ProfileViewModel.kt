@@ -53,6 +53,7 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
             }
+
             is ResultWrapper.GenericError -> {
                 if (response.code == 401) {
                     moveToLoginPage.update { true }
@@ -61,6 +62,7 @@ class ProfileViewModel @Inject constructor(
                     profileUiState.update { UserProfileUi.ErrorUi(false, errorMsg = response.error?.error ?: "Something went wrong") }
                 }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 dataStoreManager.getSavedUserProfile().collect { profile ->
                     if (profile != null) {
@@ -70,6 +72,7 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 dataStoreManager.getSavedUserProfile().collect { profile ->
                     if (profile != null) {
@@ -141,6 +144,7 @@ class ProfileViewModel @Inject constructor(
     fun logoutUser() {
         sharedPrefManager.removeAuthToken()
         sharedPrefManager.removeSavedAddress()
+        sharedPrefManager.removeMerchantId()
         viewModelScope.launch {
             productRepo.deleteAllProduct()
         }

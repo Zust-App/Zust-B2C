@@ -32,7 +32,6 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
 
     companion object {
         const val PRODUCT_ID = "product_key"
-        const val MERCHANT_ID = "merchant_id"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +62,7 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
         if (intent.hasExtra(PRODUCT_ID)) {
             val productId = intent.getStringExtra(PRODUCT_ID)
             productId?.let {
-                viewModel.setProductAndMerchantId(it, intent.getStringExtra(MERCHANT_ID) ?: "1")
+                viewModel.setProductAndMerchantId(it)
                 viewModel.getProductDetails()
             }
         } else {
@@ -72,7 +71,7 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
     }
 
     override fun didTapOnIncrementCount(productSingleItem: ProductSingleItem?) {
-        if (productSingleItem==null){
+        if (productSingleItem == null) {
             return
         }
         if (productSingleItem.maxItemPurchaseLimit > 0) {
@@ -81,7 +80,7 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
             } else {
                 AppUtility.showToast(this, "You can't add more than ${productSingleItem.maxItemPurchaseLimit}")
             }
-        }else{
+        } else {
             viewModel.updateProductCount(productSingleItem, ACTION.INCREASE)
         }
     }

@@ -68,6 +68,7 @@ class FirebaseAnalytics @Inject constructor() {
         const val OPEN_CALL = "open_call"
         const val REFER_AND_EARN_BTN = "refer_and_earn_button"
         const val REFERRAL_CODE_COPY = "referral_code_copy"
+        const val FOOD_BTM_NAV_CLICK = "food_btm_nav_click"
         fun logEvents(eventName: String?, bundle: Bundle? = null) {
             if (eventName != null) {
                 if (bundle != null) {

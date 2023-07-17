@@ -95,10 +95,10 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 .width(140.dp)
                 .height(60.dp))
         Spacer(modifier = Modifier.height(8.dp))
-        TypewriterText(text = stringResource(R.string.just_in_45_min_delivery),
+        TypewriterText(text = stringResource(R.string.last_minute_delivery_app),
             modifier = Modifier.fillMaxWidth(), textSize = 16.sp)
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = stringResource(R.string.enter_your_mobile_number),
+        Text(text = stringResource(R.string.last_minute_delivery_app),
             style = ZustTypography.subtitle1,
             color = colorResource(id = R.color.app_black))
 

@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.compose
 
+import androidx.compose.foundation.Image
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
@@ -16,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -24,7 +26,7 @@ import androidx.compose.ui.unit.dp
 
 
 enum class HomeBottomNavTypes {
-    Home, Orders, MoveToCartPage
+    Home, Orders, MoveToCartPage, Food
 }
 
 val navIconModifier = Modifier.size(22.dp)
@@ -72,6 +74,7 @@ fun CustomBottomNavigation(homeViewModel: HomeViewModel, navActionCallback: (Hom
                         }, fontWeight = FontWeight.W500)
                 }
             )
+
             BottomNavigationItem(
                 selected = homeBottomNav == HomeBottomNavTypes.Orders.ordinal,
                 onClick = {
@@ -90,6 +93,28 @@ fun CustomBottomNavigation(homeViewModel: HomeViewModel, navActionCallback: (Hom
                             colorResource(id = R.color.app_black)
                         } else {
                             colorResource(id = R.color.new_hint_color)
+                        })
+                }
+            )
+
+            BottomNavigationItem(
+                selected = homeBottomNav == HomeBottomNavTypes.Food.ordinal,
+                onClick = {
+                    navActionCallback.invoke(HomeBottomNavTypes.Food, null)
+                },
+                icon = {
+                    Image(
+                        modifier = navIconModifier,
+                        painter = painterResource(id = R.drawable.food_btm_logo),
+                        contentDescription = "food",
+                    )
+                },
+                label = {
+                    Text(text = "Food", style = ZustTypography.subtitle1,
+                        color = if (homeBottomNav == HomeBottomNavTypes.Food.ordinal) {
+                            colorResource(id = R.color.app_black)
+                        } else {
+                            colorResource(id = R.color.app_black)
                         })
                 }
             )

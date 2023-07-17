@@ -33,7 +33,6 @@ class AddressSearchActivity : BaseActivityWithLocation() {
     private val addressViewModel: AddressViewModel by viewModels()
     private val coder by lazy { Geocoder(this) }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -72,7 +71,7 @@ class AddressSearchActivity : BaseActivityWithLocation() {
             val parsedLocation = getAddressFromLatLng(location.latitude, location.longitude)
             if (parsedLocation != null) {
                 addressViewModel.searchedAddress.update {
-                    LocationAddressUi.Success(false, getAddressFromLatLng(location.latitude, location.longitude))
+                    LocationAddressUi.Success(false, parsedLocation)
                 }
             }
         }

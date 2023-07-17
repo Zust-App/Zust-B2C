@@ -7,8 +7,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class CustomMaterialDialog(private val callback:()->Unit) {
     companion object {
         const val TITLE = "Hold On!!"
-        const val MESSAGE = "We will back in your area"
-
+        const val MESSAGE = "Please try different location. We will back in your area"
     }
 
      fun showDialog(context: Context?) {

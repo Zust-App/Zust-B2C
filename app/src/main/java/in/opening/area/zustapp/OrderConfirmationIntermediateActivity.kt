@@ -55,7 +55,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
                 val (successAnimation) = createRefs()
                 val (thanksMessage) = createRefs()
                 val (orderConfirmedMessage) = createRefs()
-                Text(text = stringResource(`in`.opening.area.zustapp.R.string.order_confirmation_message, completeOrderId, 45),
+                Text(text = stringResource(R.string.order_confirmation_message, completeOrderId, 2),
                     modifier = Modifier.constrainAs(orderConfirmedMessage) {
                         bottom.linkTo(successAnimation.top, dp_16)
                         start.linkTo(parent.start, dp_20)
@@ -65,7 +65,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
                     fontFamily = okraFontFamily,
                     color = colorResource(id = color.light_green), textAlign = TextAlign.Center)
 
-                Text(text = stringResource(`in`.opening.area.zustapp.R.string.thanks_for_using_zust_app),
+                Text(text = stringResource(R.string.thanks_for_using_zust_app),
                     modifier = Modifier.constrainAs(thanksMessage) {
                         top.linkTo(successAnimation.bottom, dp_16)
                         start.linkTo(parent.start, dp_20)

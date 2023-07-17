@@ -20,7 +20,7 @@ class TimingSavingHolder(val binding: PaymentDetailSavingsItemBinding?) {
         if (!paymentActivityReqData?.expectedDelivery.isNullOrEmpty()) {
             setExpectedDeliveryTime(paymentActivityReqData?.expectedDelivery)
         } else {
-            setExpectedDeliveryTime("Delivery in 45 Mins")
+            setExpectedDeliveryTime("Last minute delivery app")
         }
         if (paymentActivityReqData?.isFreeDelivery == true) {
             setFreeDelivery("Yay! Eligible for free delivery")

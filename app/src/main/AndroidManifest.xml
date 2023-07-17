@@ -26,6 +26,7 @@
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".MyApplication"
@@ -41,6 +42,14 @@
         android:theme="@style/Theme.CustomSplashScreenTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".zustFood.ZustFoodEntryActivity"
+            android:theme="@style/Theme.ZustApp"
+            android:exported="false" />
+        <activity
+            android:name=".locationV2.LocationPermissionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp" />
         <activity
             android:name=".OrderConfirmationIntermediateActivity"
             android:exported="false"
@@ -261,17 +270,6 @@
             </intent-filter>
         </service>
 
-        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_Lz33UNoP7RkMQv" />
-
-        <receiver
-            android:name="com.razorpay.RzpTokenReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="rzp.device_token.share" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name=".services.SMSReceiver"
             android:exported="true"
@@ -299,20 +297,6 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name="com.razorpay.CheckoutActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:theme="@style/CheckoutTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <data
-                    android:host="rzp.io"
-                    android:scheme="io.rzp" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
