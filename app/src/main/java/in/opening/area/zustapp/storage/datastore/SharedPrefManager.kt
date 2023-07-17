@@ -16,7 +16,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     companion object {
         const val SHARED_PREF_NAME = "shared_pref_name"
         private const val AUTH_TOKEN = "auth_token"
-        const val ADDRESS_KEY = "address"
+        const val ADDRESS_KEY = "saved_address"
         const val MERCHANT_ID = "merchant_id"
         const val FCM_TOKEN = "fcm_token"
         const val PROFILE_CREATED = "profile_created"

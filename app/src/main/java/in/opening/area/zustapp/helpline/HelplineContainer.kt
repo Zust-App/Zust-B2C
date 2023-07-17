@@ -27,7 +27,7 @@ import androidx.constraintlayout.compose.Dimension
 
 
 @Composable
-fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallback: (Any) -> Unit) {
+fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallback: (Any) -> Unit) {
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
@@ -66,15 +66,17 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
                 fontSize = 14.sp,
             )
             Spacer(modifier = Modifier.height(8.dp))
-            val phoneNos = profileViewModel.getSupportCsDetail()?.phoneNos
-            phoneNos?.forEach {
-                Text(
-                    text = it, color = colorResource(id = R.color.light_black),
-                    style = ZustTypography.body2,
-                    fontSize = 14.sp, modifier = Modifier.clickable {
-                        AppUtility.openCallIntent(context, it)
-                    })
-            } ?: run {
+            val phoneNos = profileViewModel?.getSupportCsDetail()?.phoneNos
+            if (!phoneNos.isNullOrEmpty()) {
+                phoneNos.forEach {
+                    Text(
+                        text = it, color = colorResource(id = R.color.light_black),
+                        style = ZustTypography.body2,
+                        fontSize = 14.sp, modifier = Modifier.clickable {
+                            AppUtility.openCallIntent(context, it)
+                        })
+                }
+            } else {
                 Text(
                     text = "7858906229", color = colorResource(id = R.color.light_black),
                     style = ZustTypography.body2,
@@ -95,15 +97,17 @@ fun HelplineContainer(profileViewModel: ProfileViewModel, supportBtmSheetCallbac
                 style = ZustTypography.body2,
                 fontSize = 14.sp)
             Spacer(modifier = Modifier.height(4.dp))
-            val emails = profileViewModel.getSupportCsDetail()?.email
-            emails?.forEach {
-                Text(text = it, color = colorResource(id = R.color.light_black),
-                    style = ZustTypography.body2,
-                    fontSize = 14.sp, modifier = Modifier.clickable {
-                        AppUtility.openEmailIntent(context, it)
-                    })
-                Spacer(modifier = Modifier.height(4.dp))
-            }?:run{
+            val emails = profileViewModel?.getSupportCsDetail()?.email
+            if (!emails.isNullOrEmpty()) {
+                emails.forEach {
+                    Text(text = it, color = colorResource(id = R.color.light_black),
+                        style = ZustTypography.body2,
+                        fontSize = 14.sp, modifier = Modifier.clickable {
+                            AppUtility.openEmailIntent(context, it)
+                        })
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+            } else {
                 Text(text = "zusttapp@gmail.com", color = colorResource(id = R.color.light_black),
                     style = ZustTypography.body2,
                     fontSize = 14.sp, modifier = Modifier.clickable {

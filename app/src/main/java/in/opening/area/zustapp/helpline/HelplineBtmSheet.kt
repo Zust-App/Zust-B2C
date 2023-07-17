@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HelplineBtmSheet : BottomSheetDialogFragment() {
     private var binding: HelplineBtmSheetBinding? = null
 
-    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val profileViewModel: ProfileViewModel? by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
