@@ -64,7 +64,7 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                     val inAppWebActivity = Intent(context, InAppWebActivity::class.java).apply {
                         putExtra(InAppWebActivity.WEB_URL, "")
                         putExtra(InAppWebActivity.TITLE_TEXT, "Invoice")
-                        putExtra(InAppWebActivity.ORDER_ID, data.orderId)
+                        putExtra(ORDER_ID, data.orderId)
                     }
                     context.startActivity(inAppWebActivity)
                 },
@@ -86,7 +86,7 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                     val inAppWebActivity = Intent(context, InAppWebActivity::class.java)
                     inAppWebActivity.putExtra(InAppWebActivity.WEB_URL, "")
                     inAppWebActivity.putExtra(InAppWebActivity.TITLE_TEXT, "Invoice")
-                    inAppWebActivity.putExtra(InAppWebActivity.ORDER_ID, data.orderId)
+                    inAppWebActivity.putExtra(ORDER_ID, data.orderId)
                     context.startActivity(inAppWebActivity)
                 })
     }

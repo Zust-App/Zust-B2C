@@ -7,7 +7,7 @@ import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
+import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,7 +32,7 @@ class AppDeepLinkHandler @Inject constructor() {
                     redirectionIntent = Intent(context, OrderDetailActivity::class.java)
                     val orderNumber = data?.orderId?.toInt()
                     if (orderNumber != null) {
-                        redirectionIntent.putExtra(OrderDetailActivity.ORDER_ID, orderNumber)
+                        redirectionIntent.putExtra(ORDER_ID, orderNumber)
                     }
                 }
                 if (redirectionIntent != null) {

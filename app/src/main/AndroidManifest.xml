@@ -43,9 +43,25 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".zustFood.ZustFoodEntryActivity"
+            android:name="non_veg.payment.NonVegPaymentActivity"
             android:theme="@style/Theme.ZustApp"
             android:exported="false" />
+        <activity
+            android:name="non_veg.cart.NonVegCartActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp" />
+        <activity
+            android:name="non_veg.listing.NonVegItemListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp" />
+        <activity
+            android:name="non_veg.ZustNonVegEntryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp" />
+        <activity
+            android:name=".zustFood.ZustFoodEntryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZustApp" />
         <activity
             android:name=".locationV2.LocationPermissionActivity"
             android:exported="false"

@@ -23,7 +23,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.FOOD_BTM_NAV_CLICK
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_NON_VEG_CATEGORY_CLICK
+import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
 import `in`.opening.area.zustapp.zustFood.ZustFoodEntryActivity
+import non_veg.ZustNonVegEntryActivity
+import non_veg.listing.NonVegItemListActivity
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -100,7 +104,7 @@ fun Context.openBrowser(url: String) {
 fun Context.proceedToOrderDetails(orderId: Int?) {
     if (orderId != null) {
         val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
-        orderDetailIntent.putExtra(OrderDetailActivity.ORDER_ID, orderId)
+        orderDetailIntent.putExtra(ORDER_ID, orderId)
         startActivity(orderDetailIntent)
     }
 }
@@ -144,6 +148,22 @@ fun Context?.openCallIntent(phoneNumber: String) {
 
 fun Context.startFoodEntryActivity() {
     FirebaseAnalytics.logEvents(FOOD_BTM_NAV_CLICK)
-    val searchIntent = Intent(this, ZustFoodEntryActivity::class.java)
+    val searchIntent = Intent(this, ZustNonVegEntryActivity::class.java)
     startActivity(searchIntent)
+}
+
+
+fun Context.navigateToNonVegProductListing(categoryId: Int?, categoryName: String?) {
+    if (categoryId != null) {
+        val bundle = Bundle()
+        bundle.putString("name", categoryName)
+        bundle.putInt("id", categoryId)
+        FirebaseAnalytics.logEvents(HOME_NON_VEG_CATEGORY_CLICK, bundle)
+        val intent = Intent(this, NonVegItemListActivity::class.java)
+        intent.putExtra(NonVegItemListActivity.KEY_NV_CATEGORY_ID, categoryId)
+        if (categoryName != null) {
+            intent.putExtra(ProductListingActivity.CATEGORY_NAME, categoryName)
+        }
+        startActivity(intent)
+    }
 }

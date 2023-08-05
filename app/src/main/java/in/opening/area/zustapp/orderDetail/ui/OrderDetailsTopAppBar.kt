@@ -23,12 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
 
 
 @Composable
 fun OrderDetailsTopAppBar(
     modifier: Modifier,
     orderId: Int?,
+    intentSource: String?,
     callback: (ACTION) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier
@@ -51,7 +53,11 @@ fun OrderDetailsTopAppBar(
             }, style = ZustTypography.body1,
             fontSize = 16.sp)
 
-        Text(text = "Order number - $PREFIX_ORDER_ID$orderId",
+        Text(text = "Order number -" + if (intentSource == INTENT_SOURCE_NON_VEG) {
+            PREFIX_ORDER_ID_NON_VEG + orderId
+        } else {
+            PREFIX_ORDER_ID_GROCERY+ orderId
+        },
             color = colorResource(id = R.color.white),
             modifier = modifier.constrainAs(subTitle) {
                 top.linkTo(locationTag.bottom, dp_4)

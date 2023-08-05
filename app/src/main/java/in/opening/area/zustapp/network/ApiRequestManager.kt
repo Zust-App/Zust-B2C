@@ -33,9 +33,21 @@ import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.utility.DeviceInfo
 import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.JsonObject
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.flow.flow
+import non_veg.cart.models.CreateCartReqBody
+import non_veg.cart.models.CreateFinalCartReqBody
+import non_veg.cart.models.NonVegCartDetailsModel
+import non_veg.cart.models.UpdateNonVegCartItemReqBody
+import non_veg.common.model.GetOrderDetailReqBody
+import non_veg.home.model.NonVegCategoryModel
+import non_veg.home.model.NonVegHomePageBannerModel
+import non_veg.home.model.NonVegMerchantResponseModel
+import non_veg.listing.models.NonVegItemListModel
+import non_veg.payment.models.NonVegCartPaymentReqBody
+import non_veg.payment.models.NonVegCreateOrderResModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -479,5 +491,130 @@ class ApiRequestManager @Inject constructor() {
             body = createRapidWalletPaymentModel
         }
     }
+
+    //non veg
+    suspend fun getNonVegMerchantDetails(pinCode: String) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegMerchantResponseModel>(NetworkUtility.NON_VEG_MERCHANT_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("pincode", pinCode)
+            parameter("lat", 10)
+            parameter("lng", 20)
+        }
+    }
+
+    suspend fun getNonVegHomePageBanner(bannerType: String) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegHomePageBannerModel>(NetworkUtility.NON_VEG_HOME_PAGE_BANNER) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("bannerType", bannerType)
+
+        }
+    }
+
+    suspend fun getNonVegCategory() = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegCategoryModel>(NetworkUtility.NON_VEG_CATEGORY) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+        }
+    }
+
+    suspend fun getNonVegProductByCategoryAndMerchant(categoryId: Int, merchantId: Int) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegItemListModel>(NetworkUtility.NON_VEG_PRODUCT_BY_CATEGORY_MERCHANT) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("categoryId", categoryId)
+            parameter("merchantId", merchantId)
+        }
+    }
+
+    suspend fun getNonVegProductByCategoryAndMerchantId(categoryId: Int, merchantId: Int)= flow {
+        try {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            val value =
+                ktorHttpClient.get<NonVegItemListModel>(NetworkUtility.NON_VEG_PRODUCT_BY_CATEGORY_MERCHANT) {
+                    headers {
+                        this.append(Authorization, "Bearer $authToken")
+                    }
+                    parameter("categoryId", categoryId)
+                    parameter("merchantId", merchantId)
+                }
+            emit(ResultWrapper.Success(value))
+        } catch (e: Throwable) {
+            print(e.message)
+            emit(ResultWrapper.NetworkError)
+        }
+    }
+
+    suspend fun getNonVegCartDetails(cartId: Int, merchantId: Int) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegCartDetailsModel>(NetworkUtility.NON_VEG_CART_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("cartId", cartId)
+            parameter("merchantId", merchantId)
+        }
+    }
+
+    suspend fun createNonVegCart(createCartReqBody: CreateCartReqBody) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<NonVegCartDetailsModel>(NetworkUtility.NON_VEG_CREATE_CART) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = createCartReqBody
+        }
+    }
+
+    suspend fun finalLockNonVegCart(createCartReqBody: CreateFinalCartReqBody) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<NonVegCartDetailsModel>(NetworkUtility.NON_VEG_CREATE_CART) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = createCartReqBody
+        }
+    }
+
+    suspend fun updateUserNonVegCart(updateCartItemReqBody: UpdateNonVegCartItemReqBody) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<NonVegCartDetailsModel>(NetworkUtility.NON_VEG_UPDATE_CART) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = updateCartItemReqBody
+        }
+    }
+
+
+    suspend fun createNonVegOrder(reqBody: NonVegCartPaymentReqBody) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<NonVegCreateOrderResModel>(NetworkUtility.NON_VEG_COD_CREATE_PAYMENT) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = reqBody
+        }
+    }
+
+    suspend fun getOrderDetailsForNonVeg(orderId: Int) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<OrderDetailModel>(NetworkUtility.NON_VEG_ORDER_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body= GetOrderDetailReqBody(orderId)
+        }
+    }
+
 
 }

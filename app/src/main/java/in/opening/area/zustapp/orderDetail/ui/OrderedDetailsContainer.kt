@@ -39,7 +39,7 @@ import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
 fun OrderedDetailsContainer(
     viewModel: MyOrdersListViewModel,
     constraintLayoutScope: ConstraintLayoutScope,
-    callback: () -> Unit
+    callback: () -> Unit,
 ) {
     val orderDetail =
         viewModel.orderDetailFlow.collectAsState(initial = OrderDetailUi.InitialUi(false))
@@ -150,6 +150,7 @@ fun OrderedDetailsContainer(
                     }
                 }
             }
+
             is OrderDetailUi.ErrorUi -> {
                 if (response.errorMessage.isNotEmpty()) {
                     AppUtility.showToast(context, response.errorMessage)
@@ -158,10 +159,11 @@ fun OrderedDetailsContainer(
                 }
                 RetryOrderDetails {
                     viewModel.orderIdCache?.let { orderId ->
-                        viewModel.getOrderDetails(orderId)
+                        viewModel.getOrderDetails(orderId, viewModel.intentSource)
                     }
                 }
             }
+
             is OrderDetailUi.InitialUi -> {
 
             }

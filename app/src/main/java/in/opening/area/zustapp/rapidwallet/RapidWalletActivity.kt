@@ -35,7 +35,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
+import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE
+import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
 import `in`.opening.area.zustapp.payment.PaymentActivity
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletUiRepresentationModel
@@ -114,6 +117,9 @@ class RapidWalletActivity : AppCompatActivity() {
             rapidWalletViewModel.itemCartCount =
                 intent.getIntExtra(PaymentActivity.TOTAL_ITEMS_IN_CART, 0)
         }
+        if (intent.hasExtra(INTENT_SOURCE)) {
+            rapidWalletViewModel.intentSource = intent.getStringExtra(INTENT_SOURCE)
+        }
         rapidWalletViewModel.rapidUserExistUiState.update {
             RWUserWalletUiState.ShowUserIdInput(false)
         }
@@ -138,7 +144,7 @@ class RapidWalletActivity : AppCompatActivity() {
     private fun RapidWalletMainUi(
         padding: PaddingValues,
         rapidWalletViewModel: RapidWalletViewModel,
-        paymentState: (RapidWalletResult) -> Unit
+        paymentState: (RapidWalletResult) -> Unit,
     ) {
         val rwUserExistWalletData by rapidWalletViewModel.rapidUserExistUiState.collectAsState(
             RWUserWalletUiState.InitialUi(false)
@@ -180,6 +186,7 @@ class RapidWalletActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 is RapidWalletUiRepresentationModel.WalletDetailsUI -> {
                     enableBackBtn = true
                     val data =
@@ -197,6 +204,7 @@ class RapidWalletActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 is RapidWalletUiRepresentationModel.OtpUi -> {
                     rapidWalletViewModel.rapidUserIdCache?.let {
                         RapidUserOTPUi(it, keyboard, { userInputOTP ->
@@ -251,7 +259,7 @@ class RapidWalletActivity : AppCompatActivity() {
                 }
 
                 is RWUserWalletUiState.ErrorUi -> {
-                    enableBackBtn=true
+                    enableBackBtn = true
                     (rwUserExistWalletData as RWUserWalletUiState.ErrorUi).message?.let {
                         AppUtility.showToast(
                             context,
@@ -264,6 +272,7 @@ class RapidWalletActivity : AppCompatActivity() {
                         )
                     }
                 }
+
                 is RWUserWalletUiState.CreatePaymentSuccess -> {
 
                     (rwUserExistWalletData as RWUserWalletUiState.CreatePaymentSuccess).data?.let {
@@ -274,12 +283,14 @@ class RapidWalletActivity : AppCompatActivity() {
                                     paymentState.invoke(RapidWalletResult(orderId = orderId, 1))
                                 }
                             }
+
                             "failure" -> {
-                                enableBackBtn=true
+                                enableBackBtn = true
                                 rapidWalletViewModel.getOrderId()?.let { orderId ->
                                     paymentState.invoke(RapidWalletResult(orderId = orderId, 2))
                                 }
                             }
+
                             else -> {
 
                             }
@@ -306,7 +317,7 @@ private const val SEND_OTP = 13
 private fun ShowEnterUserId(
     keyboard: SoftwareKeyboardController?,
     rapidWalletViewModel: RapidWalletViewModel,
-    context: Context, getWalletDetails: () -> Unit
+    context: Context, getWalletDetails: () -> Unit,
 ) {
     var rapidUserId by remember {
         mutableStateOf("")
@@ -395,7 +406,7 @@ private fun ShowEnterUserId(
 
 @Composable
 private fun ShowWalletBalances(
-    successData: RwUserExistWalletData?, userActionCallback: (Int) -> Unit
+    successData: RwUserExistWalletData?, userActionCallback: (Int) -> Unit,
 ) {
     var currentRapidMethod by remember {
         mutableStateOf(RAPID_WALLET)
@@ -554,7 +565,11 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = PREFIX_ORDER_ID + rapidWalletViewModel.paymentActivityReqData?.orderId.toString(),
+                    text = if (rapidWalletViewModel.intentSource == INTENT_SOURCE_NON_VEG) {
+                        PREFIX_ORDER_ID_NON_VEG + rapidWalletViewModel.paymentActivityReqData?.orderId.toString()
+                    } else {
+                        PREFIX_ORDER_ID_GROCERY + rapidWalletViewModel.paymentActivityReqData?.orderId.toString()
+                    },
                     style = ZustTypography.body1,
                     modifier = Modifier
                 )
@@ -609,7 +624,7 @@ private fun RapidUserOTPUi(
     userId: String,
     keyboard: SoftwareKeyboardController?,
     verifyUserOTP: (String) -> Unit,
-    changeIdCallback: () -> Unit
+    changeIdCallback: () -> Unit,
 ) {
     val context: Context = LocalContext.current
     var rapidUserInputOTP by remember {

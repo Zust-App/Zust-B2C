@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -27,7 +28,6 @@ class InAppWebActivity : AppCompatActivity() {
     companion object {
         const val WEB_URL = "web_url"
         const val TITLE_TEXT = "title_text"
-        const val ORDER_ID = "order_id"
     }
 
     private var binding: ActivityInAppWebBinding? = null

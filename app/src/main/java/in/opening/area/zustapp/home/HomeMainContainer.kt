@@ -14,10 +14,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun HomeMainContainer(homeViewModel: HomeViewModel,
-                      paddingValues: PaddingValues, callback: (ACTION) -> Unit,changeLocationCallback:()->Unit) {
+fun HomeMainContainer(
+    homeViewModel: HomeViewModel = viewModel(),
+    paddingValues: PaddingValues,
+    callback: (ACTION) -> Unit,
+    changeLocationCallback: () -> Unit,
+) {
     val homeWidgets by homeViewModel.homePageUiState.collectAsState(HomePageResUi.InitialUi(false))
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier

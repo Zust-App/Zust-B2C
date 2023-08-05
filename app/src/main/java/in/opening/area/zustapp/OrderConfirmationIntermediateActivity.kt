@@ -4,7 +4,7 @@ import `in`.opening.area.zustapp.R.anim
 import `in`.opening.area.zustapp.R.color
 import `in`.opening.area.zustapp.compose.ComposeLottieWithCallback
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.ui.theme.zustFont
@@ -28,6 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE
+import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
+import `in`.opening.area.zustapp.orderDetail.ui.JUST_ORDERED
+import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
 
 val maxHeightWidthModifier = Modifier
     .fillMaxWidth()
@@ -36,11 +41,19 @@ val maxHeightWidthModifier = Modifier
 @AndroidEntryPoint
 class OrderConfirmationIntermediateActivity : AppCompatActivity() {
     private var orderId: Int? = -1
+    private var intentSource: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        orderId = intent.getIntExtra(OrderDetailActivity.ORDER_ID, -1)
-        val completeOrderId = PREFIX_ORDER_ID + orderId
+        orderId = intent.getIntExtra(ORDER_ID, -1)
+        if (intent.hasExtra(INTENT_SOURCE)) {
+            intentSource = intent.getStringExtra(INTENT_SOURCE)
+        }
+        val completeOrderId = if (intentSource == INTENT_SOURCE_NON_VEG) {
+            PREFIX_ORDER_ID_NON_VEG + orderId
+        } else {
+            PREFIX_ORDER_ID_GROCERY + orderId
+        }
         setContent {
             MainUiContainer(completeOrderId)
         }
@@ -95,8 +108,9 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
             return
         }
         val orderDetailIntent: Intent? by lazy { Intent(this, OrderDetailActivity::class.java) }
-        orderDetailIntent?.putExtra(OrderDetailActivity.ORDER_ID, orderId)
-        orderDetailIntent?.putExtra(OrderDetailActivity.JUST_ORDERED, true)
+        orderDetailIntent?.putExtra(ORDER_ID, orderId)
+        orderDetailIntent?.putExtra(JUST_ORDERED, true)
+        orderDetailIntent?.putExtra(INTENT_SOURCE, intentSource)
         orderDetailIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(orderDetailIntent)
         overridePendingTransition(anim.slide_in_right, anim.slide_out_left)

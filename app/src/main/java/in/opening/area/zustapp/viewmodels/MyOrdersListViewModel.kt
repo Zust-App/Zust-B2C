@@ -16,6 +16,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
+import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,10 +36,15 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
         MutableStateFlow<RatingOrderUiState>(RatingOrderUiState.InitialState(false))
 
     internal var orderIdCache: Int? = null
+    internal var intentSource: String? = null
 
-    internal fun getOrderDetails(orderId: Int) = viewModelScope.launch {
+    internal fun getOrderDetails(orderId: Int, intentSource: String?) = viewModelScope.launch {
         orderDetailFlow.update { OrderDetailUi.InitialUi(true) }
-        when (val response = apiRequestManager.getOrderDetails(orderId)) {
+        when (val response = if (intentSource == INTENT_SOURCE_NON_VEG) {
+            apiRequestManager.getOrderDetailsForNonVeg(orderId)
+        } else {
+            apiRequestManager.getOrderDetails(orderId)
+        }) {
             is ResultWrapper.NetworkError -> {
                 orderDetailFlow.update {
                     OrderDetailUi.ErrorUi(
@@ -46,6 +53,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                     )
                 }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 orderDetailFlow.update {
                     OrderDetailUi.ErrorUi(
@@ -54,6 +62,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                     )
                 }
             }
+
             is ResultWrapper.Success -> {
                 if (response.value.data == null) {
                     orderDetailFlow.update {
@@ -116,6 +125,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                     orderDetailFlow.update { OrderDetailUi.OrderDetail(false, response.value.data) }
                 }
             }
+
             is ResultWrapper.GenericError -> {
                 orderDetailFlow.update {
                     OrderDetailUi.ErrorUi(
@@ -144,6 +154,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
                     RatingOrderUiState.ErrorState(false)
                 }
             }
+
             else -> {
                 ratingOrderFlow.update {
                     RatingOrderUiState.ErrorState(false)

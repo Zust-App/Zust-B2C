@@ -66,5 +66,16 @@ class NetworkUtility {
         val RAPID_WALLET_SEND_OTP = "$baseUrl/rapid/send-otp"
         val RAPID_DO_PAYMENT = "$baseUrl/rapid/rapid-transaction"
 
+        //non-veg
+        val NON_VEG_MERCHANT_DETAILS = "$baseUrl/nv_home/merchant-details"
+        val NON_VEG_HOME_PAGE_BANNER = "$baseUrl/nv_home/home-page-banner"
+        val NON_VEG_CATEGORY = "$baseUrl/nv_category/get-category-list"
+        val NON_VEG_PRODUCT_BY_CATEGORY_MERCHANT = "$baseUrl/nv_merchant_product/get-merchant-product-by-category"
+        val NON_VEG_CART_DETAILS = "$baseUrl/nv_cart/get-cart-details"
+        val NON_VEG_CREATE_CART = "$baseUrl/nv_cart/create-cart"
+        val NON_VEG_UPDATE_CART = "$baseUrl/nv_cart/update-cart"
+        val NON_VEG_COD_CREATE_PAYMENT = "$baseUrl/nv_payment/make-payment"
+        val NON_VEG_ORDER_DETAILS = "$baseUrl/nv_order/order-details"
+
     }
 }

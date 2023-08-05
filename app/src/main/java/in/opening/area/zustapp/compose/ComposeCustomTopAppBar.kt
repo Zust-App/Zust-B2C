@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,14 +34,14 @@ fun ComposeCustomTopAppBar(
     modifier: Modifier, titleText: String,
     subTitleText: String?=null,
     @DrawableRes endImageId: Int?=null,
-    callback: (ACTION) -> Unit,
+    callback: (ACTION) -> Unit
 ) {
     ConstraintLayout(modifier = modifier
         .fillMaxWidth()
         .wrapContentHeight()
         .fillMaxWidth()
         .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-        .background(color = colorResource(id = R.color.new_material_primary))
+        .background(color = colorResource(id = (R.color.new_material_primary)))
         .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
         val (titleTag, subTitleTag, endImage, backArrowImage) = createRefs()

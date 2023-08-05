@@ -27,7 +27,7 @@ import androidx.constraintlayout.compose.Dimension
 @Composable
 fun CustomTopBar(
     modifier: Modifier,
-    viewModel:HomeViewModel,
+    viewModel:HomeViewModel= androidx.lifecycle.viewmodel.compose.viewModel(),
     callback: (ACTION) -> Unit,
 ) {
     val userAddress by viewModel.userLocationFlow.collectAsStateLifecycleAware(initial = UserLocationDetails())

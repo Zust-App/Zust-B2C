@@ -22,7 +22,8 @@ import androidx.constraintlayout.compose.Dimension
 @Composable
 fun NoProductFoundErrorPage(
     layoutScope: ConstraintLayoutScope,
-    topReference: ConstrainedLayoutReference, suggestCallback: () -> Unit,
+    topReference: ConstrainedLayoutReference,
+    suggestCallback: () -> Unit,
 ) {
 
     layoutScope.apply {

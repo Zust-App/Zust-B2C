@@ -95,5 +95,7 @@
     <string name="last_minute_delivery_app">Last minute delivery app</string>
     <string name="you_are_selecting_payment_method_cash_on_delivery_cod_if_you_want_to_proceed_please_press_confirm_order" translatable="false">You are selecting payment method Cash On Delivery (COD). If you want to proceed please press <b>Confirm order</b></string>
     <string name="need_help" translatable="false"><u>Need help?</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

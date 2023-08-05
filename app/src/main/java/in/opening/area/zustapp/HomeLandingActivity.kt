@@ -88,24 +88,23 @@ class HomeLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         setContent {
             Scaffold(
                 bottomBar = {
-                    CustomBottomNavigation(homeViewModel) { destination, data ->
+                    CustomBottomNavigation { destination, data ->
                         handleBottomNavCallback(destination, data)
                     }
                 },
                 topBar = {
-                    CustomTopBar(Modifier, homeViewModel) {
+                    CustomTopBar(Modifier) {
                         handleActionIntent(it)
                     }
                 },
                 backgroundColor = colorResource(id = R.color.screen_surface_color),
                 content = { paddingValue ->
-                    HomeMainContainer(homeViewModel, paddingValue, {
+                    HomeMainContainer(paddingValues = paddingValue, callback = {
                         handleActionIntent(it)
                     }) {
                         handleActionIntent(ACTION.OPEN_LOCATION)
                     }
-                },
-            )
+                })
             LaunchedEffect(key1 = Unit, block = {
                 getLatestOrderWhichNotDeliver()
             })

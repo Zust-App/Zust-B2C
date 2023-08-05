@@ -171,7 +171,8 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                     tint = colorResource(id = R.color.white))
 
             }
-        } else {
+        }
+        else {
             Icon(painter = painterResource(id = R.drawable.ic_baseline_add_24),
                 contentDescription = "add", modifier = Modifier
                     .constrainAs(addItemContainer) {

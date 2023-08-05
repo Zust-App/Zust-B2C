@@ -27,9 +27,10 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
         RapidWalletUiRepresentationModel.EnterUserIdUI(null))
 
     internal var rapidUserIdCache: String? = null
-    internal var rapidServerOTP: String? = null
+    private var rapidServerOTP: String? = null
     private var walletTypeCache: String = "1"
 
+    internal var intentSource: String? = null
     internal fun verifyRapidWalletAndBalance() = viewModelScope.launch {
         if (rapidUserIdCache == null) {
             return@launch
@@ -53,11 +54,13 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
                     }
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 rapidUserExistUiState.update {
                     RWUserWalletUiState.ErrorUi(false, "something went wrong")
                 }
             }
+
             else -> {
                 rapidUserExistUiState.update {
                     RWUserWalletUiState.ErrorUi(false, "something went wrong")
@@ -86,16 +89,19 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
                     }
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 rapidUserExistUiState.update {
                     RWUserWalletUiState.ErrorUi(false, "Something went wrong please try again")
                 }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 rapidUserExistUiState.update {
                     RWUserWalletUiState.ErrorUi(false, "Something went wrong please try again")
                 }
             }
+
             is ResultWrapper.GenericError -> {
                 rapidUserExistUiState.update {
                     RWUserWalletUiState.ErrorUi(
@@ -149,11 +155,13 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
                         }
                     }
                 }
+
                 is ResultWrapper.NetworkError -> {
                     rapidUserExistUiState.update {
                         RWUserWalletUiState.ErrorUi(false, "Something went wrong")
                     }
                 }
+
                 is ResultWrapper.GenericError -> {
                     rapidUserExistUiState.update {
                         RWUserWalletUiState.ErrorUi(
@@ -162,6 +170,7 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
                         )
                     }
                 }
+
                 is ResultWrapper.UserTokenNotFound -> {
                     rapidUserExistUiState.update {
                         RWUserWalletUiState.ErrorUi(false, "Something went wrong")

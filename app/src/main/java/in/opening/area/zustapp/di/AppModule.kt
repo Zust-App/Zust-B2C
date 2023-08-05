@@ -14,6 +14,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import non_veg.storage.dao.NonVegAddToCartDao
 import javax.inject.Singleton
 
 @Module
@@ -47,6 +48,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAddToCartDao(database: ZustAppDatabase): AddToCartDao = database.addToCartDao()
+
+    @Provides
+    @Singleton
+    fun provideNonVegAddToCartDao(database: ZustAppDatabase): NonVegAddToCartDao = database.nonVegAddToCartDao()
 
 
     @Singleton

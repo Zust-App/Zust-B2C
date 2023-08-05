@@ -78,6 +78,10 @@ class FirebaseAnalytics @Inject constructor() {
                 }
             }
         }
+        //non veg
+
+        const val HOME_NON_VEG_CATEGORY_CLICK = "home_non_veg_category_click"
+
     }
 
 }

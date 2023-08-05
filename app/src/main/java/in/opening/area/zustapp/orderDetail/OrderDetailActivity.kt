@@ -19,6 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE
+import `in`.opening.area.zustapp.orderDetail.ui.JUST_ORDERED
+import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
 
 @AndroidEntryPoint
 class OrderDetailActivity : ComponentActivity() {
@@ -26,6 +29,7 @@ class OrderDetailActivity : ComponentActivity() {
 
     private var orderId: Int? = -1
     private var justOrdered: Boolean = false
+    private var intentSource: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,10 +38,14 @@ class OrderDetailActivity : ComponentActivity() {
             if (intent.hasExtra(JUST_ORDERED)) {
                 justOrdered = intent.getBooleanExtra(JUST_ORDERED, false)
             }
+            if (intent.hasExtra(INTENT_SOURCE)) {
+                intentSource = intent.getStringExtra(INTENT_SOURCE)
+            }
+            myOrdersListViewModel.intentSource = intentSource
             Scaffold(
                 backgroundColor = colorResource(id = R.color.screen_surface_color),
                 topBar = {
-                    OrderDetailsTopAppBar(modifier = Modifier, orderId = orderId) {
+                    OrderDetailsTopAppBar(modifier = Modifier, orderId = orderId, intentSource = intentSource) {
                         handleAction(it)
                     }
                 }) {
@@ -57,7 +65,7 @@ class OrderDetailActivity : ComponentActivity() {
 
             LaunchedEffect(key1 = Unit, block = {
                 if (orderId != -1) {
-                    myOrdersListViewModel.getOrderDetails(orderId!!)
+                    myOrdersListViewModel.getOrderDetails(orderId!!,intentSource)
                 }
             })
         }
@@ -76,10 +84,6 @@ class OrderDetailActivity : ComponentActivity() {
         }
     }
 
-    companion object {
-        const val JUST_ORDERED = "just_ordered"
-        const val ORDER_ID = "order_id"
-    }
 
 
     @Deprecated("Deprecated in Java")

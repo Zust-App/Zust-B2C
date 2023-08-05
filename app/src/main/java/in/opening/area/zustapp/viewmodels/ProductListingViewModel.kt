@@ -178,5 +178,5 @@ class ProductListingViewModel @Inject constructor(private val productRepo: Produ
 
 
 enum class ACTION {
-    DECREASE, INCREASE
+    DECREASE, INCREASE,DELETE
 }

@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.orderHistory.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.extensions.collectAsStateLifecycleAware
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
@@ -51,7 +51,7 @@ fun RatingDialog(canShowDialog: Boolean, orderId: Int, viewModel: MyOrdersListVi
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = {
-                Text("Rate your order $PREFIX_ORDER_ID$orderId",
+                Text("Rate your order $PREFIX_ORDER_ID_GROCERY$orderId",
                     style = ZustTypography.body1,
                     color = colorResource(id = R.color.app_black))
             },

@@ -1,0 +1,220 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "43da7814021aea8de9512a9aad2b0704",
+    "entities": [
+      {
+        "tableName": "user",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER, PRIMARY KEY(`user_id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "user_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "cart",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tableId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `brand` TEXT, `categoryId` TEXT NOT NULL, `description` TEXT NOT NULL, `productPriceId` TEXT NOT NULL, `productGroupId` TEXT NOT NULL, `itemInStock` REAL NOT NULL, `mrp` REAL NOT NULL, `productName` TEXT NOT NULL, `price` REAL NOT NULL, `quantity` REAL, `quantityUnit` TEXT NOT NULL, `subcategoryId` INTEGER NOT NULL, `thumbnail` TEXT, `itemCountByUser` INTEGER NOT NULL, `discountPercentage` REAL NOT NULL, `wareHouseId` TEXT, `isOutOfStock` INTEGER NOT NULL, `maxItemPurchaseLimit` INTEGER NOT NULL DEFAULT -1)",
+        "fields": [
+          {
+            "fieldPath": "tableId",
+            "columnName": "tableId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brand",
+            "columnName": "brand",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productPriceId",
+            "columnName": "productPriceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productGroupId",
+            "columnName": "productGroupId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemInStock",
+            "columnName": "itemInStock",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mrp",
+            "columnName": "mrp",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productName",
+            "columnName": "productName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quantityUnit",
+            "columnName": "quantityUnit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subcategoryId",
+            "columnName": "subcategoryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "itemCountByUser",
+            "columnName": "itemCountByUser",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "discountPercentage",
+            "columnName": "discountPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wareHouseId",
+            "columnName": "wareHouseId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isOutOfStock",
+            "columnName": "isOutOfStock",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxItemPurchaseLimit",
+            "columnName": "maxItemPurchaseLimit",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "tableId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "non_veg_items",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`product_price_id` INTEGER NOT NULL, `merchant_id` INTEGER NOT NULL, `quantity` INTEGER NOT NULL, `price` REAL NOT NULL, `mrp` REAL NOT NULL, `product_id` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, PRIMARY KEY(`product_price_id`, `merchant_id`))",
+        "fields": [
+          {
+            "fieldPath": "productPriceId",
+            "columnName": "product_price_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "merchantId",
+            "columnName": "merchant_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mrp",
+            "columnName": "mrp",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "product_price_id",
+            "merchant_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '43da7814021aea8de9512a9aad2b0704')"
+    ]
+  }
+}

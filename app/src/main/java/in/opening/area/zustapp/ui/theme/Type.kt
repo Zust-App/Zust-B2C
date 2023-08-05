@@ -39,6 +39,17 @@ val anuphanFontFamily = FontFamily(
     Font(R.font.anuphan_semibold, FontWeight.W600),
     Font(R.font.anuphan_bold, FontWeight.W700))
 
+val allotropeFontFamily = FontFamily(
+    Font(R.font.allotrope_regular, FontWeight.W400),
+    Font(R.font.allotrope_medium, FontWeight.W500),
+    Font(R.font.allotrope_bold, FontWeight.W700))
+
+val blinkerFontFamily = FontFamily(
+    Font(R.font.blinker_regular, FontWeight.W400),
+    Font(R.font.blinker_semibold, FontWeight.W500),
+    Font(R.font.blinker_bold, FontWeight.W500),
+    Font(R.font.blinker_extra_bold, FontWeight.W700))
+
 
 val openSansFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300),
     Font(R.font.open_sans_regular, FontWeight.W400), Font(R.font.open_sans_medium, FontWeight.W500),
@@ -115,6 +126,7 @@ val Typography_Okra by lazy {
         ))
 }
 
+
 val Typography_Anuphan by lazy {
     androidx.compose.material.Typography(
         h1 = TextStyle(
@@ -138,8 +150,56 @@ val Typography_Anuphan by lazy {
         ))
 }
 
-val ZustTypography = Typography_OpenSans
-val zustFont = openSansFontFamily
+val Typography_Allotrope by lazy {
+
+    androidx.compose.material.Typography(
+        h1 = TextStyle(
+            fontFamily = allotropeFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W700
+        ),
+        body1 = TextStyle(
+            fontFamily = allotropeFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W600
+        ),
+        body2 = TextStyle(
+            fontFamily = allotropeFontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W500
+        ),
+        subtitle1 = TextStyle(fontFamily = allotropeFontFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400
+        ))
+}
+
+val Typography_Blinker by lazy {
+
+    androidx.compose.material.Typography(
+        h1 = TextStyle(
+            fontFamily = blinkerFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W700
+        ),
+        body1 = TextStyle(
+            fontFamily = blinkerFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W600
+        ),
+        body2 = TextStyle(
+            fontFamily = blinkerFontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W500
+        ),
+        subtitle1 = TextStyle(fontFamily = blinkerFontFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400
+        ))
+}
+
+val ZustTypography = Typography_Allotrope
+val zustFont = allotropeFontFamily
 
 
 //h1 is for title

@@ -2,8 +2,7 @@ package `in`.opening.area.zustapp.orderHistory.ui
 
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity.Companion.ORDER_ID
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID
+import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
 import `in`.opening.area.zustapp.orderHistory.models.OrderHistoryItem
 import `in`.opening.area.zustapp.pagination.LoadingError
 import `in`.opening.area.zustapp.pagination.NoPageFoundException
@@ -42,6 +41,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
 
 @Composable
 fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingValues) {
@@ -49,7 +49,7 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
     val state = rememberSwipeRefreshState(
         isRefreshing = userBookingItems.loadState.refresh is LoadState.Loading,
     )
-    val context= LocalContext.current
+    val context = LocalContext.current
     SwipeRefresh(
         state = state,
         onRefresh = {
@@ -76,6 +76,7 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
                             ShowLoadMore()
                         }
                     }
+
                     is LoadState.NotLoading -> Unit
 
                     is LoadState.Error -> {
@@ -99,7 +100,7 @@ fun BookingHistoryList(viewModel: MyOrdersListViewModel, paddingValues: PaddingV
                 NoOrderFoundContainer()
             }
             if (error is LoadingError) {
-                AppUtility.showToast(context,"Something went wrong please try again")
+                AppUtility.showToast(context, "Something went wrong please try again")
             }
         }
     }
@@ -147,7 +148,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
             })
 
         Text(text = buildString {
-            append(PREFIX_ORDER_ID)
+            append(PREFIX_ORDER_ID_GROCERY)
             append(userBooking.orderId.toString())
         }, style = ZustTypography.body2,
             fontWeight = FontWeight.W600,
@@ -190,9 +191,9 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
 
         Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(userBooking.payablePrice),
             modifier = Modifier.constrainAs(orderAmount) {
-            end.linkTo(parent.end, dp_16)
-            top.linkTo(divider.bottom, dp_12)
-        }, color = colorResource(id = R.color.app_black), style = ZustTypography.body2, fontWeight = FontWeight.W600)
+                end.linkTo(parent.end, dp_16)
+                top.linkTo(divider.bottom, dp_12)
+            }, color = colorResource(id = R.color.app_black), style = ZustTypography.body2, fontWeight = FontWeight.W600)
 
         Text(text = userBooking.orderedDateAndTime, modifier = Modifier.constrainAs(orderTime) {
             top.linkTo(divider.bottom, dp_12)

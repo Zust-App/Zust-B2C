@@ -43,7 +43,7 @@ fun HomeMainItemContainer(
 
                 homeItems.forEach { homeData ->
                     if (homeData.type == "BANNER") {
-                        customHomePageSearch {
+                        customHomePageSearch(arrayListOf("Search `Grocery`", "Search `Fruits`", "Search `Sabji`")) {
                             callback.invoke(ACTION.SEARCH_PRODUCT)
                         }
                     }
