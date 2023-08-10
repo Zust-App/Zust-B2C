@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
+import zustbase.orderDetail.ui.ORDER_ID
 import kotlinx.coroutines.flow.collectLatest
 
 

@@ -10,9 +10,9 @@ data class NonVegCategoryModel(
 )
 
 data class NonVegCategory(
-    val description: Any,
+    val description: String?,
     val id: Int,
-    val name: String,
-    val status: Any,
-    val thumbnail: Any,
+    val name: String?,
+    val status: String?,
+    val thumbnail: String,
 )

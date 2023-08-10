@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.viewmodels
 
 import `in`.opening.area.zustapp.address.model.getDisplayString
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.orderSummary.model.CancellationPolicyUiModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryItem
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryModel

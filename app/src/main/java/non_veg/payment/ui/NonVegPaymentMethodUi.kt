@@ -1,6 +1,7 @@
 package non_veg.payment.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -37,9 +39,9 @@ fun NonVegPaymentMethodUi(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
+            .background(color = colorResource(id = R.color.white))
             .clickable {
-
+                onItemSelected.invoke()
             }) {
         val (paymentIcon, paymentText, radioIcon) = createRefs()
         Image(
@@ -61,7 +63,7 @@ fun NonVegPaymentMethodUi(
                 start.linkTo(paymentIcon.end, dp_12)
                 bottom.linkTo(parent.bottom)
             },
-            style = ZustTypography.body2
+            style = ZustTypography.body1
         )
 
         RadioButton(

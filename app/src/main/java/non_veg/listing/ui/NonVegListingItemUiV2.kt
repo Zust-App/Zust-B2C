@@ -45,6 +45,7 @@ import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.utility.navigateToNonVegProductDetails
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import non_veg.listing.models.NonVegListingSingleItem
 import non_veg.listing.viewmodel.NonVegListingViewModel
@@ -52,12 +53,16 @@ import non_veg.listing.viewmodel.NonVegListingViewModel
 
 var dummyUrl = "https://static.freshtohome.com/media/catalog/product/cache/3/image/400x267/18ae109e34f485bd0b0c075abec96b2e/c/h/chicken_breast_fillet_1_2.jpg"
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NonVegListingItemUiV2(singleItem: NonVegListingSingleItem, viewModel: NonVegListingViewModel) {
+    val context = LocalContext.current
     Card(modifier = Modifier,
         shape = RoundedCornerShape(topEnd = dp_8, topStart = dp_8),
         backgroundColor = colorResource(id = R.color.white), border = BorderStroke(width = 0.5.dp,
-            color = colorResource(id = R.color.indicator_color))) {
+            color = colorResource(id = R.color.indicator_color)), onClick = {
+            context.navigateToNonVegProductDetails(productId = singleItem.productId, productPriceId = singleItem.productPriceId)
+        }) {
         ConstraintLayout(modifier = Modifier
             .fillMaxWidth()) {
             val (
@@ -98,7 +103,7 @@ fun NonVegListingItemUiV2(singleItem: NonVegListingSingleItem, viewModel: NonVeg
                 }, style = ZustTypography.subtitle1,
                 color = colorResource(id = R.color.app_black))
 
-            Text(text = singleItem.productQuantity ?: "500g",
+            Text(text = singleItem.productQuantity?.toString() ?: "500g",
                 modifier = Modifier.constrainAs(quantity) {
                     top.linkTo(minorDescription.bottom, dp_8)
                     start.linkTo(parent.start, dp_12)

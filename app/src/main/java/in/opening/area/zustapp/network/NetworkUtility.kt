@@ -76,6 +76,14 @@ class NetworkUtility {
         val NON_VEG_UPDATE_CART = "$baseUrl/nv_cart/update-cart"
         val NON_VEG_COD_CREATE_PAYMENT = "$baseUrl/nv_payment/make-payment"
         val NON_VEG_ORDER_DETAILS = "$baseUrl/nv_order/order-details"
+        val NON_VEG_RAPID_PAYMENT = "$baseUrl/nv_rapid_payment/rapid-transaction"
+        val NON_VEG_SEARCH_ITEM = "$baseUrl/nv_search/product-search"
+        val NON_VEG_HOME_PAGE_DATA = "$baseUrl/nv_home/data"
+        val NON_VEG_USER_BOOKING_HISTORY = "$baseUrl/nv_order/all-order-of-user"
+        val NON_VEG_PRODUCT_DETAILS = "$baseUrl/nv_merchant_product/get-merchant-product-details"
 
+
+        //common
+        val GET_SERVICE_LIST = "$baseUrl/zust_service/service-list"
     }
 }

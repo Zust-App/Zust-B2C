@@ -14,13 +14,15 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
-import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
+import zustbase.orderDetail.OrderDetailActivity
+import zustbase.orderDetail.ui.INTENT_SOURCE
+import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
+import zustbase.orderDetail.ui.ORDER_ID
 import `in`.opening.area.zustapp.payment.PaymentActivity
 import `in`.opening.area.zustapp.payment.PaymentMethodWarningDialog
+import `in`.opening.area.zustapp.payment.models.Payment
 import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
+import `in`.opening.area.zustapp.payment.models.PaymentMethod
 import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
@@ -52,15 +54,12 @@ class NonVegPaymentActivity : AppCompatActivity() {
                     finish()
                 })
             }, content = { paddingValues ->
-                NonVegPaymentPageMainUi(paddingValues)
+                NonVegPaymentPageMainUi(paddingValues) {
+                    updatePaymentMethod(it)
+                }
             }, bottomBar = {
-                PaymentPageBottomBar { it ->
-                    if (it == "cod") {
-                        viewModel.createUserNonVegOrder()
-                    }
-                    if (it == "rapid") {
-                        startWalletPaymentPage()
-                    }
+                PaymentPageBottomBar {
+                    handleSelectedPaymentMethod()
                 }
             })
             LaunchedEffect(key1 = Unit, block = {
@@ -97,7 +96,7 @@ class NonVegPaymentActivity : AppCompatActivity() {
                 rapidWalletResult?.let {
                     when (it.status) {
                         1 -> {
-                            // moveToOrderConfIntermediatePage()
+                            moveToOrderConfIntermediatePage(rapidWalletResult.orderId)
                         }
 
                         -1 -> {
@@ -143,13 +142,12 @@ class NonVegPaymentActivity : AppCompatActivity() {
     private fun showRapidPaymentDeclinedDialog() {
         AlertDialog.Builder(this)
             .setTitle("Alert!")
-            .setMessage("Rapid wallet payment declined or cancelled. Please try again if amount is not deducted from your wallet") // Specifying a listener allows you to take an action before dismissing the dialog.
-            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setMessage("Rapid wallet payment declined or cancelled. Please try again if amount is not deducted from your wallet")
             .setPositiveButton(
                 "Ok"
             ) { dialog, _ ->
                 dialog?.dismiss()
-            } // A null listener allows the button to dismiss the dialog and take no further action.
+            }
             .setNegativeButton(android.R.string.no, null)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
@@ -157,6 +155,7 @@ class NonVegPaymentActivity : AppCompatActivity() {
 
     private fun moveToOrderConfIntermediatePage(orderId: Int?) {
         if (orderId == null) {
+            AppUtility.showToast(this, "Something went wrong")
             return
         }
         viewModel.clearAllNonVegCartItems()
@@ -181,6 +180,30 @@ class NonVegPaymentActivity : AppCompatActivity() {
     private fun parseCreateOrderResponse(data: NonVegCreateOrderUiState) {
         if (data is NonVegCreateOrderUiState.Success) {
             moveToOrderConfIntermediatePage(data.orderId)
+        }
+    }
+
+    private fun showAlertDialogForCOD() {
+        paymentMethodWarningDialog.showDialog(this, {
+            viewModel.createUserNonVegOrder()
+        }, {
+            AppUtility.showToast(this, "Payment Declined or Cancelled")
+        })
+    }
+
+    private fun updatePaymentMethod(paymentMethod: PaymentMethod) {
+        viewModel.updatePaymentOptions(paymentMethod)
+        handleSelectedPaymentMethod()
+    }
+
+    private fun handleSelectedPaymentMethod() {
+        viewModel.selectedPaymentKey.let {
+            if (it == "cod") {
+                showAlertDialogForCOD()
+            }
+            if (it == "rapid") {
+                startWalletPaymentPage()
+            }
         }
     }
 

@@ -3,11 +3,11 @@ package `in`.opening.area.zustapp.utility
 import `in`.opening.area.zustapp.fcm.CustomFcmService
 import `in`.opening.area.zustapp.fcm.OrderDetailDeepLinkModel
 import `in`.opening.area.zustapp.home.models.HomePageGenericData
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
+import zustbase.orderDetail.OrderDetailActivity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
+import zustbase.orderDetail.ui.ORDER_ID
 import javax.inject.Inject
 import javax.inject.Singleton
 

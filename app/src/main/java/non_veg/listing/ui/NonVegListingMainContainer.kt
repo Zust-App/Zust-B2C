@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.navigateToNonVegProductDetails
 import non_veg.listing.uiModel.NonVegProductListingUiModel
 import non_veg.listing.viewmodel.NonVegListingViewModel
 
@@ -52,7 +54,7 @@ fun NonVegListingMainContainer(paddingValues: PaddingValues, viewModel: NonVegLi
         .padding(paddingValues = paddingValues)
         .fillMaxWidth()
         .fillMaxHeight()
-        .background(color = colorResource(R.color.white))) {
+        .background(color = colorResource(R.color.screen_surface_color))) {
         if (nonVegProductListUiModel.isLoading) {
             NonVegListingFullScreenShimmer()
         }

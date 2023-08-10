@@ -7,87 +7,34 @@ import `in`.opening.area.zustapp.address.model.getDisplayString
 import `in`.opening.area.zustapp.locationManager.UserLocationDetails
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.orderDetail.models.Address
-import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
-import `in`.opening.area.zustapp.uiModels.HomePageResUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import non_veg.home.uiModel.NonVegCategoryUiModel
+import non_veg.home.uiModel.NvHomePageCombinedUiModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ZustNvEntryViewModel @Inject constructor(val apiRequestManager: ApiRequestManager,private val dataStoreManager: DataStoreManager,private val sharedPrefManager: SharedPrefManager) : ViewModel() {
+class ZustNvEntryViewModel @Inject constructor(val apiRequestManager: ApiRequestManager, private val sharedPrefManager: SharedPrefManager) : ViewModel() {
 
-    private val _nonVegCategoryUiModel = MutableStateFlow<NonVegCategoryUiModel>(NonVegCategoryUiModel.Initial(false))
-    val nonVegCategoryUiModel: StateFlow<NonVegCategoryUiModel> get() = _nonVegCategoryUiModel
+    private val _nonVegHomePageUiModel = MutableStateFlow<NvHomePageCombinedUiModel>(NvHomePageCombinedUiModel.Initial(false))
+    val nonVegHomePageUiModel: StateFlow<NvHomePageCombinedUiModel> get() = _nonVegHomePageUiModel
 
     internal val userLocationFlow = MutableStateFlow(UserLocationDetails())
 
-    init {
-        getUserSavedAddress()
-    }
 
-    internal fun getNonVegMerchantDetails(pinCode: String) = viewModelScope.launch {
-        when (val response = apiRequestManager.getNonVegMerchantDetails(pinCode)) {
-
-        }
-        getNonVegHomePageBanner()
-    }
-
-    internal fun getNonVegHomePageBanner() = viewModelScope.launch {
-        when (val response = apiRequestManager.getNonVegHomePageBanner("home")) {
-            is ResultWrapper.Success -> {
-
-            }
-
-            is ResultWrapper.NetworkError -> {
-
-            }
-
-            is ResultWrapper.GenericError -> {
-
-            }
-
-            is ResultWrapper.UserTokenNotFound -> {
-
-            }
-        }
-        getNonVegCategory()
-    }
-
-
-    internal fun getNonVegCategory() = viewModelScope.launch {
-        when (val response = apiRequestManager.getNonVegCategory()) {
-            is ResultWrapper.Success -> {
-                _nonVegCategoryUiModel.value = NonVegCategoryUiModel.Success(response.value.data, false)
-            }
-
-            is ResultWrapper.NetworkError -> {
-                _nonVegCategoryUiModel.value = NonVegCategoryUiModel.Error(true, "Network Error")
-            }
-
-            is ResultWrapper.GenericError -> {
-                _nonVegCategoryUiModel.value = NonVegCategoryUiModel.Error(true, "Generic Error")
-            }
-
-            is ResultWrapper.UserTokenNotFound -> {
-                _nonVegCategoryUiModel.value = NonVegCategoryUiModel.Error(true, "User Token Not Found")
-            }
-        }
-
-    }
-
-    private fun getUserSavedAddress() {
+    //this function handle all the location and home page data functionality
+    internal fun getUserSavedAddress() {
         val address = sharedPrefManager.getUserAddress()
         updateAddressItem(address)
         address?.let {
-            if (address.latitude != null && address.latitude != 0.0) {
-
+            if (address.latitude != null && address.latitude != 0.0 && address.pincode != null) {
+                getNonVegHomePageData(address.pincode, address.latitude, address.longitude)
             } else {
-
+                _nonVegHomePageUiModel.value = NvHomePageCombinedUiModel.Error(true, "Something went wrong Invalid address")
             }
         }
     }
@@ -97,4 +44,53 @@ class ZustNvEntryViewModel @Inject constructor(val apiRequestManager: ApiRequest
             UserLocationDetails(address?.latitude, address?.longitude, address?.getDisplayString())
         }
     }
+
+    internal fun saveLatestAddress(address: Address) = viewModelScope.launch {
+        sharedPrefManager.saveAddress(address)
+    }
+
+    private fun getNonVegHomePageData(pinCode: String, lat: Double?, lng: Double?) = viewModelScope.launch {
+        _nonVegHomePageUiModel.update {
+            NvHomePageCombinedUiModel.Initial(true)
+        }
+        val defaultPinCode="11001"
+        when (val response = apiRequestManager.getNonVegHomePageData(defaultPinCode, lat = lat, lng = lng)) {
+            is ResultWrapper.Success -> {
+                if (response.value.data != null) {
+                    response.value.data.merchantDetails?.let {
+                        sharedPrefManager.saveNonVegMerchantId(it.id)
+                    }
+                    _nonVegHomePageUiModel.update {
+                        NvHomePageCombinedUiModel.Success(response.value.data, false)
+                    }
+                } else {
+                    _nonVegHomePageUiModel.update {
+                        NvHomePageCombinedUiModel.Error(false, "We are currently not available")
+                    }
+                }
+            }
+
+            is ResultWrapper.NetworkError -> {
+                sharedPrefManager.removeNonVegMerchantId()
+                _nonVegHomePageUiModel.update {
+                    NvHomePageCombinedUiModel.Error(false, "Something went wrong please try again")
+                }
+            }
+
+            is ResultWrapper.GenericError -> {
+                sharedPrefManager.removeNonVegMerchantId()
+                _nonVegHomePageUiModel.update {
+                    NvHomePageCombinedUiModel.Error(false, "Something went wrong Please try again")
+                }
+            }
+
+            else -> {
+                sharedPrefManager.removeNonVegMerchantId()
+                _nonVegHomePageUiModel.update {
+                    NvHomePageCombinedUiModel.Error(false, "Something went wrong Please try again")
+                }
+            }
+        }
+    }
+
 }

@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.opening.area.zustapp.HomeLandingActivity
+import zustbase.HomeLandingActivity
 import `in`.opening.area.zustapp.locationV2.LocationPermissionActivity
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.onboarding.compose.LoginClick

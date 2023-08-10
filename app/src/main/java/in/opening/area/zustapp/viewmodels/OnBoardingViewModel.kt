@@ -3,7 +3,7 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import javax.inject.Inject
 
 @HiltViewModel

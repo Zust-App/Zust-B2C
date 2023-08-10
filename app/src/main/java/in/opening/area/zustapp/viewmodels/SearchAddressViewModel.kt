@@ -42,12 +42,15 @@ open class SearchAddressViewModel @Inject constructor(private val apiRequestMana
                     val result = parseSearchResult(response.value)
                     searchPlacesUiState.update { SearchPlacesUi.SearchPlaceResult(false, "", result) }
                 }
+
                 is ResultWrapper.GenericError -> {
                     searchPlacesUiState.update { SearchPlacesUi.ErrorUi(false, response.error?.error ?: "Something went wrong") }
                 }
+
                 is ResultWrapper.UserTokenNotFound -> {
                     searchPlacesUiState.update { SearchPlacesUi.SearchPlaceResult(false, "User token expired") }
                 }
+
                 is ResultWrapper.NetworkError -> {
                     searchPlacesUiState.update { SearchPlacesUi.SearchPlaceResult(false, "Something went wrong") }
                 }
@@ -59,17 +62,24 @@ open class SearchAddressViewModel @Inject constructor(private val apiRequestMana
     internal fun checkServiceAvailBasedOnLatLng(lat: Double?, lng: Double?, postalCode: String?) =
         viewModelScope.launch {
             validLatLngUiState.update { AddressValidationUi.InitialUi(true, "") }
-            when (val response = apiRequestManager.checkIsServiceAvail(lat, lng, postalCode)) {
+            when (val response = apiRequestManager.getAllAvailableService(postalCode?:"000000", lat, lng)) {
                 is ResultWrapper.Success -> {
-                    val jsonObject = JSONObject(response.value)
-                    validLatLngUiState.update { AddressValidationUi.AddressValidation(false, "", jsonObject, "") }
+                    response.value.data?.serviceList?.let { zustServices ->
+                        val isAnyServiceAvailable = zustServices.any { it.enable }
+                        validLatLngUiState.update { AddressValidationUi.AddressValidation(isLoading = false, errorMessage = "Service details fetched", isAnyServiceAvailable, "okk") }
+                    } ?: run {
+                        validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Something went wrong") }
+                    }
                 }
+
                 is ResultWrapper.NetworkError -> {
                     validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Something went wrong") }
                 }
+
                 is ResultWrapper.UserTokenNotFound -> {
                     validLatLngUiState.update { AddressValidationUi.ErrorUi(false, "Auth Error") }
                 }
+
                 is ResultWrapper.GenericError -> {
                     validLatLngUiState.update { AddressValidationUi.ErrorUi(false, response.error?.error ?: "Something went wrong") }
                 }

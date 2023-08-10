@@ -6,7 +6,7 @@ import `in`.opening.area.zustapp.home.ACTION
 
 import `in`.opening.area.zustapp.locationManager.UserLocationDetails
 import `in`.opening.area.zustapp.ui.theme.*
-import `in`.opening.area.zustapp.viewmodels.HomeViewModel
+import `in`.opening.area.zustapp.viewmodels.GroceryHomeViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,7 +27,7 @@ import androidx.constraintlayout.compose.Dimension
 @Composable
 fun CustomTopBar(
     modifier: Modifier,
-    viewModel:HomeViewModel= androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel:GroceryHomeViewModel= androidx.lifecycle.viewmodel.compose.viewModel(),
     callback: (ACTION) -> Unit,
 ) {
     val userAddress by viewModel.userLocationFlow.collectAsStateLifecycleAware(initial = UserLocationDetails())

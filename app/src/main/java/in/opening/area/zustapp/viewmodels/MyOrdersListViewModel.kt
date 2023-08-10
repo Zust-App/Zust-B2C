@@ -2,10 +2,10 @@ package `in`.opening.area.zustapp.viewmodels
 
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.orderDetail.models.OrderStatus
-import `in`.opening.area.zustapp.orderHistory.models.OrderHistoryItem
-import `in`.opening.area.zustapp.orderHistory.models.OrderRatingBody
-import `in`.opening.area.zustapp.orderHistory.ui.RatingOrderUiState
+import zustbase.orderDetail.models.OrderStatus
+import zustbase.orderHistory.models.OrderHistoryItem
+import zustbase.orderHistory.models.OrderRatingBody
+import zustbase.orderHistory.ui.RatingOrderUiState
 import `in`.opening.area.zustapp.pagination.UserBookingDataSource
 import `in`.opening.area.zustapp.uiModels.OrderDetailUi
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -16,8 +16,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
+import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.pagination.UserNonVegBookingDataSource
+import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -27,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) :
     ViewModel() {
-    internal var userBookingFlow: Flow<PagingData<OrderHistoryItem>> =
+    internal var userGroceryBookingFlow: Flow<PagingData<OrderHistoryItem>> =
         Pager(PagingConfig(pageSize = 10, enablePlaceholders = false)) {
             UserBookingDataSource(apiRequestManager)
         }.flow.cachedIn(viewModelScope)
@@ -37,6 +38,13 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
 
     internal var orderIdCache: Int? = null
     internal var intentSource: String? = null
+
+    internal val orderHistoryTab= MutableStateFlow(ACTION.GROCERY_TAB)
+
+    internal var userNonVegBookingFlow: Flow<PagingData<OrderHistoryItem>> =
+        Pager(PagingConfig(pageSize = 10, enablePlaceholders = false)) {
+            UserNonVegBookingDataSource(apiRequestManager)
+        }.flow.cachedIn(viewModelScope)
 
     internal fun getOrderDetails(orderId: Int, intentSource: String?) = viewModelScope.launch {
         orderDetailFlow.update { OrderDetailUi.InitialUi(true) }

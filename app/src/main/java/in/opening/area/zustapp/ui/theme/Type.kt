@@ -156,7 +156,7 @@ val Typography_Allotrope by lazy {
         h1 = TextStyle(
             fontFamily = allotropeFontFamily,
             fontSize = 18.sp,
-            fontWeight = FontWeight.W700
+            fontWeight = FontWeight.W600
         ),
         body1 = TextStyle(
             fontFamily = allotropeFontFamily,
@@ -201,6 +201,8 @@ val Typography_Blinker by lazy {
 val ZustTypography = Typography_Allotrope
 val zustFont = allotropeFontFamily
 
+val zustTypographySecondary=Typography_Blinker
+val zustFontSecondary=Typography_Blinker
 
 //h1 is for title
 //body1

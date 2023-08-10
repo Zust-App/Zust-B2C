@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.fcm
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.HomeLandingActivity
+import zustbase.HomeLandingActivity
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import android.app.NotificationChannel
 import android.app.NotificationManager

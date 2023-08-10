@@ -10,8 +10,8 @@ data class NonVegHomePageBannerModel(
 )
 
 data class NonVegHomePageBannerData(
-    val bannerType: String,
-    val deepLink: String,
+    val bannerType: String?,
+    val deepLink: String?,
     val id: Int,
-    val imageUrl: String,
+    val imageUrl: String?,
 )

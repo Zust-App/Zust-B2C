@@ -9,6 +9,7 @@ import `in`.opening.area.zustapp.uiModels.RWUserWalletUiState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -138,9 +139,16 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
             rapidUserExistUiState.update {
                 RWUserWalletUiState.InitialUi(true)
             }
-            when (val response = apiRequestManager.createPaymentWithRapidWallet(
-                rapidUserIdCache!!, getPayablePrice(), walletTypeCache, it.orderId.toString()
-            )) {
+
+            when (val response=if(intentSource== INTENT_SOURCE_NON_VEG){
+                apiRequestManager.createNonVegRapidPayment(
+                    rapidUserIdCache!!, getPayablePrice(), walletTypeCache, it.orderId.toString()
+                )
+            }else{
+                apiRequestManager.createPaymentWithRapidWallet(
+                    rapidUserIdCache!!, getPayablePrice(), walletTypeCache, it.orderId.toString()
+                )
+            }) {
                 is ResultWrapper.Success -> {
                     response.value.data?.let { success ->
                         rapidUserExistUiState.update {

@@ -45,13 +45,14 @@ import `in`.opening.area.zustapp.viewmodels.ACTION
 import non_veg.cart.models.ItemsInCart
 import non_veg.listing.ui.dummyUrl
 
+val topRound8dp = RoundedCornerShape(topStart = dp_8, topEnd = dp_8)
+val bottomRound8dp = RoundedCornerShape(bottomEnd = dp_8, bottomStart = dp_8)
+
+
 @Composable
-fun NonVegCartItemUi(singleItem: ItemsInCart, clickCallback: (singleItem: ItemsInCart, action: ACTION) -> Unit) {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = dp_16, vertical = dp_8)
-        .wrapContentHeight()
-        .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(8.dp))) {
+fun NonVegCartItemUi(singleItem: ItemsInCart, modifier: Modifier, clickCallback: (singleItem: ItemsInCart, action: ACTION) -> Unit) {
+    ConstraintLayout(modifier = modifier
+        .background(color = colorResource(id = R.color.white))) {
         val (thumbnail, name, productQuantity, price, incrementDecContainer) = createRefs()
         Box(
             modifier = Modifier

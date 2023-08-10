@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.login
 
-import `in`.opening.area.zustapp.HomeLandingActivity
+import zustbase.HomeLandingActivity
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import `in`.opening.area.zustapp.databinding.ActivityLoginBinding
 import `in`.opening.area.zustapp.services.SMSReceiver
@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity

@@ -14,10 +14,10 @@ import `in`.opening.area.zustapp.login.model.VerifyOtpResponseModel
 import `in`.opening.area.zustapp.network.NetworkUtility.Companion.UPSELLING_PRODUCTS
 import `in`.opening.area.zustapp.network.requestBody.AuthVerificationBody
 import `in`.opening.area.zustapp.network.requestBody.UserProfileUpdateBody
-import `in`.opening.area.zustapp.orderDetail.models.OrderDetailModel
-import `in`.opening.area.zustapp.orderHistory.models.OrderRatingBody
-import `in`.opening.area.zustapp.orderHistory.models.RatingResponseModel
-import `in`.opening.area.zustapp.orderHistory.models.UserOrderHistoryModel
+import zustbase.orderDetail.models.OrderDetailModel
+import zustbase.orderHistory.models.OrderRatingBody
+import zustbase.orderHistory.models.RatingResponseModel
+import zustbase.orderHistory.models.UserOrderHistoryModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderResponseModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryModel
 import `in`.opening.area.zustapp.payment.models.*
@@ -44,10 +44,12 @@ import non_veg.cart.models.UpdateNonVegCartItemReqBody
 import non_veg.common.model.GetOrderDetailReqBody
 import non_veg.home.model.NonVegCategoryModel
 import non_veg.home.model.NonVegHomePageBannerModel
+import non_veg.home.model.NonVegHomePageCombinedResponse
 import non_veg.home.model.NonVegMerchantResponseModel
 import non_veg.listing.models.NonVegItemListModel
 import non_veg.payment.models.NonVegCartPaymentReqBody
 import non_veg.payment.models.NonVegCreateOrderResModel
+import zustbase.services.models.ZustAvailableServiceResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -493,15 +495,15 @@ class ApiRequestManager @Inject constructor() {
     }
 
     //non veg
-    suspend fun getNonVegMerchantDetails(pinCode: String) = universalApiRequestManager {
+    suspend fun getNonVegMerchantDetails(pinCode: String, lat: Double?, lng: Double?) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<NonVegMerchantResponseModel>(NetworkUtility.NON_VEG_MERCHANT_DETAILS) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
             parameter("pincode", pinCode)
-            parameter("lat", 10)
-            parameter("lng", 20)
+            parameter("lat", lat)
+            parameter("lng", lng)
         }
     }
 
@@ -536,7 +538,7 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun getNonVegProductByCategoryAndMerchantId(categoryId: Int, merchantId: Int)= flow {
+    suspend fun getNonVegProductByCategoryAndMerchantId(categoryId: Int, merchantId: Int) = flow {
         try {
             val authToken = sharedPrefManager.getUserAuthToken()
             val value =
@@ -612,9 +614,92 @@ class ApiRequestManager @Inject constructor() {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
-            body= GetOrderDetailReqBody(orderId)
+            body = GetOrderDetailReqBody(orderId)
         }
     }
 
+
+    suspend fun createNonVegRapidPayment(
+        rapidUserId: String,
+        payableAmount: Double? = null,
+        walletType: String,
+        transactionId: String,
+    ) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        val createRapidWalletPaymentModel =
+            RWCreatePaymentModel(rapidUserId, payableAmount, walletType, transactionId)
+        ktorHttpClient.post<RapidWalletPaymentResponse>(NetworkUtility.NON_VEG_RAPID_PAYMENT) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = createRapidWalletPaymentModel
+        }
+    }
+
+    suspend fun searchNonVegProduct(merchantId: Int, searchInput: String) = flow {
+        try {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            val value =
+                ktorHttpClient.get<NonVegItemListModel>(NetworkUtility.NON_VEG_SEARCH_ITEM) {
+                    headers {
+                        this.append(Authorization, "Bearer $authToken")
+                    }
+                    parameter("searchText", searchInput)
+                    parameter("merchantId", merchantId)
+                }
+            emit(ResultWrapper.Success(value))
+        } catch (e: Throwable) {
+            print(e.message)
+            emit(ResultWrapper.NetworkError)
+        }
+    }
+
+
+    suspend fun getUserNonVegBookings(pageNumber: Int): UserOrderHistoryModel {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        return ktorHttpClient.post(NetworkUtility.NON_VEG_USER_BOOKING_HISTORY) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("pageNumber", pageNumber)
+            parameter("pageSize", 10)
+        }
+    }
+
+    suspend fun getNonVegHomePageData(pinCode: String, lat: Double?, lng: Double?) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegHomePageCombinedResponse>(NetworkUtility.NON_VEG_HOME_PAGE_DATA) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("pincode", pinCode)
+            parameter("lat", lat)
+            parameter("lng", lng)
+        }
+    }
+
+    suspend fun getNonVegProductDetails(productId: Int, merchantId: Int, productPriceId: Int) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<NonVegItemListModel>(NetworkUtility.NON_VEG_PRODUCT_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("merchantId", merchantId)
+            parameter("productId", productId)
+            parameter("productPriceId", productPriceId)
+        }
+    }
+
+    suspend fun getAllAvailableService(pinCode: String,lat: Double?,lng: Double?) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<ZustAvailableServiceResult>(NetworkUtility.GET_SERVICE_LIST) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("pincode", pinCode)
+            parameter("lat", lat)
+            parameter("lng", lng)
+        }
+    }
 
 }

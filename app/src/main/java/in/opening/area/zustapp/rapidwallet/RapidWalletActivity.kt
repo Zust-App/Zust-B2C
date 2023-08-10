@@ -35,10 +35,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
+import zustbase.orderDetail.ui.INTENT_SOURCE
+import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
+import zustbase.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
+import zustbase.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
 import `in`.opening.area.zustapp.payment.PaymentActivity
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletUiRepresentationModel

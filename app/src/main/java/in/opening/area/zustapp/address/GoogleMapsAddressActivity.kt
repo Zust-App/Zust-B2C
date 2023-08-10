@@ -92,7 +92,13 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
         binding?.showHideProgressBar(response.isLoading)
         when (response) {
             is AddressValidationUi.AddressValidation -> {
-                validateSuccessResponse(response.data)
+                if (response.isAnyServiceAvailable) {
+                    if (viewModel.searchAddressModel != null) {
+                        startAddressInputActivity()
+                    }
+                }else {
+                    customMaterialDialog.showDialog(this)
+                }
             }
 
             is AddressValidationUi.InitialUi -> {
@@ -125,18 +131,6 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
         }
     }
 
-    private fun validateSuccessResponse(jsonObject: JSONObject) {
-        if (jsonObject.has("data")) {
-            val dataJson = jsonObject.getJSONObject("data")
-            if (dataJson.has("isDeliverablePinCode") && dataJson.getBoolean("isDeliverablePinCode")) {
-                if (viewModel.searchAddressModel != null) {
-                    startAddressInputActivity()
-                }
-            } else {
-                customMaterialDialog.showDialog(this)
-            }
-        }
-    }
 
     private fun setUpClickListeners() {
         binding?.proceedBtn?.setOnClickListener {

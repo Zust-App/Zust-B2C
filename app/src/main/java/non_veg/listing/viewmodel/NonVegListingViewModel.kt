@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
+import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,19 +29,21 @@ import javax.inject.Inject
 @HiltViewModel
 class NonVegListingViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager, private val nonVegAddToCartDao: NonVegAddToCartDao) : NonVegCartViewModel(apiRequestManager, nonVegAddToCartDao) {
 
+
     private val _nonVegProductUiModel = MutableStateFlow<NonVegProductListingUiModel>(NonVegProductListingUiModel.Empty(false))
     val nonVegProductListUiModel: StateFlow<NonVegProductListingUiModel> get() = _nonVegProductUiModel
 
     private var job: Job? = null
-
+    private var merchantNonVegId: Int = -1
     internal fun getAndMappedLocalCartWithServerItems(categoryId: Int) {
         _nonVegProductUiModel.update {
             NonVegProductListingUiModel.Empty(true)
         }
         job?.cancel()
+        merchantNonVegId = sharedPrefManager.getNonVegMerchantId()
         job = viewModelScope.launch {
-            val itemsFromLocalNonVegCart = getAllNonVegFromLocal(merchantId = 1)
-            val itemsFromServerSide = apiRequestManager.getNonVegProductByCategoryAndMerchantId(categoryId = categoryId, 1)
+            val itemsFromLocalNonVegCart = getAllNonVegFromLocal(merchantId = merchantNonVegId)
+            val itemsFromServerSide = apiRequestManager.getNonVegProductByCategoryAndMerchantId(categoryId = categoryId, merchantNonVegId)
             combine(itemsFromLocalNonVegCart, itemsFromServerSide) { localCart, serverProduct ->
                 mergeLocalAndServerResult(localCart, serverProduct)
             }.collect()

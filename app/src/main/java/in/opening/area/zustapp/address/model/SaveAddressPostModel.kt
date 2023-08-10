@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.address.model
 
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.utility.UserCustomError
 import android.os.Parcel
 import android.os.Parcelable

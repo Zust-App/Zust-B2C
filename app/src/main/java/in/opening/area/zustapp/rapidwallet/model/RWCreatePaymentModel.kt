@@ -14,3 +14,7 @@ data class RWCreatePaymentModel(
 enum class PaymentTypeActivation {
     GROCERY, NON_VEG, FOOD
 }
+
+enum class ZustServiceType {
+    GROCERY, NON_VEG, FOOD
+}

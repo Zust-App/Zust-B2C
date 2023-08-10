@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.storage.datastore
 
 import `in`.opening.area.zustapp.helper.LanguageManager
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.Gson
@@ -29,6 +29,8 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val SUPPORT_WA_NUM = "support_wa_num"
         const val SUPPORT_EMAIL = "support_email"
         const val SUPPORT_CALL = "support_call"
+
+        const val SAVE_NON_VEG_MERCHANT_ID = "nv_merchant_id"
     }
 
     open fun getUserAuthToken(): String? {
@@ -50,6 +52,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     open fun removeMerchantId() {
         sharedPreferences.edit().remove(MERCHANT_ID).apply()
     }
+
     open fun removeSavedAddress() {
         sharedPreferences.edit().remove(ADDRESS_KEY).apply()
     }
@@ -192,6 +195,21 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         } else {
             sharedPreferences.edit().putInt(MERCHANT_ID, -1).apply()
         }
+    }
+
+    fun getNonVegMerchantId(): Int {
+        return sharedPreferences.getInt(SAVE_NON_VEG_MERCHANT_ID, -1)
+    }
+
+    fun saveNonVegMerchantId(merchantId: Int?) {
+        if (merchantId != null) {
+            sharedPreferences.edit().putInt(SAVE_NON_VEG_MERCHANT_ID, merchantId).apply()
+        } else {
+            sharedPreferences.edit().putInt(SAVE_NON_VEG_MERCHANT_ID, -1).apply()
+        }
+    }
+    fun removeNonVegMerchantId(){
+        sharedPreferences.edit().remove(SAVE_NON_VEG_MERCHANT_ID).apply()
     }
 
 

@@ -2,11 +2,12 @@ package non_veg.cart.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.address.model.getDisplayString
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import kotlinx.coroutines.Dispatchers
@@ -51,12 +52,14 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
     internal var addressItemCache: Address? = null
 
     private val cartItemsForRequest = arrayListOf<CreateCartItem>()
+    private var nonVegMerchantId: Int = -1//default -2 is reset means already try to set the value >-1 but not found
     internal fun getNonVegCartDetails(cartId: Int) = viewModelScope.launch(Dispatchers.Default) {
         currentCartIdFromServer = cartId
         _cartDetailsState.update {
             NonVegCartUiModel.Initial(true)
         }
-        when (val response = apiRequestManager.getNonVegCartDetails(cartId = cartId, merchantId = 1)) {
+        nonVegMerchantId = sharedPrefManager.getNonVegMerchantId()
+        when (val response = apiRequestManager.getNonVegCartDetails(cartId = cartId, merchantId = nonVegMerchantId)) {
             is ResultWrapper.Success -> {
                 if (response.value.data != null) {
                     _cartSummaryUiModel.update {
@@ -82,7 +85,17 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
-    internal fun updateUserNonVegCart(cartItem: ItemsInCart, action: ACTION) = viewModelScope.launch {
+    internal fun updateUserNonVegCart(cartItem: ItemsInCart, action: ACTION) = viewModelScope.launch(Dispatchers.IO) {
+        if (nonVegMerchantId == -2) {
+            return@launch
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = sharedPrefManager.getNonVegMerchantId()
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = -2
+            return@launch
+        }
         if (currentCartIdFromServer == null || currentCartIdFromServer == -1) {
             return@launch
         }
@@ -98,7 +111,7 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
 
         val updateNonVegCartReqBody = UpdateNonVegCartItemReqBody(cartId = currentCartIdFromServer!!,
-            merchantId = 1,
+            merchantId = nonVegMerchantId,
             mrp = cartItem.mrp,
             price = cartItem.price,
             productPriceId = cartItem.merchantProductId,
@@ -110,6 +123,7 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         when (val response = apiRequestManager.updateUserNonVegCart(updateNonVegCartReqBody)) {
             is ResultWrapper.Success -> {
                 if (response.value.data != null) {
+                    insertAllNewCartItemFromServerInLocal(response.value.data)
                     _cartSummaryUiModel.update {
                         NonVegCartItemSummaryUiModel.Success(CartSummaryData(itemCountInCart = response.value.data.noOfItemsInCart,
                             itemValueInCart = response.value.data.itemPrice,
@@ -118,7 +132,6 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
                             packagingFee = response.value.data.packagingFee))
                     }
                     _cartDetailsState.value = NonVegCartUiModel.Success(response.value.data, false)
-                    insertAllNewCartItemFromServerInLocal(response.value.data)
                 } else {
                     _cartDetailsState.value = NonVegCartUiModel.Error("An error occurred", false)
                 }
@@ -130,7 +143,17 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
-    internal fun createNonVegCart() = viewModelScope.launch {
+    internal fun createNonVegCart() = viewModelScope.launch(Dispatchers.IO) {
+        if (nonVegMerchantId == -2) {
+            return@launch
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = sharedPrefManager.getNonVegMerchantId()
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = -2
+            return@launch
+        }
         if (itemsInCart == null) {
             return@launch
         }
@@ -141,7 +164,7 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
                 cartItems.add(CreateCartItem(mrp = it.mrp, price = it.price, productPriceId = it.productPriceId, quantity = it.quantity))
             }
         }
-        val createCartReqBody = CreateCartReqBody(cartItems, merchantId = 1)
+        val createCartReqBody = CreateCartReqBody(cartItems, merchantId = nonVegMerchantId)
         when (val response = apiRequestManager.createNonVegCart(createCartReqBody)) {
             is ResultWrapper.Success -> {
                 _createCartUiModel.value = NonVegCartUiModel.Success(response.value.data, false)
@@ -163,8 +186,21 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
 
     internal fun getAllNonVegFromLocal(merchantId: Int) = nonVegAddToCartDao.getAllNonVegItemFromLocal(merchantId)
 
-    internal fun handleNonVegCartInsertionOrUpdate(singleNonVegItem: NonVegListingSingleItem, action: ACTION) = viewModelScope.launch(Dispatchers.IO) {
-        val nonVegCartItem = singleNonVegItem.convertToNonVegCartItem(merchantId = 1)
+    internal fun handleNonVegCartInsertionOrUpdate(
+        singleNonVegItem: NonVegListingSingleItem,
+        action: ACTION,
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        if (nonVegMerchantId == -2) {
+            return@launch
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = sharedPrefManager.getNonVegMerchantId()
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = -2
+            return@launch
+        }
+        val nonVegCartItem = singleNonVegItem.convertToNonVegCartItem(merchantId = nonVegMerchantId)
         if (action == ACTION.INCREASE) {
             nonVegAddToCartDao.insertNonVegItemIntoLocal(nonVegCartItem.apply {
                 quantity += 1
@@ -178,9 +214,10 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
-    private suspend fun insertAllNewCartItemFromServerInLocal(data: NonVegCartData?) {
+    @Transaction
+    private suspend fun insertAllNewCartItemFromServerInLocal(data: NonVegCartData?) = viewModelScope.launch(Dispatchers.IO) {
         if (data == null) {
-            return
+            return@launch
         }
         cartItemsForRequest.clear()
         val nonVegLocalCartItems = data.itemsInCart?.map {
@@ -190,6 +227,7 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
             NonVegItemLocalModel(it.merchantProductId, it.merchantId, it.quantity, it.price, it.mrp, it.productId, -1)
         }
         if (nonVegLocalCartItems != null) {
+            nonVegAddToCartDao.deleteAllNonVegCartItems()
             nonVegAddToCartDao.insertAllNonVegItemIntoLocal(nonVegLocalCartItems)
         }
     }
@@ -214,10 +252,20 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         if (addressItemCache?.id == null) {
             return@launch
         }
+        if (nonVegMerchantId == -2) {
+            return@launch
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = sharedPrefManager.getNonVegMerchantId()
+        }
+        if (nonVegMerchantId == -1) {
+            nonVegMerchantId = -2
+            return@launch
+        }
         _createCartUiModel.value = NonVegCartUiModel.Initial(true)
         val createCartReqBody = CreateFinalCartReqBody(items = cartItemsForRequest,
             addressId = addressItemCache!!.id,
-            cartId = currentCartIdFromServer!!, finalLock = true, merchantId = 1)
+            cartId = currentCartIdFromServer!!, finalLock = true, merchantId = nonVegMerchantId)
         when (val response = apiRequestManager.finalLockNonVegCart(createCartReqBody)) {
             is ResultWrapper.Success -> {
                 _createCartUiModel.value = NonVegCartUiModel.Success(response.value.data, false)
@@ -237,5 +285,9 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
+
+    internal fun getCancellationTerms(): String {
+        return "100% cancellation fee will be applicable if you decide to cancel th order anytime after order placement. Avoid cancellation as it leads to food wastage "
+    }
 
 }

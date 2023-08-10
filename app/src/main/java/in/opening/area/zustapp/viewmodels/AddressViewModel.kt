@@ -3,7 +3,7 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.address.model.SaveAddressPostModel
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.CurrentLocationUi
@@ -77,9 +77,10 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
 
     private fun checkIsDeliverablePinCodeOrNot(inputPinCode: String, latitude: Double?, longitude: Double?) = viewModelScope.launch {
         saveUserAddressUiState.update { SaveUserAddressUi.InitialUi(true) }
-        when (val response = apiRequestManager.checkPinCodeIsDeliverableOrNot(inputPinCode,latitude,longitude)) {
+        when (val response = apiRequestManager.getAllAvailableService(inputPinCode,latitude,longitude)) {
             is ResultWrapper.Success -> {
-                if (response.value.data?.isDeliverablePinCode == true) {
+                val isAnyServiceAvailable=response.value.data?.serviceList?.any { it.enable }
+                if (isAnyServiceAvailable == true) {
                     saveAddressUserAddress(saveAddressPostModel = userAddressInputCache)
                 } else {
                     saveUserAddressUiState.update { SaveUserAddressUi.ErrorUi(false, getNotDeliverableErrorArrayList()) }

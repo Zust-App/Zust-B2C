@@ -52,14 +52,12 @@ fun NonVegBillingContainer(nonVegCartViewModel: NonVegCartViewModel = viewModel(
 }
 
 @Composable
- fun NonVegBillingContainerDataHolder(data: CartSummaryData) {
+fun NonVegBillingContainerDataHolder(data: CartSummaryData,modifier: Modifier?=null) {
     val rupees = stringResource(id = R.string.ruppes)
 
-    Column(modifier = Modifier
+    Column(modifier = modifier?:Modifier
         .fillMaxWidth()
-        .padding(vertical = 8.dp)
-        .clip(RoundedCornerShape(12.dp))
-        .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
+        .background(color = colorResource(id = R.color.white))
         .padding(horizontal = 16.dp, vertical = 16.dp)) {
 
         Row {

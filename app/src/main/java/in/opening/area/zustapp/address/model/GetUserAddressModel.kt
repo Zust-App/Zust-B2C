@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.address.model
 
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.utility.PagingMetadata
 import `in`.opening.area.zustapp.utility.UserCustomError
 import com.google.errorprone.annotations.Keep
@@ -32,7 +32,7 @@ data class AddressItem(
     val longitude: Double?,
     val pinCode:String?
 ) {
-   fun convertToAddress():Address{
+   fun convertToAddress(): Address {
        return Address(addressLevel,
            addressType,
            description,

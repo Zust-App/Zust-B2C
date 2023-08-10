@@ -8,7 +8,11 @@ import androidx.activity.viewModels
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
+import `in`.opening.area.zustapp.compose.ComposeTopAppBarProductList
+import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.utility.startNonVegSearchActivity
 import non_veg.cart.NonVegCartActivity
 import non_veg.cart.models.NonVegCartData
 import non_veg.common.CustomNonVegBottomBarView
@@ -39,9 +43,14 @@ class NonVegItemListActivity : AppCompatActivity() {
                     moveToCartDetailsActivity(it)
                 }
             }, topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = title ?: "Category", callback = {
-                    finish()
-                })
+                ComposeTopAppBarProductList(Modifier, title,
+                    "", R.drawable.new_search_icon) {
+                    if (it == ACTION.NAV_BACK) {
+                        finish()
+                    } else if (it == ACTION.SEARCH_PRODUCT) {
+                        startNonVegSearchActivity()
+                    }
+                }
             })
         }
     }

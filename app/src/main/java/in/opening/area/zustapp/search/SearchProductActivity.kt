@@ -132,7 +132,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                                                 } else {
                                                     AppUtility.showToast(context, "You can't add more than ${product.maxItemPurchaseLimit}")
                                                 }
-                                            }else{
+                                            } else {
                                                 didTapOnIncrementCount(product)
                                             }
                                         }, { product ->
@@ -145,9 +145,11 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                         }
                     }
                 }
+
                 is ProductListUi.ErrorUi -> {
                     AppUtility.showToast(context, "Something went wrong")
                 }
+
                 is ProductListUi.InitialUi -> {
 
                 }
@@ -213,7 +215,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
     }
 }
 
-private val searchResultModifier = Modifier
+val searchResultModifier = Modifier
     .fillMaxWidth()
     .wrapContentHeight()
     .padding(bottom = 8.dp)

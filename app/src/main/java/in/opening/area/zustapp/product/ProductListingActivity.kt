@@ -48,7 +48,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
         getDataFromIntent()
         setContent {
             Scaffold(topBar = {
-                ComposeTopAppBarProductList(Modifier, productListingViewModel,
+                ComposeTopAppBarProductList(Modifier, categoryName,
                     "", R.drawable.new_search_icon) {
                     if (it == NAV_BACK) {
                         finish()

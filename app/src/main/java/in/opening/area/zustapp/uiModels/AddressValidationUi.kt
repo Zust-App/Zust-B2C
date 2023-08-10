@@ -8,7 +8,7 @@ sealed interface AddressValidationUi {
 
     data class AddressValidation(override val isLoading: Boolean,
                                  override val errorMessage: String,
-                                 val data: JSONObject,
+                                 val isAnyServiceAvailable: Boolean,
                                  val infoMessage: String, val timeStamp: Long = System.currentTimeMillis()
     ) : AddressValidationUi
 

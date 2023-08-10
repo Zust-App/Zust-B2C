@@ -81,7 +81,7 @@ fun RowScope.NonVegSingleCategoryItem(categoryItem: NonVegCategory?) {
                 }
         )
 
-        Text(text = categoryItem.name,
+        Text(text = categoryItem.name ?: "",
             modifier = Modifier
                 .height(32.dp)
                 .constrainAs(categoryTitle) {

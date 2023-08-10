@@ -27,9 +27,9 @@ import `in`.opening.area.zustapp.coupon.model.AppliedCouponData
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.databinding.ActivityPaymentBinding
-import `in`.opening.area.zustapp.orderDetail.models.Address
-import `in`.opening.area.zustapp.orderDetail.models.convertAsStringText
-import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
+import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.convertAsStringText
+import zustbase.orderDetail.ui.ORDER_ID
 import `in`.opening.area.zustapp.payment.adapter.PaymentMethodAdapter
 import `in`.opening.area.zustapp.payment.adapter.PaymentMethodClickListeners
 import `in`.opening.area.zustapp.payment.holder.*

@@ -1,13 +1,5 @@
 package `in`.opening.area.zustapp.compose
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.ui.theme.ZustTypography
-import `in`.opening.area.zustapp.ui.theme.dp_16
-import `in`.opening.area.zustapp.ui.theme.dp_4
-import `in`.opening.area.zustapp.ui.theme.dp_8
-import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
-
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,19 +14,25 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_4
+import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
 
 @Composable
 fun ComposeCustomTopAppBar(
     modifier: Modifier, titleText: String,
-    subTitleText: String?=null,
-    @DrawableRes endImageId: Int?=null,
-    callback: (ACTION) -> Unit
+    subTitleText: String? = null,
+    @DrawableRes endImageId: Int? = null,
+    callback: (ACTION) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier
         .fillMaxWidth()
@@ -100,13 +98,11 @@ fun ComposeCustomTopAppBar(
 @Composable
 fun ComposeTopAppBarProductList(
     modifier: Modifier,
-    productListingViewModel: ProductListingViewModel,
+    titleText: String?,
     subTitleText: String?,
     @DrawableRes endImageId: Int?,
     callback: (ACTION) -> Unit,
 ) {
-    val data by productListingViewModel.headingData.collectAsState(initial = "")
-
     ConstraintLayout(modifier = modifier
         .fillMaxWidth()
         .wrapContentHeight()
@@ -116,7 +112,7 @@ fun ComposeTopAppBarProductList(
         .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
         val (titleTag, subTitleTag, endImage, backArrowImage) = createRefs()
-        Text(text = "$data Category", color = colorResource(id = R.color.white),
+        Text(text = "${titleText ?:""} Category", color = colorResource(id = R.color.white),
             modifier = modifier.constrainAs(titleTag) {
                 if (subTitleText.isNullOrEmpty()) {
                     top.linkTo(parent.top, dp_8)

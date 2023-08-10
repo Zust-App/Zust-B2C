@@ -3,8 +3,8 @@ package `in`.opening.area.zustapp
 import `in`.opening.area.zustapp.R.anim
 import `in`.opening.area.zustapp.R.color
 import `in`.opening.area.zustapp.compose.ComposeLottieWithCallback
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
+import zustbase.orderDetail.OrderDetailActivity
+import zustbase.orderDetail.ui.PREFIX_ORDER_ID_GROCERY
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.ui.theme.zustFont
@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE
-import `in`.opening.area.zustapp.orderDetail.ui.INTENT_SOURCE_NON_VEG
-import `in`.opening.area.zustapp.orderDetail.ui.JUST_ORDERED
-import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
-import `in`.opening.area.zustapp.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
+import zustbase.orderDetail.ui.INTENT_SOURCE
+import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
+import zustbase.orderDetail.ui.JUST_ORDERED
+import zustbase.orderDetail.ui.ORDER_ID
+import zustbase.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
 
 val maxHeightWidthModifier = Modifier
     .fillMaxWidth()

@@ -1,8 +1,5 @@
 package `in`.opening.area.zustapp.address.v2
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.databinding.AddressBtmSheetV2Binding
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -16,6 +13,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import dynamic.GroceryHomeFragment
+import dynamic.NonVegHomeFragment
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.databinding.AddressBtmSheetV2Binding
 
 
 @AndroidEntryPoint
@@ -33,6 +35,14 @@ class AddressBottomSheetV2 : BottomSheetDialogFragment(), AddressFragmentCommuni
         if (context is AddressBtmSheetCallback) {
             listener = context
         }
+        if (listener == null) {
+            if (parentFragment is GroceryHomeFragment) {
+                listener = parentFragment as GroceryHomeFragment
+            }
+            if (parentFragment is NonVegHomeFragment){
+                listener = parentFragment as NonVegHomeFragment
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,7 +50,6 @@ class AddressBottomSheetV2 : BottomSheetDialogFragment(), AddressFragmentCommuni
         setUpClickListeners()
         showAlreadyAddedFragment()
     }
-
 
     private fun setUpClickListeners() {
         binding?.cancelSheet?.setOnClickListener {

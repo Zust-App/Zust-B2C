@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,6 +44,11 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_12
+import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
 import non_veg.cart.models.NonVegCartData
 import non_veg.cart.uiModel.NonVegCartUiModel
@@ -92,15 +98,38 @@ fun NonVegCartMainContainerUi(paddingValues: PaddingValues, viewModel: NonVegCar
                 start.linkTo(parent.start)
             }) {
             if (!cartData.value.itemsInCart.isNullOrEmpty()) {
+                item {
+                    Text(text = "Items Added", style = ZustTypography.h1, modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(horizontal = dp_16, vertical = dp_12))
+                }
+
                 cartData.value.itemsInCart?.forEach { singleItem ->
                     item(singleItem.merchantProductId) {
-                        NonVegCartItemUi(singleItem) { cartItem, action ->
-                            viewModel.updateUserNonVegCart(cartItem, action)
+                        NonVegCartItemUi(singleItem, modifier = nonVegCartItemModifier) { cartItem, action ->
+                            if (!cartDetailsState.isLoading) {
+                                viewModel.updateUserNonVegCart(cartItem, action)
+                            } else {
+                                AppUtility.showToast(context = context, "Please wait")
+                            }
                         }
                     }
                 }
                 item {
+                    Spacer(modifier = Modifier.height(dp_20))
+                }
+                item {
                     NonVegBillingContainer()
+                }
+                item {
+                    Spacer(modifier = Modifier.height(dp_20))
+                }
+                item {
+                    NonVegCancellationPolicyUi()
+                }
+                item {
+                    Spacer(modifier = Modifier.height(dp_20))
                 }
             }
         }
@@ -124,6 +153,10 @@ fun NonVegCartMainContainerUi(paddingValues: PaddingValues, viewModel: NonVegCar
     }
 }
 
+private val nonVegCartItemModifier = Modifier
+    .fillMaxWidth()
+    .padding(horizontal = dp_16)
+    .wrapContentHeight()
 
 
 @Composable

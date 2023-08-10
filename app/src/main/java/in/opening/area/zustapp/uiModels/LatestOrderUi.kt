@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.uiModels
 
-import `in`.opening.area.zustapp.orderDetail.models.OrderDetailData
+import zustbase.orderDetail.models.OrderDetailData
 
 sealed interface LatestOrderUi {
     val isLoading: Boolean

@@ -1,13 +1,13 @@
 package `in`.opening.area.zustapp.home.components
 
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.orderDetail.models.convertToDisplayText
+import zustbase.orderDetail.models.convertToDisplayText
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.uiModels.LatestOrderUi
-import `in`.opening.area.zustapp.viewmodels.HomeViewModel
+import `in`.opening.area.zustapp.viewmodels.GroceryHomeViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,7 +34,7 @@ import androidx.lifecycle.ViewModel
 
 @Composable
 fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> Unit) {
-    if (viewModel is HomeViewModel) {
+    if (viewModel is GroceryHomeViewModel) {
         val latestOrderUiState by viewModel.latestOrderUiState.collectAsState(initial = LatestOrderUi.InitialUi(false))
 
         val response = latestOrderUiState

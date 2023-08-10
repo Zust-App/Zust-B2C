@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.payment.models.PaymentMethod
+import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,17 +23,21 @@ import javax.inject.Inject
 @HiltViewModel
 class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager, private val nonVegAddToCartDao: NonVegAddToCartDao) : ViewModel() {
 
+    @Inject
+    internal lateinit var sharedPrefManager: SharedPrefManager
+
     internal var nonVegCartDetailsForPayment: NonVegCartDetailsForPayment? = null
     internal var cartSummaryData: CartSummaryData? = null
 
     private val _paymentMethodUiState = MutableStateFlow<PaymentMethodUi>(PaymentMethodUi.InitialUi(false))
-    val paymentMethodUiState: StateFlow<PaymentMethodUi> by lazy { _paymentMethodUiState }
+    internal val paymentMethodUiState: StateFlow<PaymentMethodUi> by lazy { _paymentMethodUiState }
 
     internal var selectedPaymentKey: String = ""
 
     private val _nonVegCreateOrderUiState = MutableStateFlow<NonVegCreateOrderUiState>(NonVegCreateOrderUiState.Initial(false))
     val nonVegCreateOrderUiState: StateFlow<NonVegCreateOrderUiState> by lazy { _nonVegCreateOrderUiState }
-    fun getPaymentMethodsFromServer() = viewModelScope.launch(Dispatchers.IO) {
+
+    internal fun getPaymentMethodsFromServer() = viewModelScope.launch(Dispatchers.IO) {
         _paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
         when (val response = apiRequestManager.getPaymentMethods()) {
             is ResultWrapper.Success -> {
@@ -45,7 +50,16 @@ class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: 
                         }
                     }
                 } else {
-                    _paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods) }
+                    _paymentMethodUiState.update {
+                        PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods.map {
+                            it.apply {
+                                if (it.key.equals("cod", ignoreCase = true)) {
+                                    it.isSelected = true
+                                    selectedPaymentKey = it.key
+                                }
+                            }
+                        })
+                    }
                 }
             }
 
@@ -132,6 +146,9 @@ class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: 
     internal fun clearAllNonVegCartItems() = viewModelScope.launch(Dispatchers.IO) {
         nonVegAddToCartDao.deleteAllNonVegCartItems()
     }
+
+    internal fun getLatestAddress() = sharedPrefManager.getUserAddress()
+
 
     enum class NonVegPaymentMethod {
         COD, RAPID_WALLET

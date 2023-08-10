@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.storage.datastore
 
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.profile.models.ProfileData
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow

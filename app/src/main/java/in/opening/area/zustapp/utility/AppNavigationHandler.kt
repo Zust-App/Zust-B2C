@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.utility
 
-import `in`.opening.area.zustapp.HomeLandingActivity
+import zustbase.HomeLandingActivity
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_CATEGORY_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_CALL
@@ -8,8 +8,8 @@ import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_WA_O
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PRODUCT_DETAIL_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.START_SEARCH_ACTIVITY
 import `in`.opening.area.zustapp.login.LoginActivity
-import `in`.opening.area.zustapp.orderDetail.OrderDetailActivity
-import `in`.opening.area.zustapp.orderHistory.MyOrdersActivity
+import zustbase.orderDetail.OrderDetailActivity
+import zustbase.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.product.ProductListingActivity
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
@@ -24,10 +24,11 @@ import android.net.Uri
 import android.os.Bundle
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.FOOD_BTM_NAV_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_NON_VEG_CATEGORY_CLICK
-import `in`.opening.area.zustapp.orderDetail.ui.ORDER_ID
+import zustbase.orderDetail.ui.ORDER_ID
 import `in`.opening.area.zustapp.zustFood.ZustFoodEntryActivity
-import non_veg.ZustNonVegEntryActivity
 import non_veg.listing.NonVegItemListActivity
+import non_veg.product_details.NonVegProductDetailsActivity
+import non_veg.search.NonVegSearchActivity
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -148,7 +149,7 @@ fun Context?.openCallIntent(phoneNumber: String) {
 
 fun Context.startFoodEntryActivity() {
     FirebaseAnalytics.logEvents(FOOD_BTM_NAV_CLICK)
-    val searchIntent = Intent(this, ZustNonVegEntryActivity::class.java)
+    val searchIntent = Intent(this, ZustFoodEntryActivity::class.java)
     startActivity(searchIntent)
 }
 
@@ -162,8 +163,22 @@ fun Context.navigateToNonVegProductListing(categoryId: Int?, categoryName: Strin
         val intent = Intent(this, NonVegItemListActivity::class.java)
         intent.putExtra(NonVegItemListActivity.KEY_NV_CATEGORY_ID, categoryId)
         if (categoryName != null) {
-            intent.putExtra(ProductListingActivity.CATEGORY_NAME, categoryName)
+            intent.putExtra(NonVegItemListActivity.KEY_NV_CATEGORY_TITLE, categoryName)
         }
         startActivity(intent)
     }
+}
+
+fun Context.navigateToNonVegProductDetails(productId: Int?, productPriceId: Int?) {
+    if (productId != null && productPriceId != null) {
+        val intent = Intent(this, NonVegProductDetailsActivity::class.java)
+        intent.putExtra(NonVegProductDetailsActivity.KEY_NV_PRODUCT_ID, productId)
+        intent.putExtra(NonVegProductDetailsActivity.KEY_NV_PRODUCT_PRICE_ID, productPriceId)
+        startActivity(intent)
+    }
+}
+
+fun Context.startNonVegSearchActivity() {
+    val searchIntent = Intent(this, NonVegSearchActivity::class.java)
+    startActivity(searchIntent)
 }

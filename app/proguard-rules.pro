@@ -42,6 +42,15 @@
 -keep class in.opening.area.zustapp.productDetails.models.**{ *; }
 -keep class in.opening.area.zustapp.webpage.model.**{ *; }
 -keep class in.opening.area.zustapp.rapidwallet.model.**{ *; }
+-keep class non_veg.cart.models.**{ *; }
+-keep class non_veg.common.models.**{ *; }
+-keep class non_veg.home.model.**{ *; }
+-keep class non_veg.listing.models.**{ *; }
+-keep class non_veg.payment.models.**{ *; }
+-keep class non_veg.product_details.models.**{ *; }
+-keep class zustbase.orderDetail.models.**{ *; }
+-keep class zustbase.orderHistory.models.**{ *; }
+-keep class zustbase.services.models.**{ *; }
 
 
 -keepclassmembers class in.opening.area.zustapp.BuildConfig {

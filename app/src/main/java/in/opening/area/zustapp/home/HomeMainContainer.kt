@@ -6,7 +6,7 @@ import `in`.opening.area.zustapp.home.components.HomePageErrorUi
 import `in`.opening.area.zustapp.home.composeContainer.HomePageShimmerUi
 import `in`.opening.area.zustapp.uiModels.HomePageResUi
 import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.viewmodels.HomeViewModel
+import `in`.opening.area.zustapp.viewmodels.GroceryHomeViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,12 +18,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun HomeMainContainer(
-    homeViewModel: HomeViewModel = viewModel(),
+    groceryHomeViewModel: GroceryHomeViewModel = viewModel(),
     paddingValues: PaddingValues,
     callback: (ACTION) -> Unit,
     changeLocationCallback: () -> Unit,
 ) {
-    val homeWidgets by homeViewModel.homePageUiState.collectAsState(HomePageResUi.InitialUi(false))
+    val homeWidgets by groceryHomeViewModel.homePageUiState.collectAsState(HomePageResUi.InitialUi(false))
     val context = LocalContext.current
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
@@ -49,13 +49,13 @@ fun HomeMainContainer(
                     product?.itemCountByUser?.let { cartItemCount ->
                         if (product.maxItemPurchaseLimit > 0 && action == `in`.opening.area.zustapp.viewmodels.ACTION.INCREASE) {
                             if (cartItemCount <= product.maxItemPurchaseLimit) {
-                                homeViewModel.updateOrInsertItems(product, action)
+                                groceryHomeViewModel.updateOrInsertItems(product, action)
                                 return@let
                             } else {
                                 AppUtility.showToast(context, "You can't add more than ${product.maxItemPurchaseLimit}")
                             }
                         } else {
-                            homeViewModel.updateOrInsertItems(product, action)
+                            groceryHomeViewModel.updateOrInsertItems(product, action)
                         }
                     }
                 }
@@ -68,7 +68,7 @@ fun HomeMainContainer(
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
                 HomePageErrorUi(response.errorCode, searchField, notDeliverHere, this, {
-                    homeViewModel.getUserSavedAddress()
+                    groceryHomeViewModel.getUserSavedAddress()
                 }) {
                     changeLocationCallback.invoke()
                 }

@@ -24,7 +24,7 @@ data class NonVegListingSingleItem(
     val productPriceId: Int,
     val productStatus: String,
     val unit: String? = null,
-    val productQuantity: String? = null,
+    val productQuantity: Double? = null,
     val variantName: String,
     var quantityOfItemInCart: Int? = 0,
 )

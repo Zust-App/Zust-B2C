@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.orderDetail.models.Address
+import zustbase.orderDetail.models.Address
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.UserSavedAddressUi
 import `in`.opening.area.zustapp.uiModels.locations.CheckDeliverableAddressUiState
@@ -66,54 +66,41 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
     }
 
     internal fun verifyDeliverableAddress(savedAddress: AddressItem?) = viewModelScope.launch {
-        savedAddress?.let {
-            when (val response = apiRequestManager.checkIsServiceAvail(savedAddress.latitude, savedAddress.longitude, savedAddress.pinCode)) {
-                is ResultWrapper.Success -> {
-                    val jsonObject = JSONObject(response.value)
-                    if (jsonObject.has("data")) {
-                        val dataJson = jsonObject.getJSONObject("data")
-                        if (dataJson.has("isDeliverablePinCode") && dataJson.getBoolean("isDeliverablePinCode")) {
-                            if (dataJson.has("merchantId")) {
-                                val merchantId = dataJson.getInt("merchantId")
-                                deliverableAddressUiState.update {
-                                    CheckDeliverableAddressUiState.SuccessUiState(false, savedAddress)
-                                }
-                            } else {
-                                deliverableAddressUiState.update {
-                                    CheckDeliverableAddressUiState.ErrorUiState(false, null, "Please try another location")
-                                }
-                            }
-                        } else {
-                            deliverableAddressUiState.update {
-                                CheckDeliverableAddressUiState.ErrorUiState(false, null, "Please try another location")
-                            }
+        when (val response = apiRequestManager.getAllAvailableService(savedAddress?.pinCode?:"000000", savedAddress?.latitude, savedAddress?.longitude)) {
+            is ResultWrapper.Success -> {
+                response.value.data?.serviceList?.let { data ->
+                    val checkAnyServiceAvailable = data.any { it.enable }
+                    if (checkAnyServiceAvailable) {
+                        deliverableAddressUiState.update {
+                            CheckDeliverableAddressUiState.SuccessUiState(false, savedAddress)
+                        }
+                    } else {
+                        deliverableAddressUiState.update {
+                            CheckDeliverableAddressUiState.ErrorUiState(false, null, "Please try another location")
                         }
                     }
                 }
+            }
 
-                is ResultWrapper.GenericError -> {
-                    deliverableAddressUiState.update {
-                        CheckDeliverableAddressUiState.ErrorUiState(false, null, "Please try another location")
-                    }
-                }
-
-                is ResultWrapper.UserTokenNotFound -> {
-                    deliverableAddressUiState.update {
-                        CheckDeliverableAddressUiState.ErrorUiState(false, null, "Token expired")
-                    }
-                }
-
-                is ResultWrapper.NetworkError -> {
-                    deliverableAddressUiState.update {
-                        CheckDeliverableAddressUiState.ErrorUiState(false, null, "Something went wrong")
-                    }
+            is ResultWrapper.GenericError -> {
+                deliverableAddressUiState.update {
+                    CheckDeliverableAddressUiState.ErrorUiState(false, null, "Please try another location")
                 }
             }
-        } ?: run {
-            deliverableAddressUiState.update {
-                CheckDeliverableAddressUiState.ErrorUiState(false, null, "Please try another location")
+
+            is ResultWrapper.UserTokenNotFound -> {
+                deliverableAddressUiState.update {
+                    CheckDeliverableAddressUiState.ErrorUiState(false, null, "Token expired")
+                }
+            }
+
+            is ResultWrapper.NetworkError -> {
+                deliverableAddressUiState.update {
+                    CheckDeliverableAddressUiState.ErrorUiState(false, null, "Something went wrong")
+                }
             }
         }
+
     }
 
 }
