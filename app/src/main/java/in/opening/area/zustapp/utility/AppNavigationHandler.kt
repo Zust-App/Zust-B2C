@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.utility
 
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_CATEGORY_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_CALL
@@ -62,8 +62,8 @@ fun Context.startMyOrders() {
 }
 
 fun Context.proceedToHomePage() {
-    val homeLandingActivity = Intent(this, HomeLandingActivity::class.java)
-    startActivity(homeLandingActivity)
+    val zustLandingActivity = Intent(this, ZustLandingActivity::class.java)
+    startActivity(zustLandingActivity)
 }
 
 fun Context.proceedToLoginActivity() {

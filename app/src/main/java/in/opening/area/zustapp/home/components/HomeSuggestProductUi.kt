@@ -20,8 +20,7 @@ fun LazyListScope.homeSuggestProductUi(callback: (ACTION) -> Unit) {
     item(key = KEY_SUGGEST_PRODUCT) {
         Column(modifier = padding_16Modifier) {
             Spacer(modifier = Modifier.height(70.dp))
-            Text(text = "Oops, Didn't find were you\n" +
-                    "are looking for?", style = ZustTypography.body1,
+            Text(text = "Oops, Didn't find what you\n" + "are looking for?", style = ZustTypography.body1,
                 fontSize = 20.sp, color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(8.dp))
             Button(

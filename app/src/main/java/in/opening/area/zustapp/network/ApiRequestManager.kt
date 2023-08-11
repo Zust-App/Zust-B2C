@@ -49,6 +49,8 @@ import non_veg.home.model.NonVegMerchantResponseModel
 import non_veg.listing.models.NonVegItemListModel
 import non_veg.payment.models.NonVegCartPaymentReqBody
 import non_veg.payment.models.NonVegCreateOrderResModel
+import zustbase.basepage.models.ZustServicePageResponse
+import zustbase.basepage.models.ZustServicePageResponseReceiver
 import zustbase.services.models.ZustAvailableServiceResult
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -690,7 +692,7 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun getAllAvailableService(pinCode: String,lat: Double?,lng: Double?) = universalApiRequestManager {
+    suspend fun getAllAvailableService(pinCode: String, lat: Double?, lng: Double?) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<ZustAvailableServiceResult>(NetworkUtility.GET_SERVICE_LIST) {
             headers {
@@ -701,5 +703,18 @@ class ApiRequestManager @Inject constructor() {
             parameter("lng", lng)
         }
     }
+
+    suspend fun getServicePageData(pinCode: String, lat: Double?, lng: Double?) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<ZustServicePageResponseReceiver>(NetworkUtility.GET_SERVICE_PAGE_DATA) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("pincode", pinCode)
+            parameter("lat", lat)
+            parameter("lng", lng)
+        }
+    }
+
 
 }

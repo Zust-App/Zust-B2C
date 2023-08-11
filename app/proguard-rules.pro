@@ -51,7 +51,7 @@
 -keep class zustbase.orderDetail.models.**{ *; }
 -keep class zustbase.orderHistory.models.**{ *; }
 -keep class zustbase.services.models.**{ *; }
-
+-keep class zustbase.basepage.models.**{ *; }
 
 -keepclassmembers class in.opening.area.zustapp.BuildConfig {
     public static java.lang.String DEV_BASE_URL;

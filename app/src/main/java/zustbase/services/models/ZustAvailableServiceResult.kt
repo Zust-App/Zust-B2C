@@ -11,7 +11,8 @@ data class ZustAvailableServiceResult(
 )
 
 data class ZustServiceData(
-    val serviceList: List<ZustService>?
+    val serviceList: List<ZustService>?,
+    val chunkSize: Int? = 2,
 )
 
 data class ZustService(
@@ -19,4 +20,5 @@ data class ZustService(
     val enable: Boolean,
     val imageUrl: String?,
     val type: String,
+    val title:String?
 )

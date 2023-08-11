@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 
 class HomeIntentHandler {
 
@@ -17,14 +17,14 @@ class HomeIntentHandler {
     private fun getLocationPermission(context: Context) {
         val permissions = hasPermissions(context, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
         if (!permissions) {
-            if (context is HomeLandingActivity) {
+            if (context is ZustLandingActivity) {
                 registerLocationLauncher(context)
             }
         }
     }
 
     private fun registerLocationLauncher(context: Context) {
-        if (context is HomeLandingActivity) {
+        if (context is ZustLandingActivity) {
             val requestPermissionLauncher = context.registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) { result ->

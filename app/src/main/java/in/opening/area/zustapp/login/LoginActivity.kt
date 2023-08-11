@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.login
 
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.viewmodels.LoginViewModel
 import `in`.opening.area.zustapp.databinding.ActivityLoginBinding
 import `in`.opening.area.zustapp.services.SMSReceiver
@@ -88,7 +88,7 @@ class LoginActivity : AppCompatActivity(), FragmentActionListener {
     }
 
     private fun moveToHomeActivity() {
-        val intent = Intent(this@LoginActivity, HomeLandingActivity::class.java)
+        val intent = Intent(this@LoginActivity, ZustLandingActivity::class.java)
         startActivity(intent)
         finish()
     }

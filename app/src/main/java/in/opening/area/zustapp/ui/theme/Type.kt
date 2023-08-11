@@ -161,7 +161,7 @@ val Typography_Allotrope by lazy {
         body1 = TextStyle(
             fontFamily = allotropeFontFamily,
             fontSize = 16.sp,
-            fontWeight = FontWeight.W600
+            fontWeight = FontWeight.W500
         ),
         body2 = TextStyle(
             fontFamily = allotropeFontFamily,
@@ -180,12 +180,12 @@ val Typography_Blinker by lazy {
         h1 = TextStyle(
             fontFamily = blinkerFontFamily,
             fontSize = 18.sp,
-            fontWeight = FontWeight.W700
+            fontWeight = FontWeight.W600
         ),
         body1 = TextStyle(
             fontFamily = blinkerFontFamily,
             fontSize = 16.sp,
-            fontWeight = FontWeight.W600
+            fontWeight = FontWeight.W500
         ),
         body2 = TextStyle(
             fontFamily = blinkerFontFamily,

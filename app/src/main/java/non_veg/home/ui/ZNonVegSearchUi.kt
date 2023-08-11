@@ -29,7 +29,7 @@ import `in`.opening.area.zustapp.ui.generic.KEY_SEARCH
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import kotlinx.coroutines.delay
 
-fun LazyListScope.homeNonVegPageSearch(hintTexts: List<String>, callback: () -> Unit) {
+fun LazyListScope.homeGenericPageSearchDefaultUi(hintTexts: List<String>, callback: () -> Unit) {
     item(key = KEY_SEARCH) {
         var textIndex by remember { mutableStateOf(0) }
         var animatedAlpha by remember { mutableStateOf(1f) }

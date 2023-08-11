@@ -16,5 +16,5 @@ enum class PaymentTypeActivation {
 }
 
 enum class ZustServiceType {
-    GROCERY, NON_VEG, FOOD
+    GROCERY, NON_VEG,ELECTRONICS, FOOD,SUBSCRIPTION,NEAR_BY_SHOP
 }

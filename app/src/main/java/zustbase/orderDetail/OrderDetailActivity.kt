@@ -1,6 +1,6 @@
 package zustbase.orderDetail
 
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import zustbase.orderDetail.ui.OrderDetailsTopAppBar
@@ -74,7 +74,7 @@ class OrderDetailActivity : ComponentActivity() {
     private fun handleAction(it: ACTION) {
         if (it == ACTION.NAV_BACK) {
             if (justOrdered) {
-                val intent = Intent(this, HomeLandingActivity::class.java)
+                val intent = Intent(this, ZustLandingActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Removes other Activities from stack
                 startActivity(intent)
                 finish()
@@ -89,7 +89,7 @@ class OrderDetailActivity : ComponentActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (justOrdered) {
-            val intent = Intent(this, HomeLandingActivity::class.java)
+            val intent = Intent(this, ZustLandingActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Removes other Activities from stack
             startActivity(intent)
             finish()

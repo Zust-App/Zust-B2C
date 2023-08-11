@@ -16,7 +16,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import zustbase.services.models.ZustService
 
 
 enum class HomeBottomNavTypes {
@@ -26,8 +25,7 @@ enum class HomeBottomNavTypes {
 val navIconModifier = Modifier.size(22.dp)
 
 @Composable
-fun CustomBottomNavigation(availServiceList: List<ZustService>, navActionCallback: (HomeBottomNavTypes, Any?) -> Unit) {
-
+fun CustomBottomNavigation(navActionCallback: (HomeBottomNavTypes, Any?) -> Unit) {
     var homeBottomNav by rememberSaveable {
         mutableStateOf(HomeBottomNavTypes.Home.ordinal)
     }

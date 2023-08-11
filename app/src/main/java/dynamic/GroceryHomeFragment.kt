@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -25,7 +25,7 @@ import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
-import `in`.opening.area.zustapp.compose.CustomTopBar
+import `in`.opening.area.zustapp.compose.CustomGroceryTopBar
 import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
 import `in`.opening.area.zustapp.helper.SelectLanguageFragment
 import `in`.opening.area.zustapp.home.ACTION
@@ -48,6 +48,7 @@ import `in`.opening.area.zustapp.viewmodels.GroceryHomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import zustbase.utility.handleActionIntent
 
 @AndroidEntryPoint
 class GroceryHomeFragment : Fragment(), AddressBtmSheetCallback {
@@ -69,16 +70,16 @@ class GroceryHomeFragment : Fragment(), AddressBtmSheetCallback {
             setContent {
                 Scaffold(
                     topBar = {
-                        CustomTopBar(Modifier) {
-                            handleActionIntent(it)
+                        CustomGroceryTopBar(Modifier) {
+                            (activity as? AppCompatActivity?)?.handleActionIntent(it)
                         }
                     },
                     backgroundColor = colorResource(id = R.color.screen_surface_color),
                     content = { paddingValue ->
                         HomeMainContainer(paddingValues = paddingValue, callback = {
-                            handleActionIntent(it)
+                            (activity as? AppCompatActivity?)?.handleActionIntent(it)
                         }) {
-                            handleActionIntent(ACTION.OPEN_LOCATION)
+                            (activity as? AppCompatActivity?)?.handleActionIntent(ACTION.OPEN_LOCATION)
                         }
                     }, bottomBar = {
                         CustomBottomBarView(viewModel = groceryHomeViewModel, VALUE.A, {
@@ -100,53 +101,6 @@ class GroceryHomeFragment : Fragment(), AddressBtmSheetCallback {
         initialDataManagement()
     }
 
-    private fun handleActionIntent(action: ACTION) {
-        when (action) {
-            ACTION.OPEN_LOCATION -> {
-                val bottomSheetV2 = AddressBottomSheetV2.newInstance()
-                childFragmentManager.showBottomSheetIsNotPresent(bottomSheetV2, AddressBottomSheetV2.SHEET_TAG)
-            }
-
-            ACTION.OPEN_USER_BOOKING -> {
-                context?.startUserProfileActivity()
-                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            }
-
-            ACTION.SEARCH_PRODUCT -> {
-                context?.startSearchActivity()
-                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            }
-
-            ACTION.SUGGEST_PRODUCT -> {
-                showSuggestProductSheet()
-            }
-
-            ACTION.OPEN_PROFILE -> {
-                context?.startUserProfileActivity()
-                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            }
-
-            ACTION.ORDER_WA -> {
-                context?.openWhatsAppOrderIntent()
-            }
-
-            ACTION.LANGUAGE_DIALOG -> {
-                showLanguageSelectionDialog()
-            }
-
-            ACTION.PHONE_CALL -> {
-                context?.openCallIntent("74564062907")
-            }
-
-            else -> {}
-        }
-    }
-
-    private fun showSuggestProductSheet() {
-        childFragmentManager.showBottomSheetIsNotPresent(
-            SuggestProductBtmSheet.newInstance(),
-            SuggestProductBtmSheet.TAG)
-    }
 
     private fun initialDataManagement() {
         groceryHomeViewModel.getUserSavedAddress()
@@ -167,13 +121,6 @@ class GroceryHomeFragment : Fragment(), AddressBtmSheetCallback {
         activity?.finish()
     }
 
-    private fun showLanguageSelectionDialog() {
-        SelectLanguageFragment.showDialog(childFragmentManager, true)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
 
     companion object {
         fun newInstance() =

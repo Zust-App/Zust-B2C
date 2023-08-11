@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.locationV2.LocationPermissionActivity
 import `in`.opening.area.zustapp.login.LoginActivity
 import `in`.opening.area.zustapp.onboarding.compose.LoginClick
@@ -51,7 +51,7 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     private fun proceedToHomePage() {
-        val homeIntent = Intent(this, HomeLandingActivity::class.java)
+        val homeIntent = Intent(this, ZustLandingActivity::class.java)
         startActivity(homeIntent)
         finish()
     }

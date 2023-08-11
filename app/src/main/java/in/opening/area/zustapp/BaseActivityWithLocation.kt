@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ResolvableApiException
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.address.GoogleMapsAddressActivity
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 
 @AndroidEntryPoint
 open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListener, AddressBtmSheetCallback {
@@ -166,7 +166,7 @@ open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListene
     }
 
     private fun startHomeLandingIntent() {
-        val homeIntent = Intent(this, HomeLandingActivity::class.java)
+        val homeIntent = Intent(this, ZustLandingActivity::class.java)
         startActivity(homeIntent)
         finish()
     }

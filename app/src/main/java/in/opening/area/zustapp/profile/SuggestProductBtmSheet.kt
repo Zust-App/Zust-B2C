@@ -1,11 +1,15 @@
 package `in`.opening.area.zustapp.profile
 
+import android.app.Dialog
+import android.content.Context
 import `in`.opening.area.zustapp.databinding.SuggestProductBtmSheetBinding
 import `in`.opening.area.zustapp.viewmodels.ProfileViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +34,7 @@ class SuggestProductBtmSheet : BottomSheetDialogFragment() {
             }
         }
     }
+   
 
     companion object {
         const val TAG = "suggest_product"

@@ -1,7 +1,7 @@
 package `in`.opening.area.zustapp.fcm
 
 import `in`.opening.area.zustapp.R
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -98,7 +98,7 @@ class CustomFcmService : FirebaseMessagingService() {
     ) {
         if (title != null && body != null) {
             val notificationId = System.currentTimeMillis().toInt()
-            val intent = Intent(this, HomeLandingActivity::class.java)
+            val intent = Intent(this, ZustLandingActivity::class.java)
             if (orderId != null && key.equals(KEY_ORDER_DETAIL, true)) {
                 intent.putExtra(DEEP_LINK_DATA, OrderDetailDeepLinkModel(orderId, KEY_ORDER_DETAIL))
             }

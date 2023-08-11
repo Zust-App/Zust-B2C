@@ -29,6 +29,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import zustbase.custom.pressClickEffect
 import kotlin.math.ceil
 
 const val CATEGORY_ROW_COUNT = 3
@@ -65,7 +66,7 @@ private fun RowScope.SingleCategoryItem(categoryItem: HomePageGenericData) {
     val context = LocalContext.current
     ConstraintLayout(modifier = categoryModifier
         .weight(1f)
-        .clickable {
+        .pressClickEffect {
             if (categoryItem.categoryStatus == "ENABLE" || categoryItem.categoryStatus == null) {
                 context.navigateToProductListing(categoryItem.id, categoryItem.name)
             } else {

@@ -9,8 +9,10 @@
     <color name="light_black">#242c5a</color>
     <color name="logout_bg">#fee5dc</color>
 
-    <!--    <color name="new_material_primary">#442580</color>-->
+<!--        <color name="new_material_primary">#442580</color>-->
     <color name="new_material_primary">@color/blue_solid</color>
+<!--    <color name="new_material_primary">#D4CAED</color>-->
+
     <!-- #6750A4-->
     <color name="screen_surface_color">#F8F4FF</color>
     <color name="new_hint_color">#6C6C6C</color>

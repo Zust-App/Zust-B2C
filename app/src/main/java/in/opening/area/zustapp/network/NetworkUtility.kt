@@ -85,5 +85,6 @@ class NetworkUtility {
 
         //common
         val GET_SERVICE_LIST = "$baseUrl/zust_service/service-list"
+        val GET_SERVICE_PAGE_DATA = "$baseUrl/zust_service/service-page-data"
     }
 }

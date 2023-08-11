@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.BaseActivityWithLocation
-import zustbase.HomeLandingActivity
+import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
 import `in`.opening.area.zustapp.address.AddressSearchActivity
 import `in`.opening.area.zustapp.address.GoogleMapsAddressActivity
@@ -134,7 +134,7 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
     }
 
     private fun moveToHomeActivity() {
-        val intent = Intent(this, HomeLandingActivity::class.java)
+        val intent = Intent(this, ZustLandingActivity::class.java)
         startActivity(intent)
         finish()
     }

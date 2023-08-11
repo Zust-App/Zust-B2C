@@ -24,12 +24,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.home.components.homePageBrandPromiseUi
 import `in`.opening.area.zustapp.home.composeContainer.HomePageShimmerUi
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
-import `in`.opening.area.zustapp.ui.theme.dp_24
 import `in`.opening.area.zustapp.ui.theme.dp_32
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.ui.theme.zustTypographySecondary
@@ -60,7 +60,7 @@ fun ZustNvEntryMainUi(viewModel: ZustNvEntryViewModel = androidx.lifecycle.viewm
                     .fillMaxWidth()
                     .fillMaxHeight()) {
 
-                    homeNonVegPageSearch(arrayListOf("Search `Eggs`", "Search `Meat`", "Search `Chicken`")) {
+                    homeGenericPageSearchDefaultUi(arrayListOf("Search `Eggs`", "Search `Meat`", "Search `Chicken`")) {
                         searchCallback.invoke()
                     }
 

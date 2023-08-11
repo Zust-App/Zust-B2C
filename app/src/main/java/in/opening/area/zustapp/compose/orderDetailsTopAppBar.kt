@@ -25,7 +25,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
 @Composable
-fun CustomTopBar(
+fun CustomGroceryTopBar(
     modifier: Modifier,
     viewModel:GroceryHomeViewModel= androidx.lifecycle.viewmodel.compose.viewModel(),
     callback: (ACTION) -> Unit,
@@ -36,7 +36,6 @@ fun CustomTopBar(
         .fillMaxWidth()
         .wrapContentHeight()
         .fillMaxWidth()
-        .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
         .background(color = colorResource(id = color.new_material_primary))
         .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
@@ -59,7 +58,7 @@ fun CustomTopBar(
                     callback.invoke(ACTION.OPEN_LOCATION)
                 })
 
-        Text(text = "Patna", color = colorResource(id = color.white),
+        Text(text = "Address", color = colorResource(id = color.white),
             modifier = modifier
                 .constrainAs(locationTag) {
                     top.linkTo(parent.top)
@@ -122,4 +121,6 @@ fun CustomTopBar(
                 .clip(shape = RoundedCornerShape(8.dp)))
     }
 }
+
+
 

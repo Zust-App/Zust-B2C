@@ -40,6 +40,7 @@ import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.navigateToNonVegProductListing
 import `in`.opening.area.zustapp.utility.navigateToProductListing
 import non_veg.home.model.NonVegCategory
+import zustbase.custom.pressClickEffect
 import kotlin.math.ceil
 
 private val categoryModifier = Modifier
@@ -59,7 +60,7 @@ fun RowScope.NonVegSingleCategoryItem(categoryItem: NonVegCategory?) {
     val context = LocalContext.current
     ConstraintLayout(modifier = categoryModifier
         .weight(1f)
-        .clickable {
+        .pressClickEffect {
             context.navigateToNonVegProductListing(categoryItem.id, categoryItem.name)
         }) {
         val (categoryImage, categoryTitle) = createRefs()

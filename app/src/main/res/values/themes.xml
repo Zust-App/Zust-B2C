@@ -7,6 +7,7 @@
         <item name="android:statusBarColor">@color/new_material_primary</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="statusBarBackground">@color/new_material_primary</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
     </style>
 
     <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
@@ -17,9 +18,9 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.3</item>
         <item name="android:windowFrame">@null</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
     </style>
 
     <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
@@ -35,6 +36,7 @@
     <style name="Theme.OnBoardingCompose" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@color/new_material_primary</item>
         <item name="android:navigationBarColor">@color/new_material_primary</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
     </style>
 
     <style name="SlideFromRightActivity" parent="@android:style/Animation">
@@ -55,5 +57,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
     </style>
 </resources>

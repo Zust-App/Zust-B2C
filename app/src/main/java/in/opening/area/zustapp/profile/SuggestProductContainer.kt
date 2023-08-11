@@ -104,7 +104,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.screen_surface_color),
                     shape = RoundedCornerShape(8.dp))
-                .defaultMinSize(minHeight = 100.dp)
+                .defaultMinSize(minHeight = 80.dp).heightIn(max = 100.dp)
                 .constrainAs(inputField) {
                     top.linkTo(title2.bottom, dp_16)
                     start.linkTo(parent.start)

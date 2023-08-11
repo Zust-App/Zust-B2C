@@ -1,16 +1,8 @@
 package `in`.opening.area.zustapp.home
 
-import `in`.opening.area.zustapp.R.string
-
-import `in`.opening.area.zustapp.home.components.*
-import `in`.opening.area.zustapp.home.models.HomeGrid
-import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.ui.generic.customHomePageSearch
-import `in`.opening.area.zustapp.ui.theme.dp_8
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +10,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.R.string
+import `in`.opening.area.zustapp.home.components.categoryHolder
+import `in`.opening.area.zustapp.home.components.customAutoScrollImageUi
+import `in`.opening.area.zustapp.home.components.homePageBrandPromiseUi
+import `in`.opening.area.zustapp.home.components.homePageDeliveryAlert
+import `in`.opening.area.zustapp.home.components.homePageSectionTitleUi
+import `in`.opening.area.zustapp.home.components.homeSuggestProductUi
+import `in`.opening.area.zustapp.home.components.orderViaWhatsappUi
+import `in`.opening.area.zustapp.home.components.trendingProductsUi
+import `in`.opening.area.zustapp.home.models.HomeGrid
+import `in`.opening.area.zustapp.product.model.ProductSingleItem
+import `in`.opening.area.zustapp.ui.generic.customHomePageSearch
+import `in`.opening.area.zustapp.ui.theme.dp_8
 
 @Composable
 fun HomeMainItemContainer(
@@ -83,6 +88,5 @@ fun HomeMainItemContainer(
 }
 
 
-////                        homePageBrandTagUi()
 
 
