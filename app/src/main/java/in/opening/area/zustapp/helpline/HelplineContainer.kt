@@ -10,8 +10,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,7 +54,7 @@ fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallba
             Text(text = stringResource(R.string.help_and_support),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 fontSize = 18.sp,
                 color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +62,7 @@ fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallba
             Text(
                 text = stringResource(R.string.contact_nmber),
                 color = colorResource(id = R.color.green),
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 fontSize = 14.sp,
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -71,7 +71,7 @@ fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallba
                 phoneNos.forEach {
                     Text(
                         text = it, color = colorResource(id = R.color.light_black),
-                        style = ZustTypography.body2,
+                        style = ZustTypography.bodyMedium,
                         fontSize = 14.sp, modifier = Modifier.clickable {
                             AppUtility.openCallIntent(context, it)
                         })
@@ -79,13 +79,13 @@ fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallba
             } else {
                 Text(
                     text = "7858906229", color = colorResource(id = R.color.light_black),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openCallIntent(context, "7858906229")
                     })
                 Text(
                     text = "7564062907", color = colorResource(id = R.color.light_black),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openCallIntent(context, "7564062907")
                     })
@@ -94,14 +94,14 @@ fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallba
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "Email", color = colorResource(id = R.color.green),
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 fontSize = 14.sp)
             Spacer(modifier = Modifier.height(4.dp))
             val emails = profileViewModel?.getSupportCsDetail()?.email
             if (!emails.isNullOrEmpty()) {
                 emails.forEach {
                     Text(text = it, color = colorResource(id = R.color.light_black),
-                        style = ZustTypography.body2,
+                        style = ZustTypography.bodyMedium,
                         fontSize = 14.sp, modifier = Modifier.clickable {
                             AppUtility.openEmailIntent(context, it)
                         })
@@ -109,13 +109,13 @@ fun HelplineContainer(profileViewModel: ProfileViewModel?, supportBtmSheetCallba
                 }
             } else {
                 Text(text = "zusttapp@gmail.com", color = colorResource(id = R.color.light_black),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openEmailIntent(context, "zusttapp@gmail.com")
                     })
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(text = "contact@zustapp.com", color = colorResource(id = R.color.light_black),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp, modifier = Modifier.clickable {
                         AppUtility.openEmailIntent(context, "contact@zustapp.com")
                     })

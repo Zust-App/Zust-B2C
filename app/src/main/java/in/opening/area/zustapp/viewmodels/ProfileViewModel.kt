@@ -39,7 +39,9 @@ class ProfileViewModel @Inject constructor(
 
     internal fun getUserProfileResponse() = viewModelScope.launch {
         profileUiState.update { UserProfileUi.InitialUi(true) }
-        when (val response = apiRequestManager.getUserProfileDetails()) {
+        val nonVegMerchantId=sharedPrefManager.getNonVegMerchantId()
+        val merchantId=sharedPrefManager.getMerchantId()
+        when (val response = apiRequestManager.getUserProfileDetails(merchantId,nonVegMerchantId)) {
             is ResultWrapper.Success -> {
                 if (response.value.data != null) {
                     profileUiState.update { (UserProfileUi.ProfileSuccess(false, response.value.data)) }

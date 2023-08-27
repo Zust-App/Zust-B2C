@@ -20,7 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.R
 import androidx.compose.ui.Alignment
@@ -49,7 +49,7 @@ class RapidWalletBtmSheet : BottomSheetDialogFragment() {
         setStyle(DialogFragment.STYLE_NORMAL,`in`.opening.area.zustapp.R.style.SheetDialog)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return ComposeView(context = requireContext()).apply {
             setContent {
 

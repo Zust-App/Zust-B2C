@@ -1,6 +1,6 @@
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -19,7 +19,7 @@ fun TypewriterText(text: String, modifier: Modifier = Modifier, textSize: TextUn
             index++
         }
     }
-    Text(text = textToShow, modifier = modifier, style = ZustTypography.body1,
+    Text(text = textToShow, modifier = modifier, style = ZustTypography.bodyMedium,
         fontSize = textSize,
         color = colorResource(id = R.color.new_material_primary))
 }

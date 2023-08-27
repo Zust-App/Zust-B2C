@@ -1,21 +1,10 @@
 package non_veg.search.viewmodel
 
-import android.util.Log
-import android.view.View
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.product.Utils
-import `in`.opening.area.zustapp.product.model.CreateCartReqModel
-import `in`.opening.area.zustapp.product.model.ProductApiResponse
-import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.product.model.convertProductToCreateOrder
-import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
-import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.ACTION
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,10 +30,9 @@ class NonVegSearchViewModel @Inject constructor(private val apiRequestManager: A
     var searchTextCache: String = ""
 
     private var job: Job? = null
-    private var nonVegMerchantId: Int = -1
     internal fun searchProduct(searchText: String) {
         job?.cancel()
-        searchTextCache = searchText
+        searchTextCache = searchText.trim()
         job?.cancel()
         _nonVegProductUiModel.update {
             NonVegProductListingUiModel.Empty(true)

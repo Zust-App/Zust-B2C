@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -34,8 +34,8 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -84,7 +84,7 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier,
             onValueChange = { newText ->
                 searchInput = newText
             },
-            textStyle = ZustTypography.body2,
+            textStyle = ZustTypography.bodyMedium,
             singleLine = true,
             decorationBox = { innerTextField ->
                 Box(
@@ -94,7 +94,7 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier,
                     if (searchInput.isEmpty()) {
                         Text(
                             text = "Search products...",
-                            style = ZustTypography.body2,
+                            style = ZustTypography.bodyMedium,
                             color = colorResource(id = R.color.new_hint_color)
                         )
                     }
@@ -158,14 +158,19 @@ fun SearchBarUi(modifier: Modifier, modifier1: Modifier,
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun setSearchTextFiledColors(): TextFieldColors {
-    return TextFieldDefaults.textFieldColors(
+    val containerColor = Color(0xffffffff)
+    return TextFieldDefaults.colors(
+        focusedContainerColor = containerColor,
+        unfocusedContainerColor = containerColor,
+        disabledContainerColor = containerColor,
         cursorColor = Color.Black,
-        disabledLabelColor = Color.White,
         focusedIndicatorColor = Color.White,
         unfocusedIndicatorColor = Color.White,
-        backgroundColor = Color(0xffffffff))
+        disabledLabelColor = Color.White,
+    )
 }
 
 
@@ -174,7 +179,7 @@ fun setSearchTextFiledColors(): TextFieldColors {
 fun AnimatedTextHint(
     value: String,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.body1,
+    style: TextStyle = MaterialTheme.typography.bodyMedium,
 ) {
     var oldCount by remember {
         mutableStateOf(value)
@@ -195,7 +200,7 @@ fun AnimatedTextHint(
             AnimatedContent(
                 targetState = char,
                 transitionSpec = {
-                    slideInVertically { it } with slideOutVertically { -it }
+                    slideInVertically { it } togetherWith slideOutVertically { -it }
                 }
             ) { char ->
                 Text(

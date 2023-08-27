@@ -13,9 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
@@ -41,15 +41,11 @@ class PaymentWarningDialog : DialogFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
                 ConstraintLayout(
@@ -67,7 +63,7 @@ class PaymentWarningDialog : DialogFragment() {
                             end.linkTo(parent.end, dp_16)
                             width = Dimension.fillToConstraints
                         },
-                        style = ZustTypography.body1,
+                        style = ZustTypography.bodyMedium,
                         color = colorResource(id = R.color.app_black)
                     )
 
@@ -80,12 +76,12 @@ class PaymentWarningDialog : DialogFragment() {
                             end.linkTo(parent.end, dp_16)
                             bottom.linkTo(parent.bottom, dp_16)
                             width = Dimension.fillToConstraints
-                        }, style = ZustTypography.body2,
+                        }, style = ZustTypography.bodyMedium,
                         color = colorResource(id = R.color.black_3)
                     )
 
                     CircularProgressIndicator(
-                        color = MaterialTheme.colors.onSurface,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .constrainAs(progressBar) {
                                 top.linkTo(parent.top)
@@ -98,10 +94,6 @@ class PaymentWarningDialog : DialogFragment() {
                 }
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
 }

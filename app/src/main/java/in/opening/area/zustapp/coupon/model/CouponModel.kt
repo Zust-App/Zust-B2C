@@ -28,4 +28,3 @@ data class Coupon(
 data class Data(
     val coupons: List<Coupon>? = null
 )
-

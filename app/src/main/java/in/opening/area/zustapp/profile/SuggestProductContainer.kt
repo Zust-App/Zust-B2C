@@ -14,7 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -72,7 +72,7 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
             },
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.black_2))
 
         Text(text = stringResource(R.string.dinot_find_what_are_you_looking_for),
@@ -82,23 +82,27 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
             }, textAlign = TextAlign.Center,
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             fontWeight = FontWeight.W400,
             color = colorResource(id = R.color.grey_color_2))
 
+        val containerColor = colorResource(id = R.color.screen_surface_color)
         TextField(
             placeholder = {
-                Text(text = stringResource(R.string.type_items), style = ZustTypography.body2)
+                Text(text = stringResource(R.string.type_items), style = ZustTypography.bodyMedium)
             },
             value = inputText,
             onValueChange = {
                 inputText = it
             },
-            colors = TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = containerColor,
+                unfocusedContainerColor = containerColor,
+                disabledContainerColor = containerColor,
                 focusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = colorResource(id = R.color.screen_surface_color)),
+                disabledIndicatorColor = Color.Transparent,
+            ),
 
             modifier = Modifier
                 .fillMaxWidth()
@@ -134,13 +138,13 @@ fun SuggestProductContainer(profileViewModel: ProfileViewModel, callback: () -> 
         ) {
             Text(text = stringResource(R.string.send),
                 color = Color.White,
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 fontSize = 18.sp)
         }
 
         if (rememberLoadingState) {
             CircularProgressIndicator(
-                color = MaterialTheme.colors.onSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .width(30.dp)
                     .height(30.dp)

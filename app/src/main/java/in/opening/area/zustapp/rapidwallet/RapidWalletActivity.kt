@@ -15,7 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -48,6 +48,9 @@ import `in`.opening.area.zustapp.uiModels.RWUserWalletUiState
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.ProductUtils
 import kotlinx.coroutines.flow.update
+import ui.colorBlack
+import ui.colorWhite
+import ui.colorWhite1
 import java.util.*
 
 @AndroidEntryPoint
@@ -79,8 +82,8 @@ class RapidWalletActivity : AppCompatActivity() {
                     titleText = "Rapid Wallet",
                     callback = {
                         handleBackPressed()
-                    })
-            }) { padding ->
+                    }, color = colorBlack)
+            }, containerColor = colorResource(id = R.color.screen_surface_color)) { padding ->
                 RapidWalletMainUi(padding, rapidWalletViewModel) { rapidWalletResult ->
                     val intent = Intent()
                     intent.putExtra(RAPID_WALLET_SUCCESS, rapidWalletResult)
@@ -167,8 +170,7 @@ class RapidWalletActivity : AppCompatActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(padding)
-                .background(color = colorResource(id = R.color.white)),
+                .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OrderInformation(rapidWalletViewModel)
@@ -323,10 +325,11 @@ private fun ShowEnterUserId(
         mutableStateOf("")
     }
     Card(
+        colors = CardDefaults.cardColors(containerColor = colorWhite),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
-            .wrapContentHeight(), elevation = 2.dp
+            .wrapContentHeight(), elevation = CardDefaults.cardElevation(defaultElevation = dp_8)
     )
     {
         Column(
@@ -337,7 +340,7 @@ private fun ShowEnterUserId(
         ) {
             Text(
                 text = "Enter Rapid Wallet User ID*",
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 color = colorResource(id = R.color.black_2),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -358,7 +361,7 @@ private fun ShowEnterUserId(
                 onValueChange = { newText ->
                     rapidUserId = newText
                 },
-                textStyle = ZustTypography.body1,
+                textStyle = ZustTypography.bodyMedium,
                 singleLine = true,
                 decorationBox = { innerTextField ->
                     Box(
@@ -389,14 +392,14 @@ private fun ShowEnterUserId(
                         AppUtility.showToast(context, "Please wait")
                     }
                 }, colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.new_material_primary)
+                    containerColor = colorResource(id = R.color.new_material_primary)
                 )
             ) {
                 Spacer(modifier = Modifier.width(24.dp))
                 Text(
                     text = "Next",
                     color = colorResource(id = R.color.white),
-                    style = ZustTypography.body1
+                    style = ZustTypography.bodyMedium
                 )
                 Spacer(modifier = Modifier.width(24.dp))
             }
@@ -416,11 +419,12 @@ private fun ShowWalletBalances(
         return
     }
     Card(
+        colors = CardDefaults.cardColors(containerColor = colorWhite),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 16.dp)
             .wrapContentHeight(),
-        elevation = 2.dp, shape = RoundedCornerShape(8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dp_8), shape = RoundedCornerShape(8.dp)
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -437,7 +441,7 @@ private fun ShowWalletBalances(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 },
-                style = ZustTypography.h1,
+                style = ZustTypography.titleLarge,
                 color = colorResource(id = R.color.new_material_primary)
             )
 
@@ -448,7 +452,7 @@ private fun ShowWalletBalances(
                 }
                 .clickable {
                     userActionCallback.invoke(EDIT_NUMBER)
-                }, style = ZustTypography.body2, color = colorResource(id = R.color.green)
+                }, style = ZustTypography.bodyMedium, color = colorResource(id = R.color.green)
             )
 
             val (title2, subtitle2, balance2, radioBtn2) = createRefs()
@@ -462,7 +466,7 @@ private fun ShowWalletBalances(
                         end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
                     },
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.app_black)
                 )
 
@@ -475,7 +479,7 @@ private fun ShowWalletBalances(
                         .clickable {
                             currentRapidMethod = RAPID_WALLET
                         },
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.black_2)
                 )
                 Text(
@@ -486,7 +490,7 @@ private fun ShowWalletBalances(
                         bottom.linkTo(subtitle2.bottom)
                         width = Dimension.fillToConstraints
                     },
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.new_material_primary)
                 )
 
@@ -521,14 +525,14 @@ private fun ShowWalletBalances(
                 ), onClick = {
                 userActionCallback.invoke(SEND_OTP)
             }, colors = ButtonDefaults.buttonColors(
-                backgroundColor = colorResource(id = R.color.new_material_primary)
+                containerColor = colorResource(id = R.color.new_material_primary)
             )
             ) {
                 Spacer(modifier = Modifier.width(24.dp))
                 Text(
                     text = "Send OTP",
                     color = colorResource(id = R.color.white),
-                    style = ZustTypography.body1
+                    style = ZustTypography.bodyMedium
                 )
                 Spacer(modifier = Modifier.width(24.dp))
             }
@@ -544,11 +548,11 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
     if (rapidWalletViewModel.paymentActivityReqData?.orderId == null) {
         return
     }
-    Card(
+    Card(colors = CardDefaults.cardColors(containerColor = colorWhite),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 16.dp)
-            .wrapContentHeight(), elevation = 2.dp, shape = RoundedCornerShape(8.dp)
+            .wrapContentHeight(), elevation = CardDefaults.cardElevation(defaultElevation = dp_8), shape = RoundedCornerShape(8.dp)
     ) {
         Column(
             modifier = Modifier
@@ -559,7 +563,7 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "OrderId:- ",
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     modifier = Modifier,
                     color = colorResource(id = R.color.new_material_primary)
                 )
@@ -570,7 +574,7 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
                     } else {
                         PREFIX_ORDER_ID_GROCERY + rapidWalletViewModel.paymentActivityReqData?.orderId.toString()
                     },
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     modifier = Modifier
                 )
             }
@@ -580,7 +584,7 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "Payable Amount:- ",
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     modifier = Modifier,
                     color = colorResource(id = R.color.new_material_primary)
                 )
@@ -588,7 +592,7 @@ private fun OrderInformation(rapidWalletViewModel: RapidWalletViewModel) {
                 Text(
                     text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(
                         rapidWalletViewModel.getPayablePrice()
-                    ), style = ZustTypography.body1, modifier = Modifier
+                    ), style = ZustTypography.bodyMedium, modifier = Modifier
                 )
             }
 
@@ -631,10 +635,11 @@ private fun RapidUserOTPUi(
         mutableStateOf("")
     }
     Card(
+        colors = CardDefaults.cardColors(containerColor = colorWhite),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 16.dp)
-            .wrapContentHeight(), elevation = 2.dp, shape = RoundedCornerShape(8.dp)
+            .wrapContentHeight(), elevation = CardDefaults.cardElevation(defaultElevation = dp_8), shape = RoundedCornerShape(8.dp)
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -648,7 +653,7 @@ private fun RapidUserOTPUi(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 },
-                style = ZustTypography.h1,
+                style = ZustTypography.titleLarge,
                 color = colorResource(id = R.color.new_material_primary)
             )
 
@@ -659,7 +664,7 @@ private fun RapidUserOTPUi(
                 }
                 .clickable {
                     changeIdCallback.invoke()
-                }, style = ZustTypography.body2,
+                }, style = ZustTypography.bodyMedium,
                 color = colorResource(id = R.color.green)
             )
 
@@ -668,7 +673,7 @@ private fun RapidUserOTPUi(
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.body2)
+            }, style = ZustTypography.bodyMedium)
 
             BasicTextField(modifier = Modifier
                 .constrainAs(otpField) {
@@ -691,7 +696,7 @@ private fun RapidUserOTPUi(
                 onValueChange = { newText ->
                     rapidUserInputOTP = newText
                 },
-                textStyle = ZustTypography.body1,
+                textStyle = ZustTypography.bodyMedium,
                 singleLine = true,
                 decorationBox = { innerTextField ->
                     Box(
@@ -719,14 +724,14 @@ private fun RapidUserOTPUi(
                     AppUtility.showToast(context = context, "Please enter OTP")
                 }
             }, colors = ButtonDefaults.buttonColors(
-                backgroundColor = colorResource(id = R.color.new_material_primary)
+                containerColor = colorResource(id = R.color.new_material_primary)
             )
             ) {
                 Spacer(modifier = Modifier.width(24.dp))
                 Text(
                     text = stringResource(id = R.string.verify_otp),
                     color = colorResource(id = R.color.white),
-                    style = ZustTypography.body1
+                    style = ZustTypography.bodyMedium
                 )
                 Spacer(modifier = Modifier.width(24.dp))
             }
@@ -737,7 +742,7 @@ private fun RapidUserOTPUi(
 
 @Composable
 fun PaymentWindow(closeWindow: () -> Unit) {
-    val secondsRemaining by remember { mutableStateOf(300) }
+    val secondsRemaining by remember { mutableIntStateOf(300) }
     Text(
         text = "Time remaining: ${secondsRemaining / 60}:${secondsRemaining % 60}"
     )
@@ -746,7 +751,7 @@ fun PaymentWindow(closeWindow: () -> Unit) {
         closeWindow.invoke()
     }
     LaunchedEffect(key1 = Unit, block = {
-        startPaymentTimer() {
+        startPaymentTimer {
 
         }
     })

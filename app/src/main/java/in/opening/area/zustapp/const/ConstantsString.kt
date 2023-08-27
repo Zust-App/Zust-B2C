@@ -5,5 +5,5 @@ const val ENTER_MOBILE_NUM="Enter mobile number"
 const val REQUEST_OTP="Request OTP"
 const val CONTINUE="Continue"
 const val MOBILE_NUM_THRESHOLD=10
-
+const val ENTER_4_DIGIT_OTP="Enter 4 digit OTP"
 

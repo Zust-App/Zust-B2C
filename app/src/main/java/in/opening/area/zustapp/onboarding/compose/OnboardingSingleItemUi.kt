@@ -5,7 +5,7 @@ import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -17,11 +17,11 @@ private val listOfOnBoardingText = arrayListOf("Fresh food, right at your \nfing
 
 @Composable
 fun OnBoardingSingleItemUi(index: Int) {
-    Column() {
+    Column {
         Text(text = listOfOnBoardingText[index],
             color = colorResource(id = R.color.new_material_primary),
             fontSize = 18.sp,
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(16.dp))
     }

@@ -4,7 +4,6 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import `in`.opening.area.zustapp.compose.NoProductFoundErrorPage
 import `in`.opening.area.zustapp.orderSummary.OrderSummaryActivity
-import `in`.opening.area.zustapp.orderSummary.compose.SelectedCartVerticalItemUi
 import `in`.opening.area.zustapp.payment.PaymentActivity
 import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.ProductSelectionListener
@@ -34,9 +33,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +46,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
+import ui.colorBlack
+import ui.colorWhite
+import ui.linearGradientGroceryBrush
 
 @AndroidEntryPoint
 class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
@@ -63,13 +65,13 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                     }
                 },
                 topBar = {
-                    ComposeCustomTopAppBar(Modifier, "Search") {
+                    ComposeCustomTopAppBar(Modifier.background(color = colorWhite), "Search", color = colorBlack) {
                         if (it == `in`.opening.area.zustapp.home.ACTION.NAV_BACK) {
                             finish()
                         }
                     }
                 },
-                backgroundColor = colorResource(id = R.color.screen_surface_color),
+                containerColor = colorResource(id = R.color.screen_surface_color),
                 content = { paddingValue ->
                     SearchProductMainContainer(paddingValue, Modifier)
                 },
@@ -105,7 +107,7 @@ class SearchProductActivity : AppCompatActivity(), ProductSelectionListener {
                         start.linkTo(parent.start, dp_20)
                         end.linkTo(parent.end, dp_20)
                         width = Dimension.fillToConstraints
-                    }, style = ZustTypography.body1)
+                    }, style = ZustTypography.bodyMedium)
                     if (data.data.productItems.isNullOrEmpty()) {
                         NoProductFoundErrorPage(layoutScope = this, topReference = searchSection) {
                             showSuggestProductSheet()

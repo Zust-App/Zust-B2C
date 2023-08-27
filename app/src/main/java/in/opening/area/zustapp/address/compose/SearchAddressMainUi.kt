@@ -11,7 +11,7 @@ import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -101,7 +101,7 @@ fun SearchAddressMainUi(
                     item {
                         Text(text = "Search Result", modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 12.dp), style = ZustTypography.body1)
+                            .padding(horizontal = 12.dp), style = ZustTypography.bodyMedium)
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                     items((response as SearchPlacesUi.SearchPlaceResult).data) { data ->

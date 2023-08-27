@@ -21,8 +21,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -55,7 +55,7 @@ import non_veg.cart.uiModel.NonVegCartUiModel
 import non_veg.cart.viewmodel.NonVegCartViewModel
 
 @Composable
-fun NonVegCartMainContainerUi(paddingValues: PaddingValues, viewModel: NonVegCartViewModel) {
+fun NonVegCartMainContainerUi(paddingValues: PaddingValues, viewModel: NonVegCartViewModel, finishPageCallback: () -> Unit) {
     val cartDetailsState = viewModel.cartDetailsState.collectAsState().value
     val context = LocalContext.current
 
@@ -99,7 +99,7 @@ fun NonVegCartMainContainerUi(paddingValues: PaddingValues, viewModel: NonVegCar
             }) {
             if (!cartData.value.itemsInCart.isNullOrEmpty()) {
                 item {
-                    Text(text = "Items Added", style = ZustTypography.h1, modifier = Modifier
+                    Text(text = "Items Added", style = ZustTypography.titleLarge, modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(horizontal = dp_16, vertical = dp_12))
@@ -131,6 +131,8 @@ fun NonVegCartMainContainerUi(paddingValues: PaddingValues, viewModel: NonVegCar
                 item {
                     Spacer(modifier = Modifier.height(dp_20))
                 }
+            } else if (cartData.value.itemsInCart!=null) {
+                finishPageCallback.invoke()
             }
         }
         if (cartDetailsState.isLoading && cartDetailsState.isUpdateApiCall) {

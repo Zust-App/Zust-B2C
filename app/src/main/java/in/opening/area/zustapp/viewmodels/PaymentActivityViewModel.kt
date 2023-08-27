@@ -33,6 +33,10 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
     internal lateinit var sharedPrefManager: SharedPrefManager
 
     internal var appliedCoupon: String = ""
+
+    internal var paymentActivityReqData: PaymentActivityReqData? = null
+    internal var paymentMethod: PaymentMethod? = null
+    internal var cartItemCount: Int = 0
     fun getPaymentMethodsFromServer() = viewModelScope.launch(Dispatchers.IO) {
         paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
         when (val response = apiRequestManager.getPaymentMethods()) {
@@ -46,9 +50,19 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                         }
                     }
                 } else {
-                    paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods) }
+                    paymentMethodUiState.update {
+                        PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods.map {
+                            it.apply {
+                                if (it.key.equals("cod", ignoreCase = true)) {
+                                    it.isSelected = true
+                                    paymentMethod = it
+                                }
+                            }
+                        })
+                    }
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 paymentMethodUiState.update { PaymentMethodUi.ErrorUi(false, errorMsg = "something went wrong") }
             }
@@ -56,6 +70,7 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
             is ResultWrapper.GenericError -> {
                 paymentMethodUiState.update { PaymentMethodUi.ErrorUi(false, errorMsg = "something went wrong") }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 paymentMethodUiState.update {
                     PaymentMethodUi.ErrorUi(false, errorMsg = "something went wrong")
@@ -64,7 +79,15 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
-    internal fun invokePaymentToGetId(createPayment: CreatePaymentReqBodyModel) = viewModelScope.launch {
+    internal fun invokePaymentToGetId() = viewModelScope.launch {
+        val totalPayableAmount = paymentActivityReqData?.run {
+            ((itemPrice ?: 0.0) +
+                    (deliveryFee ?: 0.0) +
+                    (deliveryPartnerTip ?: 0.0)
+                    + (packagingFee ?: 0.0))
+        }
+        paymentActivityReqData?.totalAmount = totalPayableAmount
+        val createPayment = CreatePaymentReqBodyModel(totalPayableAmount, order_id = paymentActivityReqData?.orderId, paymentMethod = paymentMethod?.key!!)
         createPaymentUiState.update { CreatePaymentUi.InitialUi(true) }
         when (val response = apiRequestManager.invokePaymentToGetId(createPayment)) {
             is ResultWrapper.Success -> {
@@ -82,16 +105,19 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                     }
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 createPaymentUiState.update {
                     CreatePaymentUi.ErrorUi(false, errorMsg = "something went wrong")
                 }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 createPaymentUiState.update {
                     CreatePaymentUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList())
                 }
             }
+
             is ResultWrapper.GenericError -> {
                 createPaymentUiState.update {
                     CreatePaymentUi.ErrorUi(false, errorMsg = response.error?.error ?: "something went wrong")
@@ -109,16 +135,19 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                     PaymentVerificationUi.PaymentSuccess(false, JSONObject(response.value))
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 paymentValidationUiState.update {
                     PaymentVerificationUi.ErrorUi(false, errorMsg = "something went wrong")
                 }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 paymentValidationUiState.update {
                     PaymentVerificationUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList())
                 }
             }
+
             is ResultWrapper.GenericError -> {
                 paymentValidationUiState.update {
                     PaymentVerificationUi.ErrorUi(false, errorMsg = response.error?.error ?: "something went wrong")
@@ -146,16 +175,19 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                     }
                 }
             }
+
             is ResultWrapper.NetworkError -> {
                 validateCouponUiState.update {
                     ValidateCouponUi.ErrorUi(false, "something went wrong")
                 }
             }
+
             is ResultWrapper.UserTokenNotFound -> {
                 validateCouponUiState.update {
                     ValidateCouponUi.ErrorUi(false, errors = AppUtility.getAuthErrorArrayList())
                 }
             }
+
             is ResultWrapper.GenericError -> {
                 validateCouponUiState.update {
                     ValidateCouponUi.ErrorUi(false, response.error?.error ?: "something went wrong")
@@ -175,6 +207,18 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
 
     internal fun isCreatePaymentOnGoing(): Boolean {
         return createPaymentUiState.value.isLoading
+    }
+
+
+    internal fun updatePaymentOptions(paymentMethod: PaymentMethod) {
+        val postPaymentMethod = paymentMethodUiState.value
+        if (postPaymentMethod is PaymentMethodUi.MethodSuccess) {
+            val newPaymentList = postPaymentMethod.data.map {
+                PaymentMethod(it.key, it.name, isSelected = (it.key == paymentMethod.key))
+            }
+            this.paymentMethod = paymentMethod
+            paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, newPaymentList) }
+        }
     }
 
 

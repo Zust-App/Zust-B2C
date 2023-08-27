@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,13 +22,13 @@ import com.google.accompanist.pager.PagerState
 fun CustomHorizontalIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-    inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
+    activeColor: Color = LocalContentColor.current,
+    inactiveColor: Color = activeColor,
     indicatorWidth: Dp = 10.dp,
     indicatorHeight: Dp = indicatorWidth,
     spacing: Dp = 6.dp,
     indicatorShape: Shape = CircleShape,
-    highlightedShape: Shape = RoundedCornerShape(10.dp)
+    highlightedShape: Shape = RoundedCornerShape(10.dp),
 ) {
 
     val indicatorWidthPx = LocalDensity.current.run { indicatorWidth.roundToPx() }

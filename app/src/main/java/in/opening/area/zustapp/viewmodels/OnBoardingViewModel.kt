@@ -3,7 +3,6 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import zustbase.orderDetail.models.Address
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,7 +16,7 @@ class OnBoardingViewModel @Inject constructor(private val sharedPrefManager: Sha
         return !sharedPrefManager.getUserAuthToken().isNullOrEmpty()
     }
     fun getSavedAddressFound():Boolean{
-        sharedPrefManager.getUserAddress()?.pincode?.let {
+        sharedPrefManager.getUserAddress()?.pinCode?.let {
              return true
         }?:run {
             return false

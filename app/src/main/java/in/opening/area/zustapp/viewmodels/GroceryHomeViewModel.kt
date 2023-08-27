@@ -6,7 +6,7 @@ import `in`.opening.area.zustapp.home.models.HomeData
 import `in`.opening.area.zustapp.home.models.HomePageApiResponse
 import `in`.opening.area.zustapp.locationManager.UserLocationDetails
 import `in`.opening.area.zustapp.network.ResultWrapper
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.product.Utils
 import `in`.opening.area.zustapp.product.model.*
 import `in`.opening.area.zustapp.repository.ProductRepo
@@ -192,13 +192,13 @@ class GroceryHomeViewModel @Inject constructor(
             orderBodyRequest, priceAndTotalItemCount.second))
     }
 
-    internal fun saveLatestAddress(address: Address) = viewModelScope.launch {
-        sharedPrefManager.saveAddress(address)
+    internal fun saveLatestAddress(zustAddress: ZustAddress) = viewModelScope.launch {
+        sharedPrefManager.saveAddress(zustAddress)
     }
 
-    private fun updateAddressItem(address: Address?) {
+    private fun updateAddressItem(zustAddress: ZustAddress?) {
         userLocationFlow.update {
-            UserLocationDetails(address?.latitude, address?.longitude, address?.getDisplayString())
+            UserLocationDetails(zustAddress?.latitude, zustAddress?.longitude, zustAddress?.getDisplayString())
         }
     }
 

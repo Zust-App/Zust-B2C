@@ -13,7 +13,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,24 +35,12 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
-val modifierType1 = Modifier
-    .fillMaxWidth()
-    .background(shape = RoundedCornerShape(topStart = 12.dp,
-        topEnd = 12.dp), color = Color(0xffffffff))
-    .height(12.dp)
-
-val modifierType2 = Modifier
-    .fillMaxWidth()
-    .background(shape = RoundedCornerShape(bottomStart = 12.dp,
-        bottomEnd = 12.dp), color = Color(0xffffffff))
-    .height(12.dp)
-
 
 val modifierType4 = Modifier
     .fillMaxWidth()
     .wrapContentHeight()
     .background(color = Color(0xffffffff))
-    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp)
+    .padding(start = 16.dp, end = 16.dp, top = dp_12, bottom = dp_12)
 
 @Composable
 fun SelectedCartVerticalItemUi(
@@ -66,7 +54,7 @@ fun SelectedCartVerticalItemUi(
         detailsCallback.invoke(cartItem)
     })
     {
-        val (image, title, quantity, priceText, mrpText, incDecContainer,addItemContainer) = createRefs()
+        val (image, title, quantity, priceText, mrpText, incDecContainer, addItemContainer) = createRefs()
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(cartItem.thumbnail)
@@ -95,7 +83,7 @@ fun SelectedCartVerticalItemUi(
                     width = Dimension.fillToConstraints
                 },
             color = colorResource(id = color.app_black),
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontSize = 14.sp,
         )
         Text(text = buildString {
@@ -106,7 +94,7 @@ fun SelectedCartVerticalItemUi(
             top.linkTo(title.bottom, dp_8)
             start.linkTo(image.end, dp_10)
         }, color = colorResource(id = color.new_hint_color),
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             fontSize = 12.sp)
 
         Text(
@@ -122,7 +110,7 @@ fun SelectedCartVerticalItemUi(
                 append(ProductUtils.roundTo1DecimalPlaces(cartItem.price))
             },
             color = colorResource(id = color.app_black),
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontSize = 14.sp,
         )
 
@@ -179,7 +167,7 @@ fun SelectedCartVerticalItemUi(
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = color.app_black),
                     textAlign = TextAlign.Center,
@@ -199,7 +187,7 @@ fun SelectedCartVerticalItemUi(
                     tint = colorResource(id = color.white))
 
             }
-        }else{
+        } else {
             Button(modifier = Modifier
                 .constrainAs(addItemContainer) {
                     end.linkTo(parent.end)
@@ -209,7 +197,7 @@ fun SelectedCartVerticalItemUi(
                 .background(color = colorResource(id = color.light_green), shape = RoundedCornerShape(4.dp))
                 .height(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = color.light_green),
+                    containerColor = colorResource(id = color.light_green),
                     contentColor = colorResource(id = color.light_green)),
                 contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
                 onClick = {

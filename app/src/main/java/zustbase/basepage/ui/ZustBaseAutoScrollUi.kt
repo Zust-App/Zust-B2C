@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,9 +33,11 @@ import `in`.opening.area.zustapp.home.components.CustomIndicator
 import `in`.opening.area.zustapp.home.components.randomBlackIndicator
 import `in`.opening.area.zustapp.home.components.randomGreyIndicator
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.utility.AppDeepLinkHandler.Companion.handleOfferLink
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zustbase.basepage.models.ServicePageSingleItemData
+import zustbase.custom.pressClickEffect
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
@@ -41,19 +46,26 @@ fun ZustBaseAutoScrollUi(data: List<ServicePageSingleItemData>?) {
     if (data.isNullOrEmpty()) {
         return
     }
+    val context = LocalContext.current
     if (data.size == 1) {
+        if (data[0].imageUrl == null) {
+            return
+        }
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://dao54xqhg9jfa.cloudfront.net/oms/dd3415e0-d773-bcdf-31c9-b1694bd2d14e/original/WEB_NEW_50.jpeg")
+                .data(data[0].imageUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .height(120.dp).clip(RoundedCornerShape(dp_8))
-                .clickable {
-
+                .defaultMinSize(minHeight = 100.dp)
+                .wrapContentHeight()
+                .clip(RoundedCornerShape(dp_8))
+                .pressClickEffect {
+                    handleOfferLink(context, data[0].deepLink)
                 }
         )
         return
@@ -64,13 +76,11 @@ fun ZustBaseAutoScrollUi(data: List<ServicePageSingleItemData>?) {
             delay(4000)
             with(pagerState) {
                 val target = if (currentPage < pageCount - 1) currentPage + 1 else 0
-                animateScrollToPage(
-                    page = target,
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        easing = LinearOutSlowInEasing
-                    )
+                tween<Float>(
+                    durationMillis = 500,
+                    easing = LinearOutSlowInEasing
                 )
+                animateScrollToPage(page = target)
             }
         }
     }
@@ -78,9 +88,12 @@ fun ZustBaseAutoScrollUi(data: List<ServicePageSingleItemData>?) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 16.dp)
-        .height(125.dp)) {
+        .height(140.dp)) {
 
         HorizontalPager(count = data.size, state = pagerState) { page ->
+            if (data[page].imageUrl.isNullOrEmpty()) {
+                return@HorizontalPager
+            }
             Box(modifier = Modifier
                 .graphicsLayer {
                     val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
@@ -101,19 +114,21 @@ fun ZustBaseAutoScrollUi(data: List<ServicePageSingleItemData>?) {
                     )
 
                 }
-                .fillMaxWidth().clip(RoundedCornerShape(dp_8)))
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(dp_8)))
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://dao54xqhg9jfa.cloudfront.net/oms/dd3415e0-d773-bcdf-31c9-b1694bd2d14e/original/WEB_NEW_50.jpeg")
+                    .data(data[page].imageUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp).clip(RoundedCornerShape(dp_8))
-                    .clickable {
-
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(dp_8))
+                    .pressClickEffect {
+                        handleOfferLink(context, data[page].deepLink)
                     }
             )
         }

@@ -12,8 +12,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +50,7 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
     var doesBillingCollapse by remember {
         mutableStateOf(true)
     }
-    var rotationAngle by remember { mutableStateOf(0f) }
+    var rotationAngle by remember { mutableFloatStateOf(0f) }
 
     val rupees = stringResource(id = R.string.ruppes)
     when (value) {
@@ -65,7 +65,7 @@ fun CartBillingDetails(orderSummaryViewModel: OrderSummaryViewModel) {
                 Row {
                     Text(text = "Bill Summary",
                         color = colorResource(id = R.color.app_black),
-                        style = ZustTypography.body1)
+                        style = ZustTypography.titleMedium)
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(painter = painterResource(id = R.drawable.down_arrow),
                         contentDescription = "down_arrow", modifier = Modifier

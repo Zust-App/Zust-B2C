@@ -3,7 +3,7 @@ package `in`.opening.area.zustapp.viewmodels
 import `in`.opening.area.zustapp.address.model.SaveAddressPostModel
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.CurrentLocationUi
@@ -120,8 +120,8 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
     }
 
 
-    internal fun saveLatestAddress(address: Address) = viewModelScope.launch {
-        sharedPrefManager.saveAddress(address)
+    internal fun saveLatestAddress(zustAddress: ZustAddress) = viewModelScope.launch {
+        sharedPrefManager.saveAddress(zustAddress)
     }
 
     internal fun getLatestAddress() = sharedPrefManager.getUserAddress()

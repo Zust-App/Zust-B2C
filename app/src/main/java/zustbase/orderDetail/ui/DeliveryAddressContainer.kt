@@ -1,14 +1,14 @@
 package zustbase.orderDetail.ui
 
 import `in`.opening.area.zustapp.R
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import zustbase.orderDetail.models.OrderDetailData
 import `in`.opening.area.zustapp.ui.theme.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +23,7 @@ fun DeliveryAddressContainer(data: OrderDetailData?) {
     if (data?.address == null) {
         return
     }
-    val address: Address = data.address
+    val zustAddress: ZustAddress = data.address
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
         .background(color = Color.White, shape = RoundedCornerShape(8.dp))
@@ -36,23 +36,23 @@ fun DeliveryAddressContainer(data: OrderDetailData?) {
             top.linkTo(parent.top, dp_12)
             bottom.linkTo(addressTag.top)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
+        }, style = ZustTypography.bodyMedium, color = colorResource(id = R.color.app_black))
 
         Text(text = buildString {
-            append(address.houseNumberAndFloor)
+            append(zustAddress.houseNumberAndFloor)
             append(" ")
-            if (!address.landmark.equals("no",ignoreCase = true)) {
-                append(address.landmark)
+            if (!zustAddress.landmark.equals("no",ignoreCase = true)) {
+                append(zustAddress.landmark)
             }
             append(" ")
-            append(address.description)
+            append(zustAddress.description)
         }, modifier = Modifier.constrainAs(addressTag) {
             start.linkTo(parent.start, dp_12)
             end.linkTo(parent.end, dp_12)
             bottom.linkTo(parent.bottom, dp_8)
             top.linkTo(titleTag.bottom, dp_6)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.subtitle1,
+        }, style = ZustTypography.bodySmall,
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_hint_color))
     }

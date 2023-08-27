@@ -20,5 +20,6 @@ data class ZustService(
     val enable: Boolean,
     val imageUrl: String?,
     val type: String,
-    val title:String?
+    val title: String?,
+    val merchantId: Int?=null,
 )

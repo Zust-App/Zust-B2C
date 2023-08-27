@@ -36,13 +36,16 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import ui.colorBlack
+import ui.colorWhite
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSheetCallback {
@@ -56,7 +59,11 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
             MaterialTheme {
                 Scaffold(
                     topBar = {
-                        ComposeCustomTopAppBar(modifier = Modifier, titleText = getString(R.string.my_profile), null, null) {
+                        ComposeCustomTopAppBar(modifier = Modifier.background(color = colorWhite),
+                            titleText = getString(R.string.my_profile),
+                            null,
+                            colorBlack,
+                            null) {
                             handleAction(it)
                         }
                     },
@@ -99,18 +106,22 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
                 this.startMyOrders()
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
+
             ProfileActionCallback.MY_ADDRESS -> {
                 FirebaseAnalytics.logEvents(PROFILE_MY_ADDRESS)
                 showAddressBtmSheet()
             }
+
             ProfileActionCallback.SUGGEST_PRODUCT -> {
                 FirebaseAnalytics.logEvents(PROFILE_SUGGEST_ITEMS)
                 showSuggestProductSheet()
             }
+
             ProfileActionCallback.RATE_US_PLAY_STORE -> {
                 FirebaseAnalytics.logEvents(PROFILE_RATE_US)
                 inAppReview.showInAppReviewDialog()
             }
+
             ProfileActionCallback.SHARE_APP -> {
                 FirebaseAnalytics.logEvents(PROFILE_SHARE_APP)
                 this.navigateToReferAndEarn(profileViewModel.getReferral())
@@ -124,6 +135,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
+
             ProfileActionCallback.ABOUT_US -> {
                 if (profileViewModel.getAboutUsUrl() != null) {
                     FirebaseAnalytics.logEvents(PROFILE_ABOUT_US)
@@ -131,6 +143,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
+
             ProfileActionCallback.OPEN_SOURCE -> {
                 if (profileViewModel.getOpenSourceUrl() != null) {
                     FirebaseAnalytics.logEvents(PROFILE_OPEN_SOURCE)
@@ -138,6 +151,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
+
             ProfileActionCallback.TC -> {
                 if (profileViewModel.termAndConditionUrl() != null) {
                     FirebaseAnalytics.logEvents(PROFILE_TC_CLICK)
@@ -145,10 +159,12 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
+
             ProfileActionCallback.HELPLINE -> {
                 FirebaseAnalytics.logEvents(PROFILE_HELP_CLICK)
                 openHelplineBtmSheet()
             }
+
             ProfileActionCallback.PRIVACY_POLICY -> {
                 if (profileViewModel.privacyPolicyUrl() != null) {
                     FirebaseAnalytics.logEvents(PROFILE_PRIVACY_POLICY)
@@ -156,6 +172,7 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }
             }
+
             ProfileActionCallback.LOGOUT -> {
                 FirebaseAnalytics.logEvents(PROFILE_LOGOUT_CLICK)
                 profileViewModel.logoutUser()
@@ -190,13 +207,13 @@ class ProfileActivity : AppCompatActivity(), ProfileActionCallback, AddressBtmSh
         startAddressSearchActivity()
     }
 
-    private fun startAddNewAddressActivity(){
+    private fun startAddNewAddressActivity() {
         val newAddressIntent = Intent(this, AddNewAddressActivity::class.java)
         startActivity(newAddressIntent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
-    private fun startAddressSearchActivity(){
+    private fun startAddressSearchActivity() {
         val newAddressIntent = Intent(this, AddressSearchActivity::class.java)
         startActivity(newAddressIntent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)

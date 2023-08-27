@@ -8,7 +8,7 @@ import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.MyOrdersListViewModel
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +52,7 @@ fun RatingDialog(canShowDialog: Boolean, orderId: Int, viewModel: MyOrdersListVi
             onDismissRequest = { showDialog = false },
             title = {
                 Text("Rate your order $PREFIX_ORDER_ID_GROCERY$orderId",
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.app_black))
             },
             text = {
@@ -106,12 +106,12 @@ fun RatingDialog(canShowDialog: Boolean, orderId: Int, viewModel: MyOrdersListVi
                     }
                 }) {
                     Text("Submit",
-                        color = colorResource(id = R.color.new_material_primary), style = ZustTypography.body2)
+                        color = colorResource(id = R.color.new_material_primary), style = ZustTypography.bodyMedium)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("Cancel", color = colorResource(id = R.color.red_primary), style = ZustTypography.body2)
+                    Text("Cancel", color = colorResource(id = R.color.red_primary), style = ZustTypography.bodyMedium)
                 }
             }
         )

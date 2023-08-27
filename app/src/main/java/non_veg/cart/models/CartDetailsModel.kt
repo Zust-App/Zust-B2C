@@ -44,8 +44,7 @@ data class NonVegCartDetailsForPayment(
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
-        parcel.readString()) {
-    }
+        parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(cartId)

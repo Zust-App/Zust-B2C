@@ -7,7 +7,7 @@ import non_veg.home.viewmodel.ZustNvEntryViewModel
 //9308968024
 @Composable
 fun ZNonVegBestSellersHomeUi(viewModel: ZustNvEntryViewModel) {
-    LazyRow() {
+    LazyRow {
         items(count = 4){
             ZNonVegTopPicsItemUi()
         }

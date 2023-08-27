@@ -7,10 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -46,14 +47,14 @@ fun OtpCell(modifier: Modifier, value: Char?, isCursorVisible: Boolean = false, 
 
     Box(modifier = modifier) {
         Text(text = if (isCursorVisible) cursorSymbol else if (!obscureText.isNullOrBlank() && value?.toString().isNullOrBlank().not()) obscureText else value?.toString() ?: "",
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             modifier = Modifier.align(Alignment.Center))
     }
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PinInput(modifier: Modifier = Modifier, length: Int = 5, value: String = "",
              disableKeypad: Boolean = false, obscureText: String? = "*",onValueChanged: (String) -> Unit) {
@@ -62,8 +63,15 @@ fun PinInput(modifier: Modifier = Modifier, length: Int = 5, value: String = "",
     TextField(
         value = value,
         readOnly = disableKeypad,
-        colors = TextFieldDefaults.textFieldColors(cursorColor = Color.Black, disabledLabelColor = Color.White,
-            focusedIndicatorColor = Color.White, unfocusedIndicatorColor = Color.White, backgroundColor = Color.White),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            disabledContainerColor = Color.White,
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.White,
+            unfocusedIndicatorColor = Color.White,
+            disabledLabelColor = Color.White,
+        ),
         onValueChange = {
             if (it.length <= length) {
                 if (it.all { c -> c in '0'..'9' }) {

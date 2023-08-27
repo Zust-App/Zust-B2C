@@ -20,7 +20,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -42,18 +46,18 @@ fun AddNewAddressUi(
     val saveAddressUiData by viewModel.saveUserAddressUiState.collectAsState(initial = SaveUserAddressUi.InitialUi(false))
     val currentLocationUi by viewModel.currentLocationUiState.collectAsState(initial = CurrentLocationUi.InitialUi(false))
     val context = LocalContext.current
-    var inputPinCode by rememberSaveable() {
+    var inputPinCode by rememberSaveable {
         mutableStateOf("")
     }
-    var houseAndFloor by rememberSaveable() {
-        mutableStateOf("")
-    }
-
-    val landmarkAndArea by rememberSaveable() {
+    var houseAndFloor by rememberSaveable {
         mutableStateOf("")
     }
 
-    var alternateMobileNumber by rememberSaveable() {
+    val landmarkAndArea by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var alternateMobileNumber by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -126,7 +130,7 @@ fun AddNewAddressUi(
                 }
         )
         Text(text = "Please enter your address",
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyLarge,
             color = colorResource(id = R.color.app_black),
             modifier = modifier.constrainAs(titleText) {
                 top.linkTo(parent.top, dp_20)
@@ -141,7 +145,7 @@ fun AddNewAddressUi(
                 start.linkTo(parent.start, dp_20)
                 end.linkTo(parent.end, dp_20)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.subtitle1,
+            }, style = ZustTypography.bodySmall,
             fontWeight = FontWeight.W400,
             color = colorResource(id = R.color.app_black))
 
@@ -161,7 +165,7 @@ fun AddNewAddressUi(
                 callback.invoke(CURRENT_LOCATION)
             }, modifier = modifier
                 .clip(shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.light_black))) {
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.light_black))) {
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_my_location_24),
                     contentDescription = "",
                     modifier = modifier.size(20.dp),
@@ -170,22 +174,22 @@ fun AddNewAddressUi(
                 Text(text = "Use current location",
                     modifier = modifier.padding(vertical = 6.dp),
                     color = colorResource(id = R.color.white),
-                    style = ZustTypography.body2)
+                    style = ZustTypography.bodyMedium)
             }
             if (!customLocationModel.addressLine.isNullOrEmpty()) {
                 Spacer(modifier = modifier.height(8.dp))
                 Text(text = customLocationModel.addressLine!!,
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.app_black))
             }
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Enter PinCode*",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
             TextField(value = inputPinCode,
-                textStyle = ZustTypography.body2,
+                textStyle = ZustTypography.bodyMedium,
                 onValueChange = {
                     inputPinCode = it
                 }, modifier = modifier
@@ -196,12 +200,12 @@ fun AddNewAddressUi(
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Alternate Mobile number",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
 
             TextField(value = alternateMobileNumber,
-                textStyle = ZustTypography.body2,
+                textStyle = ZustTypography.bodyMedium,
                 onValueChange = {
                     alternateMobileNumber = it
                 }, modifier = modifier
@@ -212,13 +216,13 @@ fun AddNewAddressUi(
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Enter Complete Address*",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
 
             Spacer(modifier = modifier.height(6.dp))
 
             TextField(value = houseAndFloor,
-                textStyle = ZustTypography.body2,
+                textStyle = ZustTypography.bodyMedium,
                 onValueChange = {
                     houseAndFloor = it
                 }, modifier = modifier
@@ -251,7 +255,7 @@ fun AddNewAddressUi(
                             if (customLocationModel.lng != null) {
                                 longitude = customLocationModel.lng
                             }
-                            optionalMobileNumber = alternateMobileNumber ?: ""
+                            optionalMobileNumber = alternateMobileNumber
                         }
                         viewModel.checkAndSaveAddressWithServer()
                     } else {
@@ -261,11 +265,11 @@ fun AddNewAddressUi(
             }, modifier = modifier
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
                 Text(text = "Save Address",
                     modifier = modifier.padding(vertical = 6.dp),
                     color = colorResource(id = R.color.white),
-                    style = ZustTypography.body1)
+                    style = ZustTypography.bodyLarge)
             }
         }
         if (isLoading) {
@@ -306,21 +310,22 @@ private fun validateAddressLocally(
         AppUtility.showToast(context, "Please enter full Address")
         return false
     }
-//    if (landmark.isNullOrEmpty()) {
-//        AppUtility.showToast(context, "Please enter Area name")
-//        return false
-//    }
     return true
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun getTextFieldColors(): TextFieldColors {
-    return TextFieldDefaults.textFieldColors(
+fun getTextFieldColors(): TextFieldColors {
+    val containerColor = Color(0xffEFEFEF)
+    return TextFieldDefaults.colors(
+        focusedTextColor = colorResource(id = R.color.black_3),
+        focusedContainerColor = containerColor,
+        unfocusedContainerColor = containerColor,
+        disabledContainerColor = containerColor,
         focusedIndicatorColor = Color.Transparent,
-        disabledIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
-        backgroundColor = Color(0xffEFEFEF),
-        textColor = colorResource(id = R.color.black_3))
+        disabledIndicatorColor = Color.Transparent,
+    )
 }
 
 
@@ -333,11 +338,11 @@ fun AddNewAddressUiV2(
     val saveAddressUiData by viewModel.saveUserAddressUiState.collectAsState(initial = SaveUserAddressUi.InitialUi(false))
     val context = LocalContext.current
 
-    var inputPinCode by rememberSaveable() {
+    var inputPinCode by rememberSaveable {
         mutableStateOf(searchAddressModel.pinCode ?: "")
     }
 
-    var houseAndFloor by rememberSaveable() {
+    var houseAndFloor by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -349,7 +354,7 @@ fun AddNewAddressUiV2(
         mutableStateOf(searchAddressModel)
     }
 
-    var alternateMobileNumber by rememberSaveable() {
+    var alternateMobileNumber by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -399,7 +404,7 @@ fun AddNewAddressUiV2(
         )
 
         Text(text = "Please enter your address",
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyLarge,
             color = colorResource(id = R.color.app_black),
             modifier = modifier.constrainAs(titleText) {
                 top.linkTo(parent.top, dp_20)
@@ -415,7 +420,7 @@ fun AddNewAddressUiV2(
                 start.linkTo(parent.start, dp_20)
                 end.linkTo(parent.end, dp_20)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.subtitle1,
+            }, style = ZustTypography.bodySmall,
             fontWeight = FontWeight.W400,
             color = colorResource(id = R.color.app_black))
 
@@ -437,7 +442,7 @@ fun AddNewAddressUiV2(
                 Box(modifier = Modifier.background(color = colorResource(id = R.color.app_black),
                     shape = RoundedCornerShape(8.dp))) {
                     Text(text = searchAddressModel.addressLine!!,
-                        style = ZustTypography.body1,
+                        style = ZustTypography.bodyLarge,
                         color = colorResource(id = R.color.white),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
                 }
@@ -445,13 +450,13 @@ fun AddNewAddressUiV2(
             }
 
             Text(text = "Enter PinCode*",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
 
             Spacer(modifier = modifier.height(6.dp))
 
             TextField(value = inputPinCode,
-                textStyle = ZustTypography.body2,
+                textStyle = ZustTypography.bodyMedium,
                 onValueChange = {
                     inputPinCode = it
                 }, modifier = modifier
@@ -462,12 +467,12 @@ fun AddNewAddressUiV2(
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Alternate Mobile number",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
 
             TextField(value = alternateMobileNumber,
-                textStyle = ZustTypography.body2,
+                textStyle = ZustTypography.bodyMedium,
                 onValueChange = {
                     alternateMobileNumber = it
                 }, modifier = modifier
@@ -478,11 +483,11 @@ fun AddNewAddressUiV2(
             Spacer(modifier = modifier.height(16.dp))
 
             Text(text = "Enter Complete Address*",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
             Spacer(modifier = modifier.height(6.dp))
             TextField(value = houseAndFloor,
-                textStyle = ZustTypography.body2,
+                textStyle = ZustTypography.bodyMedium,
                 onValueChange = {
                     houseAndFloor = it
                 }, modifier = modifier
@@ -514,7 +519,7 @@ fun AddNewAddressUiV2(
                             if (customLocationModel.lng != null) {
                                 longitude = customLocationModel.lng
                             }
-                            optionalMobileNumber = alternateMobileNumber ?: ""
+                            optionalMobileNumber = alternateMobileNumber
                         }
                         viewModel.checkAndSaveAddressWithServer()
                     } else {
@@ -524,11 +529,11 @@ fun AddNewAddressUiV2(
             }, modifier = modifier
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
                 Text(text = "Save Address",
                     modifier = modifier.padding(vertical = 6.dp),
                     color = colorResource(id = R.color.white),
-                    style = ZustTypography.body1)
+                    style = ZustTypography.bodyLarge)
             }
         }
         if (isLoading) {

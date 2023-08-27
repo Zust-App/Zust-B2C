@@ -13,8 +13,7 @@ data class RapidWalletResult(
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(orderId)

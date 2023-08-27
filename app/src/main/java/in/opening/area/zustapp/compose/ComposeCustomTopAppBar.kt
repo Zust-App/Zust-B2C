@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,28 +25,30 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
+import ui.colorBlack
+import ui.colorWhite
 
 @Composable
 fun ComposeCustomTopAppBar(
-    modifier: Modifier, titleText: String,
+    modifier: Modifier,
+    titleText: String,
     subTitleText: String? = null,
+    color: Color? = colorWhite,
     @DrawableRes endImageId: Int? = null,
     callback: (ACTION) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier
-        .fillMaxWidth()
         .wrapContentHeight()
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-        .background(color = colorResource(id = (R.color.new_material_primary)))
-        .padding(vertical = 12.dp, horizontal = 20.dp)
+        .fillMaxWidth().background(color = colorWhite)
+        .padding(vertical = dp_12, horizontal = 20.dp)
     ) {
         val (titleTag, subTitleTag, endImage, backArrowImage) = createRefs()
-        Text(text = titleText, color = colorResource(id = R.color.white),
+        Text(text = titleText, color = color ?: colorWhite,
             modifier = modifier.constrainAs(titleTag) {
                 if (subTitleText.isNullOrEmpty()) {
                     top.linkTo(parent.top, dp_8)
@@ -52,14 +57,14 @@ fun ComposeCustomTopAppBar(
                     top.linkTo(parent.top)
                 }
                 start.linkTo(backArrowImage.end, dp_16)
-            }, style = ZustTypography.body1,
+            }, style = ZustTypography.titleLarge,
             maxLines = 1, overflow = TextOverflow.Ellipsis)
         if (!subTitleText.isNullOrEmpty()) {
             Text(
                 text = subTitleText,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
-                style = ZustTypography.subtitle1,
-                color = colorResource(id = R.color.white),
+                style = ZustTypography.bodySmall,
+                color = color ?: colorWhite,
                 modifier = modifier.constrainAs(subTitleTag) {
                     top.linkTo(titleTag.bottom, dp_4)
                     start.linkTo(backArrowImage.end, dp_16)
@@ -68,7 +73,7 @@ fun ComposeCustomTopAppBar(
         }
         if (endImageId != null) {
             Icon(painter = painterResource(id = endImageId),
-                tint = colorResource(id = R.color.white),
+                tint = color ?: colorWhite,
                 contentDescription = "profile", modifier = modifier
                     .constrainAs(endImage) {
                         bottom.linkTo(parent.bottom)
@@ -81,7 +86,7 @@ fun ComposeCustomTopAppBar(
         }
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
-            tint = colorResource(id = R.color.white),
+            tint = color ?: colorWhite,
             contentDescription = "profile", modifier = modifier
                 .constrainAs(backArrowImage) {
                     bottom.linkTo(parent.bottom)
@@ -100,19 +105,17 @@ fun ComposeTopAppBarProductList(
     modifier: Modifier,
     titleText: String?,
     subTitleText: String?,
+    color: Color = colorBlack,
     @DrawableRes endImageId: Int?,
     callback: (ACTION) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier
-        .fillMaxWidth()
         .wrapContentHeight()
         .fillMaxWidth()
-        .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-        .background(color = colorResource(id = R.color.new_material_primary))
-        .padding(vertical = 12.dp, horizontal = 20.dp)
+        .padding(vertical = dp_12, horizontal = 20.dp)
     ) {
         val (titleTag, subTitleTag, endImage, backArrowImage) = createRefs()
-        Text(text = "${titleText ?:""} Category", color = colorResource(id = R.color.white),
+        Text(text = titleText ?: "", color =color,
             modifier = modifier.constrainAs(titleTag) {
                 if (subTitleText.isNullOrEmpty()) {
                     top.linkTo(parent.top, dp_8)
@@ -121,14 +124,14 @@ fun ComposeTopAppBarProductList(
                     top.linkTo(parent.top)
                 }
                 start.linkTo(backArrowImage.end, dp_16)
-            }, style = ZustTypography.body1,
+            }, style = ZustTypography.titleMedium,
             maxLines = 1, overflow = TextOverflow.Ellipsis)
         if (!subTitleText.isNullOrEmpty()) {
             Text(
                 text = subTitleText,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
-                style = ZustTypography.subtitle1,
-                color = colorResource(id = R.color.white),
+                style = ZustTypography.bodySmall,
+                color = color,
                 modifier = modifier.constrainAs(subTitleTag) {
                     top.linkTo(titleTag.bottom, dp_4)
                     start.linkTo(backArrowImage.end, dp_16)
@@ -137,10 +140,11 @@ fun ComposeTopAppBarProductList(
         }
         if (endImageId != null) {
             Icon(painter = painterResource(id = endImageId),
-                tint = colorResource(id = R.color.white),
+                tint =color,
                 contentDescription = "profile", modifier = modifier
                     .constrainAs(endImage) {
-                        bottom.linkTo(parent.bottom)
+                        top.linkTo(titleTag.top)
+                        bottom.linkTo(titleTag.bottom)
                         end.linkTo(parent.end)
                     }
                     .clickable {
@@ -150,7 +154,7 @@ fun ComposeTopAppBarProductList(
         }
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
-            tint = colorResource(id = R.color.white),
+            tint = color,
             contentDescription = "profile", modifier = modifier
                 .constrainAs(backArrowImage) {
                     bottom.linkTo(parent.bottom)

@@ -11,33 +11,35 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import ui.colorBlack
+import ui.linearGradientGroceryBrush
 
 @Composable
 fun CustomGroceryTopBar(
     modifier: Modifier,
-    viewModel:GroceryHomeViewModel= androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: GroceryHomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     callback: (ACTION) -> Unit,
 ) {
     val userAddress by viewModel.userLocationFlow.collectAsStateLifecycleAware(initial = UserLocationDetails())
 
     ConstraintLayout(modifier = modifier
         .fillMaxWidth()
-        .wrapContentHeight()
+        .wrapContentHeight().shadow(elevation = dp_8, clip = true)
         .fillMaxWidth()
-        .background(color = colorResource(id = color.new_material_primary))
-        .padding(vertical = 12.dp, horizontal = 20.dp)
+        .background(brush = linearGradientGroceryBrush)
+        .padding(vertical = dp_12, horizontal = dp_20)
     ) {
         val (
             locationTag, locationSubTitle,
@@ -45,7 +47,7 @@ fun CustomGroceryTopBar(
         ) = createRefs()
 
         Icon(painter = painterResource(id = drawable.simple_location_icon),
-            contentDescription = "location", tint = colorResource(id = color.white),
+            contentDescription = "location", tint = colorBlack,
             modifier = Modifier
                 .height(17.dp)
                 .width(12.dp)
@@ -58,7 +60,7 @@ fun CustomGroceryTopBar(
                     callback.invoke(ACTION.OPEN_LOCATION)
                 })
 
-        Text(text = "Address", color = colorResource(id = color.white),
+        Text(text = "Address", color = colorBlack,
             modifier = modifier
                 .constrainAs(locationTag) {
                     top.linkTo(parent.top)
@@ -66,10 +68,10 @@ fun CustomGroceryTopBar(
                 }
                 .clickable {
                     callback.invoke(ACTION.OPEN_LOCATION)
-                }, style = ZustTypography.body1)
+                }, style = ZustTypography.titleMedium)
 
         Icon(painter = painterResource(id = drawable.down_arrow),
-            contentDescription = "location", tint = colorResource(id = color.white),
+            contentDescription = "location", tint = colorBlack,
             modifier = Modifier
                 .height(10.dp)
                 .width(12.dp)
@@ -82,33 +84,20 @@ fun CustomGroceryTopBar(
                     callback.invoke(ACTION.OPEN_LOCATION)
                 })
         Text(
-            text = userAddress.fullAddress?:"Delivery in Patna",
-            style = ZustTypography.subtitle1,
-            color = colorResource(id = color.white),
+            text = userAddress.fullAddress ?: "Delivery in Patna",
+            style = ZustTypography.bodySmall,
+            color = colorBlack,
             modifier = modifier.constrainAs(locationSubTitle) {
                 top.linkTo(locationTag.bottom, dp_4)
                 start.linkTo(parent.start)
                 end.linkTo(profileIcon.start, dp_8)
                 width = Dimension.fillToConstraints
             },
-            maxLines = 1,overflow= TextOverflow.Ellipsis
+            maxLines = 1, overflow = TextOverflow.Ellipsis
         )
 
-        if (false) {
-            Icon(painter = painterResource(id = drawable.language_icon),
-                tint = colorResource(id =color.white),
-                contentDescription = "language", modifier = modifier
-                    .constrainAs(changeLanguageIcon) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(profileIcon.start, dp_12)
-                    }
-                    .clickable {
-                        callback.invoke(ACTION.LANGUAGE_DIALOG)
-                    }
-                    .clip(shape = RoundedCornerShape(8.dp)))
-        }
         Icon(painter = painterResource(id = drawable.new_profile_icon),
-            tint = colorResource(id = color.white),
+            tint = colorBlack,
             contentDescription = "profile", modifier = modifier
                 .constrainAs(profileIcon) {
                     top.linkTo(parent.top)

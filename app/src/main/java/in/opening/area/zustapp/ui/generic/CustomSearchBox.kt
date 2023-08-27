@@ -5,6 +5,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,27 +13,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import `in`.opening.area.zustapp.R.color
 import `in`.opening.area.zustapp.R.drawable
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_12
 import kotlinx.coroutines.delay
 
 fun LazyListScope.customHomePageSearch(hintTexts: List<String>, callback: () -> Unit) {
     item(key = KEY_SEARCH) {
-        var textIndex by remember { mutableStateOf(0) }
-        var animatedAlpha by remember { mutableStateOf(1f) }
+        var textIndex by remember { mutableIntStateOf(0) }
+        var animatedAlpha by remember { mutableFloatStateOf(1f) }
         val animatedColor by animateColorAsState(
             targetValue = colorResource(id = color.new_hint_color),
             animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
@@ -42,6 +47,7 @@ fun LazyListScope.customHomePageSearch(hintTexts: List<String>, callback: () -> 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .border(width = 1.dp, shape = RoundedCornerShape(dp_12), color = colorResource(id = color.indicator_color))
                 .clip(RoundedCornerShape(12.dp))
                 .clickable {
                     textIndex = (textIndex + 1) % hintTexts.size // Cycle through the texts
@@ -54,7 +60,7 @@ fun LazyListScope.customHomePageSearch(hintTexts: List<String>, callback: () -> 
         ) {
             Text(
                 text = hintTexts[textIndex],
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 color = animatedColor.copy(alpha = animatedAlpha), // Use animatedColor and apply animatedAlpha to alpha
             )
             Spacer(modifier = Modifier.weight(1f))

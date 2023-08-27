@@ -29,6 +29,7 @@ import com.google.accompanist.pager.rememberPagerState
 import `in`.opening.area.zustapp.home.components.CustomIndicator
 import `in`.opening.area.zustapp.home.components.randomBlackIndicator
 import `in`.opening.area.zustapp.home.components.randomGreyIndicator
+import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ fun ZNonVegHomeOfferUi(data: List<NonVegHomePageBannerData>?) {
     if (data.size == 1) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://dao54xqhg9jfa.cloudfront.net/oms/dd3415e0-d773-bcdf-31c9-b1694bd2d14e/original/WEB_NEW_50.jpeg")
+                .data(data[0].imageUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = null,
@@ -67,13 +68,11 @@ fun ZNonVegHomeOfferUi(data: List<NonVegHomePageBannerData>?) {
             delay(4000)
             with(pagerState) {
                 val target = if (currentPage < pageCount - 1) currentPage + 1 else 0
-                animateScrollToPage(
-                    page = target,
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        easing = LinearOutSlowInEasing
-                    )
+                tween<Float>(
+                    durationMillis = 500,
+                    easing = LinearOutSlowInEasing
                 )
+                animateScrollToPage(page = target)
             }
         }
     }
@@ -107,7 +106,7 @@ fun ZNonVegHomeOfferUi(data: List<NonVegHomePageBannerData>?) {
                 .fillMaxWidth())
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://dao54xqhg9jfa.cloudfront.net/oms/dd3415e0-d773-bcdf-31c9-b1694bd2d14e/original/WEB_NEW_50.jpeg")
+                    .data(data = data[page].imageUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
@@ -122,7 +121,9 @@ fun ZNonVegHomeOfferUi(data: List<NonVegHomePageBannerData>?) {
             )
         }
 
-        Row(modifier = Modifier.fillMaxWidth(),
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = dp_4),
             horizontalArrangement = Arrangement.Center
         ) {
             (data.indices).forEach { index ->

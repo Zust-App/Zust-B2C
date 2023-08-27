@@ -14,22 +14,6 @@ class MyApplication : Application() {
         appContext = applicationContext
     }
 
-    override fun onLowMemory() {
-        super.onLowMemory()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-    }
-
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-    }
-
-    override fun onTerminate() {
-        super.onTerminate()
-    }
-
 
     companion object {
         lateinit var appContext: Context

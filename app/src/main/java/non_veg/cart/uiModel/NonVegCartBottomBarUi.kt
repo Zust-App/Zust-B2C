@@ -15,7 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -84,7 +84,7 @@ fun NonVegCartBottomBarUi(viewModel: NonVegCartViewModel,
                                 top.linkTo(parent.top)
 
                             }, tint = colorResource(id = R.color.new_material_primary))
-                        Text(text = stringResource(R.string.delivery_to), style = ZustTypography.body1,
+                        Text(text = stringResource(R.string.delivery_to), style = ZustTypography.bodyMedium,
                             color = colorResource(id = R.color.app_black), modifier = Modifier.constrainAs(locationTag) {
                                 top.linkTo(parent.top)
                                 start.linkTo(locationIcon.end, dp_12)
@@ -92,7 +92,7 @@ fun NonVegCartBottomBarUi(viewModel: NonVegCartViewModel,
                                 width = Dimension.fillToConstraints
                             })
                         Text(text = addressLine,
-                            style = ZustTypography.subtitle1,
+                            style = ZustTypography.bodySmall,
                             color = Color(0xCC1F1F1F),
                             modifier = Modifier.constrainAs(savedLocationText) {
                                 top.linkTo(locationTag.bottom, dp_6)
@@ -101,7 +101,7 @@ fun NonVegCartBottomBarUi(viewModel: NonVegCartViewModel,
                                 width = Dimension.fillToConstraints
                             }, maxLines = 1, overflow = TextOverflow.Ellipsis)
 
-                        Text(text = "Change", style = ZustTypography.subtitle1, fontWeight = FontWeight.W600,
+                        Text(text = "Change", style = ZustTypography.bodySmall, fontWeight = FontWeight.W600,
                             color = colorResource(id = R.color.new_material_primary),
                             modifier = Modifier
                                 .constrainAs(changeLocationTag) {
@@ -127,7 +127,7 @@ fun NonVegCartBottomBarUi(viewModel: NonVegCartViewModel,
                             }, tint = colorResource(id = R.color.new_material_primary))
 
                         Text(text = "Select Address",
-                            style = ZustTypography.body1,
+                            style = ZustTypography.bodyMedium,
                             color = colorResource(id = R.color.app_black),
                             modifier = Modifier
                                 .constrainAs(selectAddressTag) {
@@ -162,20 +162,20 @@ fun NonVegCartBottomBarUi(viewModel: NonVegCartViewModel,
                                         start.linkTo(parent.start)
                                         width = Dimension.fillToConstraints
                                     },
-                                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
+                                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
                                 Column {
-                                    Text(text = "Pay", style = ZustTypography.subtitle1,
+                                    Text(text = "Pay", style = ZustTypography.bodySmall,
                                         color = colorResource(id = R.color.white))
                                     val payableAmount = (it.deliveryFee ?: 0.0) + (it.itemValueInCart ?: 0.0) + (it.packagingFee ?: 0.0) + (it.serviceFee ?: 0.0)
                                     Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(payableAmount),
-                                        style = ZustTypography.body1,
+                                        style = ZustTypography.bodyMedium,
                                         color = colorResource(id = R.color.white))
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                                 Text(text = "Place order",
                                     textAlign = TextAlign.Center,
                                     color = colorResource(id = R.color.white),
-                                    style = ZustTypography.body1)
+                                    style = ZustTypography.bodyMedium)
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Icon(painter = painterResource(id = R.drawable.arrow_right_icon),
                                     contentDescription = "",

@@ -54,7 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, RealtimeTrackingMa
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         pickUpLatLng = LatLng(25.64386934953221, 85.10279034602493)
-        val mapFragment = supportFragmentManager.findFragmentById(`in`.opening.area.zustapp.R.id.trackingMap) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.trackingMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
         setUpObservers()
         realtimeTrackingManager.setOrderId("123", "Patna")

@@ -102,7 +102,6 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
         if (location != null) {
             val parsedLocation = getAddressFromLatLng(location.latitude, location.longitude)
             if (parsedLocation != null) {
-                locationPermissionViewModel.saveUserCurrentLocation(parsedLocation)
                 moveToMapActivity(parsedLocation)
             }
         }

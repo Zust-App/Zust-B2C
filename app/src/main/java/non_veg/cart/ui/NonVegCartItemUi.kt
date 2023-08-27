@@ -16,12 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -40,7 +41,10 @@ import `in`.opening.area.zustapp.product.removeIcon
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import non_veg.cart.models.ItemsInCart
 import non_veg.listing.ui.dummyUrl
@@ -78,28 +82,34 @@ fun NonVegCartItemUi(singleItem: ItemsInCart, modifier: Modifier, clickCallback:
         }
 
         Text(text = singleItem.productName,
-            style = ZustTypography.body1, modifier = Modifier.constrainAs(name) {
+            style = ZustTypography.bodyMedium, modifier = Modifier.constrainAs(name) {
                 top.linkTo(parent.top, dp_12)
                 start.linkTo(thumbnail.end, dp_12)
                 end.linkTo(parent.end, dp_12)
                 width = Dimension.fillToConstraints
-            }, maxLines = 1)
+            }, maxLines = 1, color = colorResource(id = R.color.app_black))
 
-        Text(text = "500g", style = ZustTypography.body2,
+        Text(text = buildString {
+            append(ProductUtils.getNumberDisplayValue(singleItem.weightPack))
+            append(singleItem.unit.lowercase())
+        }, style = ZustTypography.bodySmall,
             modifier = Modifier.constrainAs(productQuantity) {
                 top.linkTo(name.bottom, dp_8)
                 start.linkTo(thumbnail.end, dp_12)
                 end.linkTo(parent.end, dp_12)
+                bottom.linkTo(price.top, dp_8)
                 width = Dimension.fillToConstraints
-            })
+            }, color = Color(0xBF1E1E1E))
 
-        Text(text = stringResource(id = R.string.ruppes) + singleItem.price.toInt().toString(),
-            style = ZustTypography.body1,
+        Text(
+            text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(singleItem.price),
+            style = ZustTypography.bodyMedium,
             modifier = Modifier.constrainAs(price) {
                 start.linkTo(thumbnail.end, dp_12)
-                bottom.linkTo(parent.bottom, dp_12)
+                bottom.linkTo(thumbnail.bottom, dp_4)
                 width = Dimension.fillToConstraints
-            })
+            }, color = colorResource(id = R.color.app_black)
+        )
 
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier
             .border(border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.light_green)), shape = RoundedCornerShape(4.dp))
@@ -109,7 +119,7 @@ fun NonVegCartItemUi(singleItem: ItemsInCart, modifier: Modifier, clickCallback:
             .height(22.dp)
             .constrainAs(incrementDecContainer) {
                 end.linkTo(parent.end, dp_12)
-                bottom.linkTo(parent.bottom, dp_12)
+                bottom.linkTo(parent.bottom, dp_16)
             }) {
             Icon(painter = painterResource(removeIcon), contentDescription = "", modifier = Modifier
                 .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp))
@@ -125,7 +135,7 @@ fun NonVegCartItemUi(singleItem: ItemsInCart, modifier: Modifier, clickCallback:
                     .defaultMinSize(22.dp)
                     .padding(horizontal = 2.dp)
                     .align(Alignment.CenterVertically),
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 fontSize = 12.sp,
                 color = colorResource(id = R.color.app_black),
                 textAlign = TextAlign.Center,

@@ -7,12 +7,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
+import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import zustbase.orderDetail.OrderDetailActivity
 import zustbase.orderDetail.ui.INTENT_SOURCE
@@ -34,6 +36,9 @@ import non_veg.payment.ui.NonVegPaymentPageMainUi
 import non_veg.payment.ui.PaymentPageBottomBar
 import non_veg.payment.uiModels.NonVegCreateOrderUiState
 import non_veg.payment.viewModels.NonVegPaymentViewModel
+import ui.colorBlack
+import ui.colorWhite
+import ui.linearGradientNonVegBrush
 
 @AndroidEntryPoint
 class NonVegPaymentActivity : AppCompatActivity() {
@@ -50,9 +55,10 @@ class NonVegPaymentActivity : AppCompatActivity() {
         getDataFromIntent()
         setContent {
             Scaffold(topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = "Payment Options", callback = {
-                    finish()
-                })
+                ComposeCustomTopAppBar(modifier = Modifier.background(color = colorWhite), titleText = "Review & Pay", color = colorBlack ,
+                    callback = {
+                        finish()
+                    })
             }, content = { paddingValues ->
                 NonVegPaymentPageMainUi(paddingValues) {
                     updatePaymentMethod(it)

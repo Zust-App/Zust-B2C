@@ -12,10 +12,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,7 +46,7 @@ fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> U
                     .fillMaxWidth()
                     .height(45.dp)) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .width(30.dp)
                         .height(30.dp)
@@ -69,7 +69,7 @@ fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> U
                             end.linkTo(viewDetails.start, dp_4)
                             width = Dimension.fillToConstraints
                         }, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            style = ZustTypography.body2,
+                            style = ZustTypography.bodyMedium,
                             color = colorResource(id = R.color.app_black), fontSize = 14.sp)
                     }
 
@@ -100,7 +100,7 @@ fun LatestOrderUiContainer(viewModel: ViewModel, orderDetailCallback: (Int) -> U
                                 .background(color = colorResource(id = R.color.red_primary), shape = RoundedCornerShape(4.dp))
                                 .padding(horizontal = 12.dp, vertical = 4.dp),
                             color = colorResource(id = R.color.white),
-                            style = ZustTypography.body2, fontSize = 12.sp)
+                            style = ZustTypography.bodyMedium, fontSize = 12.sp)
 
                         Icon(painter = painterResource(id = R.drawable.cross_red_outline), contentDescription = stringResource(R.string.close),
                             modifier = Modifier

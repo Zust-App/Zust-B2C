@@ -13,12 +13,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
+import ui.colorBlack
+import ui.colorWhite
 import zustbase.orderDetail.ui.INTENT_SOURCE
 import zustbase.orderDetail.ui.JUST_ORDERED
 import zustbase.orderDetail.ui.ORDER_ID
@@ -43,9 +46,11 @@ class OrderDetailActivity : ComponentActivity() {
             }
             myOrdersListViewModel.intentSource = intentSource
             Scaffold(
-                backgroundColor = colorResource(id = R.color.screen_surface_color),
+                containerColor = colorResource(id = R.color.screen_surface_color),
                 topBar = {
-                    OrderDetailsTopAppBar(modifier = Modifier, orderId = orderId, intentSource = intentSource) {
+                    OrderDetailsTopAppBar(modifier = Modifier
+                        .background(color = colorWhite),
+                        orderId = orderId, color = colorBlack, intentSource = intentSource) {
                         handleAction(it)
                     }
                 }) {
@@ -65,7 +70,7 @@ class OrderDetailActivity : ComponentActivity() {
 
             LaunchedEffect(key1 = Unit, block = {
                 if (orderId != -1) {
-                    myOrdersListViewModel.getOrderDetails(orderId!!,intentSource)
+                    myOrdersListViewModel.getOrderDetails(orderId!!, intentSource)
                 }
             })
         }
@@ -83,7 +88,6 @@ class OrderDetailActivity : ComponentActivity() {
             }
         }
     }
-
 
 
     @Deprecated("Deprecated in Java")

@@ -11,7 +11,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,7 +55,7 @@ class InAppWebActivity : AppCompatActivity() {
             webUrl = intent.getStringExtra(WEB_URL)
         }
         if (intent.hasExtra(ORDER_ID)) {
-            orderId = intent.getIntExtra(ORDER_ID, -1);
+            orderId = intent.getIntExtra(ORDER_ID, -1)
         }
     }
 
@@ -158,7 +158,7 @@ class InAppWebActivity : AppCompatActivity() {
         when (invoiceOrderUiState) {
             is InvoiceOrderUiState.Success -> {
                 if (invoiceOrderUiState.invoiceHtml != null) {
-                    binding?.customWebView?.loadData(invoiceOrderUiState.invoiceHtml, "text/html", "UTF-8");
+                    binding?.customWebView?.loadData(invoiceOrderUiState.invoiceHtml, "text/html", "UTF-8")
                 } else {
                     finish()
                 }

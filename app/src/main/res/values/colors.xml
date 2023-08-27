@@ -9,12 +9,15 @@
     <color name="light_black">#242c5a</color>
     <color name="logout_bg">#fee5dc</color>
 
-<!--        <color name="new_material_primary">#442580</color>-->
-    <color name="new_material_primary">@color/blue_solid</color>
-<!--    <color name="new_material_primary">#D4CAED</color>-->
 
+    <!--        <color name="new_material_primary">#442580</color>-->
+    <color name="new_material_primary">@color/blue_solid</color>
+    <!--    <color name="new_material_primary">#D4CAED</color>-->
+    <color name="some_silver">#fdeabc</color>
+    <color name="lighting">#bfd6fd</color>
     <!-- #6750A4-->
-    <color name="screen_surface_color">#F8F4FF</color>
+
+    <color name="screen_surface_color">#F3F7FC</color>
     <color name="new_hint_color">#6C6C6C</color>
     <color name="indicator_color">#D9D9D9</color>
     <color name="yellow">#E9F0D5</color>
@@ -541,4 +544,8 @@
     <color name="yellow_none">#fd9800</color>
     <color name="yellow_refund">#ffe08f</color>
     <color name="yellow_stroke">#ffecbd</color>
+
+    <color name="nv_landing_header">#AB444A</color>
+    <color name="grocery_header">#FFF0F0D8</color>
+    <color name="border_dark">#33000000</color>
 </resources>

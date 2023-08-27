@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,13 +24,13 @@ private fun CustomTextField(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     placeholderText: String = "Placeholder",
-    fontSize: TextUnit = MaterialTheme.typography.body2.fontSize
+    fontSize: TextUnit = MaterialTheme.typography.bodyMedium.fontSize
 ) {
     var text by rememberSaveable { mutableStateOf("") }
 
     BasicTextField(modifier = modifier
         .background(
-            MaterialTheme.colors.surface,
+            MaterialTheme.colorScheme.surface,
             MaterialTheme.shapes.small,
         )
         .fillMaxWidth(),
@@ -39,9 +39,9 @@ private fun CustomTextField(
             text = it
         },
         singleLine = true,
-        cursorBrush = SolidColor(MaterialTheme.colors.primary),
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         textStyle = LocalTextStyle.current.copy(
-            color = MaterialTheme.colors.onSurface,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = fontSize
         ),
         decorationBox = { innerTextField ->
@@ -54,7 +54,7 @@ private fun CustomTextField(
                     if (text.isEmpty()) Text(
                         placeholderText,
                         style = LocalTextStyle.current.copy(
-                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f),
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
                             fontSize = fontSize
                         )
                     )

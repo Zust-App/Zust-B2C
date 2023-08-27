@@ -14,10 +14,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,13 +51,13 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
 
         Text(text = refer.title ?: ("Save upto " + stringResource(id = R.string.ruppes) + "100"),
             fontSize = 20.sp,
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black))
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = refer.description!!,
-            fontSize = 16.sp, style = ZustTypography.body2,
+            fontSize = 16.sp, style = ZustTypography.bodyMedium,
             color = Color(0x991E1E1E))
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -70,7 +70,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
             }
             .fillMaxWidth()
             .padding(12.dp)) {
-            Text(text = refer.code, style = ZustTypography.body2,
+            Text(text = refer.code, style = ZustTypography.bodyMedium,
                 color = colorResource(id = R.color.app_black))
             Spacer(Modifier.weight(1f))
 
@@ -79,7 +79,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
                     FirebaseAnalytics.logEvents(REFERRAL_CODE_COPY)
                     AppUtility.copyToClipboard(context, refer.code, "referral code")
             })
-            Text(text = stringResource(R.string.copy_code), style = ZustTypography.body2,
+            Text(text = stringResource(R.string.copy_code), style = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .clickable {
@@ -94,12 +94,12 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
         }, modifier = Modifier
             .fillMaxWidth()
             .background(shape = RoundedCornerShape(8.dp), color = colorResource(id = R.color.new_material_primary)), content = {
-            Row() {
+            Row {
                 Icon(painter = painterResource(id = R.drawable.share_icon),
                     contentDescription = "share", tint = colorResource(id = R.color.white))
                 Spacer(modifier = Modifier.width(dp_8))
-                Text(text = "Share", style = ZustTypography.body1, color = colorResource(id = R.color.white))
+                Text(text = "Share", style = ZustTypography.bodyMedium, color = colorResource(id = R.color.white))
             }
-        }, colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary)))
+        }, colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary)))
     }
 }

@@ -16,8 +16,8 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -33,10 +33,6 @@ import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
 import zustbase.orderDetail.ui.JUST_ORDERED
 import zustbase.orderDetail.ui.ORDER_ID
 import zustbase.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
-
-val maxHeightWidthModifier = Modifier
-    .fillMaxWidth()
-    .fillMaxHeight()
 
 @AndroidEntryPoint
 class OrderConfirmationIntermediateActivity : AppCompatActivity() {
@@ -68,7 +64,7 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
                 val (successAnimation) = createRefs()
                 val (thanksMessage) = createRefs()
                 val (orderConfirmedMessage) = createRefs()
-                Text(text = stringResource(R.string.order_confirmation_message, completeOrderId, 2),
+                Text(text = stringResource(R.string.order_confirmation_message, completeOrderId),
                     modifier = Modifier.constrainAs(orderConfirmedMessage) {
                         bottom.linkTo(successAnimation.top, dp_16)
                         start.linkTo(parent.start, dp_20)
@@ -122,4 +118,9 @@ class OrderConfirmationIntermediateActivity : AppCompatActivity() {
         }
     }
 }
+
+val maxHeightWidthModifier = Modifier
+    .fillMaxWidth()
+    .fillMaxHeight()
+
 

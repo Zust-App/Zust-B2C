@@ -16,10 +16,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +38,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import `in`.opening.area.zustapp.home.ACTION
@@ -48,7 +47,7 @@ import zustbase.orderDetail.ui.ORDER_ID
 import zustbase.orderDetail.ui.PREFIX_ORDER_ID_NON_VEG
 
 @Composable
-fun UserGroceryBookingList(myOrderListViewModel: MyOrdersListViewModel= viewModel(), paddingValues: PaddingValues) {
+fun UserGroceryBookingList(myOrderListViewModel: MyOrdersListViewModel = viewModel(), paddingValues: PaddingValues) {
     val userBookingItems: LazyPagingItems<OrderHistoryItem> = myOrderListViewModel.userGroceryBookingFlow.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(
         isRefreshing = userBookingItems.loadState.refresh is LoadState.Loading,
@@ -68,9 +67,9 @@ fun UserGroceryBookingList(myOrderListViewModel: MyOrdersListViewModel= viewMode
             item {
                 Spacer(modifier = Modifier.height(12.dp))
             }
-            items(userBookingItems) { item ->
-                if (item != null) {
-                    UserBookingItem(item, myOrderListViewModel,ACTION.GROCERY_TAB)
+            items(count = userBookingItems.itemCount) { index ->
+                userBookingItems[index]?.let {
+                    UserBookingItem(it, myOrderListViewModel, ACTION.GROCERY_TAB)
                 }
             }
             userBookingItems.apply {
@@ -113,7 +112,7 @@ fun UserGroceryBookingList(myOrderListViewModel: MyOrdersListViewModel= viewMode
 
 
 @Composable
-fun UserNonVegBookingList(ordersListViewModel:  MyOrdersListViewModel= viewModel(), paddingValues: PaddingValues) {
+fun UserNonVegBookingList(ordersListViewModel: MyOrdersListViewModel = viewModel(), paddingValues: PaddingValues) {
     val userBookingItems: LazyPagingItems<OrderHistoryItem> = ordersListViewModel.userNonVegBookingFlow.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(
         isRefreshing = userBookingItems.loadState.refresh is LoadState.Loading,
@@ -133,9 +132,9 @@ fun UserNonVegBookingList(ordersListViewModel:  MyOrdersListViewModel= viewModel
             item {
                 Spacer(modifier = Modifier.height(12.dp))
             }
-            items(userBookingItems) { item ->
-                if (item != null) {
-                    UserBookingItem(item, ordersListViewModel,ACTION.NON_VEG_TAB)
+            items(count = userBookingItems.itemCount) { index ->
+                userBookingItems[index]?.let {
+                    UserBookingItem(it, ordersListViewModel, ACTION.NON_VEG_TAB)
                 }
             }
             userBookingItems.apply {
@@ -185,7 +184,7 @@ val orderListItemModifier = Modifier
 val filledColor = Color(0xffFF8585)
 
 @Composable
-private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: MyOrdersListViewModel,action: ACTION) {
+private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: MyOrdersListViewModel, action: ACTION) {
     if (userBooking == null) {
         return
     }
@@ -206,7 +205,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
     ConstraintLayout(modifier = orderListItemModifier.clickable {
         val intent = Intent(context, OrderDetailActivity::class.java)
         intent.putExtra(ORDER_ID, userBooking.orderId)
-        if (action==ACTION.NON_VEG_TAB) {
+        if (action == ACTION.NON_VEG_TAB) {
             intent.putExtra(INTENT_SOURCE, INTENT_SOURCE_NON_VEG)
         }
         context.startActivity(intent)
@@ -223,7 +222,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
         Text(text = buildString {
             append(PREFIX_ORDER_ID_NON_VEG)
             append(userBooking.orderId.toString())
-        }, style = ZustTypography.body2,
+        }, style = ZustTypography.bodyMedium,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.app_black),
             modifier = Modifier.constrainAs(orderId) {
@@ -239,7 +238,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
                 end.linkTo(parent.end, dp_16)
                 top.linkTo(bagIcon.top)
                 bottom.linkTo(bagIcon.bottom)
-            }, style = ZustTypography.body2,
+            }, style = ZustTypography.bodyMedium,
             color = colorAndStatusPair.first,
             fontWeight = FontWeight.W600)
 
@@ -249,7 +248,7 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
         }, modifier = Modifier.constrainAs(orderItemCount) {
             top.linkTo(bagIcon.bottom, dp_4)
             start.linkTo(orderId.start)
-        }, color = Color(0xBF1E1E1E), fontWeight = FontWeight.W500, style = ZustTypography.subtitle1)
+        }, color = Color(0xBF1E1E1E), fontWeight = FontWeight.W500, style = ZustTypography.bodySmall)
         val (divider) = createRefs()
 
         Divider(modifier = Modifier
@@ -266,22 +265,22 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
             modifier = Modifier.constrainAs(orderAmount) {
                 end.linkTo(parent.end, dp_16)
                 top.linkTo(divider.bottom, dp_12)
-            }, color = colorResource(id = R.color.app_black), style = ZustTypography.body2, fontWeight = FontWeight.W600)
+            }, color = colorResource(id = R.color.app_black), style = ZustTypography.bodyMedium, fontWeight = FontWeight.W600)
 
         Text(text = userBooking.orderedDateAndTime ?: "", modifier = Modifier.constrainAs(orderTime) {
             top.linkTo(divider.bottom, dp_12)
             start.linkTo(parent.start, dp_16)
-        }, color = Color(0xBF1E1E1E), style = ZustTypography.subtitle1, fontWeight = FontWeight.W500)
+        }, color = Color(0xBF1E1E1E), style = ZustTypography.bodySmall, fontWeight = FontWeight.W500)
 
         val (detailsBtn) = createRefs()
-        Text(style = ZustTypography.body2,
+        Text(style = ZustTypography.bodyMedium,
             textAlign = TextAlign.Center, text = "Details",
             color = colorResource(id = R.color.white), modifier = Modifier
                 .width(80.dp)
                 .clickable {
                     val intent = Intent(context, OrderDetailActivity::class.java)
                     intent.putExtra(ORDER_ID, userBooking.orderId)
-                    if (action==ACTION.NON_VEG_TAB) {
+                    if (action == ACTION.NON_VEG_TAB) {
                         intent.putExtra(INTENT_SOURCE, INTENT_SOURCE_NON_VEG)
                     }
                     context.startActivity(intent)
@@ -312,12 +311,12 @@ private fun UserBookingItem(userBooking: OrderHistoryItem? = null, viewModel: My
                 }
             }, verticalAlignment = Alignment.CenterVertically) {
             if (userBooking.rating == 0) {
-                Text(text = "Rate order", style = ZustTypography.body2,
+                Text(text = "Rate order", style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.new_material_primary), modifier = Modifier.clickable {
                         canShowRatingDialog = true
                     })
             } else {
-                Text(text = "Rating", style = ZustTypography.body2,
+                Text(text = "Rating", style = ZustTypography.bodyMedium,
                     color = colorResource(id = R.color.black_2))
                 Spacer(modifier = Modifier.width(12.dp))
                 repeat(5) {

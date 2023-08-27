@@ -10,7 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -80,7 +80,7 @@ fun OnBoardingContainer(callback: (LoginClick) -> Unit) {
             bottom.linkTo(parent.bottom, dp_16)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-        }, style = ZustTypography.body1, color = colorResource(R.color.white))
+        }, style = ZustTypography.bodyMedium, color = colorResource(R.color.white))
 
         LaunchedEffect(key1 = Unit, block = {
             animateImageScale(scale)
@@ -109,7 +109,7 @@ private suspend fun animateImageScale(scale: Animatable<Float, AnimationVector1D
 
 @ExperimentalAnimationApi
 fun addAnimation(duration: Int = 800): ContentTransform {
-    return slideInVertically(animationSpec = tween(durationMillis = duration)) { height -> height } + fadeIn(animationSpec = tween(durationMillis = duration)) with slideOutVertically(animationSpec = tween(durationMillis = duration)) { height -> -height } + fadeOut(animationSpec = tween(durationMillis = duration))
+    return (slideInVertically(animationSpec = tween(durationMillis = duration)) { height -> height } + fadeIn(animationSpec = tween(durationMillis = duration))).togetherWith(slideOutVertically(animationSpec = tween(durationMillis = duration)) { height -> -height } + fadeOut(animationSpec = tween(durationMillis = duration)))
 }
 
 

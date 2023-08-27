@@ -10,9 +10,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -40,7 +40,7 @@ fun OrderStatusTitleContainer() {
     ) {
         val (title) = createRefs()
         Text(text = "Order status",
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top, dp_16)
@@ -104,7 +104,7 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
         }
 
         Text(text = orderStatus.orderStatusType?.firstLetterCapitalOtherSmall() ?: "",
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             color = if (!orderStatus.createdDateTime.isNullOrEmpty()) {
                 colorResource(id = R.color.app_black)
             } else {
@@ -121,7 +121,7 @@ fun OrderStatusSingleItem(orderStatus: OrderStatus, index: Int, size: Int) {
         } else {
             ""
         } ?: "",
-            style = ZustTypography.subtitle1,
+            style = ZustTypography.bodySmall,
             color = colorResource(id = R.color.new_hint_color),
             modifier = Modifier.constrainAs(orderTime) {
                 start.linkTo(orderStatusTag.end, dp_8)
@@ -203,5 +203,5 @@ fun OutlineCircle(modifier: Modifier) {
 }
 
 fun String.firstLetterCapitalOtherSmall(): String {
-    return this.lowercase().capitalize(Locale.ROOT)
+    return this.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 }

@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -31,7 +31,7 @@ fun NonVegCancellationPolicyUi(nonVegCartViewModel: NonVegCartViewModel = viewMo
             start.linkTo(parent.start, dp_16)
             end.linkTo(parent.end, dp_16)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.h1)
+        }, style = ZustTypography.titleLarge)
 
         Text(text = nonVegCartViewModel.getCancellationTerms(), modifier = Modifier.constrainAs(valueText) {
             top.linkTo(headers.bottom, dp_12)
@@ -39,7 +39,7 @@ fun NonVegCancellationPolicyUi(nonVegCartViewModel: NonVegCartViewModel = viewMo
             end.linkTo(parent.end, dp_16)
             bottom.linkTo(parent.bottom, dp_12)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.body2, color = colorResource(id = R.color.light_black))
+        }, style = ZustTypography.bodyMedium, color = colorResource(id = R.color.language_default))
 
     }
 

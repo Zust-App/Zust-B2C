@@ -7,7 +7,7 @@ import `in`.opening.area.zustapp.utility.ProductUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,7 +56,7 @@ fun OrderedItemSingleUnit(item: Item) {
                 end.linkTo(productNumItems.start, dp_12)
                 top.linkTo(parent.top, dp_12)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.body1,
+            }, style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp)
 
@@ -70,7 +70,7 @@ fun OrderedItemSingleUnit(item: Item) {
             start.linkTo(productImage.end, dp_12)
             end.linkTo(parent.end, dp_12)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.body1,
+        }, style = ZustTypography.bodyMedium,
             fontSize = 12.sp,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.new_hint_color))
@@ -84,7 +84,7 @@ fun OrderedItemSingleUnit(item: Item) {
             end.linkTo(parent.end, dp_12)
             bottom.linkTo(parent.bottom, dp_12)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.body1,
+        }, style = ZustTypography.bodyMedium,
             fontSize = 14.sp)
 
         Text(text = buildString {
@@ -93,7 +93,7 @@ fun OrderedItemSingleUnit(item: Item) {
         }, modifier = Modifier.constrainAs(productNumItems) {
             end.linkTo(parent.end, dp_12)
             top.linkTo(parent.top, dp_12)
-        }, style = ZustTypography.body2,
+        }, style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.new_hint_color),
             fontSize = 12.sp)
     }

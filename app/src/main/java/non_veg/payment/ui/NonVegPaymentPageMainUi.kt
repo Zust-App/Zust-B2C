@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -30,14 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.home.composeContainer.ShimmerGridItem
 import `in`.opening.area.zustapp.payment.models.PaymentMethod
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
-import `in`.opening.area.zustapp.ui.theme.dp_24
-import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import non_veg.cart.ui.NonVegBillingContainerDataHolder
@@ -47,7 +44,7 @@ import non_veg.payment.viewModels.NonVegPaymentViewModel
 fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel: NonVegPaymentViewModel = viewModel(), paymentMethodCallback: (PaymentMethod) -> Unit) {
     val paymentUiState = nonVegPaymentViewModel.paymentMethodUiState.collectAsState()
     if (paymentUiState.value.isLoading) {
-        ShowNonVegUiShimmer()
+        ShowPaymentPageUiShimmer()
     }
     when (paymentUiState.value) {
         is PaymentMethodUi.MethodSuccess -> {
@@ -57,7 +54,7 @@ fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel
                 .fillMaxHeight()
                 .background(color = colorResource(id = R.color.screen_surface_color))) {
                 item {
-                    DeliveryTimingOfferInfoUi()
+                    DeliveryTimingOfferInfoUi(nonVegPaymentViewModel.nonVegCartDetailsForPayment?.expectedDeliveryTime)
                 }
                 item {
                     ViewSpacer20()
@@ -72,7 +69,7 @@ fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel
                             text = stringResource(R.string.payment_method),
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            style = ZustTypography.h1)
+                            style = ZustTypography.titleMedium, color = colorResource(id = R.color.app_black))
                         ViewSpacer8()
                         (paymentUiState.value as PaymentMethodUi.MethodSuccess).data.forEach {
                             NonVegPaymentMethodUi(it.key, it.name, it.isSelected ?: false) {
@@ -112,7 +109,7 @@ fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel
 }
 
 @Composable
-private fun ShowNonVegUiShimmer() {
+ fun ShowPaymentPageUiShimmer() {
     val shimmerColors = listOf(
         Color(0xffDBDBDB).copy(alpha = 0.8f),
         Color(0xffDBDBDB).copy(alpha = 0.5f),

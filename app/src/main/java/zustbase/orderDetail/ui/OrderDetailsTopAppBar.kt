@@ -11,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import ui.colorWhite
 import zustbase.orderDetail.OrderDetailActivity
 
 
@@ -30,46 +32,45 @@ import zustbase.orderDetail.OrderDetailActivity
 fun OrderDetailsTopAppBar(
     modifier: Modifier,
     orderId: Int?,
+    color: Color,
     intentSource: String?,
     callback: (ACTION) -> Unit,
 ) {
-    ConstraintLayout(modifier = modifier
-        .fillMaxWidth()
-        .wrapContentHeight()
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-        .background(color = colorResource(id = R.color.new_material_primary))
-        .padding(vertical = 16.dp, horizontal = 16.dp)
+    ConstraintLayout(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(vertical = 16.dp, horizontal = 16.dp),
     ) {
         val (locationTag, navIcon, subTitle) = createRefs()
 
-        Text(text = "Order status", color = colorResource(id = R.color.white),
+        Text(text = "Order Details", color = color,
             modifier = modifier.constrainAs(locationTag) {
                 top.linkTo(parent.top)
                 start.linkTo(navIcon.end, dp_12)
                 end.linkTo(parent.end)
                 bottom.linkTo(subTitle.top)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.body1,
+            }, style = ZustTypography.titleMedium,
             fontSize = 16.sp)
 
-        Text(text = "Order number -" + if (intentSource == INTENT_SOURCE_NON_VEG) {
+        Text(text = "Order number - " + if (intentSource == INTENT_SOURCE_NON_VEG) {
             PREFIX_ORDER_ID_NON_VEG + orderId
         } else {
             PREFIX_ORDER_ID_GROCERY + orderId
         },
-            color = colorResource(id = R.color.white),
+            color = color,
             modifier = modifier.constrainAs(subTitle) {
                 top.linkTo(locationTag.bottom, dp_4)
                 bottom.linkTo(parent.bottom)
                 start.linkTo(navIcon.end, dp_12)
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.subtitle1,
+            }, style = ZustTypography.bodySmall,
             fontWeight = FontWeight.W500)
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
-            tint = colorResource(id = R.color.white),
+            tint = color,
             contentDescription = "back arrow", modifier = modifier
                 .constrainAs(navIcon) {
                     top.linkTo(parent.top)

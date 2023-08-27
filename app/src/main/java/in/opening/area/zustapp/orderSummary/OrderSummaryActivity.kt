@@ -30,13 +30,16 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ui.colorBlack
+import ui.colorWhite
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint
@@ -53,13 +56,16 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
                     }
                 },
                 topBar = {
-                    ComposeCustomTopAppBar(Modifier, getString(R.string.my_cart), null, null) {
+                    ComposeCustomTopAppBar(Modifier.background(color = colorWhite),
+                        "Cart",
+                        null,
+                        color = colorBlack, endImageId = null) {
                         if (it == ACTION.NAV_BACK) {
                             finish()
                         }
                     }
                 },
-                backgroundColor = colorResource(id = R.color.screen_surface_color),
+                containerColor = colorResource(id = R.color.screen_surface_color),
                 content = { paddingValue ->
                     CartMainContainer(orderSummaryViewModel, this, paddingValue)
                 },
@@ -103,9 +109,11 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
             is LockOrderCartUi.SuccessLocked -> {
                 startPaymentActivity(response.data)
             }
+
             is LockOrderCartUi.InitialUi -> {
 
             }
+
             is LockOrderCartUi.ErrorUi -> {
                 if (!response.errorMessage.isNullOrEmpty()) {
                     AppUtility.showToast(this, response.errorMessage)
@@ -158,7 +166,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
         bundle.putInt("order_id", data.orderId)
         bundle.putDouble("delivery_fee", data.deliveryFee)
         bundle.putDouble("item_total", data.itemTotalPrice)
-        FirebaseAnalytics.logEvents(FirebaseAnalytics.OPEN_PAYMENT_PAGE,bundle)
+        FirebaseAnalytics.logEvents(FirebaseAnalytics.OPEN_PAYMENT_PAGE, bundle)
         val paymentIntent = Intent(this, PaymentActivity::class.java)
         paymentIntent.putExtra(PAYMENT_MODEL_KEY, reqData)
         paymentIntent.putExtra(TOTAL_ITEMS_IN_CART, itemCount)
@@ -181,7 +189,7 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
 
     private fun checkAddressThenUpdateCart() {
         orderSummaryViewModel.getLatestAddress()
-        if (orderSummaryViewModel.addressItemCache == null) {
+        if (orderSummaryViewModel.zustAddressItemCache == null) {
             openAddressSelectionBtmSheet()
         } else {
             updateUserCartWithServer()

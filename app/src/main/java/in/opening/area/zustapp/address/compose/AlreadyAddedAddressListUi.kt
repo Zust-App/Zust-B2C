@@ -1,28 +1,26 @@
 package `in`.opening.area.zustapp.address.compose
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.address.model.AddressItem
+import `in`.opening.area.zustapp.locationV2.viewModel.LocationPermissionViewModel
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.uiModels.UserSavedAddressUi
-import `in`.opening.area.zustapp.viewmodels.AddressViewModel
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.locationV2.viewModel.LocationPermissionViewModel
-import `in`.opening.area.zustapp.product.model.Address
 
 const val KEY_NEW_ADDRESS = "new"
 const val KEY_SAVED_ADDRESS = "saved"
@@ -53,7 +51,7 @@ fun AlreadyAddedAddressListUi(
                         top.linkTo(parent.top, dp_16)
                         end.linkTo(parent.end, dp_20)
                         width = Dimension.fillToConstraints
-                    }, style = ZustTypography.body1, color = colorResource(id = R.color.app_black))
+                    }, style = ZustTypography.bodyMedium, color = colorResource(id = R.color.app_black))
                     LazyColumn(modifier = modifier
                         .fillMaxWidth()
                         .constrainAs(list) {

@@ -10,6 +10,37 @@
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
     </style>
 
+    <style name="Theme.ZustAppGrocery" parent="Theme.Material3.Light.NoActionBar">
+        <item name="backgroundColor">@color/grocery_header</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/grocery_header</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="statusBarBackground">@color/grocery_header</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
+    </style>
+
+    <style name="Theme.ZustAppWhite" parent="Theme.Material3.Light.NoActionBar">
+        <item name="backgroundColor">@color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="statusBarBackground">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
+    </style>
+
+    <style name="Theme.ZustAppNonVeg" parent="Theme.Material3.Light.NoActionBar">
+        <item name="backgroundColor">@color/nv_landing_header</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/nv_landing_header</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="statusBarBackground">@color/nv_landing_header</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
+    </style>
+
     <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:windowIsTranslucent">true</item>

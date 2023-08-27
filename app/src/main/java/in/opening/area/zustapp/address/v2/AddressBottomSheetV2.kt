@@ -32,15 +32,15 @@ class AddressBottomSheetV2 : BottomSheetDialogFragment(), AddressFragmentCommuni
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is AddressBtmSheetCallback) {
-            listener = context
+        if (parentFragment is GroceryHomeFragment) {
+            listener = parentFragment as GroceryHomeFragment
+        }
+        if (parentFragment is NonVegHomeFragment) {
+            listener = parentFragment as NonVegHomeFragment
         }
         if (listener == null) {
-            if (parentFragment is GroceryHomeFragment) {
-                listener = parentFragment as GroceryHomeFragment
-            }
-            if (parentFragment is NonVegHomeFragment){
-                listener = parentFragment as NonVegHomeFragment
+            if (context is AddressBtmSheetCallback) {
+                listener = context
             }
         }
     }

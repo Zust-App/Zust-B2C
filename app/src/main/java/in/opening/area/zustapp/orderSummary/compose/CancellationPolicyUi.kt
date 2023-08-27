@@ -8,7 +8,7 @@ import `in`.opening.area.zustapp.viewmodels.OrderSummaryViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,6 +16,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_12
+import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_8
 
 @Composable
 fun CancellationPolicyUi(orderSummaryViewModel: OrderSummaryViewModel) {
@@ -23,21 +29,34 @@ fun CancellationPolicyUi(orderSummaryViewModel: OrderSummaryViewModel) {
 
     when (cancellationPolicyData) {
         is CancellationPolicyUiModel.CancellationPolicyUiSuccess -> {
-            Column(modifier = Modifier
-                .padding(vertical = 10.dp)
-                .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(12.dp))
-                .padding(horizontal = 16.dp, vertical = 16.dp)) {
-                Text(
-                    fontWeight = FontWeight.W500,
-                    fontFamily = okraFontFamily,
-                    color = colorResource(id = R.color.new_hint_color),
-                    fontSize = 12.sp,
-                    text = "Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided")
+            ConstraintLayout(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(dp_8))) {
+                val (headers, valueText) = createRefs()
+
+                Text(text = "Cancellation Policy", modifier = Modifier.constrainAs(headers) {
+                    top.linkTo(parent.top, dp_12)
+                    start.linkTo(parent.start, dp_16)
+                    end.linkTo(parent.end, dp_16)
+                    width = Dimension.fillToConstraints
+                }, style = ZustTypography.titleMedium)
+
+                Text(text = "Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided", modifier = Modifier.constrainAs(valueText) {
+                    top.linkTo(headers.bottom, dp_12)
+                    start.linkTo(parent.start, dp_16)
+                    end.linkTo(parent.end, dp_16)
+                    bottom.linkTo(parent.bottom, dp_12)
+                    width = Dimension.fillToConstraints
+                }, style = ZustTypography.bodyMedium, color = colorResource(id = R.color.language_default))
+
             }
         }
+
         is CancellationPolicyUiModel.ErrorUi -> {
 
         }
+
         is CancellationPolicyUiModel.InitialUi -> {
 
         }

@@ -17,24 +17,32 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import `in`.opening.area.zustapp.const.ENTER_4_DIGIT_OTP
+import `in`.opening.area.zustapp.const.ENTER_MOBILE_NUM
+import `in`.opening.area.zustapp.const.MOBILE_NUM_THRESHOLD
+import `in`.opening.area.zustapp.extensions.getNumberKeyboardOptions
 import kotlinx.coroutines.flow.update
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -> Unit) {
     val context: Context = LocalContext.current
@@ -57,6 +65,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
         is GetOtpLoginUi.InitialUi -> {
             canShowProgressbar = resendOtpData.isLoading
         }
+
         is GetOtpLoginUi.OtpGetSuccess -> {
             if (resendOtpData.data.isNotificationSent == true) {
                 FirebaseAnalytics.logEvents(FirebaseAnalytics.RESEND_OTP_SUCCESS)
@@ -68,6 +77,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                 AppUtility.showToast(context, "Something went wrong")
             }
         }
+
         is GetOtpLoginUi.ErrorUi -> {
             FirebaseAnalytics.logEvents(FirebaseAnalytics.RESEND_OTP_ERROR)
             if (!resendOtpData.errors.isNullOrEmpty()) {
@@ -106,8 +116,10 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
             } else {
                 FirebaseAnalytics.logEvents(FirebaseAnalytics.OTP_VERIFICATION_ERROR)
                 AppUtility.showToast(context, "Something went wrong")
+                loginViewModel.verifyOtpUiState.update { VerifyOtpUi.InitialUi(false) }
             }
         }
+
         is VerifyOtpUi.ErrorUi -> {
             FirebaseAnalytics.logEvents(FirebaseAnalytics.OTP_VERIFICATION_ERROR)
             if (!response.errorMsg.isNullOrEmpty()) {
@@ -117,6 +129,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
             }
             loginViewModel.verifyOtpUiState.update { VerifyOtpUi.InitialUi(false) }
         }
+
         is VerifyOtpUi.InitialUi -> {
             canShowProgressbar = response.isLoading
         }
@@ -138,21 +151,37 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
 
         Text(text = buildString {
             append("Enter OTP")
-        }, color = colorResource(id = R.color.app_black), style = ZustTypography.body1, modifier = Modifier.fillMaxWidth())
+        }, color = colorResource(id = R.color.app_black), style = ZustTypography.bodyMedium, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = buildString {
-            append("Please enter the 4-digit OTP sent to you at ${obscureMobileNumber(user.mobileNum)}")
-            //append(user.mobileNum)
-        }, style = ZustTypography.subtitle1, fontSize = 14.sp, color = Color(0xff1E1E1E), modifier = Modifier.fillMaxWidth())
+            append("Please enter the 4-digit OTP sent to you at ${user.mobileNum}")
+        }, style = ZustTypography.bodySmall, fontSize = 14.sp, color = Color(0xff1E1E1E), modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        PinInput(modifier = Modifier.background(Color(0xffEFEFEF),
-            shape = RoundedCornerShape(4.dp)), value = user.otp,
-            length = 4, disableKeypad = false, obscureText = null) {
-            loginViewModel.setUserOtp(it)
-        }
+//        PinInput(modifier = Modifier.background(Color(0xffEFEFEF),
+//            shape = RoundedCornerShape(4.dp)), value = user.otp,
+//            length = 4, disableKeypad = false, obscureText = null) {
+//            loginViewModel.setUserOtp(it)
+//        }
+
+        TextField(value = user.otp, onValueChange = {
+            if (it.length <= 4) {
+                loginViewModel.setUserOtp(it)
+            }
+        }, keyboardOptions = getNumberKeyboardOptions(),
+            placeholder = { Text(ENTER_4_DIGIT_OTP, style = ZustTypography.bodySmall) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 0.dp)
+                .align(Alignment.CenterHorizontally)
+                .background(color = Color(0xffEFEFEF),
+                    shape = RoundedCornerShape(12.dp))
+                .padding(0.dp), singleLine = true,
+            colors = setTextFiledColors(),
+            textStyle = ZustTypography.bodyMedium)
+
 
         Spacer(modifier = Modifier.height(8.dp))
         ConstraintLayout(modifier = Modifier
@@ -172,7 +201,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     top.linkTo(infoIcon.top)
                     start.linkTo(infoIcon.end, dp_4)
                     bottom.linkTo(infoIcon.bottom)
-                }, fontWeight = FontWeight.W500, color = colorResource(id = R.color.red_primary), style = ZustTypography.subtitle1)
+                }, fontWeight = FontWeight.W500, color = colorResource(id = R.color.red_primary), style = ZustTypography.bodySmall)
             }
             if (!resendOtpTimeLeft.isNullOrEmpty()) {
                 Text(text = "Resend OTP in $resendOtpTimeLeft", modifier = Modifier.constrainAs(resendOtp) {
@@ -180,7 +209,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }, fontWeight = FontWeight.W500,
-                    style = ZustTypography.subtitle1, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
+                    style = ZustTypography.bodySmall, color = colorResource(id = R.color.new_material_primary), fontSize = 12.sp)
             } else {
                 Text(text = "Resend OTP", modifier = Modifier
                     .constrainAs(resendTimer) {
@@ -197,7 +226,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
                         }
                     }, fontWeight = FontWeight.W500,
                     color = colorResource(id = R.color.new_material_primary),
-                    fontSize = 12.sp, style = ZustTypography.subtitle1)
+                    fontSize = 12.sp, style = ZustTypography.bodySmall)
             }
         }
 
@@ -209,7 +238,7 @@ fun OtpVerification(loginViewModel: LoginViewModel, navigationAction: (String) -
             Row(modifier = Modifier.wrapContentHeight()) {
                 Spacer(modifier = Modifier.width(4.dp))
             }
-            Text(text = "Verify OTP", textAlign = TextAlign.Center, style = ZustTypography.body1, color = Color.White, modifier = Modifier
+            Text(text = "Verify OTP", textAlign = TextAlign.Center, style = ZustTypography.bodyMedium, color = Color.White, modifier = Modifier
                 .padding(6.dp)
                 .padding(0.dp))
         }

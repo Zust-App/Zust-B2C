@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -47,20 +47,13 @@ fun ZNonHomePageBannerUi(data: List<NonVegHomePageBannerData>?) {
         return
     }
     if (data.size == 1) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data("https://dao54xqhg9jfa.cloudfront.net/oms/dd3415e0-d773-bcdf-31c9-b1694bd2d14e/original/WEB_NEW_50.jpeg")
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp).clip(RoundedCornerShape(dp_8))
-                .clickable {
+        AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(data[0].imageUrl).crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .clip(RoundedCornerShape(dp_8))
+            .clickable {
 
-                }
-        )
+            })
         return
     }
     val pagerState = rememberPagerState()
@@ -69,13 +62,8 @@ fun ZNonHomePageBannerUi(data: List<NonVegHomePageBannerData>?) {
             delay(4000)
             with(pagerState) {
                 val target = if (currentPage < pageCount - 1) currentPage + 1 else 0
-                animateScrollToPage(
-                    page = target,
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        easing = LinearOutSlowInEasing
-                    )
-                )
+                tween<Float>(durationMillis = 500, easing = LinearOutSlowInEasing)
+                animateScrollToPage(page = target)
             }
         }
     }
@@ -84,48 +72,33 @@ fun ZNonHomePageBannerUi(data: List<NonVegHomePageBannerData>?) {
         .fillMaxWidth()
         .padding(horizontal = 16.dp)
         .height(125.dp)) {
-
         HorizontalPager(count = data.size, state = pagerState) { page ->
             Box(modifier = Modifier
                 .graphicsLayer {
                     val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
 
-                    lerp(
-                        start = 0.85f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    ).also { scale ->
+                    lerp(start = 0.85f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)).also { scale ->
                         scaleX = scale
                         scaleY = scale
 
                     }
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
+                    alpha = lerp(start = 0.5f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f))
 
                 }
-                .fillMaxWidth().clip(RoundedCornerShape(dp_8)))
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://dao54xqhg9jfa.cloudfront.net/oms/dd3415e0-d773-bcdf-31c9-b1694bd2d14e/original/WEB_NEW_50.jpeg")
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp).clip(RoundedCornerShape(dp_8))
-                    .clickable {
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(dp_8)))
+            AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(data = data[page].imageUrl).crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+                .clip(RoundedCornerShape(dp_8))
+                .clickable {
 
-                    }
-            )
+                })
         }
 
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = dp_8), horizontalArrangement = Arrangement.Center) {
             (data.indices).forEach { index ->
                 if (pagerState.currentPage == index) {
                     CustomIndicator(randomBlackIndicator)

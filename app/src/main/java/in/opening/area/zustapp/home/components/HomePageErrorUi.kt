@@ -1,16 +1,13 @@
 package `in`.opening.area.zustapp.home.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +15,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import `in`.opening.area.zustapp.network.ApiRequestManager
+import `in`.opening.area.zustapp.ui.theme.dp_16
+import non_veg.payment.ui.ViewSpacer12
+import non_veg.payment.ui.ViewSpacer20
+import ui.colorBlack
 
 @Composable
 fun HomePageErrorUi(
@@ -40,47 +42,65 @@ fun HomePageErrorUi(
                 bottom.linkTo(parent.bottom, dp_8)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            }, horizontalAlignment = Alignment.CenterHorizontally) {
+            }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 
-            Spacer(modifier = Modifier.height(60.dp))
             if (errorCode == ApiRequestManager.NOT_COVERAGE_ERROR_CODE) {
-                Image(painter = painterResource(id = R.drawable.not_serviceable_area), contentDescription = "", modifier =
-                Modifier
-                    .height(150.dp)
-                    .width(150.dp))
-                Text(text = "Zust is not available in your area.\n" +
-                        "Please select a different location.",
-                    color = colorResource(id = R.color.app_black),
-                    style = ZustTypography.body2,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+                Text(text = "Service not available in \nyou area currently",
+                    color = colorResource(id = R.color.black),
+                    style = ZustTypography.titleLarge,
+                    modifier = Modifier.padding(horizontal = dp_16, vertical = 8.dp),
                     textAlign = TextAlign.Center)
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = {
+
+                Text(text = "But we are working on it.\nSo Hold on!", color = colorResource(id = R.color.black_3),
+                    style = ZustTypography.bodySmall.copy(fontSize = 16.sp),
+                    modifier = Modifier.padding(horizontal = dp_16),
+                    textAlign = TextAlign.Center)
+
+                ViewSpacer20()
+
+                Image(painter = painterResource(id = R.drawable.no_service_available), contentDescription = "no internet")
+
+                ViewSpacer20()
+
+                OutlinedButton(onClick = {
                     changeLocation.invoke()
                 }, modifier = Modifier
                     .wrapContentHeight()
-                    .wrapContentWidth()
-                    .background(color = colorResource(id = R.color.new_material_primary),
-                        shape = RoundedCornerShape(size = 12.dp)),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
+                    .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
                     Text(text = "Change Location",
-                        style = ZustTypography.body1,
+                        style = ZustTypography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 8.dp),
-                        color = colorResource(id = R.color.white))
+                        color = colorBlack)
                 }
             } else {
-                Text(text = "Something went wrong please try again",
-                    color = colorResource(id = R.color.red_primary),
-                    style = ZustTypography.body2)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Oops, Something Went \n" +
+                        "wrong!",
+                    color = colorResource(id = R.color.black),
+                    style = ZustTypography.titleLarge,
+                    modifier = Modifier.padding(horizontal = dp_16, vertical = 8.dp),
+                    textAlign = TextAlign.Center)
+
+                Text(text = "Please try again in sometime.", color = colorResource(id = R.color.black_3),
+                    style = ZustTypography.bodySmall.copy(fontSize = 16.sp),
+                    modifier = Modifier.padding(horizontal = dp_16),
+                    textAlign = TextAlign.Center)
+
+                ViewSpacer20()
+
+                Image(painter = painterResource(id = R.drawable.error_icon), contentDescription = "error icon")
+
+                ViewSpacer20()
 
                 OutlinedButton(onClick = {
                     retryCallback.invoke()
-                }) {
-                    Text(text = "Retry Again",
-                        color = colorResource(id = R.color.app_black),
-                        style = ZustTypography.body1)
+                }, modifier = Modifier
+                    .wrapContentHeight()
+                    .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
+                    Text(text = "Change Location",
+                        style = ZustTypography.bodyMedium,
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        color = colorBlack)
                 }
             }
         }

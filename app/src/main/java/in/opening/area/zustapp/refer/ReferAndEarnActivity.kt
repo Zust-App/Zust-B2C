@@ -7,9 +7,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
+import ui.colorBlack
+import ui.colorWhite
 
 @AndroidEntryPoint
 class ReferAndEarnActivity : AppCompatActivity() {
@@ -30,9 +33,10 @@ class ReferAndEarnActivity : AppCompatActivity() {
         }
         setContent {
             Scaffold(topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = "Refer and Earn", callback = {
-                    finish()
-                })
+                ComposeCustomTopAppBar(modifier = Modifier.background(color = colorWhite),
+                    titleText = "Refer and Earn", color = colorBlack, callback = {
+                        finish()
+                    })
             }) {
                 ReferAndEarnMainUi(viewModel, it)
             }

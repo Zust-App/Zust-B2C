@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -85,7 +85,7 @@ private fun SingleSubCategoryItem(itemValue: SingleSubCategory?, callback: (Sing
                 .aspectRatio(1f)
                 .clip(MaterialTheme.shapes.medium))
 
-            Text(text = itemValue.name ?: "Title", style = ZustTypography.body2, modifier = Modifier
+            Text(text = itemValue.name ?: "Title", style = ZustTypography.bodyMedium, modifier = Modifier
                 .width(60.dp)
                 .constrainAs(title) {
                     top.linkTo(image.bottom)

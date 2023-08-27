@@ -1,9 +1,8 @@
 package `in`.opening.area.zustapp.storage.datastore
 
 import `in`.opening.area.zustapp.helper.LanguageManager
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.google.gson.Gson
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,6 +15,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     companion object {
         const val SHARED_PREF_NAME = "shared_pref_name"
         private const val AUTH_TOKEN = "auth_token"
+        const val ADDRESS_KEY_1 = "saved_address_1"
         const val ADDRESS_KEY = "saved_address"
         const val MERCHANT_ID = "merchant_id"
         const val FCM_TOKEN = "fcm_token"
@@ -31,6 +31,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val SUPPORT_CALL = "support_call"
 
         const val SAVE_NON_VEG_MERCHANT_ID = "nv_merchant_id"
+        const val CLEAR_CART_GROCERY="clear_cart_grocery"
     }
 
     open fun getUserAuthToken(): String? {
@@ -54,6 +55,10 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun removeSavedAddress() {
+        sharedPreferences.edit().remove(ADDRESS_KEY_1).apply()
+    }
+
+    open fun removeSavedAddressPrevious() {
         sharedPreferences.edit().remove(ADDRESS_KEY).apply()
     }
 
@@ -72,19 +77,19 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.edit().putString(AUTH_TOKEN, authToken).apply()
     }
 
-    fun saveAddress(address: Address) {
+    fun saveAddress(zustAddress: ZustAddress) {
         try {
-            val string = gson.toJson(address)
-            sharedPreferences.edit().putString(ADDRESS_KEY, string).apply()
+            val string = gson.toJson(zustAddress)
+            sharedPreferences.edit().putString(ADDRESS_KEY_1, string).apply()
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun getUserAddress(): Address? {
+    fun getUserAddress(): ZustAddress? {
         return try {
-            val addressString = sharedPreferences.getString(ADDRESS_KEY, "")
-            gson.fromJson(addressString, Address::class.java)
+            val addressString = sharedPreferences.getString(ADDRESS_KEY_1, "")
+            gson.fromJson(addressString, ZustAddress::class.java)
         } catch (e: Exception) {
             null
         }
@@ -167,23 +172,15 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.edit().putString(SUPPORT_WA_NUM, supportWhatsapp).apply()
     }
 
-    fun saveUserCurrentLocation(address: android.location.Address) {
+    fun saveUserCurrentLocation(zustAddress: ZustAddress) {
         try {
-            val string = gson.toJson(address)
-            sharedPreferences.edit().putString(ADDRESS_KEY, string).apply()
+            val string = gson.toJson(zustAddress)
+            sharedPreferences.edit().putString(ADDRESS_KEY_1, string).apply()
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun getUserCurrentLocation(): android.location.Address? {
-        return try {
-            val addressString = sharedPreferences.getString(ADDRESS_KEY, "")
-            gson.fromJson(addressString, android.location.Address::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
 
     fun getMerchantId(): Int {
         return sharedPreferences.getInt(MERCHANT_ID, -1)
@@ -208,8 +205,17 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
             sharedPreferences.edit().putInt(SAVE_NON_VEG_MERCHANT_ID, -1).apply()
         }
     }
-    fun removeNonVegMerchantId(){
+
+    fun removeNonVegMerchantId() {
         sharedPreferences.edit().remove(SAVE_NON_VEG_MERCHANT_ID).apply()
+    }
+
+    open fun getClearGroceryCart(): Boolean {
+        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY,false)
+    }
+
+    open fun saveClearGroceryCart(value: Boolean) {
+        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY, value).apply()
     }
 
 

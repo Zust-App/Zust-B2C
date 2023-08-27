@@ -4,7 +4,7 @@ import `in`.opening.area.zustapp.BuildConfig
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +20,7 @@ fun AppVersionInfoHolder() {
         .fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = "App Version $versionName",
-            style = ZustTypography.subtitle1, modifier = Modifier.padding(),
+            style = ZustTypography.bodySmall, modifier = Modifier.padding(),
             color = colorResource(id = R.color.new_hint_color))
         Spacer(modifier = Modifier.height(12.dp))
     }

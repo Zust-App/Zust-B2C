@@ -23,10 +23,14 @@ data class NonVegListingSingleItem(
     val productName: String,
     val productPriceId: Int,
     val productStatus: String,
-    val unit: String? = null,
-    val productQuantity: Double? = null,
+    val unit: String,
+    val weightPack: Double,
     val variantName: String,
     var quantityOfItemInCart: Int? = 0,
+    val minorTag:String?=null,
+    val piecesDescription:String?,
+    val servesDescription:String?,
+    val anyOtherDescription:String?
 )
 
 fun NonVegListingSingleItem.convertToNonVegCartItem(merchantId: Int): NonVegItemLocalModel {

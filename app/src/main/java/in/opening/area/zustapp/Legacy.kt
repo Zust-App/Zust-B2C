@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //import `in`.opening.area.zustapp.ui.theme.montserrat
 //import androidx.compose.foundation.layout.Row
 //import androidx.compose.foundation.layout.Spacer
-//import androidx.compose.material.Text
+//import androidx.compose.material3.Text
 //import androidx.compose.ui.Modifier
 //import androidx.compose.ui.res.colorResource
 //import androidx.compose.ui.text.font.FontWeight
@@ -61,7 +61,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //            index++
 //        }
 //    }
-//    Text(text = textToShow, modifier = modifier, style = Typography_Montserrat.body1,
+//    Text(text = textToShow, modifier = modifier, style = Typography_Montserrat.bodyMedium,
 //        fontSize = textSize,
 //        color = colorResource(id = R.color.new_material_primary))
 //}
@@ -81,7 +81,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //            Icon(painter = painterResource(id = R.drawable.ic_outline_check_circle_outline_24),
 //                contentDescription = "check", tint = colorResource(id = R.color.light_green))
 //            Spacer(modifier = Modifier.width(6.dp))
-//            Text(text = targetCount, style = Typography_Montserrat.body2,
+//            Text(text = targetCount, style = Typography_Montserrat.bodyMedium,
 //                textAlign = TextAlign.Center,
 //                fontSize = 18.sp,
 //                color = colorResource(id = R.color.app_black))
@@ -127,7 +127,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //                    )
 //                    Text(
 //                        text = text,
-//                        style = Typography_Montserrat.body2,
+//                        style = Typography_Montserrat.bodyMedium,
 //                        modifier = Modifier.constrainAs(name) {
 //                            start.linkTo(icon.end, dp_6)
 //                            end.linkTo(parent.end)
@@ -256,7 +256,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //                        end.linkTo(radioBtn1.start, dp_8)
 //                        width = Dimension.fillToConstraints
 //                    },
-//                    style = ZustTypography.body1,
+//                    style = ZustTypography.bodyMedium,
 //                    color = colorResource(id = R.color.app_black)
 //                )
 //                Text(
@@ -269,7 +269,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //                        .clickable {
 //                            currentRapidMethod = RAPID_BANK
 //                        },
-//                    style = ZustTypography.body2,
+//                    style = ZustTypography.bodyMedium,
 //                    color = colorResource(id = R.color.black_2)
 //                )
 //                Text(
@@ -281,7 +281,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 //                        end.linkTo(radioBtn1.start, dp_8)
 //                        width = Dimension.fillToConstraints
 //                    },
-//                    style = ZustTypography.body1,
+//                    style = ZustTypography.bodyMedium,
 //                    color = colorResource(id = R.color.new_material_primary)
 //                )
 //

@@ -1,27 +1,36 @@
 package `in`.opening.area.zustapp.product
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.R.*
-import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
-import `in`.opening.area.zustapp.compose.NoProductFoundErrorPage
-import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.product.compose.ProductListingShimmerUi
-import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.ui.theme.*
-import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
-import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.utility.ProductUtils
-import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,11 +52,30 @@ import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import java.util.*
+import `in`.opening.area.zustapp.R.color
+import `in`.opening.area.zustapp.R.drawable
+import `in`.opening.area.zustapp.R.string
+import `in`.opening.area.zustapp.compose.NoProductFoundErrorPage
+import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.product.compose.ProductListingShimmerUi
+import `in`.opening.area.zustapp.product.model.ProductSingleItem
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_10
+import `in`.opening.area.zustapp.ui.theme.dp_12
+import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.ui.theme.dp_24
+import `in`.opening.area.zustapp.ui.theme.dp_4
+import `in`.opening.area.zustapp.ui.theme.dp_40
+import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.ui.theme.zustFont
+import `in`.opening.area.zustapp.uiModels.productList.ProductListUi
+import `in`.opening.area.zustapp.utility.AppUtility
+import `in`.opening.area.zustapp.utility.ProductUtils
+import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
+import java.util.Locale
 
 const val KEY_BANNER = "banner"
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductListingContainer(
     layoutScope: ConstraintLayoutScope,
@@ -77,17 +105,19 @@ fun ProductListingContainer(
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
             }
+
             is ProductListUi.InitialUi -> {
                 showHidePgBar = response.isLoading
             }
+
             is ProductListUi.ProductListSuccess -> {
                 if (!response.data.productItems.isNullOrEmpty()) {
                     LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2),
                         modifier = Modifier.constrainAs(productList) {
                             top.linkTo(otherCategoryUi.bottom, dp_12)
                             bottom.linkTo(parent.bottom, 8.dp)
-                            start.linkTo(parent.start, dp_20)
-                            end.linkTo(parent.end, dp_20)
+                            start.linkTo(parent.start, dp_8)
+                            end.linkTo(parent.end, dp_4)
                             width = Dimension.fillToConstraints
                             height = Dimension.fillToConstraints
                         }) {
@@ -107,7 +137,7 @@ fun ProductListingContainer(
         }
         if (showHidePgBar) {
             ProductListingShimmerUi(modifier = Modifier
-                .padding(20.dp)
+                .padding(dp_8)
                 .constrainAs(productList) {
                     top.linkTo(otherCategoryUi.bottom, dp_40)
                     bottom.linkTo(parent.bottom, 8.dp)
@@ -116,12 +146,14 @@ fun ProductListingContainer(
                 }
                 .fillMaxWidth()
                 .fillMaxHeight())
-            CustomAnimatedProgressBar(modifier = Modifier.constrainAs(pgBar) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            })
+            CircularProgressIndicator(strokeWidth = 4.dp, modifier = Modifier
+                .size(dp_24)
+                .constrainAs(pgBar) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                })
         }
     }
 }
@@ -160,7 +192,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
             end.linkTo(parent.end)
             top.linkTo(imageIcon.bottom, dp_8)
             width = Dimension.fillToConstraints
-        }, style = ZustTypography.body2)
+        }, style = ZustTypography.bodyMedium)
 
         Text(text = ProductUtils.getNumberDisplayValue(productSingleItem.quantity) + " " + productSingleItem.quantityUnit.lowercase(),
             color = colorResource(id = color.new_hint_color),
@@ -231,7 +263,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = color.app_black),
                     textAlign = TextAlign.Center,
@@ -261,7 +293,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                 .background(color = colorResource(id = color.light_green), shape = RoundedCornerShape(4.dp))
                 .height(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = color.light_green),
+                    containerColor = colorResource(id = color.light_green),
                     contentColor = colorResource(id = color.light_green)),
                 contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
                 onClick = {
@@ -290,8 +322,8 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
 
 }
 
-const val addIcon = drawable.ic_baseline_add_24
-const val removeIcon = drawable.ic_baseline_remove_24
+var addIcon = drawable.ic_baseline_add_24
+var removeIcon = drawable.ic_baseline_remove_24
 
 interface ProductSelectionListener {
     fun didTapOnIncrementCount(productSingleItem: ProductSingleItem?)

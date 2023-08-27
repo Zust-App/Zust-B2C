@@ -10,5 +10,5 @@ const val JUST_ORDERED = "just_ordered"
 const val ORDER_ID = "order_id"
 
 enum class FragmentTypes {
-    GROCERY, NON_VEG
+    LANDING,ANALYSIS,GROCERY, NON_VEG
 }

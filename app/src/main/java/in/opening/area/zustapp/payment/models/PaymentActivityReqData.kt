@@ -2,19 +2,21 @@ package `in`.opening.area.zustapp.payment.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import non_veg.common.model.CartSummaryData
 
 
-data class PaymentActivityReqData(var orderId: Int? = -1,
-                                  var itemPrice: Double? = 0.0,
-                                  var deliveryFee: Double? = 0.0,
-                                  var packagingFee: Double? = 0.0,
-                                  var couponDiscount: Double? = 0.0,
-                                  var totalAmount: Double? =0.0,
-                                  var couponString: String?=null,
-                                  var deliveryPartnerTip:Double?=0.0,
-                                  var isFreeDelivery:Boolean?=null,
-                                  var expectedDelivery:String?=null,
-):Parcelable {
+data class PaymentActivityReqData(
+    var orderId: Int? = -1,
+    var itemPrice: Double? = 0.0,
+    var deliveryFee: Double? = 0.0,
+    var packagingFee: Double? = 0.0,
+    var couponDiscount: Double? = 0.0,
+    var totalAmount: Double? = 0.0,
+    var couponString: String? = null,
+    var deliveryPartnerTip: Double? = 0.0,
+    var isFreeDelivery: Boolean? = null,
+    var expectedDelivery: String? = null
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Double::class.java.classLoader) as? Double,
@@ -25,8 +27,7 @@ data class PaymentActivityReqData(var orderId: Int? = -1,
         parcel.readString(),
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
-        parcel.readString()) {
-    }
+        parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(orderId)
@@ -54,4 +55,9 @@ data class PaymentActivityReqData(var orderId: Int? = -1,
             return arrayOfNulls(size)
         }
     }
+}
+
+fun PaymentActivityReqData.convertToCartSummaryData(): CartSummaryData {
+    return CartSummaryData(itemCountInCart = 0, itemValueInCart = this.itemPrice,
+        serviceFee = 0.0, deliveryFee = this.deliveryFee, packagingFee = this.packagingFee)
 }

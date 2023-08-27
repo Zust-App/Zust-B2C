@@ -9,11 +9,10 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.colorResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,32 +21,25 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
 import `in`.opening.area.zustapp.address.AddressSearchActivity
 import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.address.v2.AddressBottomSheetV2
 import `in`.opening.area.zustapp.address.v2.AddressBtmSheetCallback
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.compose.CustomGroceryTopBar
-import `in`.opening.area.zustapp.extensions.showBottomSheetIsNotPresent
-import `in`.opening.area.zustapp.helper.SelectLanguageFragment
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.home.HomeMainContainer
 import `in`.opening.area.zustapp.orderSummary.OrderSummaryActivity
 import `in`.opening.area.zustapp.payment.PaymentActivity
 import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.model.CreateCartData
-import `in`.opening.area.zustapp.profile.SuggestProductBtmSheet
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
 import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
 import `in`.opening.area.zustapp.uiModels.VALUE
 import `in`.opening.area.zustapp.utility.AppUtility
-import `in`.opening.area.zustapp.utility.openCallIntent
-import `in`.opening.area.zustapp.utility.openWhatsAppOrderIntent
 import `in`.opening.area.zustapp.utility.proceedToLoginActivity
-import `in`.opening.area.zustapp.utility.startSearchActivity
-import `in`.opening.area.zustapp.utility.startUserProfileActivity
 import `in`.opening.area.zustapp.viewmodels.GroceryHomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ui.colorWhite
 import zustbase.utility.handleActionIntent
 
 @AndroidEntryPoint
@@ -55,14 +47,10 @@ class GroceryHomeFragment : Fragment(), AddressBtmSheetCallback {
 
     private val groceryHomeViewModel: GroceryHomeViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -71,15 +59,15 @@ class GroceryHomeFragment : Fragment(), AddressBtmSheetCallback {
                 Scaffold(
                     topBar = {
                         CustomGroceryTopBar(Modifier) {
-                            (activity as? AppCompatActivity?)?.handleActionIntent(it)
+                            (activity as? AppCompatActivity?)?.handleActionIntent(it, fragmentManager = childFragmentManager)
                         }
                     },
-                    backgroundColor = colorResource(id = R.color.screen_surface_color),
+                    containerColor = colorWhite,
                     content = { paddingValue ->
                         HomeMainContainer(paddingValues = paddingValue, callback = {
-                            (activity as? AppCompatActivity?)?.handleActionIntent(it)
+                            (activity as? AppCompatActivity?)?.handleActionIntent(it, fragmentManager = childFragmentManager)
                         }) {
-                            (activity as? AppCompatActivity?)?.handleActionIntent(ACTION.OPEN_LOCATION)
+                            (activity as? AppCompatActivity?)?.handleActionIntent(ACTION.OPEN_LOCATION, fragmentManager = childFragmentManager)
                         }
                     }, bottomBar = {
                         CustomBottomBarView(viewModel = groceryHomeViewModel, VALUE.A, {

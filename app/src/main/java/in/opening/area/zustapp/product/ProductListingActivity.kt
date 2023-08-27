@@ -27,7 +27,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -36,6 +36,11 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ui.colorBlack
+import ui.colorWhite
+import ui.linearGradientGroceryBrush
+import ui.linearGradientNonVegBrush
+import zustbase.utility.showSuggestProductSheet
 
 @AndroidEntryPoint
 class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, ProductDetailsCallback {
@@ -48,8 +53,11 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
         getDataFromIntent()
         setContent {
             Scaffold(topBar = {
-                ComposeTopAppBarProductList(Modifier, categoryName,
-                    "", R.drawable.new_search_icon) {
+                ComposeTopAppBarProductList(Modifier.background(color = colorWhite),
+                    buildString {
+                        append(categoryName ?: "")
+                        append(" Category")
+                    }, "", color = colorBlack, R.drawable.new_search_icon) {
                     if (it == NAV_BACK) {
                         finish()
                     } else if (it == SEARCH_PRODUCT) {
@@ -108,7 +116,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
     }
 
     override fun didTapOnIncrementCount(productSingleItem: ProductSingleItem?) {
-        if (productSingleItem==null){
+        if (productSingleItem == null) {
             return
         }
         if (productSingleItem.maxItemPurchaseLimit > 0) {
@@ -117,7 +125,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
             } else {
                 AppUtility.showToast(this, "You can't add more than ${productSingleItem.maxItemPurchaseLimit}")
             }
-        }else{
+        } else {
             productListingViewModel.updateProductCount(productSingleItem, ACTION.INCREASE)
         }
     }
@@ -169,13 +177,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
     }
 
     override fun openSuggestProduct() {
-        showSuggestProductSheet()
-    }
-
-    private fun showSuggestProductSheet() {
-        supportFragmentManager.showBottomSheetIsNotPresent(
-            SuggestProductBtmSheet.newInstance(),
-            SuggestProductBtmSheet.TAG)
+        this.showSuggestProductSheet()
     }
 
     private fun startSearchActivity() {

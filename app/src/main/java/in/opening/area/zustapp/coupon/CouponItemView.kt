@@ -11,8 +11,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +45,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
                 })
 
         Text(text = item.couponName,
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             modifier = modifier.constrainAs(couponName) {
                 top.linkTo(parent.top, dp_16)
                 start.linkTo(couponIcon.end, dp_8)
@@ -54,7 +54,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
             }, color = Color(0xD91E1E1E))
 
         Text(text = item.description,
-            style = ZustTypography.subtitle1,
+            style = ZustTypography.bodySmall,
             color = Color(0xBF1E1E1E),
             modifier = Modifier.constrainAs(descriptionText) {
                 start.linkTo(couponName.start)
@@ -81,7 +81,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
         ) {
             Text(text = item.couponCode,
                 color = Color(0xff7B2AFF),
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = modifier
                     .padding(horizontal = 16.dp, vertical = 4.dp))
@@ -90,7 +90,7 @@ fun CouponItemView(item: Coupon, modifier: Modifier, couponItemClickListener: Co
 
         Text(text = "APPLY",
             color = colorResource(id = color.new_material_primary),
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontSize = 14.sp,
             modifier = modifier
                 .constrainAs(applyText) {

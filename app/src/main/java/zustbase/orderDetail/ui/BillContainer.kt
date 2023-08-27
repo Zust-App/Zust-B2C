@@ -8,9 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,11 +35,11 @@ fun BillContainer(data: OrderDetailData?) {
         .padding(12.dp)) {
 
         Row {
-            Text(text = "Billing Details", style = ZustTypography.body1)
+            Text(text = "Billing Details", style = ZustTypography.bodyLarge)
             Spacer(modifier = Modifier.width(12.dp))
             Text(text = ("Paid via " + data.paymentMethod),
                 color = colorResource(id = R.color.light_green),
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 fontSize = 12.sp)
             Spacer(modifier = Modifier.weight(1f))
             Icon(painter = painterResource(id = R.drawable.down_arrow),
@@ -51,12 +51,12 @@ fun BillContainer(data: OrderDetailData?) {
         if (isExpanded) {
             Row {
                 Text(text = "Item Fee",
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.black_4))
                 Spacer(Modifier.weight(1f))
                 Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(data.itemTotalPrice),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.light_green))
             }
@@ -64,12 +64,12 @@ fun BillContainer(data: OrderDetailData?) {
 
             Row {
                 Text(text = "Packaging fee",
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.black_4))
                 Spacer(Modifier.weight(1f))
                 Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(data.packagingFee),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.light_green))
             }
@@ -77,12 +77,12 @@ fun BillContainer(data: OrderDetailData?) {
             Spacer(modifier = Modifier.height(4.dp))
             Row {
                 Text(text = "Delivery charge",
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.black_4))
                 Spacer(Modifier.weight(1f))
                 Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(data.deliveryFee),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.light_green))
             }
@@ -90,12 +90,12 @@ fun BillContainer(data: OrderDetailData?) {
             if (data.deliveryPartnerTip != null && data.deliveryPartnerTip > 0.0) {
                 Row {
                     Text(text = "Delivery Partner Tip",
-                        style = ZustTypography.body2,
+                        style = ZustTypography.bodyMedium,
                         fontSize = 12.sp,
                         color = colorResource(id = R.color.black_4))
                     Spacer(Modifier.weight(1f))
                     Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(data.deliveryPartnerTip),
-                        style = ZustTypography.body2,
+                        style = ZustTypography.bodyMedium,
                         fontSize = 12.sp,
                         color = colorResource(id = R.color.light_green))
                 }
@@ -104,12 +104,12 @@ fun BillContainer(data: OrderDetailData?) {
 
             Row {
                 Text(text = "Discount",
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.black_4))
                 Spacer(Modifier.weight(1f))
                 Text(text = "- " + stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(data.couponDiscountPrice),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.light_green))
 
@@ -130,19 +130,19 @@ fun BillContainer(data: OrderDetailData?) {
                 (data.deliveryPartnerTip ?: 0.0) - data.couponDiscountPrice
         Row {
             Text(text = "Total bill",
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 fontSize = 12.sp,
                 color = colorResource(id = R.color.new_material_primary))
 
             Spacer(Modifier.weight(1f))
             if (data.updatedTotalPrice != null && data.updatedTotalPrice != 0.0) {
                 Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
-                    style = ZustTypography.body2.copy(textDecoration = TextDecoration.LineThrough),
+                    style = ZustTypography.bodyMedium.copy(textDecoration = TextDecoration.LineThrough),
                     fontSize = 14.sp,
                     color = colorResource(id = R.color.new_material_primary))
             } else {
                 Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp,
                     color = colorResource(id = R.color.new_material_primary))
             }
@@ -151,14 +151,14 @@ fun BillContainer(data: OrderDetailData?) {
             Spacer(modifier = Modifier.height(8.dp))
             Row {
                 Text(text = "Updated Price",
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp,
                     color = colorResource(id = R.color.red_secondary))
 
                 Spacer(Modifier.weight(1f))
 
                 Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPrice),
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 14.sp,
                     color = colorResource(id = R.color.red_secondary))
             }

@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.viewmodels
 
 import `in`.opening.area.zustapp.address.model.getDisplayString
 import `in`.opening.area.zustapp.network.ResultWrapper
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.orderSummary.model.CancellationPolicyUiModel
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryItem
 import `in`.opening.area.zustapp.orderSummary.model.LockOrderSummaryModel
@@ -53,7 +53,7 @@ class OrderSummaryViewModel @Inject constructor(
     //cache data
     internal val cancellationPolicyCacheData = MutableStateFlow<CancellationPolicyUiModel>(CancellationPolicyUiModel.InitialUi(false))
 
-    internal var addressItemCache: Address? = null
+    internal var zustAddressItemCache: ZustAddress? = null
     private var upSellingProductsCache: ArrayList<ProductSingleItem>? = null
     private val originalCartItems = ArrayList<ProductSingleItem>()
     private var upSellingItemsId: Set<String> = hashSetOf()
@@ -136,7 +136,7 @@ class OrderSummaryViewModel @Inject constructor(
 
     internal fun updateUserCartWithServer(orderId: Int) = viewModelScope.launch {
         lockedCartUiState.update { LockOrderCartUi.InitialUi(true) }
-        if (addressItemCache == null) {
+        if (zustAddressItemCache == null) {
             lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = "Please select address") }
             return@launch
         }
@@ -145,7 +145,7 @@ class OrderSummaryViewModel @Inject constructor(
             lockedCartUiState.update { LockOrderCartUi.ErrorUi(false, errorMessage = "May be something wrong with cart") }
             return@launch
         } else {
-            checkServiceAvailBasedOnLatLng(addressItemCache, orderId)
+            checkServiceAvailBasedOnLatLng(zustAddressItemCache, orderId)
         }
     }
 
@@ -154,7 +154,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     private suspend fun proceedWithCartItemsAndUpdateServer(orderId: Int, merchantId: Int) {
-        val lockOrderSummaryModel = LockOrderSummaryModel(addressId = addressItemCache!!.id,
+        val lockOrderSummaryModel = LockOrderSummaryModel(addressId = zustAddressItemCache!!.id,
             lockOrderSummaryItems = lockOrderSummaryItems,
             merchantId = merchantId, orderId = orderId, deliveryPartnerTip = deliveryPartnerTipAmount)
         when (val response = productRepo.apiRequestManager.syncUserCartWithServerAndLock(lockOrderSummaryModel)) {
@@ -181,10 +181,10 @@ class OrderSummaryViewModel @Inject constructor(
 
     }
 
-    private fun checkServiceAvailBasedOnLatLng(address: Address?, orderId: Int) = viewModelScope.launch {
+    private fun checkServiceAvailBasedOnLatLng(zustAddress: ZustAddress?, orderId: Int) = viewModelScope.launch {
         supervisorScope {
-            if (((address?.latitude != null && address.longitude != null) && (address.latitude != 0.0 && address.longitude != 0.0)) || !address?.pincode.isNullOrEmpty()) {
-                when (val response = productRepo.apiRequestManager.checkIsServiceAvail(address?.latitude, address?.longitude, address?.pincode)) {
+            if (((zustAddress?.latitude != null && zustAddress.longitude != null) && (zustAddress.latitude != 0.0 && zustAddress.longitude != 0.0)) || !zustAddress?.pinCode.isNullOrEmpty()) {
+                when (val response = productRepo.apiRequestManager.checkIsServiceAvail(zustAddress?.latitude, zustAddress?.longitude, zustAddress?.pinCode)) {
                     is ResultWrapper.Success -> {
                         val jsonObject = JSONObject(response.value)
                         if (jsonObject.has("data")) {
@@ -239,8 +239,8 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    internal fun saveLatestAddress(address: Address) = viewModelScope.launch {
-        sharedPrefManager.saveAddress(address)
+    internal fun saveLatestAddress(zustAddress: ZustAddress) = viewModelScope.launch {
+        sharedPrefManager.saveAddress(zustAddress)
     }
 
     internal fun getLatestAddress() {
@@ -248,10 +248,10 @@ class OrderSummaryViewModel @Inject constructor(
         updateAddressItem(address)
     }
 
-    internal fun updateAddressItem(address: Address?) {
-        this.addressItemCache = address
+    internal fun updateAddressItem(zustAddress: ZustAddress?) {
+        this.zustAddressItemCache = zustAddress
         addressLineData.update {
-            address?.getDisplayString() ?: ""
+            zustAddress?.getDisplayString() ?: ""
         }
     }
 

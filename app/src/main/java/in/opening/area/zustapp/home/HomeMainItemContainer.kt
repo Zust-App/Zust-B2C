@@ -23,6 +23,7 @@ import `in`.opening.area.zustapp.home.models.HomeGrid
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.ui.generic.customHomePageSearch
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import non_veg.payment.ui.ViewSpacer8
 
 @Composable
 fun HomeMainItemContainer(
@@ -62,11 +63,17 @@ fun HomeMainItemContainer(
                     if (homeData.type == "BANNER") {
                         homePageSectionTitleUi(homeData.title)
                         if (!homeData.data.isNullOrEmpty()) {
+                            item {
+                                ViewSpacer8()
+                            }
                             customAutoScrollImageUi(homeData.data)
                         }
                     }
                     if (homeData.type == "CATEGORY") {
                         homePageSectionTitleUi(homeData.title)
+                        item {
+                            ViewSpacer8()
+                        }
                         categoryHolder(homeData.data)
                     }
                 }

@@ -12,5 +12,5 @@ data class ItemsInCart(
     val productStatus: String,
     val quantity: Int,
     val unit: String,
-    val productQuantity: Double? = null,
+    val weightPack: Double,
 )

@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.ui.theme
 
+import androidx.compose.material3.Typography
 import `in`.opening.area.zustapp.R
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -44,58 +45,62 @@ val allotropeFontFamily = FontFamily(
     Font(R.font.allotrope_medium, FontWeight.W500),
     Font(R.font.allotrope_bold, FontWeight.W700))
 
-val blinkerFontFamily = FontFamily(
-    Font(R.font.blinker_regular, FontWeight.W400),
-    Font(R.font.blinker_semibold, FontWeight.W500),
-    Font(R.font.blinker_bold, FontWeight.W500),
-    Font(R.font.blinker_extra_bold, FontWeight.W700))
+val taFontFamily = FontFamily(
+    Font(R.font.ta_font_regular, FontWeight.W400),
+    Font(R.font.ta_font_medium, FontWeight.W500),
+    Font(R.font.ta_font_bold, FontWeight.W600),
+    Font(R.font.ta_font_ultra, FontWeight.W700))
 
 
 val openSansFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300),
     Font(R.font.open_sans_regular, FontWeight.W400), Font(R.font.open_sans_medium, FontWeight.W500),
     Font(R.font.open_sans_semibold, FontWeight.W600), Font(R.font.open_sans_bold, FontWeight.W700))
 
+val buiFontFamily = FontFamily(Font(R.font.open_sans_light, FontWeight.W300),
+    Font(R.font.bui_booking_regular, FontWeight.W400), Font(R.font.bui_booking_medium, FontWeight.W500),
+    Font(R.font.bui_booking_bold, FontWeight.W600), Font(R.font.bui_booking_extra_bold, FontWeight.W700))
+
 val Typography_Mons by lazy {
-    androidx.compose.material.Typography(
-        h1 = TextStyle(
+    Typography(
+        titleLarge = TextStyle(
             fontFamily = montserratFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.W700
         ),
-        body1 = TextStyle(
+        titleMedium = TextStyle(
             fontFamily = montserratFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         ),
-        body2 = TextStyle(
+        bodyMedium = TextStyle(
             fontFamily = montserratFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = montserratFontFamily,
+        bodySmall = TextStyle(fontFamily = montserratFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
 }
 
 val Typography_OpenSans by lazy {
-    androidx.compose.material.Typography(
-        h1 = TextStyle(
+    Typography(
+        titleLarge = TextStyle(
             fontFamily = anuphanFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.W700
         ),
-        body1 = TextStyle(
+        titleMedium = TextStyle(
             fontFamily = openSansFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         ),
-        body2 = TextStyle(
+        bodyMedium = TextStyle(
             fontFamily = openSansFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = openSansFontFamily,
+        bodySmall = TextStyle(fontFamily = openSansFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
@@ -104,23 +109,23 @@ val Typography_OpenSans by lazy {
 
 val Typography_Okra by lazy {
 
-    androidx.compose.material.Typography(
-        h1 = TextStyle(
+    Typography(
+        titleLarge = TextStyle(
             fontFamily = anuphanFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.W700
         ),
-        body1 = TextStyle(
+        titleMedium = TextStyle(
             fontFamily = okraFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         ),
-        body2 = TextStyle(
+        bodyMedium = TextStyle(
             fontFamily = okraFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = okraFontFamily,
+        bodySmall = TextStyle(fontFamily = okraFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
@@ -128,23 +133,23 @@ val Typography_Okra by lazy {
 
 
 val Typography_Anuphan by lazy {
-    androidx.compose.material.Typography(
-        h1 = TextStyle(
+    Typography(
+        titleLarge = TextStyle(
             fontFamily = anuphanFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.W700
         ),
-        body1 = TextStyle(
+        titleMedium = TextStyle(
             fontFamily = anuphanFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         ),
-        body2 = TextStyle(
+        bodyMedium = TextStyle(
             fontFamily = anuphanFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = anuphanFontFamily,
+        bodySmall = TextStyle(fontFamily = anuphanFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
@@ -152,59 +157,84 @@ val Typography_Anuphan by lazy {
 
 val Typography_Allotrope by lazy {
 
-    androidx.compose.material.Typography(
-        h1 = TextStyle(
+    Typography(
+        titleLarge = TextStyle(
             fontFamily = allotropeFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.W600
         ),
-        body1 = TextStyle(
+        titleMedium = TextStyle(
             fontFamily = allotropeFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W500
         ),
-        body2 = TextStyle(
+        bodyMedium = TextStyle(
             fontFamily = allotropeFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = allotropeFontFamily,
+        bodySmall = TextStyle(fontFamily = allotropeFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
 }
 
-val Typography_Blinker by lazy {
+val Typography_Ta by lazy {
 
-    androidx.compose.material.Typography(
-        h1 = TextStyle(
-            fontFamily = blinkerFontFamily,
+    Typography(
+        titleLarge = TextStyle(
+            fontFamily = taFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.W600
         ),
-        body1 = TextStyle(
-            fontFamily = blinkerFontFamily,
+        titleMedium = TextStyle(
+            fontFamily = taFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W600
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = taFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.W500
         ),
-        body2 = TextStyle(
-            fontFamily = blinkerFontFamily,
+        bodyMedium = TextStyle(
+            fontFamily = taFontFamily,
             fontSize = 14.sp,
             fontWeight = FontWeight.W500
         ),
-        subtitle1 = TextStyle(fontFamily = blinkerFontFamily,
+        bodySmall = TextStyle(fontFamily = taFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400
         ))
 }
+val Typography_Bui by lazy {
 
-val ZustTypography = Typography_Allotrope
-val zustFont = allotropeFontFamily
+    Typography(
+        titleLarge = TextStyle(
+            fontFamily = buiFontFamily,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W600
+        ),
+        titleMedium = TextStyle(
+            fontFamily = buiFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W600
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = buiFontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W500
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = buiFontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W500
+        ),
+        bodySmall = TextStyle(fontFamily = buiFontFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400
+        ))
+}
+val ZustTypography = Typography_Bui
+val zustFont = buiFontFamily
 
-val zustTypographySecondary=Typography_Blinker
-val zustFontSecondary=Typography_Blinker
-
-//h1 is for title
-//body1
-//body1
-//subtitl1

@@ -9,9 +9,9 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -34,7 +34,7 @@ fun CouponListingContainer(
         is CouponListUi.CouponSuccess -> {
             if (response.data.isEmpty()) {
                 Text(text = "No coupon available right now",
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     color = colorResource(id = `in`.opening.area.zustapp.R.color.light_black), modifier = modifier
                         .fillMaxWidth(), textAlign = TextAlign.Center)
             } else {
@@ -48,11 +48,13 @@ fun CouponListingContainer(
                 }
             }
         }
+
         is CouponListUi.InitialUi -> {
             if (response.isLoading) {
                 ShowProgressBar()
             }
         }
+
         is CouponListUi.ErrorUi -> {
             if (!response.errorMsg.isNullOrEmpty()) {
                 AppUtility.showToast(context, response.errorMsg)
@@ -75,7 +77,7 @@ private fun ShowProgressBar() {
         .height(100.dp)) {
         val (pgBar) = createRefs()
         CircularProgressIndicator(
-            color = MaterialTheme.colors.onSurface,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .width(30.dp)
                 .height(30.dp)

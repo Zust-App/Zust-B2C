@@ -78,8 +78,7 @@ data class ProductSingleItem(
         parcel.readInt(),
         parcel.readDouble(),
         parcel.readString(),
-        parcel.readByte() != 0.toByte(), parcel.readInt()) {
-    }
+        parcel.readByte() != 0.toByte(), parcel.readInt())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(tableId)

@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
@@ -33,12 +34,13 @@ import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
 import non_veg.home.ui.homeGenericPageSearchDefaultUi
+import non_veg.payment.ui.ViewSpacer8
 import zustbase.ZustLandingViewModel
 import zustbase.services.models.ZustService
 import zustbase.services.uiModel.ZustAvailServicesUiModel
 
 @Composable
-fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(), paddingValues: PaddingValues, genericCallback: (ACTION) -> Unit, basicCallback: (ZustService) -> Unit) {
+fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel, genericCallback: (ACTION) -> Unit, basicCallback: (ZustService) -> Unit) {
     val zustAvailServiceUiModel by zustLandingViewModel.zustServicesUiModel.collectAsState()
     if (zustAvailServiceUiModel.isLoading) {
         Column(modifier = Modifier
@@ -53,9 +55,7 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
             LazyColumn(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(paddingValues)
                 .background(color = colorResource(id = R.color.white))) {
-
                 homeGenericPageSearchDefaultUi(arrayListOf("Search `Grocery`", "Search `Meat`", "Search `Restaurant`", "Search `Milk`")) {
 
                 }
@@ -66,7 +66,8 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
                     response.zustServicePageResponse.data[0].let {
                         if (!it.list.isNullOrEmpty()) {
                             item {
-                                Text(text = it.title, modifier = Modifier.padding(horizontal = dp_16, vertical = dp_16), style = ZustTypography.body1)
+                                NvHomeTitle(it.title)
+                                ViewSpacer8()
                             }
                             if (it.key == "promotion") {
                                 zustBaseRow2ItemsUi(it.list)
@@ -81,10 +82,8 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
 
                 if (!response.data?.serviceList.isNullOrEmpty()) {
                     item {
-                        Text(text = "We deliver essential to your doorstep", style = ZustTypography.body1, modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(start = dp_16, top = dp_16, end = dp_16, bottom = dp_8))
+                        NvHomeTitle("We deliver essential to your doorstep")
+                        ViewSpacer8()
                     }
                     zustAvailServicesUi(response.data, basicCallback)
                 }
@@ -93,7 +92,7 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
                     response.zustServicePageResponse?.data?.get(1)?.let {
                         if (!it.list.isNullOrEmpty()) {
                             item {
-                                Text(text = it.title, modifier = Modifier.padding(horizontal = dp_16, vertical = dp_16), style = ZustTypography.body1)
+                                NvHomeTitle(it.title)
                             }
                             if (it.key == "promotion") {
                                 zustBaseRow2ItemsUi(it.list)
@@ -109,7 +108,7 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
                     response.zustServicePageResponse?.data?.get(2)?.let {
                         if (!it.list.isNullOrEmpty()) {
                             item {
-                                Text(text = it.title, modifier = Modifier.padding(horizontal = dp_16, vertical = dp_16), style = ZustTypography.body1)
+                                NvHomeTitle(it.title)
                             }
                             if (it.key == "promotion") {
                                 zustBaseRow2ItemsUi(it.list)
@@ -124,7 +123,7 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
 
                 homeSuggestProductUi(genericCallback)
 
-                homePageBrandPromiseUi()
+                homePageBrandPromiseUi(true)
             }
         }
 
@@ -138,3 +137,14 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel = viewModel(),
     }
 }
 
+@Composable
+private fun NvHomeTitle(title: String?) {
+    if (title == null) {
+        return
+    }
+    Text(text = title,
+        style = ZustTypography.bodyLarge, modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(start = dp_16, top = dp_16, end = dp_16, bottom = dp_8))
+}

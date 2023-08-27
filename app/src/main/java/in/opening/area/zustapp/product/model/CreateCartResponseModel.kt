@@ -14,7 +14,7 @@ data class CreateCartResponseModel(
 
 @Keep
 data class CreateCartData(
-    val address: Address? = null,
+    val address: ZustAddressV1? = null,
     val orderId: Int? = null,
     val couponCode: String? = null,
     val couponId: String? = null,
@@ -38,7 +38,7 @@ data class Item(
     val thumbnail: String,
 )
 
-data class Address(
+data class ZustAddressV1(
     val addressLevel: Any,
     val addressType: String,
     val description: String,

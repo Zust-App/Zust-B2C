@@ -7,7 +7,7 @@ import `in`.opening.area.zustapp.ui.theme.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -39,7 +39,7 @@ fun OrderStatusSummaryHolder(data: OrderDetailData?) {
                 })
 
         Text(text = data.expectedTimeToDelivery ?: "",
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontWeight = FontWeight.W700,
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_material_primary),

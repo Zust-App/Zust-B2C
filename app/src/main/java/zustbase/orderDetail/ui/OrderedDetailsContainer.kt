@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -198,7 +198,7 @@ private fun RetryOrderDetails(retryCallback: () -> Unit) {
         Text(
             text = "Something went wrong please try again",
             color = colorResource(id = R.color.red_primary),
-            style = ZustTypography.body2
+            style = ZustTypography.bodyMedium
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -209,7 +209,7 @@ private fun RetryOrderDetails(retryCallback: () -> Unit) {
             Text(
                 text = "Retry",
                 color = colorResource(id = R.color.app_black),
-                style = ZustTypography.body1
+                style = ZustTypography.bodyMedium
             )
         }
 

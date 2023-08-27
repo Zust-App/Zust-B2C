@@ -3,9 +3,10 @@ package `in`.opening.area.zustapp.login
 import `in`.opening.area.zustapp.ui.theme.primaryColor
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -62,14 +63,19 @@ val annotatedStringTAndC = buildAnnotatedString {
     pop()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun setTextFiledColors(): TextFieldColors {
-    return TextFieldDefaults.textFieldColors(
+    val containerColor = Color(0xffEFEFEF)
+    return TextFieldDefaults.colors(
+        focusedContainerColor = containerColor,
+        unfocusedContainerColor = containerColor,
+        disabledContainerColor = containerColor,
         cursorColor = Color.Black,
-        disabledLabelColor = Color.White,
         focusedIndicatorColor = Color.White,
         unfocusedIndicatorColor = Color.White,
-        backgroundColor = Color(0xffEFEFEF))
+        disabledLabelColor = Color.White,
+    )
 }
 
 @Composable

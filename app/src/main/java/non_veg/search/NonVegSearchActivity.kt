@@ -5,15 +5,16 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,6 +45,10 @@ import non_veg.listing.uiModel.NonVegProductListingUiModel
 import non_veg.search.ui.NonVegSearchResultItemUi
 import non_veg.search.ui.NonVegSearchUi
 import non_veg.search.viewmodel.NonVegSearchViewModel
+import ui.colorBlack
+import ui.colorWhite
+import ui.linearGradientNonVegBrush
+import zustbase.utility.showSuggestProductSheet
 
 @AndroidEntryPoint
 class NonVegSearchActivity : AppCompatActivity() {
@@ -62,13 +67,13 @@ class NonVegSearchActivity : AppCompatActivity() {
                     }
                 },
                 topBar = {
-                    ComposeCustomTopAppBar(Modifier, "Search") {
+                    ComposeCustomTopAppBar(Modifier.background(color = colorWhite), color = colorBlack, titleText = "Search") {
                         if (it == ACTION.NAV_BACK) {
                             finish()
                         }
                     }
                 },
-                backgroundColor = colorResource(id = R.color.screen_surface_color),
+                containerColor = colorResource(id = R.color.screen_surface_color),
                 content = { paddingValue ->
                     SearchProductMainContainer(paddingValue, Modifier)
                 },
@@ -115,10 +120,10 @@ class NonVegSearchActivity : AppCompatActivity() {
                         start.linkTo(parent.start, dp_20)
                         end.linkTo(parent.end, dp_20)
                         width = Dimension.fillToConstraints
-                    }, style = ZustTypography.body1)
+                    }, style = ZustTypography.bodyMedium)
                     if (data.data.isNullOrEmpty()) {
                         NoProductFoundErrorPage(layoutScope = this, topReference = searchSection) {
-
+                            showSuggestProductSheet()
                         }
                     } else {
                         if (data.data.isNotEmpty()) {
@@ -133,9 +138,9 @@ class NonVegSearchActivity : AppCompatActivity() {
                                     bottom.linkTo(parent.bottom)
                                     height = Dimension.fillToConstraints
                                 }) {
-                                items(data.data) {singleItem->
+                                items(data.data) { singleItem ->
                                     NonVegSearchResultItemUi(singleItem, searchResultModifier) {
-                                        nonVegSearchViewModel.handleNonVegCartInsertOrUpdate(singleItem,it)
+                                        nonVegSearchViewModel.handleNonVegCartInsertOrUpdate(singleItem, it)
                                     }
                                 }
                             }

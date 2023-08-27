@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,11 +48,11 @@ fun ConstraintLayoutScope.OtherCategoryUi(
             is OtherCategoriesUiModel.SuccessUi -> {
                 LazyRow(modifier = Modifier
                     .constrainAs(otherCategoryUi) {
-                        top.linkTo(parent.top, dp_12)
+                        top.linkTo(parent.top, dp_8)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = dp_8),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                     items(data.data ?: arrayListOf()) { categoryItems ->
                         OptionalCategoryItem(categoryItems, data.selectedCategoryId) { clickedCategory ->
@@ -62,6 +62,7 @@ fun ConstraintLayoutScope.OtherCategoryUi(
                     }
                 }
             }
+
             is OtherCategoriesUiModel.InitialUi -> {
                 if (data.isLoading) {
                     OtherCategoryShimmerUi(modifier = Modifier

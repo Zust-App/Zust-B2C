@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:layout_width="match_parent"
         android:id="@+id/zust_entry_page_frame_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

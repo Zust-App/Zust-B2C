@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.address.model.getDisplayString
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import kotlinx.coroutines.Dispatchers
@@ -49,10 +49,10 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
 
     internal var itemsInCart: List<NonVegItemLocalModel>? = null
     internal val addressLineData = MutableStateFlow("")
-    internal var addressItemCache: Address? = null
+    internal var zustAddressItemCache: ZustAddress? = null
 
-    private val cartItemsForRequest = arrayListOf<CreateCartItem>()
-    private var nonVegMerchantId: Int = -1//default -2 is reset means already try to set the value >-1 but not found
+    internal val cartItemsForRequest = arrayListOf<CreateCartItem>()
+    internal var nonVegMerchantId: Int = -1//default -2 is reset means already try to set the value >-1 but not found
     internal fun getNonVegCartDetails(cartId: Int) = viewModelScope.launch(Dispatchers.Default) {
         currentCartIdFromServer = cartId
         _cartDetailsState.update {
@@ -232,8 +232,8 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
     }
 
-    internal fun saveLatestAddress(address: Address) = viewModelScope.launch {
-        sharedPrefManager.saveAddress(address)
+    internal fun saveLatestAddress(zustAddress: ZustAddress) = viewModelScope.launch {
+        sharedPrefManager.saveAddress(zustAddress)
     }
 
     internal fun getLatestAddress() {
@@ -241,15 +241,15 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         updateAddressItem(address)
     }
 
-    internal fun updateAddressItem(address: Address?) {
-        this.addressItemCache = address
+    internal open fun updateAddressItem(zustAddress: ZustAddress?) {
+        this.zustAddressItemCache = zustAddress
         addressLineData.update {
-            address?.getDisplayString() ?: ""
+            zustAddress?.getDisplayString() ?: ""
         }
     }
 
     internal fun lockUserCartFinalCall() = viewModelScope.launch {
-        if (addressItemCache?.id == null) {
+        if (zustAddressItemCache?.id == null) {
             return@launch
         }
         if (nonVegMerchantId == -2) {
@@ -264,7 +264,7 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
         }
         _createCartUiModel.value = NonVegCartUiModel.Initial(true)
         val createCartReqBody = CreateFinalCartReqBody(items = cartItemsForRequest,
-            addressId = addressItemCache!!.id,
+            addressId = zustAddressItemCache!!.id,
             cartId = currentCartIdFromServer!!, finalLock = true, merchantId = nonVegMerchantId)
         when (val response = apiRequestManager.finalLockNonVegCart(createCartReqBody)) {
             is ResultWrapper.Success -> {
@@ -287,7 +287,7 @@ open class NonVegCartViewModel @Inject constructor(private val apiRequestManager
 
 
     internal fun getCancellationTerms(): String {
-        return "100% cancellation fee will be applicable if you decide to cancel th order anytime after order placement. Avoid cancellation as it leads to food wastage "
+        return "100% cancellation fee will be applicable if you decide to cancel the order anytime after order placement. Avoid cancellation as it leads to food wastage "
     }
 
 }

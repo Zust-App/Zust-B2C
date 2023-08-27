@@ -21,9 +21,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -45,9 +46,10 @@ import non_veg.listing.uiModel.NonVegProductListingUiModel
 import non_veg.listing.viewmodel.NonVegListingViewModel
 
 private val spacerHeight20 = Modifier.height(dp_20)
+private val spacerHeight12 = Modifier.height(dp_12)
 
 @Composable
-fun NonVegListingMainContainer(paddingValues: PaddingValues, viewModel: NonVegListingViewModel) {
+fun NonVegListingMainContainer(paddingValues: PaddingValues, viewModel: NonVegListingViewModel, suggestProductCallback: () -> Unit) {
     val context = LocalContext.current
     val nonVegProductListUiModel = viewModel.nonVegProductListUiModel.collectAsState().value
     ConstraintLayout(modifier = Modifier
@@ -68,8 +70,8 @@ fun NonVegListingMainContainer(paddingValues: PaddingValues, viewModel: NonVegLi
             is NonVegProductListingUiModel.Success -> {
                 val productList = nonVegProductListUiModel.data
                 if (!productList.isNullOrEmpty()) {
-                    Text(text = "Items",
-                        style = ZustTypography.body1,
+                    Text(text = "Showing result of ${productList.size} Items",
+                        style = ZustTypography.bodyMedium,
                         modifier = Modifier
                             .padding(top = 16.dp,
                                 start = 20.dp, end = 20.dp)
@@ -92,15 +94,22 @@ fun NonVegListingMainContainer(paddingValues: PaddingValues, viewModel: NonVegLi
                         }) {
                         items(productList) { singleItem ->
                             NonVegListingItemUiV2(singleItem, viewModel)
-                            Spacer(modifier = spacerHeight20)
+                            Spacer(modifier = spacerHeight12)
                         }
-//                        item {
-//                            Text(text = "That's all my folks")
-//                        }
+                        item {
+                            Spacer(modifier = Modifier.height(dp_20))
+                        }
+                        item {
+                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = "That's all my folks",
+                                    color = colorResource(id = R.color.new_hint_color),
+                                    style = ZustTypography.bodyMedium)
+                            }
+                        }
                     }
                 } else {
                     NoProductFoundErrorPage(layoutScope = this, topReference = spacer) {
-
+                        suggestProductCallback.invoke()
                     }
                 }
             }

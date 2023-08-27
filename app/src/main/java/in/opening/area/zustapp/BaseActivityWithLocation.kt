@@ -29,10 +29,6 @@ import zustbase.ZustLandingActivity
 open class BaseActivityWithLocation : AppCompatActivity(), CustomLocationListener, AddressBtmSheetCallback {
     private val locationManager: CustomLocationManager by lazy { CustomLocationManager(this, this) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     companion object {
         const val MY_PERMISSIONS_REQUEST_LOCATION = 109
         const val ACTION_PERMISSION_GPS = 110

@@ -12,14 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,11 +41,14 @@ import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.utility.ProductUtils
 import non_veg.payment.viewModels.NonVegPaymentViewModel
+import ui.colorBlack
 
 
 @Composable
-fun PaymentPageBottomBar(nonVegPaymentViewModel: NonVegPaymentViewModel = viewModel(), onPlaceOrderClick: () -> Unit) {
+fun PaymentPageBottomBar(nonVegPaymentViewModel: NonVegPaymentViewModel = viewModel(),
+                         onPlaceOrderClick: () -> Unit) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
@@ -68,7 +69,7 @@ fun PaymentPageBottomBar(nonVegPaymentViewModel: NonVegPaymentViewModel = viewMo
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                     },
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 fontSize = 12.sp,
                 color = colorResource(id = R.color.light_black)
             )
@@ -78,16 +79,16 @@ fun PaymentPageBottomBar(nonVegPaymentViewModel: NonVegPaymentViewModel = viewMo
                     + (nonVegPaymentViewModel.cartSummaryData?.deliveryFee ?: 0.0))
 
             Text(
-                text = stringResource(id = R.string.ruppes) + totalPayableAmount,
+                text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPayableAmount),
                 modifier = Modifier
                     .constrainAs(totalPayableAmountTv) {
                         top.linkTo(tvPayTag.bottom)
                         start.linkTo(parent.start)
                         bottom.linkTo(parent.bottom)
                     },
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.black)
+                color = colorBlack
             )
 
             Button(onClick = {
@@ -98,14 +99,14 @@ fun PaymentPageBottomBar(nonVegPaymentViewModel: NonVegPaymentViewModel = viewMo
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
                 Row(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = stringResource(R.string.pay_now),
-                        style = ZustTypography.body1,
+                        style = ZustTypography.bodyMedium,
                         fontSize = 16.sp,
                         color = colorResource(id = R.color.white)
                     )

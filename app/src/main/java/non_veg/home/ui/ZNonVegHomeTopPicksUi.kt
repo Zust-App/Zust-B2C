@@ -7,7 +7,7 @@ import non_veg.home.viewmodel.ZustNvEntryViewModel
 
 @Composable
 fun ZNonVegHomeTopPicksUi(viewModel: ZustNvEntryViewModel) {
-    LazyRow() {
+    LazyRow {
 
     }
 }

@@ -13,7 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +32,7 @@ fun DeliveryPartnerInfoUi(riderDetails: RiderDetails) {
             .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(dp_8))) {
             val (text, icon) = createRefs()
             Text(text = riderDetails.riderName + " is your Delivery Partner",
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 color = colorResource(id = R.color.app_black),
                 modifier = Modifier
                     .wrapContentHeight()

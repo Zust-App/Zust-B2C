@@ -33,7 +33,6 @@ import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.utility.DeviceInfo
 import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.JsonObject
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.flow.flow
@@ -49,7 +48,9 @@ import non_veg.home.model.NonVegMerchantResponseModel
 import non_veg.listing.models.NonVegItemListModel
 import non_veg.payment.models.NonVegCartPaymentReqBody
 import non_veg.payment.models.NonVegCreateOrderResModel
-import zustbase.basepage.models.ZustServicePageResponse
+import subscription.model.SubscriptionFormReqBody
+import subscription.model.SubscriptionFormResponseModel
+import zustbase.analysis.models.UserAnalysisResponseModel
 import zustbase.basepage.models.ZustServicePageResponseReceiver
 import zustbase.services.models.ZustAvailableServiceResult
 import javax.inject.Inject
@@ -331,12 +332,14 @@ class ApiRequestManager @Inject constructor() {
             }
         }
 
-    suspend fun getUserProfileDetails() = universalApiRequestManager {
+    suspend fun getUserProfileDetails(merchantId: Int, nonVegMerchantId: Int) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<UserProfileResponse>(NetworkUtility.USER_PROFILE_PAGE) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
+            parameter("merchantId", merchantId)
+            parameter("nonVegMerchantId", nonVegMerchantId)
         }
     }
 
@@ -716,5 +719,34 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
+    suspend fun getUserAnalysisData() = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<UserAnalysisResponseModel>(NetworkUtility.GET_USER_ANALYSIS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+        }
+    }
+
+    suspend fun sendSubscriptionFormResponse(subscriptionFormReqBody: SubscriptionFormReqBody) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<SubscriptionFormResponseModel>(NetworkUtility.SEND_SUBSCRIPTION_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            body = subscriptionFormReqBody
+        }
+    }
+
+    suspend fun getUserLatestLocalCartDetails(reqData: List<Int>, merchantId: Int) = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<NonVegItemListModel>(NetworkUtility.GET_USER_LATEST_LOCAL_NV_CART_DETAILS) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+            parameter("merchantId", merchantId)
+            body = reqData
+        }
+    }
 
 }

@@ -9,7 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -30,7 +30,7 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
             val (alertTextTitle, alertTextBody, waIcon, callUs) = createRefs()
             Text(text = DELIVERY_ALERT,
                 color = colorResource(id = R.color.white),
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .constrainAs(alertTextTitle) {
                         start.linkTo(parent.start, dp_16)
@@ -42,7 +42,7 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
 
             Text(text = data[0].description ?: "For now you can call or whatsapp us",
                 color = colorResource(id = R.color.white),
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .wrapContentHeight()
                     .constrainAs(alertTextBody) {

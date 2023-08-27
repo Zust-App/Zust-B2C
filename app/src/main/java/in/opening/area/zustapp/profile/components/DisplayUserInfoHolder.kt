@@ -6,7 +6,7 @@ import `in`.opening.area.zustapp.ui.theme.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -47,11 +47,11 @@ fun DisplayUserInfo(user: User?) {
                         bottom.linkTo(phoneNum.bottom)
                     },
                 text = displayText, color = Color.White,
-                style = ZustTypography.body2
+                style = ZustTypography.bodyMedium
             )
 
             Text(text = user?.userName ?: stringResource(R.string.my_account),
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .padding()
                     .constrainAs(titleText) {
@@ -63,7 +63,7 @@ fun DisplayUserInfo(user: User?) {
                     }, color = colorResource(id = R.color.app_black))
             if (!user?.phoneNo.isNullOrEmpty()) {
                 Text(text = "+91 " + user?.phoneNo,
-                    style = ZustTypography.body2,
+                    style = ZustTypography.bodyMedium,
                     modifier = Modifier
                         .padding()
                         .constrainAs(phoneNum) {

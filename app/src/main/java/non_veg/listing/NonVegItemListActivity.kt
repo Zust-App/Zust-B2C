@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.R
@@ -18,6 +19,11 @@ import non_veg.cart.models.NonVegCartData
 import non_veg.common.CustomNonVegBottomBarView
 import non_veg.listing.ui.NonVegListingMainContainer
 import non_veg.listing.viewmodel.NonVegListingViewModel
+import ui.colorBlack
+import ui.colorWhite
+import ui.linearGradientNonVegBrush
+import zustbase.utility.moveToCartDetailsActivity
+import zustbase.utility.showSuggestProductSheet
 
 @AndroidEntryPoint
 class NonVegItemListActivity : AppCompatActivity() {
@@ -35,7 +41,9 @@ class NonVegItemListActivity : AppCompatActivity() {
         getDataFromIntent()
         setContent {
             Scaffold(content = { paddingValues ->
-                NonVegListingMainContainer(paddingValues, viewModel)
+                NonVegListingMainContainer(paddingValues, viewModel) {
+                    showSuggestProductSheet()
+                }
             }, bottomBar = {
                 CustomNonVegBottomBarView(viewModel = viewModel, {
                     viewModel.createNonVegCart()
@@ -43,8 +51,11 @@ class NonVegItemListActivity : AppCompatActivity() {
                     moveToCartDetailsActivity(it)
                 }
             }, topBar = {
-                ComposeTopAppBarProductList(Modifier, title,
-                    "", R.drawable.new_search_icon) {
+                ComposeTopAppBarProductList(Modifier.background(color = colorWhite), buildString {
+                    append(title ?: "")
+                    append(" Category")
+                },
+                    "", color = colorBlack, R.drawable.new_search_icon) {
                     if (it == ACTION.NAV_BACK) {
                         finish()
                     } else if (it == ACTION.SEARCH_PRODUCT) {
@@ -71,14 +82,5 @@ class NonVegItemListActivity : AppCompatActivity() {
         }
     }
 
-    private fun moveToCartDetailsActivity(nonVegCartData: NonVegCartData?) {
-        if (nonVegCartData?.cartId == null) {
-            return
-        }
-        val nonVegCartActivity = Intent(this, NonVegCartActivity::class.java)
-        nonVegCartActivity.apply {
-            putExtra(NonVegCartActivity.NON_VEG_CART_ID, nonVegCartData.cartId)
-        }
-        startActivity(nonVegCartActivity)
-    }
+
 }

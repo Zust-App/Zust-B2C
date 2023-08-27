@@ -3,9 +3,9 @@ package zustbase.orderDetail.ui
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -20,13 +20,13 @@ fun ExploreMoreUi(clickCallback: () -> Unit) {
         .wrapContentHeight()) {
         Button(onClick = {
             clickCallback.invoke()
-        }, colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
+        }, colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
             Text(text = "Continue shopping at",
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 color = colorResource(id = R.color.white))
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = stringResource(id = R.string.app_name),
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 fontWeight = FontWeight.W700,
                 color = colorResource(id = R.color.white))
         }

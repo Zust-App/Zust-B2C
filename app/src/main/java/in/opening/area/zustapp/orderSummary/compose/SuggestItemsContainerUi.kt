@@ -13,7 +13,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +52,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
                     start.linkTo(parent.start, dp_12)
                     end.linkTo(parent.end, dp_12)
                 })
-        Text(text = product.productName, style = ZustTypography.body1,
+        Text(text = product.productName, style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp, modifier = Modifier.constrainAs(productName) {
                 top.linkTo(productImage.bottom, dp_4)
@@ -64,7 +64,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
             append(ProductUtils.getNumberDisplayValue(product.quantity))
             append(" ")
             append(product.quantityUnit.lowercase())
-        }, style = ZustTypography.body2,
+        }, style = ZustTypography.bodyMedium,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.new_hint_color),
             fontSize = 12.sp,
@@ -75,7 +75,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
         Text(text = buildString {
             append(stringResource(id = R.string.ruppes))
             append(product.price.toInt())
-        }, style = ZustTypography.body1,
+        }, style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp,
             modifier = Modifier.constrainAs(productPrice) {
@@ -128,7 +128,7 @@ fun SuggestItemContainer(product: ProductSingleItem,listeners: OrderItemsClickLi
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,

@@ -12,14 +12,14 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
@@ -30,7 +30,6 @@ import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.ORDER_HISTORY_CLICK_BTM_NAV
 import `in`.opening.area.zustapp.compose.CustomBottomNavigation
 import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
-import `in`.opening.area.zustapp.databinding.HomeLandingLayoutBinding
 import `in`.opening.area.zustapp.fcm.CustomFcmService
 import `in`.opening.area.zustapp.offline.ConnectionLiveData
 import `in`.opening.area.zustapp.utility.AppDeepLinkHandler
@@ -40,10 +39,9 @@ import `in`.opening.area.zustapp.utility.startFoodEntryActivity
 import `in`.opening.area.zustapp.utility.startMyOrders
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import zustbase.basepage.routing.ZustComposeAppScreenRouting
 import zustbase.basepage.ui.CustomZustTopBar
-import zustbase.basepage.ui.ZustBasePageMainUi
 import zustbase.utility.handleActionIntent
-import zustbase.utility.handleBasicCallbacks
 
 
 @AndroidEntryPoint
@@ -63,7 +61,6 @@ class ZustLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         }
     }
 
-    private var binding: HomeLandingLayoutBinding? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -76,21 +73,7 @@ class ZustLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold(content = { paddingValues ->
-                ZustBasePageMainUi(paddingValues = paddingValues, genericCallback = {
-                    handleActionIntent(it)
-                }) {
-                    handleBasicCallbacks(it)
-                }
-            }, topBar = {
-                CustomZustTopBar(modifier = Modifier, callback = {
-                    handleActionIntent(it)
-                })
-            }, bottomBar = {
-                CustomBottomNavigation { it, _ ->
-                    handleBottomNavCallback(it)
-                }
-            })
+            ZustLandingMainScreenUi()
         }
         initialDataManagement()
         ConnectionLiveData(applicationContext).observe(
@@ -102,6 +85,7 @@ class ZustLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         }
         handleDeepLinkIntent(intent = intent)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        zustLandingViewModel.clearUserGroceryCart()
     }
 
 
@@ -181,11 +165,6 @@ class ZustLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         backPressedCount = 0
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
-    }
-
 
     override fun didTapOnAddAddress(savedAddress: AddressItem) {
         val address = savedAddress.convertToAddress()
@@ -213,6 +192,28 @@ class ZustLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         startAddNewAddressActivity.launch(newAddressIntent)
     }
 
+    @Composable
+    private fun ZustLandingMainScreenUi() {
+        val navController = rememberNavController()
+        Scaffold(
+            topBar = {
+                CustomZustTopBar(modifier = Modifier, callback = {
+                    handleActionIntent(it, fragmentManager = supportFragmentManager)
+                })
+            },
+            bottomBar = {
+                CustomBottomNavigation(navController = navController) { it, _ ->
+                    handleBottomNavCallback(it)
+                }
+            },
+            content = { padding ->
+                Box(modifier = Modifier.padding(paddingValues = padding)) {
+                    ZustComposeAppScreenRouting(navController, zustLandingViewModel)
+                }
+            })
+    }
+
 }
+
 
 

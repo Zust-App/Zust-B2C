@@ -12,8 +12,8 @@ import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +40,7 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                 start.linkTo(parent.start)
                 end.linkTo(invoiceDownloadIcon.start, dp_12)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.body1,
+            }, style = ZustTypography.bodyMedium,
             fontWeight = FontWeight.W700,
             fontSize = 18.sp,
             color = colorResource(id = color.app_black))
@@ -68,12 +68,12 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                     }
                     context.startActivity(inAppWebActivity)
                 },
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontSize = 12.sp)
 
         Text(text = "Your order has been successfully processed.",
             color = colorResource(id = color.black_3),
-            style = ZustTypography.body2, modifier = Modifier
+            style = ZustTypography.bodyMedium, modifier = Modifier
                 .padding(end = 12.dp)
                 .constrainAs(subTitleText) {
                     top.linkTo(titleText.bottom, dp_8)

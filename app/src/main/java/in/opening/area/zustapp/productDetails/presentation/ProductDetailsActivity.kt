@@ -8,7 +8,6 @@ import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
 import `in`.opening.area.zustapp.product.ProductSelectionListener
 import `in`.opening.area.zustapp.product.model.CreateCartData
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.productDetails.compose.ProductDetailTopBarUi
 import `in`.opening.area.zustapp.productDetails.compose.ProductDetailMainUi
 import `in`.opening.area.zustapp.ui.generic.CustomBottomBarView
 import `in`.opening.area.zustapp.uiModels.CreateCartResponseUi
@@ -21,10 +20,15 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
 import kotlinx.coroutines.flow.update
+import ui.colorBlack
+import ui.colorWhite
+import ui.linearGradientGroceryBrush
 
 @AndroidEntryPoint
 class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
@@ -39,7 +43,8 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
         getDataFromIntent()
         setContent {
             Scaffold(topBar = {
-                ProductDetailTopBarUi(Modifier) {
+                ComposeCustomTopAppBar(modifier = Modifier.background(color = colorWhite),
+                    titleText = "Product Details", color = colorBlack) {
                     handleNavigation(it)
                 }
             }, bottomBar = {

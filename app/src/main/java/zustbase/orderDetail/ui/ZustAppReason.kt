@@ -8,7 +8,7 @@ import `in`.opening.area.zustapp.ui.theme.dp_8
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -27,7 +27,7 @@ fun ZustAppReason(reason: String) {
                 start.linkTo(parent.start, dp_16)
                 end.linkTo(parent.end, dp_16)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.body1)
+            }, style = ZustTypography.bodyMedium)
         Text(text = reason, color = colorResource(id = R.color.white),
             modifier = Modifier.constrainAs(body) {
                 top.linkTo(title.bottom, dp_8)
@@ -35,6 +35,6 @@ fun ZustAppReason(reason: String) {
                 end.linkTo(parent.end, dp_16)
                 bottom.linkTo(parent.bottom, dp_12)
                 width = Dimension.fillToConstraints
-            }, style = ZustTypography.body2)
+            }, style = ZustTypography.bodyMedium)
     }
 }

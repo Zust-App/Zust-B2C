@@ -81,10 +81,13 @@ class NetworkUtility {
         val NON_VEG_HOME_PAGE_DATA = "$baseUrl/nv_home/data"
         val NON_VEG_USER_BOOKING_HISTORY = "$baseUrl/nv_order/all-order-of-user"
         val NON_VEG_PRODUCT_DETAILS = "$baseUrl/nv_merchant_product/get-merchant-product-details"
+        val GET_USER_LATEST_LOCAL_NV_CART_DETAILS = "$baseUrl/nv_merchant_product/local-cart-product-details"
 
 
         //common
         val GET_SERVICE_LIST = "$baseUrl/zust_service/service-list"
         val GET_SERVICE_PAGE_DATA = "$baseUrl/zust_service/service-page-data"
+        val GET_USER_ANALYSIS = "$baseUrl/report/user-analysis"
+        val SEND_SUBSCRIPTION_DETAILS = "$baseUrl/zust_subscription/form"
     }
 }

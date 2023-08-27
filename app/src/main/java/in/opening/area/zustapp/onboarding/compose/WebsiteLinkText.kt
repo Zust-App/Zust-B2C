@@ -3,7 +3,7 @@ import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.utility.AppUtility.Companion.WEB_URL
 import `in`.opening.area.zustapp.utility.openBrowser
 import androidx.compose.foundation.clickable
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +32,7 @@ fun WebsiteLinkText(modifier: Modifier) {
             context.openBrowser(WEB_URL)
         }),
         textAlign = TextAlign.Center,
-        style = ZustTypography.body2.copy(
+        style = ZustTypography.bodyMedium.copy(
             color = colorResource(id = R.color.new_material_primary),
             textDecoration = TextDecoration.Underline
         ),

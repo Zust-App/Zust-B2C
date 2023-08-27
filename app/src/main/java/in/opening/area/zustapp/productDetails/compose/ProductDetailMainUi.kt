@@ -1,28 +1,31 @@
 package `in`.opening.area.zustapp.productDetails.compose
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
-import `in`.opening.area.zustapp.product.ProductSelectionListener
-import `in`.opening.area.zustapp.product.addIcon
-import `in`.opening.area.zustapp.product.model.ProductSingleItem
-import `in`.opening.area.zustapp.product.removeIcon
-import `in`.opening.area.zustapp.ui.theme.*
-import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
-import `in`.opening.area.zustapp.utility.ProductUtils
-import `in`.opening.area.zustapp.viewmodels.ProductDetailsViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -39,7 +42,23 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import java.util.*
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
+import `in`.opening.area.zustapp.product.ProductSelectionListener
+import `in`.opening.area.zustapp.product.addIcon
+import `in`.opening.area.zustapp.product.model.ProductSingleItem
+import `in`.opening.area.zustapp.product.removeIcon
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_12
+import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_24
+import `in`.opening.area.zustapp.ui.theme.dp_8
+import `in`.opening.area.zustapp.ui.theme.okraFontFamily
+import `in`.opening.area.zustapp.ui.theme.zustFont
+import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
+import `in`.opening.area.zustapp.utility.ProductUtils
+import `in`.opening.area.zustapp.viewmodels.ProductDetailsViewModel
+import java.util.Locale
 
 @Composable
 fun ProductDetailMainUi(
@@ -54,7 +73,6 @@ fun ProductDetailMainUi(
         .fillMaxHeight()) {
         val (progressbar) = createRefs()
         when (val data = productDetailsUiState) {
-
             is ProductDetailsUiState.Success -> {
                 if (data.isLoading) {
                     CustomAnimatedProgressBar(modifier = Modifier.constrainAs(progressbar) {
@@ -73,14 +91,6 @@ fun ProductDetailMainUi(
                         .padding(paddingValue)
                         .padding(vertical = 16.dp)) {
                         item {
-                            Text(text = data.productPriceSingleItems[0].productName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }, color = colorResource(id = R.color.app_black),
-                                fontFamily = zustFont,
-                                fontWeight = FontWeight.W600,
-                                fontSize = 16.sp, modifier = Modifier.padding(horizontal = 16.dp))
-                            Spacer(modifier = Modifier.height(24.dp))
-                        }
-
-                        item {
                             ConstraintLayout(modifier = Modifier
                                 .fillMaxWidth()) {
                                 val (imageIcon) = createRefs()
@@ -90,7 +100,7 @@ fun ProductDetailMainUi(
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier
                                         .height(175.dp)
-                                        .width(175.dp)
+                                        .fillMaxWidth()
                                         .constrainAs(imageIcon) {
                                             top.linkTo(parent.top, dp_24)
                                             start.linkTo(parent.start)
@@ -99,7 +109,11 @@ fun ProductDetailMainUi(
                                         }, alignment = Alignment.Center)
                             }
                         }
-
+                        item {
+                            Text(text = data.productPriceSingleItems[0].productName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }, color = colorResource(id = R.color.app_black), modifier = Modifier.padding(horizontal = 16.dp),
+                                style = ZustTypography.titleLarge)
+                            Spacer(modifier = Modifier.height(24.dp))
+                        }
                         item {
                             Divider(modifier = Modifier
                                 .fillMaxWidth()
@@ -108,11 +122,9 @@ fun ProductDetailMainUi(
                             Spacer(modifier = Modifier.height(24.dp))
                             Text(
                                 text = "Pack Sizes",
-                                fontFamily = openSansFontFamily,
-                                fontWeight = FontWeight.W400,
-                                fontSize = 16.sp,
                                 color = colorResource(id = R.color.app_black),
-                                modifier = Modifier.padding(horizontal = 16.dp)
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                style = ZustTypography.bodyLarge
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -125,8 +137,8 @@ fun ProductDetailMainUi(
                         item {
                             Spacer(modifier = Modifier.height(24.dp))
                             Text(
-                                text = "Important Information",
-                                style = Typography_Okra.body1,
+                                text = "Description",
+                                style = ZustTypography.bodyLarge,
                                 color = colorResource(id = R.color.app_black),
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
@@ -135,13 +147,14 @@ fun ProductDetailMainUi(
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = data.productPriceSingleItems[0].description,
-                                style = ZustTypography.body2,
+                                style = ZustTypography.bodyMedium,
                                 color = colorResource(id = R.color.new_hint_color), modifier = Modifier.padding(horizontal = 16.dp)
                             )
                         }
                     }
                 }
             }
+
             is ProductDetailsUiState.InitialUi -> {
                 if (data.isLoading) {
                     CustomAnimatedProgressBar(modifier = Modifier.constrainAs(progressbar) {
@@ -161,8 +174,8 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 16.dp)
-        .border( // Set the background color
-            shape = RoundedCornerShape(4.dp), // Set the corner shape
+        .border(
+            shape = RoundedCornerShape(4.dp),
             border = BorderStroke(0.5.dp, colorResource(id = R.color.new_hint_color)) // Set the border
         )) {
         val (
@@ -210,65 +223,6 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                 color = colorResource(id = R.color.new_hint_color),
             )
         }
-
-        if (productSingleItem.itemCountByUser > 0) {
-            Row(horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .constrainAs(incDecContainer) {
-                        top.linkTo(parent.top, dp_8)
-                        end.linkTo(parent.end, dp_12)
-                        bottom.linkTo(parent.bottom, dp_8)
-                    }
-                    .background(color = colorResource(id = R.color.light_green),
-                        shape = RoundedCornerShape(6.dp))
-                    .padding(horizontal = 8.dp, vertical = 2.dp)
-                    .wrapContentHeight()) {
-                Icon(painter = painterResource(removeIcon), contentDescription = "",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .clickable {
-                            callback.didTapOnDecrementCount(productSingleItem)
-                        }, tint = colorResource(id = R.color.white))
-
-                Text(text = productSingleItem.itemCountByUser.toString(),
-                    modifier = Modifier.padding(start = dp_8,
-                        end = dp_8),
-                    fontWeight = FontWeight.W600,
-                    fontFamily = zustFont, fontSize = 14.sp,
-                    color = colorResource(id = R.color.white),
-                    textAlign = TextAlign.Center)
-
-                Icon(painter = painterResource(addIcon), contentDescription = "", modifier = Modifier
-                    .size(22.dp)
-                    .padding(0.dp)
-                    .clickable {
-                        callback.didTapOnIncrementCount(productSingleItem)
-                    }, tint = colorResource(id = R.color.white))
-            }
-        } else {
-            Button(modifier = Modifier
-                .constrainAs(incDecContainer) {
-                    top.linkTo(parent.top, dp_8)
-                    end.linkTo(parent.end, dp_12)
-                    bottom.linkTo(parent.bottom, dp_8)
-                }
-                .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(8.dp))
-                .height(26.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.light_green),
-                    contentColor = colorResource(id = R.color.light_green)),
-                contentPadding = PaddingValues(vertical = 0.dp, horizontal = 20.dp),
-                onClick = {
-                    callback.didTapOnIncrementCount(productSingleItem)
-                }) {
-                Text(text = stringResource(R.string.add),
-                    fontWeight = FontWeight.W600, color = colorResource(id = R.color.white),
-                    fontFamily = zustFont, fontSize = 12.sp)
-            }
-        }
-
         if (productSingleItem.discountPercentage > 0.0) {
             Text(text = productSingleItem.discountPercentage.toInt().toString() + "% OFF", modifier = Modifier
                 .background(color = colorResource(id = R.color.light_offer_color),
@@ -281,6 +235,64 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                 fontSize = 12.sp,
                 fontFamily = okraFontFamily,
                 fontWeight = FontWeight.W600)
+        }
+
+        val inCart = productSingleItem.itemCountByUser > 0
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier
+            .border(border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.light_green)), shape = RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(4.dp))
+            .wrapContentWidth()
+            .background(color = colorResource(id = R.color.white))
+            .height(22.dp)
+            .constrainAs(incDecContainer) {
+                top.linkTo(parent.top, dp_8)
+                end.linkTo(parent.end, dp_12)
+                bottom.linkTo(parent.bottom, dp_8)
+            }) {
+            if (!inCart) {
+                Text(
+                    text = "ADD",
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable {
+                            callback.didTapOnIncrementCount(productSingleItem)
+                        }
+                        .padding(horizontal = dp_12),
+                    style = ZustTypography.titleMedium,
+                    fontSize = 12.sp,
+                    color = colorResource(id = R.color.app_black),
+                    textAlign = TextAlign.Center,
+                )
+            } else {
+                Icon(painter = painterResource(removeIcon), contentDescription = "", modifier = Modifier
+                    .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp))
+                    .clip(RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp))
+                    .size(22.dp)
+                    .clickable {
+                        callback.didTapOnDecrementCount(productSingleItem)
+                    }, tint = colorResource(id = R.color.white))
+
+                Text(
+                    text = productSingleItem.itemCountByUser.toString(),
+                    modifier = Modifier
+                        .defaultMinSize(22.dp)
+                        .padding(horizontal = 2.dp)
+                        .align(Alignment.CenterVertically),
+                    style = ZustTypography.bodyMedium,
+                    fontSize = 12.sp,
+                    color = colorResource(id = R.color.app_black),
+                    textAlign = TextAlign.Center,
+                )
+
+                Icon(painter = painterResource(addIcon), contentDescription = "", modifier = Modifier
+                    .size(22.dp)
+                    .clip(RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp))
+                    .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp))
+                    .clickable {
+                        callback.didTapOnIncrementCount(productSingleItem)
+                    }, tint = colorResource(id = R.color.white))
+            }
         }
     }
 }

@@ -29,6 +29,8 @@ import `in`.opening.area.zustapp.zustFood.ZustFoodEntryActivity
 import non_veg.listing.NonVegItemListActivity
 import non_veg.product_details.NonVegProductDetailsActivity
 import non_veg.search.NonVegSearchActivity
+import zustbase.orderDetail.ui.INTENT_SOURCE
+import zustbase.orderDetail.ui.INTENT_SOURCE_GROCERY
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -106,6 +108,7 @@ fun Context.proceedToOrderDetails(orderId: Int?) {
     if (orderId != null) {
         val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
         orderDetailIntent.putExtra(ORDER_ID, orderId)
+        orderDetailIntent.putExtra(INTENT_SOURCE, INTENT_SOURCE_GROCERY)
         startActivity(orderDetailIntent)
     }
 }

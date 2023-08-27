@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +46,7 @@ fun ZNonVegTopPicsItemUi() {
                 end.linkTo(parent.end)
             })
         Text(text = "Chicken drumstick - Pack of 2",
-            style = ZustTypography.h1, modifier = Modifier.constrainAs(productTitle) {
+            style = ZustTypography.titleLarge, modifier = Modifier.constrainAs(productTitle) {
                 top.linkTo(productIcon.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
@@ -79,7 +79,7 @@ fun ZNonVegTopPicsItemUi() {
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,

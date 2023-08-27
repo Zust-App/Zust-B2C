@@ -1,12 +1,5 @@
 package `in`.opening.area.zustapp.coupon
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
-import `in`.opening.area.zustapp.coupon.model.Coupon
-import `in`.opening.area.zustapp.home.ACTION
-import `in`.opening.area.zustapp.ui.theme.*
-import `in`.opening.area.zustapp.viewmodels.CouponListingViewModel
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -16,9 +9,17 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.R
+import `in`.opening.area.zustapp.compose.ComposeCustomTopAppBar
+import `in`.opening.area.zustapp.coupon.model.Coupon
+import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_24
+import `in`.opening.area.zustapp.viewmodels.CouponListingViewModel
+import ui.colorBlack
+import ui.colorWhite
 
 @AndroidEntryPoint
 class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
@@ -38,12 +49,12 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
         const val INTENT_KEY_COUPON_VALUE = "coupon_value"
     }
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold(topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = "Coupon",
+                ComposeCustomTopAppBar(modifier = Modifier.background(color = colorWhite), titleText = "Coupon",
+                    color = colorBlack,
                     callback = {
                         if (it == ACTION.NAV_BACK) {
                             finish()
@@ -62,7 +73,7 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(color = colorResource(id = R.color.screen_surface_color) )
+                .background(color = colorResource(id = R.color.screen_surface_color))
         ) {
             val (manualCouponContainer, titleText, couponList) = createRefs()
             ConstraintLayout(
@@ -84,19 +95,21 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
                     TextField(
                         value = couponViewModel.userInputCoupon,
                         onValueChange = { couponViewModel.userInputCoupon = it },
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = colorResource(id = R.color.grey_color_2),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = colorResource(id = R.color.grey_color_2),
                             disabledTextColor = Color.Transparent,
-                            backgroundColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            disabledContainerColor = Color.White,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
+                            disabledIndicatorColor = Color.Transparent,
                         ),
                         modifier = Modifier.weight(1f),
                         placeholder = {
                             Text(
                                 text = "Enter Coupon here",
-                                style = ZustTypography.body2,
+                                style = ZustTypography.bodyMedium,
                                 color = Color(0xffB2B2B2)
                             )
                         },
@@ -113,14 +126,14 @@ class CouponListingActivity : ComponentActivity(), CouponItemClickListener {
                                 setResult(Activity.RESULT_OK, intent)
                                 finish()
                             },
-                        style = ZustTypography.body2,
+                        style = ZustTypography.bodyMedium,
                         color = colorResource(id = R.color.app_black)
                     )
                 }
             }
             Text(
                 text = "Available Coupons",
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 modifier = Modifier.constrainAs(titleText) {
                     top.linkTo(manualCouponContainer.bottom, dp_24)
                     start.linkTo(parent.start, dp_16)

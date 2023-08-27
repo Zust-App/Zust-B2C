@@ -14,9 +14,7 @@ import java.util.regex.Pattern
 class SMSReceiver() : BroadcastReceiver(), Parcelable {
     private var otpListener: OTPReceiveListener? = null
 
-    constructor(parcel: Parcel) : this() {
-
-    }
+    constructor(parcel: Parcel) : this()
 
     fun setOTPListener(otpListener: OTPReceiveListener?) {
         this.otpListener = otpListener

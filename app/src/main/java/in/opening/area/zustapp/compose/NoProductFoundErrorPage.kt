@@ -4,9 +4,9 @@ import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.theme.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,19 +48,19 @@ fun NoProductFoundErrorPage(
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(text = "Oops, Didn't find what you\n" +
                         "are looking for?",
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 18.sp, color = Color(0xBF1E1E1E))
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = { suggestCallback.invoke() },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = colorResource(id = R.color.white),
+                        containerColor = colorResource(id = R.color.white),
                         contentColor = colorResource(id = R.color.white)),
                     modifier = Modifier
                         .wrapContentHeight()
                         .clip(RoundedCornerShape(12.dp)),
                 ) {
-                    Text(text = "Suggest items", style = ZustTypography.body1,
+                    Text(text = "Suggest items", style = ZustTypography.bodyMedium,
                         color = colorResource(id = R.color.new_material_primary))
                 }
             }

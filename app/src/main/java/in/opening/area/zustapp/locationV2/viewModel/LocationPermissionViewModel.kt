@@ -6,17 +6,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.address.model.AddressItem
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.uiModels.UserSavedAddressUi
 import `in`.opening.area.zustapp.uiModels.locations.CheckDeliverableAddressUiState
-import `in`.opening.area.zustapp.uiModels.orderSummary.LockOrderCartUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.UserCustomError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +26,7 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
     internal val deliverableAddressUiState = MutableStateFlow<CheckDeliverableAddressUiState>(CheckDeliverableAddressUiState.InitialUiState(false))
 
     internal fun getAllAddress() = viewModelScope.launch {
+        sharedPrefManager.removeSavedAddressPrevious()
         userAddressListUiState.update { UserSavedAddressUi.InitialUi(isLoading = true) }
         when (val response = apiRequestManager.getAllAddress()) {
             is ResultWrapper.Success -> {
@@ -57,11 +56,11 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
         }
     }
 
-    internal fun saveLatestAddress(address: Address) = viewModelScope.launch {
-        sharedPrefManager.saveAddress(address)
+    internal fun saveLatestAddress(zustAddress: ZustAddress) = viewModelScope.launch {
+        sharedPrefManager.saveAddress(zustAddress)
     }
 
-    internal fun saveUserCurrentLocation(parsedLocation: android.location.Address) {
+    internal fun saveUserCurrentLocation(parsedLocation: ZustAddress) {
         sharedPrefManager.saveUserCurrentLocation(parsedLocation)
     }
 

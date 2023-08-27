@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.address.model
 
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.utility.PagingMetadata
 import `in`.opening.area.zustapp.utility.UserCustomError
 import com.google.errorprone.annotations.Keep
@@ -11,13 +11,13 @@ data class GetUserAddressModel(
     val errors: List<UserCustomError> = arrayListOf(),
     val message: String? = null,
     val statusCode: Int? = -1,
-    val timeStamp: String? = null
+    val timeStamp: String? = null,
 )
 
 @Keep
 data class AddressData(
     val _metadata: PagingMetadata,
-    val addresses: List<AddressItem>
+    val addresses: List<AddressItem>,
 )
 
 @Keep
@@ -30,22 +30,20 @@ data class AddressItem(
     val landmark: String?,
     val latitude: Double?,
     val longitude: Double?,
-    val pinCode:String?
+    val pinCode: String?,
 ) {
-   fun convertToAddress(): Address {
-       return Address(addressLevel,
-           addressType,
-           description,
-           houseNumberAndFloor,
-           id,landmark
-           ,latitude
-           ,longitude,
-           pinCode)
-   }
+    fun convertToAddress(): ZustAddress {
+        return ZustAddress(addressLevel,
+            addressType,
+            description,
+            houseNumberAndFloor,
+            id, landmark, latitude, longitude,
+            pinCode=pinCode)
+    }
 }
 
-fun Address.getDisplayString(): String {
-    return buildString{
+fun ZustAddress.getDisplayString(): String {
+    return buildString {
         if (!houseNumberAndFloor.isNullOrEmpty()) {
             append(houseNumberAndFloor)
             append(",")
@@ -61,7 +59,7 @@ fun Address.getDisplayString(): String {
 }
 
 fun AddressItem.getDisplayString(): String {
-    return buildString{
+    return buildString {
         if (!houseNumberAndFloor.isNullOrEmpty()) {
             append(houseNumberAndFloor)
             append(",")

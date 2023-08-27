@@ -5,31 +5,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import `in`.opening.area.zustapp.R
-import zustbase.orderDetail.models.convertAsStringText
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_20
 import `in`.opening.area.zustapp.ui.theme.dp_24
 import `in`.opening.area.zustapp.ui.theme.dp_8
-import `in`.opening.area.zustapp.ui.theme.zustTypographySecondary
 import non_veg.payment.viewModels.NonVegPaymentViewModel
+import zustbase.orderDetail.models.convertAsStringText
 
 @Composable
 fun NonVegPaymentAddressUi(nonVegPaymentViewModel: NonVegPaymentViewModel = viewModel()) {
@@ -42,14 +37,15 @@ fun NonVegPaymentAddressUi(nonVegPaymentViewModel: NonVegPaymentViewModel = view
             .padding(horizontal = 16.dp)
             .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(dp_8))
             .padding(horizontal = dp_16, vertical = dp_16)
+            .fillMaxWidth()
     ) {
         val (locationIcon, addressTitleTag, addressTextView) = createRefs()
 
         Icon(
-            imageVector = Icons.Default.LocationOn,
+            painter = painterResource(id = R.drawable.home_location_pin_icon),
             contentDescription = null,
             modifier = Modifier
-                .size(dp_24)
+                .size(dp_20)
                 .constrainAs(locationIcon) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -58,7 +54,8 @@ fun NonVegPaymentAddressUi(nonVegPaymentViewModel: NonVegPaymentViewModel = view
 
         Text(
             text = "Delivery Address",
-            style = zustTypographySecondary.h1,
+            style = ZustTypography.titleMedium, color =
+            colorResource(id = R.color.app_black),
             modifier = Modifier.constrainAs(addressTitleTag) {
                 top.linkTo(locationIcon.top)
                 start.linkTo(locationIcon.end, dp_8)
@@ -69,11 +66,13 @@ fun NonVegPaymentAddressUi(nonVegPaymentViewModel: NonVegPaymentViewModel = view
 
         Text(
             text = deliveryAddress,
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium, color =
+            colorResource(id = R.color.language_default),
             modifier = Modifier.constrainAs(addressTextView) {
                 top.linkTo(addressTitleTag.bottom, dp_12)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
             }
         )
     }

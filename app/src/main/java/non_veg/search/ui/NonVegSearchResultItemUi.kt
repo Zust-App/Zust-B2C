@@ -13,12 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -89,18 +89,17 @@ fun NonVegSearchResultItemUi(
                     width = Dimension.fillToConstraints
                 },
             color = colorResource(id = R.color.app_black),
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
         )
 
         Text(text = buildString {
-            append(ProductUtils.getNumberDisplayValue(item.productQuantity ?: 0.0))
-            append(" ")
-            append(item.unit?.lowercase())
+            append(ProductUtils.getNumberDisplayValue(item.weightPack))
+            append(item.unit.lowercase())
         }, modifier = Modifier.constrainAs(quantity) {
             top.linkTo(title.bottom, dp_8)
             start.linkTo(image.end, dp_10)
         }, color = colorResource(id = R.color.new_hint_color),
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             fontSize = 12.sp)
 
         Text(
@@ -111,10 +110,10 @@ fun NonVegSearchResultItemUi(
                 },
             text = buildString {
                 append(stringResource(id = R.string.ruppes))
-                append(ProductUtils.roundTo1DecimalPlaces(item.price))
+                append(ProductUtils.roundTo1DecimalPlaces(item.mrp))
             },
             color = colorResource(id = R.color.app_black),
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontSize = 14.sp,
         )
 
@@ -126,7 +125,7 @@ fun NonVegSearchResultItemUi(
                 },
             text = buildString {
                 append(stringResource(id = R.string.ruppes))
-                append(ProductUtils.roundTo1DecimalPlaces(item.mrp))
+                append(ProductUtils.roundTo1DecimalPlaces(item.price))
             },
             color = colorResource(id = R.color.new_hint_color),
             fontFamily = zustFont,
@@ -156,7 +155,7 @@ fun NonVegSearchResultItemUi(
                         .clip(RoundedCornerShape(topStart = 4.dp,
                             bottomStart = 4.dp))
                         .size(22.dp)
-                        .clickable() {
+                        .clickable {
                             callback.invoke(ACTION.DECREASE)
                         },
                     tint = colorResource(id = R.color.white))
@@ -167,7 +166,7 @@ fun NonVegSearchResultItemUi(
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,
@@ -197,7 +196,7 @@ fun NonVegSearchResultItemUi(
                 .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(4.dp))
                 .height(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.light_green),
+                    containerColor = colorResource(id = R.color.light_green),
                     contentColor = colorResource(id = R.color.light_green)),
                 contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
                 onClick = {

@@ -8,7 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +28,8 @@ import non_veg.cart.ui.NonVegCartMainContainerUi
 import non_veg.cart.uiModel.NonVegCartBottomBarUi
 import non_veg.cart.viewmodel.NonVegCartViewModel
 import non_veg.payment.NonVegPaymentActivity
+import ui.colorBlack
+import ui.colorWhite
 
 @AndroidEntryPoint
 class NonVegCartActivity : AppCompatActivity(), AddressBtmSheetCallback {
@@ -41,7 +44,10 @@ class NonVegCartActivity : AppCompatActivity(), AddressBtmSheetCallback {
         getDataFromIntent()
         setContent {
             Scaffold(content = { paddingValues ->
-                NonVegCartMainContainerUi(paddingValues, viewModel)
+                NonVegCartMainContainerUi(paddingValues, viewModel) {
+                    AppUtility.showToast(this, "Please add items")
+                    finish()
+                }
             }, bottomBar = {
                 NonVegCartBottomBarUi(viewModel = viewModel, updateOrderCallback = {
                     handleActionOfBottomAppBar(it)
@@ -49,9 +55,14 @@ class NonVegCartActivity : AppCompatActivity(), AddressBtmSheetCallback {
                     moveToNonVegPaymentActivity(it)
                 })
             }, topBar = {
-                ComposeCustomTopAppBar(modifier = Modifier, titleText = "Cart", callback = {
-                    finish()
-                })
+                ComposeCustomTopAppBar(modifier = Modifier.background(color = colorWhite),
+                    titleText = "Cart",
+                    subTitleText = null,
+                    color = colorBlack,
+                    endImageId = null,
+                    callback = {
+                        finish()
+                    })
             })
             LaunchedEffect(key1 = Unit, block = {
                 viewModel.getLatestAddress()
@@ -82,7 +93,7 @@ class NonVegCartActivity : AppCompatActivity(), AddressBtmSheetCallback {
 
     private fun checkAddressThenUpdateCart() {
         viewModel.getLatestAddress()
-        if (viewModel.addressItemCache == null) {
+        if (viewModel.zustAddressItemCache == null) {
             openAddressSelectionBtmSheet()
         } else {
             viewModel.lockUserCartFinalCall()

@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.orderSummary.model
 
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.product.model.Item
 import `in`.opening.area.zustapp.utility.UserCustomError
 import com.google.gson.annotations.SerializedName
@@ -20,7 +20,7 @@ data class LockOrderResponseData(
     val couponCode: String? = null,
     val items: List<Item>,
     val orderId: Int,
-    val address: Address,
+    val address: ZustAddress,
     val expectedDelivery: String? = null,
     val isFreeDelivery: Boolean? = null,
 )

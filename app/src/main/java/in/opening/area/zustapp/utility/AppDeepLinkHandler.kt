@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import zustbase.orderDetail.ui.ORDER_ID
+import zustbase.utility.startSubscriptionFormActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,8 +45,11 @@ class AppDeepLinkHandler @Inject constructor() {
 
         fun handleOfferLink(
             context: Context?,
-            data: Any,
+            data: Any?,
         ) {
+            if (data == null) {
+                return
+            }
             if (context == null) {
                 return
             }
@@ -53,6 +57,14 @@ class AppDeepLinkHandler @Inject constructor() {
                 if (data is HomePageGenericData) {
                     if (data.deepLink?.contains("home") == true) {
                         context.navigateToProductListing(data.category?.toInt(), null)
+                    }
+                    if (data.deepLink?.contains("zForm")==true){
+                        context.startSubscriptionFormActivity()
+                    }
+                }
+                if (data is String) {
+                    if (data == "sForm") {
+                        context.startSubscriptionFormActivity()
                     }
                 }
             } catch (e: Exception) {

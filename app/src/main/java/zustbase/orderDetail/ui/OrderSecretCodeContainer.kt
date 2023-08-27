@@ -9,7 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +32,7 @@ fun OrderSecretCodeContainer(data: OrderDetailData?) {
         if (!data.secretCode.isNullOrEmpty()) {
             val (secretCodeTv, warningText) = createRefs()
             Text(text = Html.fromHtml("Order OTP: <b>${data.secretCode}</b>").toString(),
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .constrainAs(secretCodeTv) {
                         end.linkTo(parent.end, dp_12)
@@ -45,7 +45,7 @@ fun OrderSecretCodeContainer(data: OrderDetailData?) {
                     }, color = colorResource(id = R.color.new_material_primary))
 
             Text(text = stringResource(R.string.warning_secret_code),
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 modifier = Modifier.constrainAs(warningText) {
                     end.linkTo(parent.end, dp_12)
                     top.linkTo(secretCodeTv.bottom, dp_8)

@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
@@ -48,7 +48,7 @@ class OfflineActivity : AppCompatActivity() {
                         start.linkTo(parent.start, dp_16)
                         end.linkTo(parent.end, dp_16)
                         width = Dimension.fillToConstraints
-                    }, textAlign = TextAlign.Center, style = ZustTypography.body1)
+                    }, textAlign = TextAlign.Center, style = ZustTypography.bodyMedium)
                 Button(modifier = Modifier
                     .constrainAs(settingBtn) {
                         top.linkTo(noInternetLottie.bottom, dp_16)
@@ -61,8 +61,8 @@ class OfflineActivity : AppCompatActivity() {
                     } else {
                         startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
                     }
-                }, colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.new_material_primary))) {
-                    Text(text = "Open settings", style = ZustTypography.body1,
+                }, colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
+                    Text(text = "Open settings", style = ZustTypography.bodyMedium,
                         color = colorResource(id = R.color.white))
                 }
             }

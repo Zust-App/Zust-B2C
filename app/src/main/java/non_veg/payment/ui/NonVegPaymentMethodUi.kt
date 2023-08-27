@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,12 +58,13 @@ fun NonVegPaymentMethodUi(
 
         Text(
             text = paymentMethodName,
+            color = colorResource(id = R.color.language_default),
             modifier = Modifier.constrainAs(paymentText) {
                 top.linkTo(parent.top)
                 start.linkTo(paymentIcon.end, dp_12)
                 bottom.linkTo(parent.bottom)
             },
-            style = ZustTypography.body1
+            style = ZustTypography.bodyMedium
         )
 
         RadioButton(

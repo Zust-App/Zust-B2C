@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,10 +28,10 @@ fun ExpectedDeliveryTimeTag(orderSummaryViewModel: OrderSummaryViewModel) {
         .fillMaxWidth()
         .padding(top = 24.dp)) {
         val (timeText, icon) = createRefs()
-        Text(text = expectedDeliveryTimeData ?: "Last minute delivery app",
+        Text(text = expectedDeliveryTimeData ?: "Your all in one delivery app",
             fontSize = 14.sp,
             color = colorResource(id = R.color.new_material_primary),
-            style = ZustTypography.body1, modifier = Modifier
+            style = ZustTypography.bodyMedium, modifier = Modifier
                 .constrainAs(timeText) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)

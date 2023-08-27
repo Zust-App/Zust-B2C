@@ -1,6 +1,6 @@
 package `in`.opening.area.zustapp.address.model
 
-import zustbase.orderDetail.models.Address
+import zustbase.orderDetail.models.ZustAddress
 import `in`.opening.area.zustapp.utility.UserCustomError
 import android.os.Parcel
 import android.os.Parcelable
@@ -31,14 +31,14 @@ data class CustomAddress(
     var id: Int? = -1,
 ) {
 
-    fun convertToAddressItem(): Address {
-        return Address(null,
+    fun convertToAddressItem(): ZustAddress {
+        return ZustAddress(null,
             addressType, description,
             houseNumberAndFloor,
             id ?: -1,
             landmark,
             latitude,
-            longitude, pincode = pinCode)
+            longitude, pinCode = pinCode)
     }
 
 }

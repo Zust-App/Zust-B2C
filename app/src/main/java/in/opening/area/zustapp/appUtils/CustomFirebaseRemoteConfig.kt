@@ -8,7 +8,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 
 object CustomFirebaseRemoteConfig {
 
-    private const val show_bill="show_bill";//boolean
+    private const val show_bill="show_bill"//boolean
     private const val order_enable="order_enable"
     fun init(){
         val duration = if (BuildConfig.DEBUG) 20L else 3600L

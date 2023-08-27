@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,6 +39,7 @@ import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import non_veg.home.viewmodel.ZustNvEntryViewModel
+import ui.linearGradientNonVegBrush
 
 @Composable
 fun CustomNonVegHomeTopBar(
@@ -52,8 +53,7 @@ fun CustomNonVegHomeTopBar(
         .fillMaxWidth()
         .wrapContentHeight()
         .fillMaxWidth()
-        .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-        .background(color = colorResource(id = R.color.new_material_primary))
+        .background(brush = linearGradientNonVegBrush)
         .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
         val (
@@ -75,7 +75,7 @@ fun CustomNonVegHomeTopBar(
                     callback.invoke(ACTION.OPEN_LOCATION)
                 })
 
-        Text(text = "Patna", color = colorResource(id = R.color.white),
+        Text(text = "Address", color = colorResource(id = R.color.white),
             modifier = modifier
                 .constrainAs(locationTag) {
                     top.linkTo(parent.top)
@@ -83,7 +83,7 @@ fun CustomNonVegHomeTopBar(
                 }
                 .clickable {
                     callback.invoke(ACTION.OPEN_LOCATION)
-                }, style = ZustTypography.body1)
+                }, style = ZustTypography.bodyMedium)
 
         Icon(painter = painterResource(id = R.drawable.down_arrow),
             contentDescription = "location", tint = colorResource(id = R.color.white),
@@ -100,7 +100,7 @@ fun CustomNonVegHomeTopBar(
                 })
         Text(
             text = userAddress.fullAddress ?: "Delivery in Patna",
-            style = ZustTypography.subtitle1,
+            style = ZustTypography.bodySmall,
             color = colorResource(id = R.color.white),
             modifier = modifier.constrainAs(locationSubTitle) {
                 top.linkTo(locationTag.bottom, dp_4)

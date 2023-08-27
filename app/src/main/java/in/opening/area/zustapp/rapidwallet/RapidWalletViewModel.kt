@@ -32,14 +32,17 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
     private var walletTypeCache: String = "1"
 
     internal var intentSource: String? = null
+
+    private var orderId:Int?=null
     internal fun verifyRapidWalletAndBalance() = viewModelScope.launch {
-        if (rapidUserIdCache == null) {
+        if (rapidUserIdCache.isNullOrEmpty()) {
             return@launch
         }
         rapidUserExistUiState.update {
             RWUserWalletUiState.InitialUi(true)
         }
-        when (val response = apiRequestManager.checkRapidWalletAndBalance(rapidUserIdCache!!)) {
+        val cleanedRapidUserId = rapidUserIdCache!!.replace("+91", "").replace("\\s".toRegex(), "")
+        when (val response = apiRequestManager.checkRapidWalletAndBalance(cleanedRapidUserId)) {
             is ResultWrapper.Success -> {
                 response.value.data?.let {
                     rapidUserExistUiState.update {
@@ -74,10 +77,12 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
         if (rapidUserId.isNullOrEmpty()) {
             return@launch
         }
+        val cleanedRapidUserId = rapidUserIdCache!!.replace("+91", "").replace("\\s".toRegex(), "")
+
         rapidUserExistUiState.update {
             RWUserWalletUiState.InitialUi(true)
         }
-        when (val response = apiRequestManager.sendRapidWalletOTP(rapidUserId)) {
+        when (val response = apiRequestManager.sendRapidWalletOTP(cleanedRapidUserId)) {
             is ResultWrapper.Success -> {
                 response.value.data?.let { data ->
                     rapidServerOTP = data.opt
@@ -135,22 +140,29 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
         if (walletTypeCache.isNullOrEmpty()) {
             return@launch
         }
+        val cleanedRapidUserId = rapidUserIdCache!!.replace("+91", "").replace("\\s".toRegex(), "")
+
         paymentActivityReqData?.let {
             rapidUserExistUiState.update {
                 RWUserWalletUiState.InitialUi(true)
             }
 
             when (val response=if(intentSource== INTENT_SOURCE_NON_VEG){
+                //here it.orderId refers to cartId in server side
                 apiRequestManager.createNonVegRapidPayment(
-                    rapidUserIdCache!!, getPayablePrice(), walletTypeCache, it.orderId.toString()
+                    cleanedRapidUserId, getPayablePrice(), walletTypeCache, it.orderId.toString()
                 )
             }else{
+                //but this is actual order id
                 apiRequestManager.createPaymentWithRapidWallet(
-                    rapidUserIdCache!!, getPayablePrice(), walletTypeCache, it.orderId.toString()
+                    cleanedRapidUserId, getPayablePrice(), walletTypeCache, it.orderId.toString()
                 )
             }) {
                 is ResultWrapper.Success -> {
                     response.value.data?.let { success ->
+                        if (!success.orderId.isNullOrBlank()) {
+                            orderId = success.orderId.toIntOrNull() ?: orderId
+                        }
                         rapidUserExistUiState.update {
                             RWUserWalletUiState.CreatePaymentSuccess(false, success)
                         }
@@ -190,7 +202,10 @@ class RapidWalletViewModel @Inject constructor(private val apiRequestManager: Ap
     }
 
     internal fun getOrderId(): Int? {
-        return paymentActivityReqData?.orderId
+        if (orderId==null) {
+            return paymentActivityReqData?.orderId
+        }
+        return orderId
     }
 
 

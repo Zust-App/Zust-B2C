@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -87,26 +87,26 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
             }
             Spacer(modifier = Modifier.height(24.dp))
             Text(text = "What should we call you?",
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 color = colorResource(id = R.color.app_black))
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(text = "Let us know how to properly address you.",
-                style = ZustTypography.body2,
+                style = ZustTypography.bodyMedium,
                 fontWeight = FontWeight.W400,
                 color = colorResource(id = R.color.app_black))
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(text = "Name*",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 fontWeight = FontWeight.W500,
                 color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(dp_8))
             TextField(value = userName, onValueChange = {
                 userName = it
-            }, textStyle = ZustTypography.body2, modifier = Modifier
+            }, textStyle = ZustTypography.bodyMedium, modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
                 colors = setTextFiledColors(), shape = RoundedCornerShape(12.dp),
@@ -115,13 +115,13 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
             Spacer(modifier = Modifier.height(dp_20))
 
             Text(text = "Referral code (if available)",
-                style = ZustTypography.subtitle1,
+                style = ZustTypography.bodySmall,
                 fontWeight = FontWeight.W500,
                 color = colorResource(id = R.color.app_black))
             Spacer(modifier = Modifier.height(dp_8))
             TextField(value = referralCode, onValueChange = {
                 referralCode = it
-            }, textStyle = ZustTypography.body2,
+            }, textStyle = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
@@ -140,7 +140,7 @@ fun ProfileContainer(loginViewModel: LoginViewModel, navigationAction: (String) 
                 Text(text = "Complete".uppercase(),
                     modifier = Modifier.padding(8.dp),
                     color = Color.White,
-                    style = ZustTypography.body1)
+                    style = ZustTypography.bodyMedium)
             }
         }
         val (progressbarRef) = createRefs()

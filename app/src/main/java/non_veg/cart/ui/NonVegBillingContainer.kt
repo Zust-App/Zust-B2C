@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -63,7 +63,7 @@ fun NonVegBillingContainerDataHolder(data: CartSummaryData,modifier: Modifier?=n
         Row {
             Text(text = "Bill Summary",
                 color = colorResource(id = R.color.app_black),
-                style = ZustTypography.body1)
+                style = ZustTypography.titleMedium)
             Spacer(modifier = Modifier.weight(1f))
         }
 

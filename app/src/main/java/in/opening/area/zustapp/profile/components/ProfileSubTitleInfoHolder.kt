@@ -5,7 +5,7 @@ import `in`.opening.area.zustapp.profile.models.ProfileStaticItem
 import `in`.opening.area.zustapp.ui.theme.*
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -20,7 +20,7 @@ fun ProfileSubTitleInfo(profileStaticItem: ProfileStaticItem) {
         .padding(top = 24.dp, start = 16.dp, end = 16.dp)) {
         val (title) = createRefs()
         Text(text = profileStaticItem.text,
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black), modifier = Modifier
                 .constrainAs(title) {
                     top.linkTo(parent.top)

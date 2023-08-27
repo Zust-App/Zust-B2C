@@ -8,8 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +50,7 @@ fun SearchPlacesResultItemUi(data: SearchPlacesDataModel, callback: (SearchPlace
             text = data.mainText ?: "",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
             color = Color.Black,
@@ -68,7 +67,7 @@ fun SearchPlacesResultItemUi(data: SearchPlacesDataModel, callback: (SearchPlace
             text = data.description ?: "",
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            style = ZustTypography.subtitle1,
+            style = ZustTypography.bodySmall,
             fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
             color = Color.Gray,

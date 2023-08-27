@@ -14,19 +14,28 @@ import `in`.opening.area.zustapp.viewmodels.OrderSummaryNetworkVM
 import android.content.Context
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -35,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModel
+import ui.colorBlack
+import ui.colorWhite
 
 
 @Composable
@@ -58,83 +69,73 @@ fun CustomBottomBarView(
                     AppUtility.showToast(context, response.errors?.getTextMsg())
                 }
             }
+
             is CreateCartResponseUi.CartSuccess -> {
                 if (response.value == type) {
                     FirebaseAnalytics.logEvents(FirebaseAnalytics.CLICK_ON_VIEW_CART_SUCCESS)
                     successCallback.invoke(response.data)
                 }
             }
+
             is CreateCartResponseUi.InitialUi -> {
 
             }
         }
 
-        AnimatedVisibility(
-            visible = addToCart.totalItemCount > 0,
-            enter = slideInVertically(
-                initialOffsetY = { it },
-                animationSpec = tween(durationMillis = 400)
-            ) + fadeIn(),
-            exit = slideOutVertically(
-                targetOffsetY = { it },
-                animationSpec = tween(durationMillis = 50)
-            ) + fadeOut(),
-        ) {
-            //new_material_primary
-            BottomAppBar(
-                modifier = Modifier
-                    .clickable {
-                        FirebaseAnalytics.logEvents(FirebaseAnalytics.CLICK_ON_VIEW_CART)
-                        proceedToCartClick.invoke()
-                    }
-                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp, 0.dp, 0.dp)),
-                backgroundColor = colorResource(id = R.color.new_material_primary),
-            ) {
+        if (addToCart.totalItemCount > 0) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .shadow(dp_8)
+                .clip(RoundedCornerShape(topEnd = dp_8, topStart = dp_8))
+                .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(topEnd = dp_8, topStart = dp_8))) {
                 ConstraintLayout(modifier = Modifier
+                    .wrapContentHeight()
                     .fillMaxWidth()
-                    .height(36.dp)) {
-                    val (itemCount, price, viewCart, progressBar, viewCartIcon) = createRefs()
-                    Text(text = addToCart.totalItemCount.toString() + " Items", modifier = Modifier.constrainAs(itemCount) {
+                    .clip(RoundedCornerShape(topEnd = dp_8, topStart = dp_8))
+                    .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(topEnd = dp_8, topStart = dp_8)))
+                {
+                    val (itemCount, price, viewCart, progressBar) = createRefs()
+                    Text(text = buildString {
+                        append(addToCart.totalItemCount)
+                        append(" Items")
+                    }, modifier = Modifier.constrainAs(itemCount) {
                         start.linkTo(parent.start, dp_16)
-                        top.linkTo(parent.top, dp_4)
-                    }, color = colorResource(id = R.color.white),
-                        style = ZustTypography.subtitle1)
+                        top.linkTo(viewCart.top)
+                        bottom.linkTo(price.top)
+                    }, color = colorResource(id = R.color.language_default),
+                        style = ZustTypography.bodyMedium)
 
-                    Text(text = stringResource(id = R.string.ruppes) +
-                            ProductUtils.roundTo1DecimalPlaces(addToCart.calculatedPrice),
-                        modifier = Modifier.constrainAs(price) {
-                            start.linkTo(parent.start, dp_16)
-                            top.linkTo(itemCount.bottom, dp_8)
-                            bottom.linkTo(parent.bottom, dp_4)
-                        }, color = colorResource(id = R.color.white),
-                        style = ZustTypography.body1,
-                        fontSize = 14.sp)
+                    Text(text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(addToCart.calculatedPrice), modifier = Modifier.constrainAs(price) {
+                        start.linkTo(parent.start, dp_16)
+                        top.linkTo(itemCount.bottom)
+                        bottom.linkTo(viewCart.bottom)
+                    }, color = colorBlack,
+                        style = ZustTypography.titleLarge, fontSize = 14.sp)
 
-                    Text(text = stringResource(R.string.view_cart),
-                        modifier = Modifier.constrainAs(viewCart) {
-                            end.linkTo(viewCartIcon.start, dp_12)
-                            top.linkTo(parent.top, dp_8)
-                            bottom.linkTo(parent.bottom, dp_8)
-                        }, color = colorResource(id = R.color.white),
-                        style = ZustTypography.body1)
-
-                    Icon(painter = painterResource(id = R.drawable.arrow_right_icon),
-                        contentDescription = "", modifier = Modifier.constrainAs(viewCartIcon) {
-                            end.linkTo(parent.end, dp_8)
-                            top.linkTo(viewCart.top)
-                            bottom.linkTo(viewCart.bottom)
-                        }, tint = colorResource(id = R.color.white))
-
+                    Button(onClick = { proceedToCartClick.invoke() }, modifier = Modifier.constrainAs(viewCart) {
+                        end.linkTo(parent.end, dp_8)
+                        top.linkTo(parent.top, dp_8)
+                        bottom.linkTo(parent.bottom, dp_8)
+                    }, colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
+                        Spacer(modifier = Modifier.width(dp_12))
+                        Text(text = stringResource(R.string.view_cart),
+                            color = colorResource(id = R.color.white), style = ZustTypography.bodyMedium)
+                        Spacer(modifier = Modifier.width(dp_12))
+                        Icon(painter = painterResource(id = R.drawable.arrow_right_icon), contentDescription = "", tint = colorResource(id = R.color.white))
+                        Spacer(modifier = Modifier.width(dp_12))
+                    }
                     if (cartUiState.isLoading) {
-                        CircularProgressIndicator(modifier = Modifier.constrainAs(progressBar) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }, color = colorResource(id = R.color.white))
+                        CircularProgressIndicator(modifier = Modifier
+                            .size(dp_24)
+                            .constrainAs(progressBar) {
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                            }, color = colorResource(id = R.color.new_material_primary))
                     }
                 }
-
             }
         }
 

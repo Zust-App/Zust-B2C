@@ -7,14 +7,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
+import ui.colorBlack
+import ui.colorWhite
 import zustbase.orderHistory.ui.UserGroceryBookingList
 import zustbase.orderHistory.ui.UserNonVegBookingList
 import zustbase.ui.ComposeCustomOrderHistoryTopBar
@@ -27,12 +30,12 @@ class MyOrdersActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold(topBar = {
-                ComposeCustomOrderHistoryTopBar(modifier = Modifier, titleText = "My Orders", null, null) {
+                ComposeCustomOrderHistoryTopBar(modifier = Modifier.background(color = colorWhite), titleText = "My Orders", null, color = colorBlack, null) {
                     handleAction(it)
                 }
             }, content = {
                 BookingHistoryContainer(it)
-            }, backgroundColor = colorResource(id = R.color.screen_surface_color))
+            }, containerColor = colorResource(id = R.color.screen_surface_color))
         }
     }
 

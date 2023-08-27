@@ -18,13 +18,23 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.ui.theme.dp_4
+import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
 import kotlinx.coroutines.flow.update
+import ui.colorBlack
+import ui.colorWhite
 
 
 @AndroidEntryPoint
@@ -38,10 +48,18 @@ class AddressSearchActivity : BaseActivityWithLocation() {
         setContent {
             Scaffold(
                 topBar = {
-                    ComposeCustomTopAppBar(modifier = Modifier,
-                        titleText = "Search Location",
-                        subTitleText = null, null) {
-                        finish()
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .shadow(elevation = dp_8)) {
+                        ComposeCustomTopAppBar(modifier = Modifier
+                            .background(color = colorWhite, shape = RoundedCornerShape(0.dp)),
+                            titleText = "Search Location",
+                            color = colorBlack,
+                            endImageId = null,
+                            subTitleText = null) {
+                            finish()
+                        }
                     }
                 }
             ) { padding ->

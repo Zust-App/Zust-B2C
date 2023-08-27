@@ -1,105 +1,111 @@
 package `in`.opening.area.zustapp.compose
 
-import androidx.compose.foundation.Image
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import `in`.opening.area.zustapp.ui.theme.dp_8
 
 
 enum class HomeBottomNavTypes {
-    Home, Orders, MoveToCartPage, Food
+    Landing, Orders, MoveToCartPage, Food, Analysis
 }
 
 val navIconModifier = Modifier.size(22.dp)
 
 @Composable
-fun CustomBottomNavigation(navActionCallback: (HomeBottomNavTypes, Any?) -> Unit) {
-    var homeBottomNav by rememberSaveable {
-        mutableStateOf(HomeBottomNavTypes.Home.ordinal)
+fun CustomBottomNavigation(navController: NavHostController, navActionCallback: (HomeBottomNavTypes, Any?) -> Unit) {
+    var currentSelectedNav by remember {
+        mutableStateOf(HomeBottomNavTypes.Landing.name)
     }
 
-    BottomNavigation(backgroundColor = colorResource(R.color.white), modifier = Modifier.fillMaxWidth()) {
-        BottomNavigationItem(
-            selected = homeBottomNav == HomeBottomNavTypes.Home.ordinal,
-            onClick = {
-                if (homeBottomNav != HomeBottomNavTypes.Home.ordinal) {
-                    homeBottomNav = HomeBottomNavTypes.Home.ordinal
-                    navActionCallback.invoke(HomeBottomNavTypes.Home, null)
+    NavigationBar(
+        containerColor = colorResource(R.color.white),
+        modifier = Modifier.fillMaxWidth(),
+        tonalElevation = dp_8,
+        windowInsets = NavigationBarDefaults.windowInsets,
+    ) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        navItems.forEach { screen ->
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = screen.iconResId),
+                        modifier = navIconModifier,
+                        contentDescription = screen.contentDescription
+                    )
+                },
+                label = {
+                    Text(
+                        text = screen.label,
+                        style = ZustTypography.bodySmall,
+                        color = if (screen.type.name == currentSelectedNav) {
+                            colorResource(id = R.color.app_black)
+                        } else {
+                            colorResource(id = R.color.new_hint_color)
+                        },
+                        fontWeight = FontWeight.W500
+                    )
+                },
+                selected = currentDestination?.hierarchy?.any { it.route == screen.type.name } == true,
+                onClick = {
+                    if (screen.type.name == HomeBottomNavTypes.Orders.name) {
+                        navActionCallback.invoke(HomeBottomNavTypes.Orders, null)
+                    } else {
+                        currentSelectedNav = screen.type.name
+                        navController.navigate(screen.type.name) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
                 }
-            },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.home_nav_selected_icon),
-                    modifier = navIconModifier,
-                    contentDescription = "Home"
-                )
-            },
-            label = {
-                Text(text = "Home",
-                    style = ZustTypography.subtitle1,
-                    color = if (homeBottomNav == HomeBottomNavTypes.Home.ordinal) {
-                        colorResource(id = R.color.app_black)
-                    } else {
-                        colorResource(id = R.color.new_hint_color)
-                    }, fontWeight = FontWeight.W500)
-            }
-        )
-
-        BottomNavigationItem(
-            selected = homeBottomNav == HomeBottomNavTypes.Orders.ordinal,
-            onClick = {
-                navActionCallback.invoke(HomeBottomNavTypes.Orders, null)
-            },
-            icon = {
-                Icon(
-                    modifier = navIconModifier,
-                    painter = painterResource(id = R.drawable.shopping_bag_nav_icon),
-                    contentDescription = "Orders"
-                )
-            },
-            label = {
-                Text(text = "Orders", style = ZustTypography.subtitle1,
-                    color = if (homeBottomNav == HomeBottomNavTypes.Home.ordinal) {
-                        colorResource(id = R.color.app_black)
-                    } else {
-                        colorResource(id = R.color.new_hint_color)
-                    })
-            }
-        )
-
-        BottomNavigationItem(
-            selected = homeBottomNav == HomeBottomNavTypes.Food.ordinal,
-            onClick = {
-                navActionCallback.invoke(HomeBottomNavTypes.Food, null)
-            },
-            icon = {
-                Image(
-                    modifier = navIconModifier,
-                    painter = painterResource(id = R.drawable.food_btm_logo),
-                    contentDescription = "food",
-                )
-            },
-            label = {
-                Text(text = "Food", style = ZustTypography.subtitle1,
-                    color = if (homeBottomNav == HomeBottomNavTypes.Food.ordinal) {
-                        colorResource(id = R.color.app_black)
-                    } else {
-                        colorResource(id = R.color.app_black)
-                    })
-            }
-        )
+            )
+        }
     }
-
 }
+
+
+val navItems = listOf(
+    HomeBottomNavItem(
+        HomeBottomNavTypes.Landing,
+        R.drawable.outline_home_24,
+        "Home"
+    ),
+    HomeBottomNavItem(
+        HomeBottomNavTypes.Analysis,
+        R.drawable.outline_analytics_24,
+        "Analysis"
+    ),
+    HomeBottomNavItem(
+        HomeBottomNavTypes.Orders,
+        R.drawable.shopping_bag_nav_icon,
+        "Orders"
+    )
+)
+
+data class HomeBottomNavItem(
+    val type: HomeBottomNavTypes,
+    val iconResId: Int,
+    val label: String,
+    val contentDescription: String = label,
+)
+

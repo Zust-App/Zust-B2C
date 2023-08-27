@@ -177,8 +177,7 @@ data class OrderDetailDeepLinkModel(
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readString()) {
-    }
+        parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(orderId)

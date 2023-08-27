@@ -24,7 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -98,8 +98,8 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
         TypewriterText(text = stringResource(R.string.last_minute_delivery_app),
             modifier = Modifier.fillMaxWidth(), textSize = 16.sp)
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = stringResource(R.string.last_minute_delivery_app),
-            style = ZustTypography.subtitle1,
+        Text(text = ENTER_MOBILE_NUM,
+            style = ZustTypography.bodySmall,
             color = colorResource(id = R.color.app_black))
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -121,7 +121,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 SetDrawableImage(R.drawable.india_flag_icon)
             },
             colors = setTextFiledColors(),
-            textStyle = ZustTypography.body2, trailingIcon = {
+            textStyle = ZustTypography.bodyMedium, trailingIcon = {
                 if (user.mobileNum.length == MOBILE_NUM_THRESHOLD) {
                     SetDrawableImage(R.drawable.ic_outline_check_circle_outline_24)
                 }
@@ -140,7 +140,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
                 Spacer(modifier = Modifier.width(4.dp))
             }
             Text(text = "NEXT", textAlign = TextAlign.Center,
-                style = ZustTypography.body1,
+                style = ZustTypography.bodyMedium,
                 color = Color.White, modifier = Modifier
                     .padding(6.dp)
                     .padding(0.dp))
@@ -148,7 +148,7 @@ fun LoginMainContainer(loginViewModel: LoginViewModel, navigationAction: (String
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ClickableText(text = annotatedStringTAndC, style = ZustTypography.subtitle1,
+        ClickableText(text = annotatedStringTAndC, style = ZustTypography.bodySmall,
             onClick = { offset ->
                 annotatedStringTAndC.getStringAnnotations(tag = "policy",
                     start = offset, end = offset).firstOrNull()?.let {

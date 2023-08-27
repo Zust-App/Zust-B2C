@@ -15,9 +15,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -84,7 +84,7 @@ fun SearchPlacesBarUi(
                 onValueChange = { newText ->
                     searchInput = newText
                 },
-                textStyle = ZustTypography.body1,
+                textStyle = ZustTypography.bodyMedium,
                 singleLine = true,
                 decorationBox = { innerTextField ->
                     Box(
@@ -95,7 +95,7 @@ fun SearchPlacesBarUi(
                         if (searchInput.isEmpty()) {
                             Text(
                                 text = "Type address...",
-                                style = ZustTypography.body1,
+                                style = ZustTypography.bodyMedium,
                                 color = colorResource(id = R.color.new_hint_color)
                             )
                         }
@@ -143,7 +143,7 @@ fun SearchPlacesBarUi(
                 .background(color = colorResource(id = R.color.new_material_primary), shape = RoundedCornerShape(8.dp))
                 .padding(horizontal = 12.dp, vertical = 12.dp)
                 .clip(RoundedCornerShape(8.dp))) {
-                Text(text = "Use Current Location", style = ZustTypography.body1, color = colorResource(id = R.color.white))
+                Text(text = "Use Current Location", style = ZustTypography.bodyMedium, color = colorResource(id = R.color.white))
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_my_location_24), contentDescription = "current location",
                     tint = colorResource(id = R.color.white))

@@ -67,7 +67,7 @@
     <string name="permission_not_granted">Permission Not Granted</string>
     <string name="permission_granted">Permission Granted</string>
     <string name="thanks_for_using_zust_app">Thanks for using Zust app</string>
-    <string name="order_confirmation_message">Your order %1$s confirmed. Will deliver in %2$d Minutes</string>
+    <string name="order_confirmation_message">Your order %1$s confirmed</string>
     <string name="my_profile">My Profile</string>
     <string name="faq">Faq</string>
     <string name="about_us">About us</string>
@@ -84,6 +84,6 @@
     <string name="we_don_t_have_your_location_yet">We don\'t have your location, yet!</string>
     <string name="we_need_your_location_to_find_nearest_store_provide_you_a_seamless_delivery_experience"><![CDATA[We need your location to find nearest store & provide you a seamless delivery experience]]></string>
     <string name="enable_device_location">Enable device location</string>
-    <string name="last_minute_delivery_app">Last minute delivery app</string>
+    <string name="last_minute_delivery_app">Your all in one delivery app</string>
 
 </resources>

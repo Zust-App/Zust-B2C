@@ -3,12 +3,14 @@ package zustbase.basepage.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,11 +26,12 @@ import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import ui.colorBlack
 import zustbase.custom.pressClickEffect
 import zustbase.services.models.ZustService
 import zustbase.services.models.ZustServiceData
 
-private const val DEFAULT_SERVICE_CHUNK_SIZE = 3
+private const val DEFAULT_SERVICE_CHUNK_SIZE = 4
 fun LazyListScope.zustAvailServicesUi(data: ZustServiceData?, callback: (ZustService) -> Unit) {
     if (data == null) {
         return
@@ -44,22 +47,21 @@ fun LazyListScope.zustAvailServicesUi(data: ZustServiceData?, callback: (ZustSer
                 .padding(horizontal = dp_16, vertical = dp_8)
         ) {
             val chunk = chunkedServices[index]
-            chunk.forEachIndexed { itemIndex, service ->
-                val startPadding = if (itemIndex == 0) 0.dp else dp_8
-                val endPadding = if (itemIndex == chunk.lastIndex) 0.dp else dp_8
-                ZustSingleServiceUi(
-                    service,
-                    modifier = Modifier
-                        .pressClickEffect {
-                            callback.invoke(service)
-                        }
-                        .weight(1f)
-                        .padding(start = startPadding, end = endPadding)
-                )
+            for (i in (0 until DEFAULT_SERVICE_CHUNK_SIZE)) {
+                if (i < chunk.size) {
+                    ZustSingleServiceUi(
+                        chunk[i],
+                        modifier = Modifier
+                            .pressClickEffect {
+                                callback.invoke(chunk[i])
+                            }
+                            .weight(1f)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
-            if (chunk.size < (DEFAULT_SERVICE_CHUNK_SIZE)) {
-                Spacer(modifier = Modifier.weight(1f))
-            }
+
         }
     }
 }
@@ -68,7 +70,7 @@ fun LazyListScope.zustAvailServicesUi(data: ZustServiceData?, callback: (ZustSer
 private fun ZustSingleServiceUi(zustService: ZustService, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.padding(horizontal = dp_4)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -78,15 +80,15 @@ private fun ZustSingleServiceUi(zustService: ZustService, modifier: Modifier = M
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .height(110.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(dp_4))
+                .aspectRatio(1f)
+                .clip(CircleShape)
         )
         Spacer(modifier = Modifier.height(dp_8))
         Text(
             text = zustService.title ?: "",
-            style = ZustTypography.body2,
-            color = colorResource(id = R.color.black),
+            style = ZustTypography.bodySmall,
+            color = colorBlack,
         )
     }
 }

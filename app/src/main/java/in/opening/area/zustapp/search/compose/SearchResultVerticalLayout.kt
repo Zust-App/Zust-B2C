@@ -12,7 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,7 +74,7 @@ fun SearchResultVerticalLayout(
                     width = Dimension.fillToConstraints
                 },
             color = colorResource(id = R.color.app_black),
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
         )
 
         Text(text = buildString {
@@ -85,7 +85,7 @@ fun SearchResultVerticalLayout(
             top.linkTo(title.bottom, dp_8)
             start.linkTo(image.end, dp_10)
         }, color = colorResource(id = R.color.new_hint_color),
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             fontSize = 12.sp)
 
         Text(
@@ -99,7 +99,7 @@ fun SearchResultVerticalLayout(
                 append(ProductUtils.roundTo1DecimalPlaces(cartItem.price))
             },
             color = colorResource(id = R.color.app_black),
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
             fontSize = 14.sp,
         )
 
@@ -152,7 +152,7 @@ fun SearchResultVerticalLayout(
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,
@@ -182,7 +182,7 @@ fun SearchResultVerticalLayout(
                 .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(4.dp))
                 .height(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.light_green),
+                    containerColor = colorResource(id = R.color.light_green),
                     contentColor = colorResource(id = R.color.light_green)),
                 contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
                 onClick = {

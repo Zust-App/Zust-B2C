@@ -1,7 +1,9 @@
 package zustbase.orderDetail.models
 
+import android.location.Address
 import `in`.opening.area.zustapp.utility.UserCustomError
 import com.google.errorprone.annotations.Keep
+import `in`.opening.area.zustapp.product.model.ZustAddressV1
 
 @Keep
 data class OrderDetailModel(
@@ -15,7 +17,7 @@ data class OrderDetailModel(
 
 @Keep
 data class OrderDetailData(
-    val address: Address? = null,
+    val address: ZustAddress? = null,
     val couponDiscountPrice: Double,
     val deliveryFee: Double,
     val itemTotalPrice: Double,
@@ -56,19 +58,21 @@ data class Item(
 data class RiderDetails(val riderPhone: String? = null, val riderName: String? = null)
 
 @Keep
-data class Address(
-    val addressLevel: String?,
-    val addressType: String?,
-    val description: String?,
-    val houseNumberAndFloor: String?,
+data class ZustAddress(
+    val addressLevel: String? = null,
+    val addressType: String? = null,
+    val description: String? = null,
+    val houseNumberAndFloor: String? = null,
     val id: Int,
-    val landmark: String?,
+    val landmark: String? = null,
     val latitude: Double? = 0.0,
     val longitude: Double? = 0.0,
-    val pincode: String? = null,
+    val pinCode: String? = null,
 )
 
-fun Address?.convertAsStringText(): String {
+
+
+fun ZustAddress?.convertAsStringText(): String {
     val address = this
     return buildString {
         if (!address?.houseNumberAndFloor.isNullOrEmpty()) {

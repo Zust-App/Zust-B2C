@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun UpSellingUi(products: List<ProductSingleItem>,listeners: OrderItemsClickListeners) {
-    LazyRow() {
+    LazyRow {
         products.forEach {
             item(key = it.productPriceId) {
                 SuggestItemContainer(it,listeners)

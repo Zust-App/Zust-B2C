@@ -14,8 +14,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +51,7 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
     val context = LocalContext.current
     ConstraintLayout(modifier = trendingItemsModifier
         .weight(1f)
+        .border(width = 1.dp, shape = RoundedCornerShape(dp_8), color = colorResource(id = R.color.border_dark))
         .clickable {
             context.startProductDetailPage(product)
         }) {
@@ -67,7 +68,7 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                 end.linkTo(parent.end, dp_12)
             })
         Text(text = product.productName,
-            style = ZustTypography.body2,
+            style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp, modifier = Modifier
                 .height(38.dp)
@@ -81,7 +82,7 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
             append(ProductUtils.getNumberDisplayValue(product.quantity))
             append(" ")
             append(product.quantityUnit.lowercase())
-        }, style = ZustTypography.body2,
+        }, style = ZustTypography.bodyMedium,
             fontWeight = FontWeight.W600,
             color = colorResource(id = R.color.new_hint_color),
             fontSize = 12.sp,
@@ -93,13 +94,14 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
         Text(text = buildString {
             append(stringResource(id = R.string.ruppes))
             append(product.price.toInt())
-        }, style = ZustTypography.body1,
+        }, style = ZustTypography.bodyMedium,
             color = colorResource(id = R.color.app_black),
             fontSize = 14.sp,
             fontWeight = FontWeight.W600,
             modifier = Modifier.constrainAs(productPrice) {
                 top.linkTo(productQuantity.bottom, dp_8)
                 start.linkTo(parent.start, dp_12)
+                bottom.linkTo(parent.bottom, dp_8)
             })
 
         if (product.discountPercentage > 0) {
@@ -130,7 +132,8 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                     .height(22.dp)
                     .constrainAs(incDecContainer) {
                         end.linkTo(parent.end, dp_8)
-                        bottom.linkTo(productImage.bottom)
+                        top.linkTo(productImage.bottom, dp_8)
+                        bottom.linkTo(parent.bottom, dp_8)
                     }) {
                 Icon(painter = painterResource(removeIcon),
                     contentDescription = "",
@@ -151,7 +154,7 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                         .defaultMinSize(22.dp)
                         .padding(horizontal = 2.dp)
                         .align(Alignment.CenterVertically),
-                    style = ZustTypography.body1,
+                    style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.app_black),
                     textAlign = TextAlign.Center,
@@ -171,13 +174,13 @@ fun RowScope.TrendingProductsSingleItem(product: ProductSingleItem, productItemC
                     tint = colorResource(id = R.color.white))
 
             }
-        }
-        else {
+        } else {
             Icon(painter = painterResource(id = R.drawable.ic_baseline_add_24),
                 contentDescription = "add", modifier = Modifier
                     .constrainAs(addItemContainer) {
                         end.linkTo(parent.end, dp_8)
-                        bottom.linkTo(productImage.bottom)
+                        top.linkTo(productImage.bottom, dp_8)
+                        bottom.linkTo(parent.bottom, dp_8)
                     }
                     .size(22.dp)
                     .clickable {

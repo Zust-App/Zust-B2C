@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +59,7 @@ fun HelpAndSupportUi() {
                     start.linkTo(chatIcon.end, dp_12)
                     width = Dimension.fillToConstraints
                 },
-            style = ZustTypography.body1,
+            style = ZustTypography.bodyMedium,
         )
 
         Icon(painter = painterResource(id = R.drawable.arrow_right_icon),

@@ -25,10 +25,6 @@ class PhoneInputFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = contentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         loginViewModel.getOtpUiState.update { GetOtpLoginUi.InitialUi(false) }
         loginViewModel.autoFetchOTP.update { "" }
