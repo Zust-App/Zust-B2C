@@ -12,6 +12,7 @@ import `in`.opening.area.zustapp.uiModels.UserSavedAddressUi
 import `in`.opening.area.zustapp.uiModels.locations.CheckDeliverableAddressUiState
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.utility.UserCustomError
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,6 +25,7 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
     internal val userAddressListUiState = MutableStateFlow<UserSavedAddressUi>(UserSavedAddressUi.InitialUi(isLoading = false))
 
     internal val deliverableAddressUiState = MutableStateFlow<CheckDeliverableAddressUiState>(CheckDeliverableAddressUiState.InitialUiState(false))
+    internal val isAppUpdateAvail = MutableStateFlow(false)
 
     internal fun getAllAddress() = viewModelScope.launch {
         sharedPrefManager.removeSavedAddressPrevious()
@@ -100,6 +102,27 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
             }
         }
 
+    }
+
+    internal fun getAppMetaData() = viewModelScope.launch(Dispatchers.IO) {
+        when (val response = apiRequestManager.getMetaData()) {
+            is ResultWrapper.Success -> {
+                response.value.data?.let {
+                    if (it.isAppUpdateAvail == true) {
+                        sharedPrefManager.saveFreeDeliveryBasePrice(it.freeDeliveryFee)
+                        sharedPrefManager.saveDeliveryFee(it.deliveryCharge)
+                        sharedPrefManager.saveNonVegFreeDeliveryFee(it.nonVegFreeDelivery)
+                        isAppUpdateAvail.update { true }
+                    } else {
+                        isAppUpdateAvail.update { false }
+                    }
+                }
+            }
+
+            else -> {
+                isAppUpdateAvail.update { false }
+            }
+        }
     }
 
 }

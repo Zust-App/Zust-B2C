@@ -49,7 +49,12 @@ private const val NV_HOME_OFFER = 1
 private const val NV_HOME_BANNER = 2
 
 @Composable
-fun ZustNvEntryMainUi(viewModel: ZustNvEntryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), paddingValues: PaddingValues, searchCallback: () -> Unit) {
+fun ZustNvEntryMainUi(
+    viewModel: ZustNvEntryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    paddingValues: PaddingValues,
+    changeLocation: () -> Unit,
+    searchCallback: () -> Unit,
+) {
     val nvHomePageCombinedData = viewModel.nonVegHomePageUiModel.collectAsState().value
 
     if (nvHomePageCombinedData.isLoading) {
@@ -123,8 +128,8 @@ fun ZustNvEntryMainUi(viewModel: ZustNvEntryViewModel = androidx.lifecycle.viewm
             NonVegHomePageErrorUi(retryCallback = {
                 viewModel.getUserSavedAddress()
             }, changeLocation = {
-
-            }, 100)
+                changeLocation.invoke()
+            }, nvHomePageCombinedData.errorCode)
         }
 
         is NvHomePageCombinedUiModel.Initial -> {
@@ -147,7 +152,7 @@ private fun ShowNonVegProgressBar() {
 }
 
 @Composable
-private fun NonVegHomePageErrorUi(retryCallback: () -> Unit, changeLocation: () -> Unit, errorCode: Int) {
+private fun NonVegHomePageErrorUi(retryCallback: () -> Unit, changeLocation: () -> Unit, errorCode: Int?) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {

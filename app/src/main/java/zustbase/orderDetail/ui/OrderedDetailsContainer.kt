@@ -28,6 +28,7 @@ import androidx.constraintlayout.compose.Dimension
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
+import `in`.opening.area.zustapp.home.components.FullScreenErrorUi
 import zustbase.orderDetail.models.OrderStatus
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_20
@@ -157,10 +158,12 @@ fun OrderedDetailsContainer(
                 } else {
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
-                RetryOrderDetails {
+                FullScreenErrorUi(errorCode = null, retryCallback = {
                     viewModel.orderIdCache?.let { orderId ->
                         viewModel.getOrderDetails(orderId, viewModel.intentSource)
                     }
+                }) {
+
                 }
             }
 

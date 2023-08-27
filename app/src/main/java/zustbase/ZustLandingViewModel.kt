@@ -102,6 +102,7 @@ class ZustLandingViewModel @Inject constructor(
                     if (it.isAppUpdateAvail == true) {
                         sharedPrefManager.saveFreeDeliveryBasePrice(it.freeDeliveryFee)
                         sharedPrefManager.saveDeliveryFee(it.deliveryCharge)
+                        sharedPrefManager.saveNonVegFreeDeliveryFee(it.nonVegFreeDelivery)
                         isAppUpdateAvail.update { true }
                     } else {
                         isAppUpdateAvail.update { false }
@@ -141,8 +142,16 @@ class ZustLandingViewModel @Inject constructor(
         if (!sharedPrefManager.getClearGroceryCart()) {
             dbAddToCartRepository.deleteAllCartItem()
             sharedPrefManager.saveClearGroceryCart(true)
-        }else{
+        } else {
             return@launch
+        }
+    }
+    internal fun resetStateOfUi(){
+        _zustServicesUiModel.update {
+            ZustAvailServicesUiModel.Empty(true)
+        }
+        _userAnalysisReportUiModel.update {
+            UserReportAnalysisUiModel.Empty(true)
         }
     }
 

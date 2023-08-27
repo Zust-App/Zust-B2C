@@ -124,11 +124,11 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    fun getHomePageDataWithFlow(lat: Double, lng: Double) = flow {
-        emit(getHomePageDataFromServer(lat, lng))
+    fun getHomePageDataWithFlow(lat: Double, lng: Double, pinCode: String?) = flow {
+        emit(getHomePageDataFromServer(lat, lng, pinCode))
     }
 
-    private suspend fun getHomePageDataFromServer(lat: Double, lng: Double) =
+    private suspend fun getHomePageDataFromServer(lat: Double, lng: Double, pinCode: String?) =
         universalApiRequestManager {
             val token = sharedPrefManager.getUserAuthToken()
             val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE) {
@@ -137,17 +137,20 @@ class ApiRequestManager @Inject constructor() {
                 }
                 parameter("latitude", lat)
                 parameter("longitude", lng)
+                parameter("pincode", pinCode)
             }
             value
         }
 
-    suspend fun getTrendingProductsWithFlow() = flow {
-        emit(getTrendingProducts())
+    suspend fun getTrendingProductsWithFlow(lat: Double?, lng: Double?, pinCode: String?) = flow {
+        emit(getTrendingProducts(lat, lng, pinCode))
     }
 
-    private suspend fun getTrendingProducts() = universalApiRequestManager {
+    private suspend fun getTrendingProducts(lat: Double?, lng: Double?, pinCode: String?) = universalApiRequestManager {
         val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.TRENDING_PRODUCTS) {
-
+            parameter("lat", lat ?: 0.0)
+            parameter("lng", lng ?: 0.0)
+            parameter("pincode", pinCode ?: "000000")
         }
         value
     }

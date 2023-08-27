@@ -69,7 +69,7 @@ class ZustNvEntryViewModel @Inject constructor(private val apiRequestManager: Ap
                     }
                 } else {
                     _nonVegHomePageUiModel.update {
-                        NvHomePageCombinedUiModel.Error(false, "We are currently not available")
+                        NvHomePageCombinedUiModel.Error(false, "We are currently not available", ApiRequestManager.NOT_COVERAGE_ERROR_CODE)
                     }
                 }
             }
@@ -115,6 +115,7 @@ class ZustNvEntryViewModel @Inject constructor(private val apiRequestManager: Ap
                                 startCollectingLocalInfoItems()
                             }
                         }
+
                         else -> {
                             startCollectingLocalInfoItems()
                         }

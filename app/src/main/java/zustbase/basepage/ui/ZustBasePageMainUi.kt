@@ -3,7 +3,6 @@ package zustbase.basepage.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,21 +17,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.home.components.FullScreenErrorUi
 import `in`.opening.area.zustapp.home.components.homePageBrandPromiseUi
 import `in`.opening.area.zustapp.home.components.homeSuggestProductUi
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
-import `in`.opening.area.zustapp.utility.AppUtility
 import non_veg.home.ui.homeGenericPageSearchDefaultUi
 import non_veg.payment.ui.ViewSpacer8
 import zustbase.ZustLandingViewModel
@@ -88,33 +84,17 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel, genericCallba
                     zustAvailServicesUi(response.data, basicCallback)
                 }
 
-                if ((response.zustServicePageResponse?.data?.size ?: 0) > 1) {
-                    response.zustServicePageResponse?.data?.get(1)?.let {
-                        if (!it.list.isNullOrEmpty()) {
+                response.zustServicePageResponse?.data?.let { servicesData ->
+                    if (servicesData.size > 1) {
+                        for (i in 1 until servicesData.size) {
                             item {
-                                NvHomeTitle(it.title)
+                                NvHomeTitle(servicesData[i].title)
                             }
-                            if (it.key == "promotion") {
-                                zustBaseRow2ItemsUi(it.list)
+                            if (servicesData[i].key == "promotion") {
+                                zustBaseRow2ItemsUi(servicesData[i].list)
                             } else {
                                 item {
-                                    ZustBaseAutoScrollUi(it.list)
-                                }
-                            }
-                        }
-                    }
-                }
-                if ((response.zustServicePageResponse?.data?.size ?: 0) > 2) {
-                    response.zustServicePageResponse?.data?.get(2)?.let {
-                        if (!it.list.isNullOrEmpty()) {
-                            item {
-                                NvHomeTitle(it.title)
-                            }
-                            if (it.key == "promotion") {
-                                zustBaseRow2ItemsUi(it.list)
-                            } else {
-                                item {
-                                    ZustBaseAutoScrollUi(it.list)
+                                    ZustBaseAutoScrollUi(servicesData[i].list)
                                 }
                             }
                         }
@@ -132,7 +112,13 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel, genericCallba
         }
 
         is ZustAvailServicesUiModel.ErrorUi -> {
-            AppUtility.showToast(LocalContext.current, response.message)
+            FullScreenErrorUi(errorCode = response.errorCode, retryCallback = {
+                zustLandingViewModel.getListOfServiceableItem()
+                zustLandingViewModel.getUserAnalysisData()
+            }) {
+
+            }
+            zustLandingViewModel.resetStateOfUi()
         }
     }
 }

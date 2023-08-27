@@ -55,20 +55,20 @@ class GroceryHomeViewModel @Inject constructor(
         updateAddressItem(address)
         address?.let {
             if (address.latitude != null && address.latitude != 0.0) {
-                getGroceryHomePageData(address.latitude, address.longitude)
+                getGroceryHomePageData(address.latitude, address.longitude,address.pinCode)
             } else {
                 homePageUiState.update { HomePageResUi.ErrorUi(false, errorMsg = "Invalid address please try other location", errors = arrayListOf(), errorCode = NOT_COVERAGE_ERROR_CODE) }
             }
         }
     }
 
-    private fun getGroceryHomePageData(lat: Double?, lng: Double?) {
+    private fun getGroceryHomePageData(lat: Double?, lng: Double?,pinCode:String?) {
         job?.cancel()
         job = viewModelScope.launch {
             homePageUiState.update { HomePageResUi.InitialUi(true) }
             if (lat != null && lng != null) {
-                val trendingProductsResponse = productRepo.apiRequestManager.getTrendingProductsWithFlow()
-                val homePageResponse = productRepo.apiRequestManager.getHomePageDataWithFlow(lat, lng)
+                val trendingProductsResponse = productRepo.apiRequestManager.getTrendingProductsWithFlow(lat, lng,pinCode)
+                val homePageResponse = productRepo.apiRequestManager.getHomePageDataWithFlow(lat, lng,pinCode)
                 val addToCartProducts = productRepo.dbRepo.getAllCartItems()
                 combine(trendingProductsResponse, homePageResponse, addToCartProducts) { trend, homePage, localProducts ->
                     localProductCountMap = localProducts.associate { it.productPriceId to it.itemCountByUser }

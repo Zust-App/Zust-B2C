@@ -149,7 +149,9 @@ class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: 
 
     internal fun getLatestAddress() = sharedPrefManager.getUserAddress()
 
-
+    internal fun getNonVegMinDeliveryAmount(): Int {
+        return sharedPrefManager.getNonVegFreeDeliveryFee()
+    }
     enum class NonVegPaymentMethod {
         COD, RAPID_WALLET
     }

@@ -242,7 +242,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                     .constrainAs(incDecContainer) {
                         top.linkTo(priceText.top)
                         end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
+                        bottom.linkTo(priceText.bottom)
                     }) {
                 Icon(painter = painterResource(removeIcon),
                     contentDescription = "",
@@ -288,7 +288,7 @@ private fun ProductSingleItem(productSingleItem: ProductSingleItem, callback: Pr
                 .constrainAs(addItemContainer) {
                     top.linkTo(priceText.top)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                    bottom.linkTo(priceText.bottom)
                 }
                 .background(color = colorResource(id = color.light_green), shape = RoundedCornerShape(4.dp))
                 .height(24.dp),

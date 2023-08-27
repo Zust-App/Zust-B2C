@@ -22,4 +22,5 @@ data class ZustService(
     val type: String,
     val title: String?,
     val merchantId: Int?=null,
+    val deepLink:String?=null
 )

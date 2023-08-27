@@ -2,7 +2,7 @@ package `in`.opening.area.zustapp.home
 
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
-import `in`.opening.area.zustapp.home.components.HomePageErrorUi
+import `in`.opening.area.zustapp.home.components.FullScreenErrorUi
 import `in`.opening.area.zustapp.home.composeContainer.HomePageShimmerUi
 import `in`.opening.area.zustapp.uiModels.HomePageResUi
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -29,8 +29,7 @@ fun HomeMainContainer(
         .fillMaxWidth()
         .fillMaxHeight()
         .padding(paddingValues)) {
-        val (searchField, notDeliverHere, pgBar) = createRefs()
-
+        val (pgBar) = createRefs()
         val response = homeWidgets
         if (response.isLoading) {
             HomePageShimmerUi()
@@ -48,7 +47,7 @@ fun HomeMainContainer(
                     this, callback) { product, action ->
                     product?.itemCountByUser?.let { cartItemCount ->
                         if (product.maxItemPurchaseLimit > 0 && action == `in`.opening.area.zustapp.viewmodels.ACTION.INCREASE) {
-                            if (cartItemCount <= product.maxItemPurchaseLimit) {
+                            if (cartItemCount < product.maxItemPurchaseLimit) {
                                 groceryHomeViewModel.updateOrInsertItems(product, action)
                                 return@let
                             } else {
@@ -67,7 +66,7 @@ fun HomeMainContainer(
                 } else {
                     AppUtility.showToast(context, response.errors.getTextMsg())
                 }
-                HomePageErrorUi(response.errorCode, searchField, notDeliverHere, this, {
+                FullScreenErrorUi(response.errorCode, {
                     groceryHomeViewModel.getUserSavedAddress()
                 }) {
                     changeLocationCallback.invoke()

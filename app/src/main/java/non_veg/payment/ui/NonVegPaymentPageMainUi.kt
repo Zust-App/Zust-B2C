@@ -54,7 +54,7 @@ fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel
                 .fillMaxHeight()
                 .background(color = colorResource(id = R.color.screen_surface_color))) {
                 item {
-                    DeliveryTimingOfferInfoUi(nonVegPaymentViewModel.nonVegCartDetailsForPayment?.expectedDeliveryTime)
+                    DeliveryTimingOfferInfoUi(nonVegPaymentViewModel.nonVegCartDetailsForPayment?.expectedDeliveryTime, nonVegPaymentViewModel.getNonVegMinDeliveryAmount())
                 }
                 item {
                     ViewSpacer20()
@@ -109,7 +109,7 @@ fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel
 }
 
 @Composable
- fun ShowPaymentPageUiShimmer() {
+fun ShowPaymentPageUiShimmer() {
     val shimmerColors = listOf(
         Color(0xffDBDBDB).copy(alpha = 0.8f),
         Color(0xffDBDBDB).copy(alpha = 0.5f),

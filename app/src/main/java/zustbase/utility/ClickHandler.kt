@@ -26,8 +26,8 @@ import zustbase.orderDetail.ui.INTENT_SOURCE
 import zustbase.services.models.ZustService
 
 fun Context.handleBasicCallbacks(zustService: ZustService) {
-    if (!zustService.enable) {
-        AppUtility.showToast(this, "Zust ${zustService.title} coming soon")
+    if (!zustService.enable && !zustService.type.equals(ZustServiceType.SUBSCRIPTION.name,ignoreCase = true)) {
+        AppUtility.showToast(this, "Zust ${zustService.title} coming soon in your area")
         return
     }
     when (zustService.type) {
@@ -62,9 +62,15 @@ fun Context.handleBasicCallbacks(zustService: ZustService) {
         }
 
         ZustServiceType.SUBSCRIPTION.name -> {
-            val zustEntryIntent = Intent(this, ZustGroceryEntryPointActivity::class.java)
-            zustEntryIntent.putExtra(INTENT_SOURCE, ZustServiceType.SUBSCRIPTION.name)
-            startActivity(zustEntryIntent)
+            if (zustService.deepLink==null || zustService.deepLink=="sForm") {
+                val zustEntryIntent = Intent(this, SubscriptionFormActivity::class.java)
+                zustEntryIntent.putExtra(INTENT_SOURCE, ZustServiceType.SUBSCRIPTION.name)
+                startActivity(zustEntryIntent)
+            }else{
+                val zustEntryIntent = Intent(this, ZustGroceryEntryPointActivity::class.java)
+                zustEntryIntent.putExtra(INTENT_SOURCE, ZustServiceType.SUBSCRIPTION.name)
+                startActivity(zustEntryIntent)
+            }
         }
     }
 }

@@ -10,7 +10,7 @@
     <color name="logout_bg">#fee5dc</color>
 
 
-    <!--        <color name="new_material_primary">#442580</color>-->
+    <!--<color name="new_material_primary">#442580</color>-->
     <color name="new_material_primary">@color/blue_solid</color>
     <!--    <color name="new_material_primary">#D4CAED</color>-->
     <color name="some_silver">#fdeabc</color>
@@ -547,5 +547,5 @@
 
     <color name="nv_landing_header">#AB444A</color>
     <color name="grocery_header">#FFF0F0D8</color>
-    <color name="border_dark">#33000000</color>
+    <color name="border_dark">#ffefefef</color>
 </resources>

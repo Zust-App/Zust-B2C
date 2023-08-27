@@ -20,7 +20,7 @@ import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 
 @Composable
-fun DeliveryTimingOfferInfoUi(expectedDeliveryTime: String?) {
+fun DeliveryTimingOfferInfoUi(expectedDeliveryTime: String?,price:Int?=99) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
@@ -31,7 +31,7 @@ fun DeliveryTimingOfferInfoUi(expectedDeliveryTime: String?) {
         Text(text = expectedDeliveryTime ?: "You will receive your order within shortly",
             style = ZustTypography.titleMedium, color = colorResource(id = R.color.white))
         ViewSpacer8()
-        Text(text = "Free delivery above ${stringResource(id = R.string.ruppes) + 99}",
+        Text(text = "Free delivery above ${(((stringResource(id = R.string.ruppes) + (price?:99)))) }",
             style = ZustTypography.bodyMedium, color = colorResource(id = R.color.light))
     }
 }

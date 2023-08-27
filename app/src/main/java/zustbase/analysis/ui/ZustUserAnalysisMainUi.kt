@@ -3,26 +3,21 @@ package zustbase.analysis.ui
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
+import `in`.opening.area.zustapp.home.components.FullScreenErrorUi
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
-import `in`.opening.area.zustapp.utility.AppUtility
 import zustbase.ZustLandingViewModel
 import zustbase.analysis.uimodels.UserReportAnalysisUiModel
 
@@ -79,7 +74,7 @@ fun ZustUserAnalysisMainUi(zustLandingViewModel: ZustLandingViewModel) {
                         response.data.topGainer.forEachIndexed { index, topGainer ->
                             item(index) {
                                 if (topGainer.name != null && topGainer.expense != null) {
-                                    TopGainerSingleItemUi(name = topGainer.name, expense = topGainer.expense, rank = index+1)
+                                    TopGainerSingleItemUi(name = topGainer.name, expense = topGainer.expense, rank = index + 1)
                                 }
                             }
                         }
@@ -92,7 +87,11 @@ fun ZustUserAnalysisMainUi(zustLandingViewModel: ZustLandingViewModel) {
             }
 
             is UserReportAnalysisUiModel.Error -> {
-                AppUtility.showToast(LocalContext.current, response.errorMessage)
+                FullScreenErrorUi(errorCode = response.errorCode, retryCallback = {
+                    zustLandingViewModel.getUserAnalysisData()
+                }) {
+
+                }
             }
         }
     }

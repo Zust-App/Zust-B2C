@@ -68,13 +68,16 @@ fun LazyListScope.zustAvailServicesUi(data: ZustServiceData?, callback: (ZustSer
 
 @Composable
 private fun ZustSingleServiceUi(zustService: ZustService, modifier: Modifier = Modifier) {
+    if (zustService.imageUrl.isNullOrEmpty()){
+        return
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(horizontal = dp_4)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(zustService.imageUrl ?: "https://ik.imagekit.io/dunzo/home/tr:w-488,h-360_home_icon/operator-FFWUCfzmUzhok89HMYt0ON2Gy5oZECO73gRenPw11HxAeCLBtTBOG8FMqMTe92UOnScOPMUnjYDcaPVxx7wSFJwXJ3kSR3YRsPby4EgC4zW2mVYLc99zuvVh7O2Ppmx2QMQd40UiwYLGhy0OjbMayr.png")
+                .data(zustService.imageUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = null,

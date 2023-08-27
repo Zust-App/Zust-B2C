@@ -80,7 +80,7 @@ class ProductDetailsActivity : AppCompatActivity(), ProductSelectionListener {
             return
         }
         if (productSingleItem.maxItemPurchaseLimit > 0) {
-            if (productSingleItem.itemCountByUser <= productSingleItem.maxItemPurchaseLimit) {
+            if (productSingleItem.itemCountByUser < productSingleItem.maxItemPurchaseLimit) {
                 viewModel.updateProductCount(productSingleItem, ACTION.INCREASE)
             } else {
                 AppUtility.showToast(this, "You can't add more than ${productSingleItem.maxItemPurchaseLimit}")

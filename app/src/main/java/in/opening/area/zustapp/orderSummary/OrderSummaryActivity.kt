@@ -125,7 +125,18 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
     }
 
     override fun didTapOnIncreaseProductItemAmount(v: ProductSingleItem) {
-        orderSummaryViewModel.increaseItemCount(v)
+        v.itemCountByUser.let { cartItemCount ->
+            if (v.maxItemPurchaseLimit > 0) {
+                if (cartItemCount < v.maxItemPurchaseLimit) {
+                    orderSummaryViewModel.increaseItemCount(v)
+                    return@let
+                } else {
+                    AppUtility.showToast(this, "You can't add more than ${v.maxItemPurchaseLimit}")
+                }
+            } else {
+                orderSummaryViewModel.increaseItemCount(v)
+            }
+        }
     }
 
     override fun didTapOnDecreaseProductItemAmount(v: ProductSingleItem) {

@@ -25,13 +25,13 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val USER_MOBILE_NUM = "user_mobile_num"
         const val FREE_DELIVERY_BASE_PRICE = "free_delivery_base_price"
         const val DELIVERY_FEE_PRICE = "delivery_fee_price"
-
+        const val NON_VEG_FREE_DELIVERY_MIN_PRICE = "non_veg_delivery_min_fee"
         const val SUPPORT_WA_NUM = "support_wa_num"
         const val SUPPORT_EMAIL = "support_email"
         const val SUPPORT_CALL = "support_call"
 
         const val SAVE_NON_VEG_MERCHANT_ID = "nv_merchant_id"
-        const val CLEAR_CART_GROCERY="clear_cart_grocery"
+        const val CLEAR_CART_GROCERY = "clear_cart_grocery"
     }
 
     open fun getUserAuthToken(): String? {
@@ -139,6 +139,14 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         return sharedPreferences.getFloat(DELIVERY_FEE_PRICE, 10f).toInt()
     }
 
+    fun saveNonVegFreeDeliveryFee(deliveryFee: Double?) {
+        sharedPreferences.edit().putFloat(NON_VEG_FREE_DELIVERY_MIN_PRICE, (deliveryFee?.toFloat()) ?: 200f).apply()
+    }
+
+    fun getNonVegFreeDeliveryFee(): Int {
+        return sharedPreferences.getFloat(NON_VEG_FREE_DELIVERY_MIN_PRICE, 200f).toInt()
+    }
+
     fun getSupportPhoneNumber(): String {
         return sharedPreferences.getString(SUPPORT_CALL, "7858906229") ?: "7858906229"
     }
@@ -211,7 +219,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun getClearGroceryCart(): Boolean {
-        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY,false)
+        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY, false)
     }
 
     open fun saveClearGroceryCart(value: Boolean) {

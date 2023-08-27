@@ -36,7 +36,7 @@ class ProductListingViewModel @Inject constructor(private val productRepo: Produ
 
     internal fun updateProductCount(product: ProductSingleItem?, action: ACTION) {
         product?.let {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 productRepo.insertOrUpdateProduct(it, action)
             }
         }

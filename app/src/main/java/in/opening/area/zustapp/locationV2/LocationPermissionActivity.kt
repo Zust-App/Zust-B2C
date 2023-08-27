@@ -28,6 +28,7 @@ import `in`.opening.area.zustapp.locationV2.viewModel.LocationPermissionViewMode
 import `in`.opening.area.zustapp.uiModels.locations.CheckDeliverableAddressUiState
 import `in`.opening.area.zustapp.utility.AppUtility
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LocationPermissionActivity : BaseActivityWithLocation() {
@@ -84,6 +85,7 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
                 locationPermissionViewModel.verifyDeliverableAddress(it)
             }
         }
+        locationPermissionViewModel.getAppMetaData()
         locationPermissionViewModel.getAllAddress()
     }
 
@@ -147,8 +149,17 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
 
     private fun attachObservers() {
         lifecycleScope.launchWhenStarted {
-            locationPermissionViewModel.deliverableAddressUiState.collectLatest {
-                parseDeliverableAddress(it)
+            launch {
+                locationPermissionViewModel.deliverableAddressUiState.collectLatest {
+                    parseDeliverableAddress(it)
+                }
+            }
+            launch {
+                locationPermissionViewModel.isAppUpdateAvail.collectLatest {
+                    if (it) {
+                        AppUtility.openPlayStore(this@LocationPermissionActivity)
+                    }
+                }
             }
         }
     }

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,6 +46,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
+import `in`.opening.area.zustapp.home.components.FullScreenErrorUi
 import `in`.opening.area.zustapp.product.ProductSelectionListener
 import `in`.opening.area.zustapp.product.addIcon
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
@@ -58,6 +61,8 @@ import `in`.opening.area.zustapp.ui.theme.zustFont
 import `in`.opening.area.zustapp.uiModels.ProductDetailsUiState
 import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.ProductDetailsViewModel
+import ui.colorBlack
+import ui.colorWhite
 import java.util.Locale
 
 @Composable
@@ -165,6 +170,13 @@ fun ProductDetailMainUi(
                     })
                 }
             }
+            is ProductDetailsUiState.ErrorUi->{
+                FullScreenErrorUi(errorCode = null, retryCallback = {
+                    viewModel.getProductDetails()
+                }) {
+
+                }
+            }
         }
     }
 }
@@ -243,7 +255,7 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
             .clip(RoundedCornerShape(4.dp))
             .wrapContentWidth()
             .background(color = colorResource(id = R.color.white))
-            .height(22.dp)
+            .wrapContentHeight()
             .constrainAs(incDecContainer) {
                 top.linkTo(parent.top, dp_8)
                 end.linkTo(parent.end, dp_12)
@@ -253,15 +265,17 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                 Text(
                     text = "ADD",
                     modifier = Modifier
-                        .padding(horizontal = 10.dp)
                         .align(Alignment.CenterVertically)
+                        .background(color = colorResource(id = R.color.light_green))
                         .clickable {
                             callback.didTapOnIncrementCount(productSingleItem)
                         }
-                        .padding(horizontal = dp_12),
+                        .width(65.dp)
+                        .size(dp_24)
+                        .wrapContentHeight(),
                     style = ZustTypography.titleMedium,
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.app_black),
+                    color = colorWhite,
                     textAlign = TextAlign.Center,
                 )
             } else {
@@ -271,7 +285,7 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                     .size(22.dp)
                     .clickable {
                         callback.didTapOnDecrementCount(productSingleItem)
-                    }, tint = colorResource(id = R.color.white))
+                    }, tint = colorWhite)
 
                 Text(
                     text = productSingleItem.itemCountByUser.toString(),
@@ -281,7 +295,7 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                         .align(Alignment.CenterVertically),
                     style = ZustTypography.bodyMedium,
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.app_black),
+                    color = colorBlack,
                     textAlign = TextAlign.Center,
                 )
 
@@ -291,7 +305,7 @@ private fun MultipleVariantItemUI(productSingleItem: ProductSingleItem, callback
                     .background(color = colorResource(id = R.color.light_green), shape = RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp))
                     .clickable {
                         callback.didTapOnIncrementCount(productSingleItem)
-                    }, tint = colorResource(id = R.color.white))
+                    }, tint = colorWhite)
             }
         }
     }

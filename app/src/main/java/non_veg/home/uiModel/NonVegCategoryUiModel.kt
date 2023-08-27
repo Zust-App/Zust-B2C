@@ -15,5 +15,5 @@ sealed interface NvHomePageCombinedUiModel {
     val isLoading: Boolean
     data class Success(val data: NvHomePageData?, override val isLoading: Boolean) : NvHomePageCombinedUiModel
     data class Initial(override val isLoading: Boolean) : NvHomePageCombinedUiModel
-    data class Error(override val isLoading: Boolean, val errorMessage: String) : NvHomePageCombinedUiModel
+    data class Error(override val isLoading: Boolean, val errorMessage: String,val errorCode:Int?=null) : NvHomePageCombinedUiModel
 }

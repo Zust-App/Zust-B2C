@@ -43,7 +43,9 @@ class NonVegHomeFragment : Fragment(), AddressBtmSheetCallback {
             )
             setContent {
                 Scaffold(modifier = Modifier, content = { profilePaddingValues ->
-                    ZustNvEntryMainUi(paddingValues = profilePaddingValues) {
+                    ZustNvEntryMainUi(paddingValues = profilePaddingValues, changeLocation = {
+                        (activity as? AppCompatActivity?)?.handleActionIntent(ACTION.OPEN_LOCATION, fragmentManager = childFragmentManager)
+                    }) {
                         (activity as? AppCompatActivity?)?.handleActionIntent(ACTION.SEARCH_NON_VEG, fragmentManager = childFragmentManager)
                     }
                 }, topBar = {

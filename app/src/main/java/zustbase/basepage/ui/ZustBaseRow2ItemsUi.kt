@@ -25,8 +25,10 @@ import zustbase.basepage.models.ServicePageSingleItemData
 import zustbase.custom.pressClickEffect
 
 
-fun LazyListScope.zustBaseRow2ItemsUi(list: List<ServicePageSingleItemData>) {
-
+fun LazyListScope.zustBaseRow2ItemsUi(list: List<ServicePageSingleItemData>?) {
+    if (list == null) {
+        return
+    }
     item {
         val context = LocalContext.current
         Row(
