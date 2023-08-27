@@ -69,6 +69,7 @@ fun LazyListScope.customAutoScrollImageUi(imageList: List<HomePageGenericData>?)
                         AppDeepLinkHandler.handleOfferLink(context, imageList[0].deepLink)
                     }
             )
+            return@item
         }
         val pagerState = rememberPagerState()
         LaunchedEffect(key1 = pagerState.currentPage) {
