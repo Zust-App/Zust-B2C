@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.viewmodels
 
+import android.app.Application
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import zustbase.orderDetail.models.OrderStatus
@@ -16,8 +17,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.opening.area.zustapp.MyApplication
 import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.pagination.UserNonVegBookingDataSource
+import kotlinx.coroutines.Dispatchers
 import zustbase.orderDetail.ui.INTENT_SOURCE_NON_VEG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +49,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
             UserNonVegBookingDataSource(apiRequestManager)
         }.flow.cachedIn(viewModelScope)
 
-    internal fun getOrderDetails(orderId: Int, intentSource: String?) = viewModelScope.launch {
+    internal fun getOrderDetails(orderId: Int, intentSource: String?) = viewModelScope.launch(Dispatchers.IO) {
         orderDetailFlow.update { OrderDetailUi.InitialUi(true) }
         when (val response = if (intentSource == INTENT_SOURCE_NON_VEG) {
             apiRequestManager.getOrderDetailsForNonVeg(orderId)
@@ -63,6 +66,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
             }
 
             is ResultWrapper.UserTokenNotFound -> {
+
                 orderDetailFlow.update {
                     OrderDetailUi.ErrorUi(
                         false,
@@ -73,6 +77,7 @@ class MyOrdersListViewModel @Inject constructor(private val apiRequestManager: A
 
             is ResultWrapper.Success -> {
                 if (response.value.data == null) {
+
                     orderDetailFlow.update {
                         OrderDetailUi.ErrorUi(
                             false,

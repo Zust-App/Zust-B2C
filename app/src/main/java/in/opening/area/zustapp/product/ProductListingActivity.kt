@@ -29,6 +29,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -46,16 +48,16 @@ import zustbase.utility.showSuggestProductSheet
 class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, ProductDetailsCallback {
     private val productListingViewModel: ProductListingViewModel by viewModels()
     private var categoryId: Int? = null
-    private var categoryName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getDataFromIntent()
         setContent {
+           val title by productListingViewModel.headingData.collectAsState()
             Scaffold(topBar = {
                 ComposeTopAppBarProductList(Modifier.background(color = colorWhite),
                     buildString {
-                        append(categoryName ?: "")
+                        append(title)
                         append(" Category")
                     }, "", color = colorBlack, R.drawable.new_search_icon) {
                     if (it == NAV_BACK) {
@@ -92,8 +94,7 @@ class ProductListingActivity : AppCompatActivity(), ProductSelectionListener, Pr
             categoryId = intent.getIntExtra(CATEGORY_ID, -1)
         }
         if (intent != null && intent.hasExtra(CATEGORY_NAME)) {
-            categoryName = intent.getStringExtra(CATEGORY_NAME)
-            productListingViewModel.updateHeaderData(categoryName)
+            productListingViewModel.updateHeaderData(intent.getStringExtra(CATEGORY_NAME))
         }
         if (categoryId == null) {
             finish()

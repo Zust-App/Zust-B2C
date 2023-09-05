@@ -52,7 +52,7 @@ fun FullScreenErrorUi(
                 changeLocation.invoke()
             }, modifier = Modifier
                 .wrapContentHeight()
-                .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
+                .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.screen_surface_color), width = 1.dp)) {
                 Text(text = "Change Location",
                     style = ZustTypography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -82,8 +82,8 @@ fun FullScreenErrorUi(
                 retryCallback.invoke()
             }, modifier = Modifier
                 .wrapContentHeight()
-                .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
-                Text(text = "Change Location",
+                .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.screen_surface_color), width = 1.dp)) {
+                Text(text = "Retry",
                     style = ZustTypography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 8.dp),
                     color = colorBlack)

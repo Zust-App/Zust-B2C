@@ -455,13 +455,14 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun getInvoice(orderId: Int) = universalApiRequestManager {
+    suspend fun getInvoice(orderId: Int, intentSource: String) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<InvoiceResponseModel>(NetworkUtility.ORDER_INVOICE) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
             }
             parameter("orderId", orderId)
+            parameter("source",intentSource)
         }
     }
 

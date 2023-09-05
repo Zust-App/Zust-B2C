@@ -2,7 +2,6 @@ package `in`.opening.area.zustapp.webpage
 
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +14,11 @@ import javax.inject.Inject
 class InAppWebViewModel @Inject constructor(private val apiRequestManager: ApiRequestManager) : ViewModel() {
     internal val orderUiResponse = MutableStateFlow<InvoiceOrderUiState>(InvoiceOrderUiState.Initial(false))
 
-    internal fun getInvoiceBasedOnOrder(orderId: Int) = viewModelScope.launch {
+    internal fun getInvoiceBasedOnOrder(orderId: Int, intentSource: String) = viewModelScope.launch {
         orderUiResponse.update {
             InvoiceOrderUiState.Initial( true)
         }
-        when (val response = apiRequestManager.getInvoice(orderId)) {
+        when (val response = apiRequestManager.getInvoice(orderId,intentSource)) {
             is ResultWrapper.Success -> {
                 if (response.value.data != null) {
                     orderUiResponse.update {

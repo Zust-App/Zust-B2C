@@ -210,7 +210,7 @@ private fun NonVegHomePageErrorUi(retryCallback: () -> Unit, changeLocation: () 
             }, modifier = Modifier
                 .wrapContentHeight()
                 .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
-                Text(text = "Change Location",
+                Text(text = "Retry",
                     style = ZustTypography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 8.dp),
                     color = colorBlack)

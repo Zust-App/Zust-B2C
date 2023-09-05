@@ -26,7 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
 @Composable
-fun ItemTopInfoContainer(data: OrderDetailData?) {
+fun ItemTopInfoContainer(data: OrderDetailData?,intentSource:String?) {
     val context: Context = LocalContext.current
     if (data == null) {
         return
@@ -64,6 +64,7 @@ fun ItemTopInfoContainer(data: OrderDetailData?) {
                     val inAppWebActivity = Intent(context, InAppWebActivity::class.java).apply {
                         putExtra(InAppWebActivity.WEB_URL, "")
                         putExtra(InAppWebActivity.TITLE_TEXT, "Invoice")
+                        putExtra(INTENT_SOURCE,intentSource?: INTENT_SOURCE_GROCERY)
                         putExtra(ORDER_ID, data.orderId)
                     }
                     context.startActivity(inAppWebActivity)

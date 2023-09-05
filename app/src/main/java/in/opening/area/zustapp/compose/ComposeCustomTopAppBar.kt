@@ -1,10 +1,16 @@
 package `in`.opening.area.zustapp.compose
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -24,10 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.home.ACTION
+import `in`.opening.area.zustapp.product.addIcon
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_4
+import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.viewmodels.ProductListingViewModel
 import ui.colorBlack
@@ -40,11 +48,13 @@ fun ComposeCustomTopAppBar(
     subTitleText: String? = null,
     color: Color? = colorWhite,
     @DrawableRes endImageId: Int? = null,
+    endText: String? = null,
     callback: (ACTION) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier
         .wrapContentHeight()
-        .fillMaxWidth().background(color = colorWhite)
+        .fillMaxWidth()
+        .background(color = colorWhite)
         .padding(vertical = dp_12, horizontal = 20.dp)
     ) {
         val (titleTag, subTitleTag, endImage, backArrowImage) = createRefs()
@@ -84,6 +94,25 @@ fun ComposeCustomTopAppBar(
                     }
                     .clip(shape = RoundedCornerShape(8.dp)))
         }
+        if (endText != null) {
+            Row(modifier = Modifier
+                .constrainAs(endImage) {
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                }
+                .border(border = BorderStroke(1.dp, color = colorResource(id = R.color.new_material_primary)), shape = RoundedCornerShape(dp_4))
+                .padding(horizontal = 8.dp, vertical = 6.dp)
+                .clickable {
+                    callback.invoke(ACTION.ADD_MORE)
+                }) {
+                Icon(painter = painterResource(id = addIcon),
+                    tint = color ?: colorWhite,
+                    contentDescription = "profile", modifier = modifier.size(dp_16))
+                Spacer(modifier = Modifier.width(dp_6))
+                Text(text = endText, style = ZustTypography.bodyMedium,
+                    color = colorResource(id = R.color.light_green))
+            }
+        }
 
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = color ?: colorWhite,
@@ -115,7 +144,7 @@ fun ComposeTopAppBarProductList(
         .padding(vertical = dp_12, horizontal = 20.dp)
     ) {
         val (titleTag, subTitleTag, endImage, backArrowImage) = createRefs()
-        Text(text = titleText ?: "", color =color,
+        Text(text = titleText ?: "", color = color,
             modifier = modifier.constrainAs(titleTag) {
                 if (subTitleText.isNullOrEmpty()) {
                     top.linkTo(parent.top, dp_8)
@@ -140,7 +169,7 @@ fun ComposeTopAppBarProductList(
         }
         if (endImageId != null) {
             Icon(painter = painterResource(id = endImageId),
-                tint =color,
+                tint = color,
                 contentDescription = "profile", modifier = modifier
                     .constrainAs(endImage) {
                         top.linkTo(titleTag.top)
@@ -166,3 +195,4 @@ fun ComposeTopAppBarProductList(
                 })
     }
 }
+

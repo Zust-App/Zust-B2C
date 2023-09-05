@@ -47,7 +47,6 @@ import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.ProductUtils
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import non_veg.cart.models.ItemsInCart
-import non_veg.listing.ui.dummyUrl
 
 val topRound8dp = RoundedCornerShape(topStart = dp_8, topEnd = dp_8)
 val bottomRound8dp = RoundedCornerShape(bottomEnd = dp_8, bottomStart = dp_8)
@@ -70,7 +69,7 @@ fun NonVegCartItemUi(singleItem: ItemsInCart, modifier: Modifier, clickCallback:
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(dummyUrl)
+                    .data(singleItem.imageUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,

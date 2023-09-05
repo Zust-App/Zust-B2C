@@ -32,6 +32,8 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
 
         const val SAVE_NON_VEG_MERCHANT_ID = "nv_merchant_id"
         const val CLEAR_CART_GROCERY = "clear_cart_grocery"
+        const val CLEAR_CART_GROCERY1 = "clear_cart_grocery1"
+
     }
 
     open fun getUserAuthToken(): String? {
@@ -219,12 +221,16 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun getClearGroceryCart(): Boolean {
-        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY, false)
+        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY1, false)
     }
 
     open fun saveClearGroceryCart(value: Boolean) {
-        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY, value).apply()
+        removeClearCart()
+        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY1, value).apply()
     }
 
+    open fun removeClearCart() {
+        sharedPreferences.edit().remove(CLEAR_CART_GROCERY).apply()
+    }
 
 }

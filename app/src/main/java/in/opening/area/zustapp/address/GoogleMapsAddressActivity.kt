@@ -176,14 +176,16 @@ class GoogleMapsAddressActivity : BaseActivityWithLocation(), OnMapReadyCallback
         binding?.showHideProgressBar(false)
         val latLng = LatLng(latitude, longitude)
         val markerBounds = LatLngBounds.Builder().include(latLng).build()
-        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(markerBounds, 100)
-        googleMap?.moveCamera(cameraUpdate)
-        googleMap?.addMarker(MarkerOptions()
-            .position(latLng)
-            .draggable(true)
-            .title("Location"))?.showInfoWindow()
-        googleMap?.animateCamera(CameraUpdateFactory.zoomTo(15f))
-        googleMap?.uiSettings?.isZoomControlsEnabled = true
+        googleMap?.setOnMapLoadedCallback {
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(markerBounds, 100)
+            googleMap?.moveCamera(cameraUpdate)
+            googleMap?.addMarker(MarkerOptions()
+                .position(latLng)
+                .draggable(true)
+                .title("Location"))?.showInfoWindow()
+            googleMap?.animateCamera(CameraUpdateFactory.zoomTo(15f))
+            googleMap?.uiSettings?.isZoomControlsEnabled = true
+        }
     }
 
     override fun onStart() {

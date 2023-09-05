@@ -97,5 +97,6 @@
     <string name="need_help" translatable="false"><u>Need help?</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="review">Review</string>
 
 </resources>

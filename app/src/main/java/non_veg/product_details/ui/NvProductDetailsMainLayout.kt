@@ -54,7 +54,6 @@ import `in`.opening.area.zustapp.ui.theme.dp_6
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.ACTION
 import non_veg.listing.models.NonVegListingSingleItem
-import non_veg.listing.ui.dummyUrl
 import non_veg.product_details.uimodel.NvProductDetailsUiState
 import non_veg.product_details.viewmodel.NvProductDetailsViewModel
 
@@ -83,7 +82,7 @@ fun NvProductDetailsMainLayout(paddingValues: PaddingValues, nonVegProductDetail
                     .fillMaxHeight()) {
                     if (!response.data.isNullOrEmpty()) {
                         item {
-                            NvProductDetailsImageUi()
+                            NvProductDetailsImageUi(response.data[0])
                         }
                         item {
                             ProductDetailsTitlePriceSectionUi(response.data[0], nonVegProductDetailsViewModel)
@@ -115,12 +114,12 @@ fun NvProductDetailsMainLayout(paddingValues: PaddingValues, nonVegProductDetail
 
 
 @Composable
-private fun NvProductDetailsImageUi() {
+private fun NvProductDetailsImageUi(nonVegListingSingleItem: NonVegListingSingleItem) {
     LazyRow(modifier = Modifier
         .fillMaxWidth()
         .height(240.dp)) {
         item {
-            AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(dummyUrl).crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
+            AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(nonVegListingSingleItem.productImageUrl).crossfade(true).build(), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier
                 .height(240.dp)
                 .fillParentMaxWidth())
         }

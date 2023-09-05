@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +39,8 @@ import `in`.opening.area.zustapp.home.ACTION
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
 import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
+import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.ui.theme.dp_24
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
 
@@ -62,6 +65,7 @@ fun ComposeCustomOrderHistoryTopBar(
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = color,
             contentDescription = "profile", modifier = modifier
+                .size(dp_20)
                 .constrainAs(backArrowImage) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)

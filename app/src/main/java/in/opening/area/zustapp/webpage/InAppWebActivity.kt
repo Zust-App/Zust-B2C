@@ -20,6 +20,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import zustbase.orderDetail.ui.ORDER_ID
 import kotlinx.coroutines.flow.collectLatest
+import zustbase.orderDetail.ui.INTENT_SOURCE
+import zustbase.orderDetail.ui.INTENT_SOURCE_GROCERY
 
 
 @AndroidEntryPoint
@@ -36,6 +38,7 @@ class InAppWebActivity : AppCompatActivity() {
     private var webUrl: String? = null
     private val viewModel: InAppWebViewModel by viewModels()
     private var orderId: Int? = null
+    private var intentSource:String= INTENT_SOURCE_GROCERY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +59,9 @@ class InAppWebActivity : AppCompatActivity() {
         }
         if (intent.hasExtra(ORDER_ID)) {
             orderId = intent.getIntExtra(ORDER_ID, -1)
+        }
+        if (intent.hasExtra(INTENT_SOURCE)){
+            intentSource=intent.getStringExtra(INTENT_SOURCE)?: INTENT_SOURCE_GROCERY
         }
     }
 
@@ -91,7 +97,7 @@ class InAppWebActivity : AppCompatActivity() {
                 })
             }
             if (orderId != null && orderId != -1) {
-                viewModel.getInvoiceBasedOnOrder(orderId!!)
+                viewModel.getInvoiceBasedOnOrder(orderId!!,intentSource)
             }
         } else {
             finish()
@@ -102,7 +108,7 @@ class InAppWebActivity : AppCompatActivity() {
     @Composable
     private fun SetUpComposeView(indicatorProgress: Int) {
         if (indicatorProgress < 100) {
-            var progress by remember { mutableStateOf(0f) }
+            var progress by remember { mutableFloatStateOf(0f) }
             val progressAnimDuration = 1500
             val progressAnimation by animateFloatAsState(
                 targetValue = indicatorProgress.toFloat(),

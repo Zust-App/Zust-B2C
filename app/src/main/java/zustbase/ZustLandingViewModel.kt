@@ -146,12 +146,13 @@ class ZustLandingViewModel @Inject constructor(
             return@launch
         }
     }
+
     internal fun resetStateOfUi(){
         _zustServicesUiModel.update {
-            ZustAvailServicesUiModel.Empty(true)
+            ZustAvailServicesUiModel.Empty(false)
         }
         _userAnalysisReportUiModel.update {
-            UserReportAnalysisUiModel.Empty(true)
+            UserReportAnalysisUiModel.Empty(false)
         }
     }
 

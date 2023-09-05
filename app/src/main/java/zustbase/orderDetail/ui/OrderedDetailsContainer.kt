@@ -69,7 +69,7 @@ fun OrderedDetailsContainer(
                     }
                     item {
                         Spacer(modifier = Modifier.height(dp_20))
-                        ItemTopInfoContainer(response.data)
+                        ItemTopInfoContainer(response.data,viewModel.intentSource)
                         Spacer(modifier = Modifier.height(dp_20))
                     }
 

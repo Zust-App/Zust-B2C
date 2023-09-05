@@ -24,18 +24,15 @@ import `in`.opening.area.zustapp.payment.ui.GroceryPaymentPageBottomBar
 import `in`.opening.area.zustapp.payment.ui.GroceryPaymentPageMainUi
 import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
-import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
 import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
 import `in`.opening.area.zustapp.utility.*
 import `in`.opening.area.zustapp.utility.AppUtility.Companion.showToast
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import ui.colorBlack
 import ui.colorWhite
-import ui.linearGradientGroceryBrush
 import zustbase.orderDetail.ui.ORDER_ID
 
 

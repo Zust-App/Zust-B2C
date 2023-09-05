@@ -127,7 +127,9 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
     }
 
     private fun showProgressBar() {
-        locationFetchingProgressDialog.showDialog(this)
+        if (!this.isFinishing && !this.isDestroyed) {
+            locationFetchingProgressDialog.showDialog(this)
+        }
     }
 
     private fun hideProgressBar() {

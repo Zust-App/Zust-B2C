@@ -1,9 +1,7 @@
 package zustbase.orderDetail.models
 
-import android.location.Address
+import androidx.annotation.Keep
 import `in`.opening.area.zustapp.utility.UserCustomError
-import com.google.errorprone.annotations.Keep
-import `in`.opening.area.zustapp.product.model.ZustAddressV1
 
 @Keep
 data class OrderDetailModel(

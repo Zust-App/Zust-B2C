@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -24,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.ui.theme.dp_20
+import `in`.opening.area.zustapp.ui.theme.dp_24
 import ui.colorWhite
 import zustbase.orderDetail.OrderDetailActivity
 
@@ -72,6 +75,7 @@ fun OrderDetailsTopAppBar(
         Icon(painter = painterResource(id = R.drawable.app_nav_arrow),
             tint = color,
             contentDescription = "back arrow", modifier = modifier
+                .size(dp_20)
                 .constrainAs(navIcon) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)

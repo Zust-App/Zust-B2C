@@ -20,6 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.utility.AppUtility
 import ui.colorBlack
 import ui.colorWhite
 import zustbase.orderDetail.ui.INTENT_SOURCE
@@ -66,13 +67,14 @@ class OrderDetailActivity : ComponentActivity() {
                         handleAction(ACTION.NAV_BACK)
                     }
                 }
+                LaunchedEffect(key1 = Unit, block = {
+                    if (orderId != -1 && orderId!=null) {
+                        myOrdersListViewModel.getOrderDetails(orderId!!, intentSource)
+                    }else{
+                        AppUtility.showToast(this@OrderDetailActivity,"order id is null or missing")
+                    }
+                })
             }
-
-            LaunchedEffect(key1 = Unit, block = {
-                if (orderId != -1) {
-                    myOrdersListViewModel.getOrderDetails(orderId!!, intentSource)
-                }
-            })
         }
     }
 

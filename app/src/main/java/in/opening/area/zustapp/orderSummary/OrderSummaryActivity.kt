@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ui.colorBlack
 import ui.colorWhite
+import zustbase.utility.handleActionIntent
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint
@@ -59,9 +60,12 @@ class OrderSummaryActivity : AppCompatActivity(), OrderItemsClickListeners, Addr
                     ComposeCustomTopAppBar(Modifier.background(color = colorWhite),
                         "Cart",
                         null,
-                        color = colorBlack, endImageId = null) {
+                        color = colorBlack, endImageId = null, endText = "Add more") {
                         if (it == ACTION.NAV_BACK) {
                             finish()
+                        }
+                        if (it == ACTION.ADD_MORE) {
+                            handleActionIntent(ACTION.SEARCH_PRODUCT)
                         }
                     }
                 },

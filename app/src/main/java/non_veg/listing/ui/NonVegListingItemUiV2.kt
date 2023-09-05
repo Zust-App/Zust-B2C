@@ -50,7 +50,6 @@ import non_veg.listing.models.NonVegListingSingleItem
 import non_veg.listing.viewmodel.NonVegListingViewModel
 
 
-var dummyUrl = "https://static.freshtohome.com/media/catalog/product/cache/3/image/400x267/18ae109e34f485bd0b0c075abec96b2e/c/h/chicken_breast_fillet_1_2.jpg"
 
 @Composable
 fun NonVegListingItemUiV2(singleItem: NonVegListingSingleItem, viewModel: NonVegListingViewModel) {
@@ -67,7 +66,7 @@ fun NonVegListingItemUiV2(singleItem: NonVegListingSingleItem, viewModel: NonVeg
         ) = createRefs()
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(dummyUrl)
+                .data(singleItem.productImageUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = null,

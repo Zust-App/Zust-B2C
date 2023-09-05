@@ -8,12 +8,7 @@ buildscript {
         classpath 'com.google.firebase:perf-plugin:1.4.2'
     }
     repositories {
-        maven {
-            url 'https://maven.cashfree.com/release'
-            content {
-                includeGroup "com.cashfree.pg"
-            }
-        }
+
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"

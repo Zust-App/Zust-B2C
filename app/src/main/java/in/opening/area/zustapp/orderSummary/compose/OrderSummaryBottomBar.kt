@@ -178,7 +178,7 @@ fun OrderSummaryBottomBarUi(orderSummaryViewModel: OrderSummaryViewModel, update
                             bottom.linkTo(parent.bottom, dp_8)
                         }, colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.new_material_primary))) {
                             Spacer(modifier = Modifier.width(dp_12))
-                            Text(text = stringResource(R.string.view_cart),
+                            Text(text = stringResource(R.string.review),
                                 color = colorResource(id = R.color.white), style = ZustTypography.bodyMedium)
                             Spacer(modifier = Modifier.width(dp_12))
                             Icon(painter = painterResource(id = R.drawable.arrow_right_icon), contentDescription = "", tint = colorResource(id = R.color.white))
