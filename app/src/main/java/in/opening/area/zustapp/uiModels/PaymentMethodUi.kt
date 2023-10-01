@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.uiModels
 
+import `in`.opening.area.zustapp.payment.models.PaymentData
 import `in`.opening.area.zustapp.payment.models.PaymentMethod
 import `in`.opening.area.zustapp.utility.UserCustomError
 
@@ -8,7 +9,7 @@ sealed interface PaymentMethodUi {
 
     data class MethodSuccess(
         override val isLoading: Boolean,
-        val data: List<PaymentMethod> = arrayListOf(),
+        val data: List<PaymentData> = arrayListOf(),
         val timeStamp: Long = System.currentTimeMillis()
     ) : PaymentMethodUi
 

@@ -22,7 +22,7 @@ fun ComposeLottie(
         mutableStateOf(true)
     }
     val animationSpeed by remember {
-        mutableStateOf(speed ?: 1f)
+        mutableFloatStateOf(speed ?: 1f)
     }
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(rawId)

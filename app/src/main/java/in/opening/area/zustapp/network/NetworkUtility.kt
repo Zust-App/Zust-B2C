@@ -41,7 +41,7 @@ class NetworkUtility {
         val ORDERS_CART = "$baseUrl/orders/cart1"
         val COUPONS = "$baseUrl/coupons/user-coupons"
         val PRODUCT_SEARCH = "$baseUrl/products/search"
-        val PAYMENT_METHOD = "$baseUrl/orders/payment-methods"
+        val PAYMENT_METHOD = "$baseUrl/orders/payment-methods-v1"
         val CREATE_PAYMENT = "$baseUrl/orders/create-payment"
         val VERIFY_PAYMENT = "$paymentBaseUrl/payment/verify"
         val TIME_SLOT = "$baseUrl/orders/time-slot"

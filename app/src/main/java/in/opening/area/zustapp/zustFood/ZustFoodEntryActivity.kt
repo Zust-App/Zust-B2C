@@ -57,18 +57,6 @@ class ZustFoodEntryActivity : AppCompatActivity() {
                     .fillMaxWidth()
                     .fillMaxHeight()) {
                     val (previewImage, upcomingTitleText) = createRefs()
-                    Image(painter = painterResource(id = R.drawable.food_preview),
-                        contentDescription = "food preview",
-                        modifier = Modifier
-                            .constrainAs(previewImage) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                bottom.linkTo(upcomingTitleText.top, dp_16)
-                                height = Dimension.fillToConstraints
-                            }
-                            .padding(vertical = 16.dp)
-                            .fillMaxWidth(), contentScale = ContentScale.FillBounds)
                     Text(
                         modifier = Modifier
                             .constrainAs(upcomingTitleText) {

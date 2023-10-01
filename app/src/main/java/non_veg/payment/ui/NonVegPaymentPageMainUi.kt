@@ -72,9 +72,9 @@ fun NonVegPaymentPageMainUi(paddingValues: PaddingValues, nonVegPaymentViewModel
                             style = ZustTypography.titleMedium, color = colorResource(id = R.color.app_black))
                         ViewSpacer8()
                         (paymentUiState.value as PaymentMethodUi.MethodSuccess).data.forEach {
-                            NonVegPaymentMethodUi(it.key, it.name, it.isSelected ?: false) {
-                                paymentMethodCallback.invoke(it)
-                            }
+//                            NonVegPaymentMethodUi(it.key, it.name, it.isSelected ?: false) {
+//                                paymentMethodCallback.invoke(it)
+//                            }
                         }
                     }
                 }

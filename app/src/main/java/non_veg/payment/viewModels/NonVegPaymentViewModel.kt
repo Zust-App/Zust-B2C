@@ -41,26 +41,26 @@ class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: 
         _paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
         when (val response = apiRequestManager.getPaymentMethods()) {
             is ResultWrapper.Success -> {
-                if (response.value.data?.paymentMethods == null) {
-                    _paymentMethodUiState.update {
-                        if (!response.value.message.isNullOrEmpty()) {
-                            PaymentMethodUi.ErrorUi(false, errorMsg = response.value.message)
-                        } else {
-                            PaymentMethodUi.ErrorUi(false, errors = response.value.errors ?: emptyList())
-                        }
-                    }
-                } else {
-                    _paymentMethodUiState.update {
-                        PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods.map {
-                            it.apply {
-                                if (it.key.equals("cod", ignoreCase = true)) {
-                                    it.isSelected = true
-                                    selectedPaymentKey = it.key
-                                }
-                            }
-                        })
-                    }
-                }
+//                if (response.value.data?.paymentMethods == null) {
+//                    _paymentMethodUiState.update {
+//                        if (!response.value.message.isNullOrEmpty()) {
+//                            PaymentMethodUi.ErrorUi(false, errorMsg = response.value.message)
+//                        } else {
+//                            PaymentMethodUi.ErrorUi(false, errors = response.value.errors ?: emptyList())
+//                        }
+//                    }
+//                } else {
+//                    _paymentMethodUiState.update {
+//                        PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods.map {
+//                            it.apply {
+//                                if (it.key.equals("cod", ignoreCase = true)) {
+//                                    it.isSelected = true
+//                                    selectedPaymentKey = it.key
+//                                }
+//                            }
+//                        } as ArrayList<PaymentMethod>)
+//                    }
+//                }
             }
 
             is ResultWrapper.NetworkError -> {
@@ -91,17 +91,17 @@ class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: 
 
     internal fun updatePaymentOptions(paymentMethod: PaymentMethod) {
         val postPaymentMethod = paymentMethodUiState.value
-        if (postPaymentMethod is PaymentMethodUi.MethodSuccess) {
-            val newPaymentList = postPaymentMethod.data.map {
-                PaymentMethod(
-                    it.key,
-                    it.name,
-                    isSelected = (it.key == paymentMethod.key)
-                )
-            }
-            selectedPaymentKey = paymentMethod.key
-            _paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, newPaymentList) }
-        }
+//        if (postPaymentMethod is PaymentMethodUi.MethodSuccess) {
+//            val newPaymentList = postPaymentMethod.data.map {
+//                PaymentMethod(
+//                    it.key,
+//                    it.name,
+//                    isSelected = (it.key == paymentMethod.key)
+//                )
+//            }
+//            selectedPaymentKey = paymentMethod.key
+//            _paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, newPaymentList as ArrayList<PaymentMethod>) }
+//        }
     }
 
     //when payment method is COD

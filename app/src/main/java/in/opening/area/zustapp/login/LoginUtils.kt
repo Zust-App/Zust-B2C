@@ -63,7 +63,6 @@ val annotatedStringTAndC = buildAnnotatedString {
     pop()
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun setTextFiledColors(): TextFieldColors {
     val containerColor = Color(0xffEFEFEF)

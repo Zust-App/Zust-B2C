@@ -177,4 +177,6 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltCompilerVersion"
+    implementation "phonepe.intentsdk.android.release:IntentSDK:2.0.1"
+
 }

@@ -11,7 +11,9 @@ import `in`.opening.area.zustapp.uiModels.*
 import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phonepe.intent.sdk.api.UPIApplicationInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.opening.area.zustapp.ui.theme.okraFontFamily
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -37,11 +39,13 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
     internal var paymentActivityReqData: PaymentActivityReqData? = null
     internal var paymentMethod: PaymentMethod? = null
     internal var cartItemCount: Int = 0
-    fun getPaymentMethodsFromServer() = viewModelScope.launch(Dispatchers.IO) {
+
+
+    internal fun getPaymentMethodsFromServer(upiApps: List<UPIApplicationInfo>) = viewModelScope.launch(Dispatchers.IO) {
         paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
         when (val response = apiRequestManager.getPaymentMethods()) {
             is ResultWrapper.Success -> {
-                if (response.value.data?.paymentMethods == null) {
+                if (response.value.data == null) {
                     paymentMethodUiState.update {
                         if (!response.value.message.isNullOrEmpty()) {
                             PaymentMethodUi.ErrorUi(false, errorMsg = response.value.message)
@@ -50,16 +54,7 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                         }
                     }
                 } else {
-                    paymentMethodUiState.update {
-                        PaymentMethodUi.MethodSuccess(false, response.value.data.paymentMethods.map {
-                            it.apply {
-                                if (it.key.equals("cod", ignoreCase = true)) {
-                                    it.isSelected = true
-                                    paymentMethod = it
-                                }
-                            }
-                        })
-                    }
+                    refactorPaymentMethods(upiApps, response.value.data)
                 }
             }
 
@@ -78,6 +73,7 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
             }
         }
     }
+
 
     internal fun invokePaymentToGetId() = viewModelScope.launch {
         val totalPayableAmount = paymentActivityReqData?.run {
@@ -213,13 +209,23 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
     internal fun updatePaymentOptions(paymentMethod: PaymentMethod) {
         val postPaymentMethod = paymentMethodUiState.value
         if (postPaymentMethod is PaymentMethodUi.MethodSuccess) {
-            val newPaymentList = postPaymentMethod.data.map {
-                PaymentMethod(it.key, it.name, isSelected = (it.key == paymentMethod.key))
-            }
             this.paymentMethod = paymentMethod
-            paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, newPaymentList) }
+            paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, postPaymentMethod.data) }
         }
     }
 
-
+    private fun refactorPaymentMethods(upiApps: List<UPIApplicationInfo>, paymentDatas: List<PaymentData>) {
+        val upiAppsAssociates = upiApps.associateBy { it.packageName }
+        paymentDatas.forEach {
+            if (it.paymentCategory.contains("upi", ignoreCase = true)) {
+                val upiPaymentMethods = it.paymentMethods
+                upiPaymentMethods.forEach { method ->
+                    method.enabled = upiAppsAssociates.containsKey(method.packageName)
+                }
+            }
+        }
+        paymentMethodUiState.update {
+            PaymentMethodUi.MethodSuccess(false, paymentDatas)
+        }
+    }
 }

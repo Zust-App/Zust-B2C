@@ -10,12 +10,3 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 const val KEY_BRAND = "brand_tag"
-fun LazyListScope.homePageBrandTagUi() {
-    item(key = KEY_BRAND) {
-        Image(painter = painterResource(id = R.drawable.fresh_veggies_tag),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-            contentDescription = "Discount")
-    }
-}

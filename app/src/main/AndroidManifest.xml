@@ -9,6 +9,10 @@
         <package android:name="in.amazon.mShop.android.shopping" />
         <package android:name="com.google.android.apps.nbu.paisa.user" />
         <package android:name="com.phonepe.app" />
+        <package android:name="com.phonepe.app.preprod" />
+        <package android:name="net.one97.paytm" />
+        <package android:name="in.org.npci.upiapp" />
+
 
         <intent>
             <action android:name="android.intent.action.SEND" />
@@ -334,6 +338,20 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/key_geo" />
+
+        <meta-data
+            android:name="com.phonepe.android.sdk.isUAT"
+            android:value="false" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.isSimulator"
+            android:value="false" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.MerchantId"
+            android:value="M1O8N18KU2RP" />
+
+        <meta-data
+            android:name="com.phonepe.android.sdk.AppId"
+            android:value="e2a24a0e-bd26-4ab6-b529-ab25eda6bfb5" />
     </application>
 
 </manifest>

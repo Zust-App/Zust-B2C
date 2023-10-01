@@ -7,21 +7,26 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class PaymentMethodResponseModel(
     @SerializedName("data")
-    val `data`: PaymentData? = null,
+    val `data`: List<PaymentData>? = null,
     val errors: List<UserCustomError>? = null,
     val message: String? = null,
     val statusCode: Int? = null,
-    val timestamp: String? = null
+    val timestamp: String? = null,
 )
 
 @Keep
 data class PaymentData(
-    val paymentMethods: List<PaymentMethod>
+    val paymentCategory: String,
+    val paymentMethods: ArrayList<PaymentMethod>,
+    val alignment: String = "horizontal",
 )
 
 @Keep
 data class PaymentMethod(
     val key: String,
     val name: String,
-    var isSelected: Boolean? = false
+    val packageName: String? = null,
+    val thumbnail: String? = null,
+    var isSelected: Boolean? = false,
+    var enabled: Boolean = false,
 )

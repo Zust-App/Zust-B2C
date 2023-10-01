@@ -28,7 +28,7 @@ fun ProfileEachItemContainer(profileStaticItem: ProfileStaticItem, clickEvent: (
         .clickable {
             clickEvent.invoke(profileStaticItem.eventCode)
         }) {
-        Icon(painter = painterResource(id = profileStaticItem.iconRes ?: R.drawable.net_bank_pay_mode),
+        Icon(painter = painterResource(id = profileStaticItem.iconRes?:R.drawable.baseline_image_24),
             contentDescription = "",
             modifier = Modifier
                 .padding(start = 8.dp, top = 12.dp)

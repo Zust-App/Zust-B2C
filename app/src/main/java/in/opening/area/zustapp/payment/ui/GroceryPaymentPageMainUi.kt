@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -17,18 +19,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.payment.models.CreatePaymentDataModel
 import `in`.opening.area.zustapp.payment.models.PaymentMethod
 import `in`.opening.area.zustapp.payment.models.convertToCartSummaryData
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
+import `in`.opening.area.zustapp.ui.theme.dp_12
 import `in`.opening.area.zustapp.ui.theme.dp_16
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
@@ -39,10 +44,15 @@ import kotlinx.coroutines.flow.update
 import non_veg.cart.ui.NonVegBillingContainerDataHolder
 import non_veg.payment.ui.DeliveryTimingOfferInfoUi
 import non_veg.payment.ui.NonVegPaymentAddressUi
-import non_veg.payment.ui.NonVegPaymentMethodUi
+import non_veg.payment.ui.CommonPaymentMethodItemUi
 import non_veg.payment.ui.ShowPaymentPageUiShimmer
 import non_veg.payment.ui.ViewSpacer20
-import non_veg.payment.ui.ViewSpacer8
+
+private val paymentMethodItemModifier = Modifier
+    .wrapContentHeight()
+    .wrapContentWidth()
+    .padding(horizontal = dp_12)
+    .background(color = Color.White)
 
 @Composable
 fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: PaymentActivityViewModel, paymentMethodCallback: (PaymentMethod) -> Unit, firstCallback: (CreatePaymentDataModel) -> Unit) {
@@ -96,25 +106,48 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                         item {
                             ViewSpacer20()
                         }
-                        item {
-                            Column(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(dp_8))
-                                .padding(horizontal = dp_16, vertical = dp_16)) {
+
+                        paymentResponse.data.forEach { data ->
+                            item {
                                 Text(
-                                    text = stringResource(R.string.payment_method),
+                                    text = data.paymentCategory,
                                     modifier = Modifier
-                                        .fillMaxWidth(),
+                                        .fillMaxWidth()
+                                        .padding(horizontal = dp_16, vertical = dp_8),
                                     style = ZustTypography.titleMedium, color = colorResource(id = R.color.app_black))
-                                ViewSpacer8()
-                                paymentResponse.data.forEach {
-                                    NonVegPaymentMethodUi(it.key, it.name, it.isSelected ?: false) {
-                                        paymentMethodCallback.invoke(it)
+                            }
+                            if (data.alignment == "horizontal") {
+                                item {
+                                    FlowRow(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                        .background(color = colorResource(id = R.color.white))
+                                        .padding(horizontal = dp_16, vertical = dp_16),
+                                        mainAxisAlignment = MainAxisAlignment.SpaceEvenly) {
+                                        data.paymentMethods.forEach {
+                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.isSelected ?: false) {
+                                                paymentMethodCallback.invoke(it)
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                item {
+                                    Column(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                        .background(color = colorResource(id = R.color.white))
+                                        .padding(horizontal = dp_16, vertical = dp_16)) {
+                                        data.paymentMethods.forEach {
+                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.isSelected ?: false) {
+                                                paymentMethodCallback.invoke(it)
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
+
                         item {
                             ViewSpacer20()
                         }
@@ -145,6 +178,7 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
             }
 
         }
+
         if (createPaymentUiState.isLoading) {
             CircularProgressIndicator(
                 color = MaterialTheme.colorScheme.onSurface,
