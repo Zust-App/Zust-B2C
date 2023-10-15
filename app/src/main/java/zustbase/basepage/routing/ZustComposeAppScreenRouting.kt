@@ -7,10 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.opening.area.zustapp.compose.HomeBottomNavTypes
+import wallet.ZustPayMainUi
 import zustbase.ZustLandingViewModel
 import zustbase.analysis.ui.ZustUserAnalysisMainUi
 import zustbase.basepage.ui.ZustBasePageMainUi
-import zustbase.orderDetail.ui.FragmentTypes
 import zustbase.utility.handleActionIntent
 import zustbase.utility.handleBasicCallbacks
 
@@ -24,7 +24,7 @@ fun AppCompatActivity.ZustComposeAppScreenRouting(navController: NavHostControll
         startDestination = HomeBottomNavTypes.Landing.name,
     ) {
         composable(route = HomeBottomNavTypes.Landing.name) {
-            ZustBasePageMainUi(zustLandingViewModel,genericCallback = {
+            ZustBasePageMainUi(zustLandingViewModel, genericCallback = {
                 handleActionIntent(it)
             }) {
                 handleBasicCallbacks(it)
@@ -32,6 +32,9 @@ fun AppCompatActivity.ZustComposeAppScreenRouting(navController: NavHostControll
         }
         composable(route = HomeBottomNavTypes.Analysis.name) {
             ZustUserAnalysisMainUi(zustLandingViewModel)
+        }
+        composable(route = HomeBottomNavTypes.ZustPay.name) {
+            ZustPayMainUi(zustLandingViewModel)
         }
     }
 }

@@ -14,6 +14,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 /**
  * Converts HTML to PDF.
@@ -34,6 +36,7 @@ public class PdfConverter implements Runnable {
     private WebView mWebView;
 
     private PdfConverter() {
+
     }
 
     public static synchronized PdfConverter getInstance() {
@@ -123,4 +126,6 @@ public class PdfConverter implements Runnable {
         mIsCurrentlyConverting = false;
         mWebView = null;
     }
+
 }
+

@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.coupon.model.getTextMsg
 import `in`.opening.area.zustapp.payment.models.CreatePaymentDataModel
@@ -40,7 +39,18 @@ import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import non_veg.cart.ui.NonVegBillingContainerDataHolder
 import non_veg.payment.ui.DeliveryTimingOfferInfoUi
 import non_veg.payment.ui.NonVegPaymentAddressUi
@@ -122,10 +132,9 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                                         .fillMaxWidth()
                                         .padding(horizontal = 16.dp)
                                         .background(color = colorResource(id = R.color.white))
-                                        .padding(horizontal = dp_16, vertical = dp_16),
-                                        mainAxisAlignment = MainAxisAlignment.SpaceEvenly) {
+                                        .padding(horizontal = dp_16, vertical = dp_16)) {
                                         data.paymentMethods.forEach {
-                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.isSelected ?: false) {
+                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false) {
                                                 paymentMethodCallback.invoke(it)
                                             }
                                         }
@@ -139,7 +148,7 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                                         .background(color = colorResource(id = R.color.white))
                                         .padding(horizontal = dp_16, vertical = dp_16)) {
                                         data.paymentMethods.forEach {
-                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.isSelected ?: false) {
+                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false) {
                                                 paymentMethodCallback.invoke(it)
                                             }
                                         }
@@ -197,4 +206,38 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
     if (paymentDataUi.isLoading) {
         ShowPaymentPageUiShimmer()
     }
+}
+
+
+suspend fun fetchIdsFromApi(): List<Int> {
+    return arrayListOf()
+}
+
+var x = arrayListOf<Any>()
+
+// Function to fetch details for a single ID from the API
+suspend fun fetchDetailsByIdFromApi(id: Int): String {
+    val y = x.remove {
+
+    }
+    fetchDetailsForIds().collectLatest {
+
+    }
+    return ""
+}
+
+
+fun fetchDetailsForIds(): Flow<List<String>> = flow {
+    val ids = fetchIdsFromApi()
+    val x = ids
+        .map { id ->
+            val details = fetchDetailsByIdFromApi(id)
+            details
+        }
+    emit(x)
+}
+
+
+fun <T, R> List<T>.remove(filter: T.() -> R): List<T> {
+    return arrayListOf<T>()
 }

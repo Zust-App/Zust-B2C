@@ -50,6 +50,7 @@ import non_veg.payment.models.NonVegCartPaymentReqBody
 import non_veg.payment.models.NonVegCreateOrderResModel
 import subscription.model.SubscriptionFormReqBody
 import subscription.model.SubscriptionFormResponseModel
+import wallet.data.ZustPayAmountDetailModel
 import zustbase.analysis.models.UserAnalysisResponseModel
 import zustbase.basepage.models.ZustServicePageResponseReceiver
 import zustbase.services.models.ZustAvailableServiceResult
@@ -462,7 +463,7 @@ class ApiRequestManager @Inject constructor() {
                 this.append(Authorization, "Bearer $authToken")
             }
             parameter("orderId", orderId)
-            parameter("source",intentSource)
+            parameter("source", intentSource)
         }
     }
 
@@ -753,4 +754,12 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
+    suspend fun getZustPayAmount() = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.post<ZustPayAmountDetailModel>(NetworkUtility.ZUST_PAY_AMOUNT) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+        }
+    }
 }

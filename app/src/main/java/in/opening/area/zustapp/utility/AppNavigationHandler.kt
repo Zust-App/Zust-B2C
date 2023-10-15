@@ -80,6 +80,15 @@ fun Context.moveToInAppWebPage(url: String, title: String) {
     startActivity(inAppWebActivity)
 }
 
+fun Context.openWebActivity(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
+    } else {
+        moveToInAppWebPage(url = url, "Google Form")
+    }
+}
+
 fun Context.navigateToReferAndEarn(refer: Refer?) {
     if (refer == null) {
         return

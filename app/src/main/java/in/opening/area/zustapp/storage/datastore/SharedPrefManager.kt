@@ -34,6 +34,8 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val CLEAR_CART_GROCERY = "clear_cart_grocery"
         const val CLEAR_CART_GROCERY1 = "clear_cart_grocery1"
 
+        const val AFFILIATE_PARTNER_LINK = "afp_link"
+
     }
 
     open fun getUserAuthToken(): String? {
@@ -233,4 +235,11 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.edit().remove(CLEAR_CART_GROCERY).apply()
     }
 
+    open fun getAffiliatePartnerLink(): String {
+       return sharedPreferences.getString(AFFILIATE_PARTNER_LINK, "https://forms.gle/hLdrfuYbiVYVYwM47")?:"https://forms.gle/hLdrfuYbiVYVYwM47"
+    }
+
+    open fun saveAffiliatePartnerLink(link: String?) {
+        sharedPreferences.edit().putString(AFFILIATE_PARTNER_LINK, link?:"https://forms.gle/hLdrfuYbiVYVYwM47").apply()
+    }
 }

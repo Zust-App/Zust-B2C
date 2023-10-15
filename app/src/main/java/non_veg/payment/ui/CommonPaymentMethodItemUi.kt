@@ -19,6 +19,7 @@ fun CommonPaymentMethodItemUi(
     modifier: Modifier,
     paymentKey: String,
     paymentMethodName: String,
+    thumbnail:String,
     isSelected: Boolean,
     onItemSelected: () -> Unit,
 ) {
@@ -29,7 +30,7 @@ fun CommonPaymentMethodItemUi(
             }) {
         val (paymentIcon, paymentText) = createRefs()
         AsyncImage(
-            model = "https://delasign.com/delasignBlack.png",
+            model =thumbnail ,
             placeholder = painterResource(id = R.drawable.baseline_image_24),
             error = painterResource(id = R.drawable.baseline_image_24),
             contentDescription = paymentKey,

@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -65,7 +66,7 @@ fun GroceryPaymentPageBottomBar(
             )
             val totalPayableAmount = ((paymentViewModel.paymentActivityReqData?.itemPrice ?: 0.0) +
                     (paymentViewModel.paymentActivityReqData?.packagingFee ?: 0.0)
-                    + (paymentViewModel.paymentActivityReqData?.deliveryFee ?: 0.0)+(paymentViewModel.paymentActivityReqData?.deliveryPartnerTip ?: 0.0))
+                    + (paymentViewModel.paymentActivityReqData?.deliveryFee ?: 0.0) + (paymentViewModel.paymentActivityReqData?.deliveryPartnerTip ?: 0.0))
 
             Text(
                 text = stringResource(id = R.string.ruppes) + ProductUtils.roundTo1DecimalPlaces(totalPayableAmount),

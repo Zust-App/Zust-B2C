@@ -1,5 +1,9 @@
 package `in`.opening.area.zustapp.viewmodels
 
+import android.app.ActivityManager
+import android.content.Context
+import android.graphics.Canvas
+import android.widget.LinearLayout
 import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
@@ -15,7 +19,11 @@ import com.phonepe.intent.sdk.api.UPIApplicationInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.opening.area.zustapp.ui.theme.okraFontFamily
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -40,6 +48,9 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
     internal var paymentMethod: PaymentMethod? = null
     internal var cartItemCount: Int = 0
 
+    fun getUserId(): String {
+        return sharedPrefManager.getUserMobileNumber()
+    }
 
     internal fun getPaymentMethodsFromServer(upiApps: List<UPIApplicationInfo>) = viewModelScope.launch(Dispatchers.IO) {
         paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
@@ -72,8 +83,8 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                 }
             }
         }
-    }
 
+    }
 
     internal fun invokePaymentToGetId() = viewModelScope.launch {
         val totalPayableAmount = paymentActivityReqData?.run {
@@ -229,3 +240,4 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
         }
     }
 }
+

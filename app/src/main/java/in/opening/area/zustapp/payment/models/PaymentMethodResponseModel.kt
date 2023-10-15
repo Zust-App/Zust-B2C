@@ -18,7 +18,7 @@ data class PaymentMethodResponseModel(
 data class PaymentData(
     val paymentCategory: String,
     val paymentMethods: ArrayList<PaymentMethod>,
-    val alignment: String = "horizontal",
+    val alignment: String,
 )
 
 @Keep

@@ -30,6 +30,7 @@ class NetworkUtility {
 
         private val baseUrl = getCompleteBaseUrl()
 
+        private val zustPayBaseUrl = "https://zustpay.zustapp.com/api/v1"
         private val paymentBaseUrl = getPaymentUrl()
         val END_POINT_REGISTER = "$baseUrl/auth/register-send-otp"
         val END_POINT_AUTH_VERIFICATION = "$baseUrl/auth/register-verify-otp"
@@ -89,5 +90,11 @@ class NetworkUtility {
         val GET_SERVICE_PAGE_DATA = "$baseUrl/zust_service/service-page-data"
         val GET_USER_ANALYSIS = "$baseUrl/report/user-analysis"
         val SEND_SUBSCRIPTION_DETAILS = "$baseUrl/zust_subscription/form"
+
+        //zust pay
+        val ZUST_PAY_AMOUNT = "$zustPayBaseUrl/zust_pay/wallet-amount"
+        val ZUST_PAY_CREDIT_DETAILS = "$zustPayBaseUrl/zust_pay/credit_details"
+        val ZUST_PAY_TRANSACTION_DETAIL = "$zustPayBaseUrl/zust_pay/credit_details"
+
     }
 }

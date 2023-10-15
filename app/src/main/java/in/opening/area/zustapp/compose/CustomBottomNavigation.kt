@@ -20,10 +20,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import `in`.opening.area.zustapp.ui.theme.dp_8
+import okhttp3.internal.wait
 
 
 enum class HomeBottomNavTypes {
-    Landing, Orders, MoveToCartPage, Food, Analysis
+    Landing, Orders, MoveToCartPage, Food, Analysis, ZustPay
 }
 
 val navIconModifier = Modifier.size(22.dp)
@@ -89,6 +90,11 @@ val navItems = listOf(
         HomeBottomNavTypes.Landing,
         R.drawable.outline_home_24,
         "Home"
+    ),
+    HomeBottomNavItem(
+        HomeBottomNavTypes.ZustPay,
+        R.drawable.baseline_account_balance_wallet_24,
+        "ZustPay"
     ),
     HomeBottomNavItem(
         HomeBottomNavTypes.Analysis,

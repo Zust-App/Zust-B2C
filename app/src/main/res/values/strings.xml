@@ -99,4 +99,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="review">Review</string>
 
+    <string name="pg_merchant_stage" translatable="false">PGTESTPAYUAT</string>
+    <string name="pg_merchant_prod" translatable="false">M1O8N18KU2RP</string>
+    <string name="pg_app_id" translatable="false">e2a24a0e-bd26-4ab6-b529-ab25eda6bfb5</string>
+
+
 </resources>

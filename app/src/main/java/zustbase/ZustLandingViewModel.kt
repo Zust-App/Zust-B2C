@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import wallet.uistate.ZustPayUiState
 import zustbase.analysis.uimodels.UserReportAnalysisUiModel
 import zustbase.basepage.models.ZustServicePageResponse
 import zustbase.basepage.models.ZustServicePageResponseReceiver
@@ -43,6 +44,8 @@ class ZustLandingViewModel @Inject constructor(
     private val _userAnalysisReportUiModel = MutableStateFlow<UserReportAnalysisUiModel>(UserReportAnalysisUiModel.Empty(false))
     val userAnalysisReportUiModel: StateFlow<UserReportAnalysisUiModel> get() = _userAnalysisReportUiModel
 
+    private val _zustPayUiModel = MutableStateFlow<ZustPayUiState>(ZustPayUiState.Initial(false))
+    internal val zustPayUiModel: StateFlow<ZustPayUiState> get() = _zustPayUiModel
     internal fun getListOfServiceableItem() = viewModelScope.launch(Dispatchers.IO) {
         val address = sharedPrefManager.getUserAddress()
         updateAddressItem(address)
@@ -103,6 +106,7 @@ class ZustLandingViewModel @Inject constructor(
                         sharedPrefManager.saveFreeDeliveryBasePrice(it.freeDeliveryFee)
                         sharedPrefManager.saveDeliveryFee(it.deliveryCharge)
                         sharedPrefManager.saveNonVegFreeDeliveryFee(it.nonVegFreeDelivery)
+                        sharedPrefManager.saveAffiliatePartnerLink(it.afpLink)
                         isAppUpdateAvail.update { true }
                     } else {
                         isAppUpdateAvail.update { false }
@@ -147,7 +151,7 @@ class ZustLandingViewModel @Inject constructor(
         }
     }
 
-    internal fun resetStateOfUi(){
+    internal fun resetStateOfUi() {
         _zustServicesUiModel.update {
             ZustAvailServicesUiModel.Empty(false)
         }
@@ -156,4 +160,36 @@ class ZustLandingViewModel @Inject constructor(
         }
     }
 
+    internal fun retrieveZustPayWallet() = viewModelScope.launch(Dispatchers.IO) {
+        when (val response = apiRequestManager.getZustPayAmount()) {
+            is ResultWrapper.Success -> {
+                if (response.value.data == null) {
+                    _zustPayUiModel.update { ZustPayUiState.Error(response.value.errorMsg, false) }
+                } else {
+                    _zustPayUiModel.update { ZustPayUiState.Success(data = response.value.data, false) }
+                }
+            }
+
+            is ResultWrapper.GenericError -> {
+                _zustPayUiModel.update { ZustPayUiState.Error("Something went wrong Please try again", false) }
+            }
+
+            is ResultWrapper.UserTokenNotFound -> {
+                _zustPayUiModel.update { ZustPayUiState.Error("Unauthorized", false) }
+
+            }
+
+            is ResultWrapper.NetworkError -> {
+                _zustPayUiModel.update { ZustPayUiState.Error("Something went wrong Please try again", false) }
+            }
+
+            else -> {
+
+            }
+        }
+    }
+
+    internal fun getAffiliatePartnerLink(): String {
+        return sharedPrefManager.getAffiliatePartnerLink()
+    }
 }

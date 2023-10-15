@@ -19,6 +19,7 @@ data class AppMetaData(
     val isAppUpdateAvail: Boolean? = false,
     val freeDeliveryFee: Double? = 99.0,
     val nonVegFreeDelivery: Double? = 200.0,
+    val afpLink: String? = "",
 )
 //for 1 open address search--> map--> add location input
 //for 2 direct open add location input

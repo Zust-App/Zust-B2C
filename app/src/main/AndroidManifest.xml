@@ -341,17 +341,24 @@
 
         <meta-data
             android:name="com.phonepe.android.sdk.isUAT"
-            android:value="false" />
+            android:value="true"/>
         <meta-data
             android:name="com.phonepe.android.sdk.isSimulator"
-            android:value="false" />
+            android:value="true"/>
+
         <meta-data
             android:name="com.phonepe.android.sdk.MerchantId"
-            android:value="M1O8N18KU2RP" />
+            android:value="@string/pg_merchant_stage" />
+
+<!--        <meta-data-->
+<!--            android:name="com.phonepe.android.sdk.MerchantId"-->
+<!--            android:value="@string/pg_merchant_prod"/>-->
+
 
         <meta-data
             android:name="com.phonepe.android.sdk.AppId"
-            android:value="e2a24a0e-bd26-4ab6-b529-ab25eda6bfb5" />
+            android:value="@string/pg_app_id" />
+
     </application>
 
 </manifest>
