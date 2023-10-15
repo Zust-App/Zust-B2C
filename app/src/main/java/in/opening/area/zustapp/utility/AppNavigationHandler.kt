@@ -1,15 +1,19 @@
 package `in`.opening.area.zustapp.utility
 
-import zustbase.ZustLandingActivity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import androidx.core.content.ContextCompat
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.FOOD_BTM_NAV_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_CATEGORY_CLICK
+import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_NON_VEG_CATEGORY_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_CALL
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.OPEN_WA_ORDER
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.PRODUCT_DETAIL_CLICK
 import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.START_SEARCH_ACTIVITY
 import `in`.opening.area.zustapp.login.LoginActivity
-import zustbase.orderDetail.OrderDetailActivity
-import zustbase.orderHistory.MyOrdersActivity
 import `in`.opening.area.zustapp.product.ProductListingActivity
 import `in`.opening.area.zustapp.product.model.ProductSingleItem
 import `in`.opening.area.zustapp.productDetails.presentation.ProductDetailsActivity
@@ -18,19 +22,16 @@ import `in`.opening.area.zustapp.profile.models.Refer
 import `in`.opening.area.zustapp.refer.ReferAndEarnActivity
 import `in`.opening.area.zustapp.search.SearchProductActivity
 import `in`.opening.area.zustapp.webpage.InAppWebActivity
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.FOOD_BTM_NAV_CLICK
-import `in`.opening.area.zustapp.analytics.FirebaseAnalytics.Companion.HOME_NON_VEG_CATEGORY_CLICK
-import zustbase.orderDetail.ui.ORDER_ID
 import `in`.opening.area.zustapp.zustFood.ZustFoodEntryActivity
 import non_veg.listing.NonVegItemListActivity
 import non_veg.product_details.NonVegProductDetailsActivity
 import non_veg.search.NonVegSearchActivity
+import zustbase.ZustLandingActivity
+import zustbase.orderDetail.OrderDetailActivity
 import zustbase.orderDetail.ui.INTENT_SOURCE
 import zustbase.orderDetail.ui.INTENT_SOURCE_GROCERY
+import zustbase.orderDetail.ui.ORDER_ID
+import zustbase.orderHistory.MyOrdersActivity
 
 
 fun Context.navigateToProductListing(categoryId: Int?, categoryName: String?) {
@@ -81,11 +82,15 @@ fun Context.moveToInAppWebPage(url: String, title: String) {
 }
 
 fun Context.openWebActivity(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    if (intent.resolveActivity(packageManager) != null) {
-        startActivity(intent)
-    } else {
-        moveToInAppWebPage(url = url, "Google Form")
+    try {
+        openChrome(url)
+    } catch (e: Exception) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            moveToInAppWebPage(url = url, "Google Form")
+        }
     }
 }
 
@@ -193,4 +198,20 @@ fun Context.navigateToNonVegProductDetails(productId: Int?, productPriceId: Int?
 fun Context.startNonVegSearchActivity() {
     val searchIntent = Intent(this, NonVegSearchActivity::class.java)
     startActivity(searchIntent)
+}
+
+fun Context.openChrome(url: String) {
+    try {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
+    } catch (e: Exception) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            moveToInAppWebPage(url = url, "Google Form")
+        }
+    }finally {
+
+    }
 }

@@ -236,10 +236,10 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun getAffiliatePartnerLink(): String {
-       return sharedPreferences.getString(AFFILIATE_PARTNER_LINK, "https://forms.gle/hLdrfuYbiVYVYwM47")?:"https://forms.gle/hLdrfuYbiVYVYwM47"
+       return sharedPreferences.getString(AFFILIATE_PARTNER_LINK, "https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0")?:"https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0"
     }
 
     open fun saveAffiliatePartnerLink(link: String?) {
-        sharedPreferences.edit().putString(AFFILIATE_PARTNER_LINK, link?:"https://forms.gle/hLdrfuYbiVYVYwM47").apply()
+        sharedPreferences.edit().putString(AFFILIATE_PARTNER_LINK, link?:"https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0").apply()
     }
 }
