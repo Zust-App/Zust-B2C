@@ -85,7 +85,7 @@ fun ZustPayMainUi(zustLandingViewModel: ZustLandingViewModel) {
                         .wrapContentHeight()
                         .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
                     Text(text = "Become affiliate partner",
-                        style = ZustTypography.bodyMedium,
+                        style = ZustTypography.bodyLarge,
                         modifier = Modifier.padding(horizontal = 8.dp),
                         color = colorBlack)
 
@@ -116,7 +116,7 @@ fun ZustPayMainUi(zustLandingViewModel: ZustLandingViewModel) {
                     .wrapContentHeight()
                     .wrapContentWidth(), border = BorderStroke(color = colorResource(id = R.color.new_hint_color), width = 1.dp)) {
                     Text(text = "Become affiliate partner",
-                        style = ZustTypography.bodyMedium,
+                        style = ZustTypography.bodyLarge,
                         modifier = Modifier.padding(horizontal = 8.dp),
                         color = colorBlack)
                 }
