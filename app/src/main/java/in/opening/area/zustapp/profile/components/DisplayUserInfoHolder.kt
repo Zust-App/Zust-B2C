@@ -29,7 +29,7 @@ fun DisplayUserInfo(user: User?) {
                 shape = RoundedCornerShape(8.dp))
             .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 16.dp)
             .fillMaxWidth()) {
-            val (userIcon, titleText, phoneNum, _) = createRefs()
+            val (userIcon, titleText, phoneNum, affiliateTag, _) = createRefs()
             val displayText = user?.getDisplayIconText() ?: "G"
             Text(
                 modifier = Modifier
@@ -70,11 +70,21 @@ fun DisplayUserInfo(user: User?) {
                             top.linkTo(titleText.bottom)
                             start.linkTo(userIcon.end, 32.dp)
                             end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom, dp_8)
                             width = Dimension.fillToConstraints
                         }, color = colorResource(id = R.color.black_3))
             }
-
+            user?.affiliatePartner?.let {
+                Text(text = it,
+                    style = ZustTypography.bodyMedium,
+                    modifier = Modifier
+                        .padding()
+                        .constrainAs(affiliateTag) {
+                            top.linkTo(phoneNum.bottom)
+                            start.linkTo(userIcon.end, 32.dp)
+                            end.linkTo(parent.end)
+                            width = Dimension.fillToConstraints
+                        }, color = colorResource(id = R.color.black_3))
+            }
         }
     }
 

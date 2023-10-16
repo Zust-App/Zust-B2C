@@ -75,8 +75,12 @@ class PaymentActivity : AppCompatActivity() {
                 }
             }) {
                 GroceryPaymentPageMainUi(it, paymentViewModel, { paymentMethod ->
-                    paymentViewModel.updatePaymentOptions(paymentMethod)
-                    proceedToPaymentFirstApiCall()
+                    if (paymentMethod.enabled) {
+                        paymentViewModel.updatePaymentOptions(paymentMethod)
+                        proceedToPaymentFirstApiCall()
+                    } else {
+                        showToast(this@PaymentActivity, "Please select other payment Option")
+                    }
                 }) { firstClickCallback ->
                     proceedAfterCreatePayment(firstClickCallback)
                 }

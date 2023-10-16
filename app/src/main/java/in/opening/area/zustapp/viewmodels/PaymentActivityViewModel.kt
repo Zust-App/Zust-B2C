@@ -221,7 +221,18 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
         val postPaymentMethod = paymentMethodUiState.value
         if (postPaymentMethod is PaymentMethodUi.MethodSuccess) {
             this.paymentMethod = paymentMethod
-            paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, postPaymentMethod.data) }
+            val updatedPaymentMethods = postPaymentMethod.data.map { paymentData ->
+                paymentData.copy(paymentCategory = paymentData.paymentCategory, alignment = paymentData.alignment, paymentMethods = paymentData.paymentMethods.map { method ->
+                    method.copy(key = method.key,
+                        name = method.name,
+                        packageName = method.packageName,
+                        thumbnail = method.thumbnail,
+                        isSelected = method.key == paymentMethod.key,
+                        enabled = method.key == paymentMethod.key
+                    )
+                } as ArrayList<PaymentMethod>)
+            }
+            paymentMethodUiState.update { PaymentMethodUi.MethodSuccess(false, updatedPaymentMethods) }
         }
     }
 

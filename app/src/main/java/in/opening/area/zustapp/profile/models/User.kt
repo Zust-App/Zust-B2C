@@ -6,7 +6,8 @@ import com.google.errorprone.annotations.Keep
 data class User(
     val email: String? = null,
     val phoneNo: String? = null,
-    val userName: String? = null
+    val userName: String? = null,
+    val affiliatePartner: String? = null,
 ) {
     fun getDisplayIconText(): String {
         try {
@@ -29,8 +30,8 @@ data class User(
                     append("G")
                 }
             }
-        }catch (e:Exception){
-            return userName?:"G"
+        } catch (e: Exception) {
+            return userName ?: "G"
         }
     }
 }

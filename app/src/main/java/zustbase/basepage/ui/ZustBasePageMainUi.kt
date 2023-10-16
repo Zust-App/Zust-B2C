@@ -112,13 +112,13 @@ fun ZustBasePageMainUi(zustLandingViewModel: ZustLandingViewModel, genericCallba
         }
 
         is ZustAvailServicesUiModel.ErrorUi -> {
+//            zustLandingViewModel.resetStateOfUi()
             FullScreenErrorUi(errorCode = response.errorCode, retryCallback = {
                 zustLandingViewModel.getListOfServiceableItem()
                 zustLandingViewModel.getUserAnalysisData()
             }) {
 
             }
-            zustLandingViewModel.resetStateOfUi()
         }
     }
 }

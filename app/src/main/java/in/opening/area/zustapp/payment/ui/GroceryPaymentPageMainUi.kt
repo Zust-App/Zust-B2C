@@ -39,22 +39,15 @@ import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
 import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
 import `in`.opening.area.zustapp.utility.AppUtility
 import `in`.opening.area.zustapp.viewmodels.PaymentActivityViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flatMap
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import non_veg.cart.ui.NonVegBillingContainerDataHolder
 import non_veg.payment.ui.DeliveryTimingOfferInfoUi
 import non_veg.payment.ui.NonVegPaymentAddressUi
 import non_veg.payment.ui.CommonPaymentMethodItemUi
+import non_veg.payment.ui.CommonPaymentMethodItemUiV2
 import non_veg.payment.ui.ShowPaymentPageUiShimmer
 import non_veg.payment.ui.ViewSpacer20
 
@@ -134,7 +127,7 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                                         .background(color = colorResource(id = R.color.white))
                                         .padding(horizontal = dp_16, vertical = dp_16)) {
                                         data.paymentMethods.forEach {
-                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false) {
+                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false, it.enabled) {
                                                 paymentMethodCallback.invoke(it)
                                             }
                                         }
@@ -148,7 +141,7 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                                         .background(color = colorResource(id = R.color.white))
                                         .padding(horizontal = dp_16, vertical = dp_16)) {
                                         data.paymentMethods.forEach {
-                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false) {
+                                            CommonPaymentMethodItemUiV2(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false, it.enabled) {
                                                 paymentMethodCallback.invoke(it)
                                             }
                                         }
