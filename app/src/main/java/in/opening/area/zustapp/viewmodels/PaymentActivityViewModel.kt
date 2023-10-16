@@ -228,7 +228,7 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
                         packageName = method.packageName,
                         thumbnail = method.thumbnail,
                         isSelected = method.key == paymentMethod.key,
-                        enabled = method.key == paymentMethod.key
+                        enable = method.enable
                     )
                 } as ArrayList<PaymentMethod>)
             }
@@ -242,7 +242,9 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
             if (it.paymentCategory.contains("upi", ignoreCase = true)) {
                 val upiPaymentMethods = it.paymentMethods
                 upiPaymentMethods.forEach { method ->
-                    method.enabled = upiAppsAssociates.containsKey(method.packageName)
+                    if (method.enable) {
+                        method.enable = upiAppsAssociates.containsKey(method.packageName)
+                    }
                 }
             }
         }

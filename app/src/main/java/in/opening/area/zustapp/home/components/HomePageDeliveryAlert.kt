@@ -19,7 +19,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
 const val KEY_DELIVERY_ALERT = "delivery_alert"
-const val DELIVERY_ALERT="Delivery Alert!!"
+const val DELIVERY_ALERT = "Delivery Alert!!"
 fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callback: (ACTION) -> Unit) {
     item(key = KEY_DELIVERY_ALERT) {
         ConstraintLayout(modifier = Modifier
@@ -64,19 +64,6 @@ fun LazyListScope.homePageDeliveryAlert(data: List<HomePageGenericData>, callbac
                     }
                     .clickable {
                         callback.invoke(ACTION.ORDER_WA)
-                    }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.call_icon),
-                contentDescription = "whatsapp now",
-                modifier = Modifier
-                    .size(30.dp)
-                    .constrainAs(callUs) {
-                        end.linkTo(waIcon.start, dp_20)
-                        bottom.linkTo(parent.bottom, dp_12)
-                    }
-                    .clickable {
-                        callback.invoke(ACTION.PHONE_CALL)
                     }
             )
         }

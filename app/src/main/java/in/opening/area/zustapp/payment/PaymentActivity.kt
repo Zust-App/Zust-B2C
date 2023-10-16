@@ -75,7 +75,7 @@ class PaymentActivity : AppCompatActivity() {
                 }
             }) {
                 GroceryPaymentPageMainUi(it, paymentViewModel, { paymentMethod ->
-                    if (paymentMethod.enabled) {
+                    if (paymentMethod.enable) {
                         paymentViewModel.updatePaymentOptions(paymentMethod)
                         proceedToPaymentFirstApiCall()
                     } else {

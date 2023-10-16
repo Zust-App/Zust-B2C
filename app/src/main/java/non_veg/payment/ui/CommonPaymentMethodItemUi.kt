@@ -51,7 +51,7 @@ fun CommonPaymentMethodItemUi(
                     start.linkTo(paymentText.start)
                     end.linkTo(paymentText.end)
                 }
-                .size(40.dp)
+                .size(36.dp)
                 .border(
                     width = 2.dp,
                     color = if (isSelected) colorResource(id = R.color.language_default) else Color.Transparent,
@@ -106,7 +106,7 @@ fun CommonPaymentMethodItemUiV2(
                     end.linkTo(paymentText.start)
                     bottom.linkTo(parent.bottom)
                 }
-                .size(36.dp)
+                .size(32.dp)
         )
 
         Text(

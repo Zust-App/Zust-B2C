@@ -33,6 +33,7 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val SAVE_NON_VEG_MERCHANT_ID = "nv_merchant_id"
         const val CLEAR_CART_GROCERY = "clear_cart_grocery"
         const val CLEAR_CART_GROCERY1 = "clear_cart_grocery1"
+        const val CLEAR_CART_GROCERY2="clear_cart_grocery1"
 
         const val AFFILIATE_PARTNER_LINK = "afp_link"
 
@@ -223,16 +224,17 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun getClearGroceryCart(): Boolean {
-        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY1, false)
+        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY2, false)
     }
 
     open fun saveClearGroceryCart(value: Boolean) {
         removeClearCart()
-        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY1, value).apply()
+        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY2, value).apply()
     }
 
     open fun removeClearCart() {
         sharedPreferences.edit().remove(CLEAR_CART_GROCERY).apply()
+        sharedPreferences.edit().remove(CLEAR_CART_GROCERY1).apply()
     }
 
     open fun getAffiliatePartnerLink(): String {

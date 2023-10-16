@@ -28,5 +28,5 @@ data class PaymentMethod(
     val packageName: String? = null,
     val thumbnail: String? = null,
     var isSelected: Boolean? = false,
-    var enabled: Boolean = false,
+    var enable: Boolean = false,
 )

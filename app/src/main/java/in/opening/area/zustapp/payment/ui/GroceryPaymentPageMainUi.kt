@@ -127,7 +127,7 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                                         .background(color = colorResource(id = R.color.white))
                                         .padding(horizontal = dp_16, vertical = dp_16)) {
                                         data.paymentMethods.forEach {
-                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false, it.enabled) {
+                                            CommonPaymentMethodItemUi(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false, it.enable) {
                                                 paymentMethodCallback.invoke(it)
                                             }
                                         }
@@ -141,7 +141,7 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
                                         .background(color = colorResource(id = R.color.white))
                                         .padding(horizontal = dp_16, vertical = dp_16)) {
                                         data.paymentMethods.forEach {
-                                            CommonPaymentMethodItemUiV2(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false, it.enabled) {
+                                            CommonPaymentMethodItemUiV2(paymentMethodItemModifier, it.key, it.name, it.thumbnail ?: "", it.isSelected ?: false, it.enable) {
                                                 paymentMethodCallback.invoke(it)
                                             }
                                         }
