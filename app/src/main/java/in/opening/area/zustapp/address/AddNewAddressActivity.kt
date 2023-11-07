@@ -40,7 +40,7 @@ class AddNewAddressActivity : AppCompatActivity() {
         getDataFromIntent()
         setContent {
             Scaffold {
-                NewAddressAddContainer(it)
+                NewAddressAddContainer(it, searchAddressModel)
             }
         }
     }
@@ -55,18 +55,18 @@ class AddNewAddressActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun NewAddressAddContainer(paddingValues: PaddingValues) {
-        if (searchAddressModel == null) {
+    fun NewAddressAddContainer(paddingValues: PaddingValues, searchAddressModel: SearchAddressModel?) {
+        if (this.searchAddressModel == null) {
             AddNewAddressUi(modifier = Modifier.padding(paddingValues), viewModel) {
                 handleAction(it)
             }
         }
-        if (searchAddressModel != null) {
-            customLocationModel.addressLine = searchAddressModel!!.addressDesc
-            customLocationModel.pinCode = searchAddressModel!!.postalCode
-            customLocationModel.lat = searchAddressModel!!.lat
-            customLocationModel.lng = searchAddressModel!!.longitude
-            AddNewAddressUiV2(modifier = Modifier.padding(paddingValues), viewModel, customLocationModel) {
+        if (this.searchAddressModel != null) {
+            customLocationModel.addressLine = (this.searchAddressModel!!.apartmentData?.apartmentName ?: "") + this.searchAddressModel!!.addressDesc
+            customLocationModel.pinCode = this.searchAddressModel!!.postalCode
+            customLocationModel.lat = this.searchAddressModel!!.lat
+            customLocationModel.lng = this.searchAddressModel!!.longitude
+            AddNewAddressUiV2(modifier = Modifier.padding(paddingValues), viewModel, searchAddressModel, customLocationModel) {
                 handleAction(it)
             }
         }
@@ -78,7 +78,7 @@ class AddNewAddressActivity : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra(KEY_SELECTED_ADDRESS_ID, data.id)
             if (intentSource != null) {
-                intent.putExtra(GoogleMapsAddressActivity.SOURCE,intentSource)
+                intent.putExtra(GoogleMapsAddressActivity.SOURCE, intentSource)
             }
             setResult(RESULT_OK, intent)
             finish()

@@ -54,6 +54,8 @@
 -keep class zustbase.basepage.models.**{ *; }
 -keep class subscription.model.**{ *; }
 -keep class zustbase.analysis.models.**{ *; }
+-keep class wallet.data.**{*;}
+-keep class in.opening.area.zustapp.refer.data.**{*;}
 -keepclassmembers class in.opening.area.zustapp.BuildConfig {
     public static java.lang.String DEV_BASE_URL;
     public static java.lang.String PROD_BASE_URL;

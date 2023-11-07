@@ -42,7 +42,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
     )
     val context = LocalContext.current
     Column(modifier = modifier
-        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+        .padding(top = 12.dp)
         .background(color = colorResource(id = R.color.white), shape = RoundedCornerShape(8.dp))
         .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -78,7 +78,7 @@ fun ProfileReferralSection(refer: Refer?, modifier: Modifier) {
                 contentDescription = null, modifier = Modifier.clickable {
                     FirebaseAnalytics.logEvents(REFERRAL_CODE_COPY)
                     AppUtility.copyToClipboard(context, refer.code, "referral code")
-            })
+                })
             Text(text = stringResource(R.string.copy_code), style = ZustTypography.bodyMedium,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)

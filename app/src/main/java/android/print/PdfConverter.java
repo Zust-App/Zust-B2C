@@ -14,8 +14,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 /**
  * Converts HTML to PDF.
@@ -103,7 +101,6 @@ public class PdfConverter implements Runnable {
     }
 
     private PrintAttributes getDefaultPrintAttrs() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return null;
 
         return new PrintAttributes.Builder()
                 .setMediaSize(PrintAttributes.MediaSize.NA_GOVT_LETTER)

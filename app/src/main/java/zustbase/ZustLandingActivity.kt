@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import zustbase.basepage.routing.ZustComposeAppScreenRouting
 import zustbase.basepage.ui.CustomZustTopBar
 import zustbase.utility.handleActionIntent
+import android.net.Uri
 
 
 @AndroidEntryPoint
@@ -86,6 +87,9 @@ class ZustLandingActivity : AppCompatActivity(), AddressBtmSheetCallback {
         handleDeepLinkIntent(intent = intent)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         zustLandingViewModel.clearUserGroceryCart()
+//        val appLinkIntent: Intent = intent
+//        val appLinkAction: String? = appLinkIntent.action
+//        val appLinkData: Uri? = appLinkIntent.data
     }
 
 

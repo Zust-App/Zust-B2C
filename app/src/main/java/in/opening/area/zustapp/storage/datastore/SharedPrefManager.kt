@@ -33,7 +33,9 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         const val SAVE_NON_VEG_MERCHANT_ID = "nv_merchant_id"
         const val CLEAR_CART_GROCERY = "clear_cart_grocery"
         const val CLEAR_CART_GROCERY1 = "clear_cart_grocery1"
-        const val CLEAR_CART_GROCERY2="clear_cart_grocery1"
+        const val CLEAR_CART_GROCERY2 = "clear_cart_grocery1"
+        const val CLEAR_CART_GROCERY3 = "clear_cart_grocery3"
+
 
         const val AFFILIATE_PARTNER_LINK = "afp_link"
 
@@ -224,24 +226,33 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
     }
 
     open fun getClearGroceryCart(): Boolean {
-        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY2, false)
+        return sharedPreferences.getBoolean(CLEAR_CART_GROCERY3, false)
     }
 
     open fun saveClearGroceryCart(value: Boolean) {
         removeClearCart()
-        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY2, value).apply()
+        sharedPreferences.edit().putBoolean(CLEAR_CART_GROCERY3, value).apply()
     }
 
     open fun removeClearCart() {
         sharedPreferences.edit().remove(CLEAR_CART_GROCERY).apply()
         sharedPreferences.edit().remove(CLEAR_CART_GROCERY1).apply()
+        sharedPreferences.edit().remove(CLEAR_CART_GROCERY2).apply()
     }
 
     open fun getAffiliatePartnerLink(): String {
-       return sharedPreferences.getString(AFFILIATE_PARTNER_LINK, "https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0")?:"https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0"
+        return sharedPreferences.getString(AFFILIATE_PARTNER_LINK, "https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0")
+            ?: "https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0"
     }
 
     open fun saveAffiliatePartnerLink(link: String?) {
-        sharedPreferences.edit().putString(AFFILIATE_PARTNER_LINK, link?:"https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0").apply()
+        sharedPreferences.edit().putString(AFFILIATE_PARTNER_LINK, link ?: "https://docs.google.com/forms/d/e/1FAIpQLSe7-e7MwGjMUpOGWAeoxAWo4s7bKcmt23BBtkLhElZbvh2iDw/viewform?vc=0&c=0&w=1&flr=0").apply()
+    }
+
+    open fun ktorBaseUrl(){
+
+    }
+    open fun getKtorBaseUrl(){
+       // return sharedPreferences.getBoolean(CLEAR_CART_GROCERY3, false)
     }
 }

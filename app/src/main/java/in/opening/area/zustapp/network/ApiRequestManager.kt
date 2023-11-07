@@ -33,6 +33,8 @@ import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import `in`.opening.area.zustapp.utility.DeviceInfo
 import `in`.opening.area.zustapp.webpage.model.InvoiceResponseModel
 import com.google.android.gms.maps.model.LatLng
+import `in`.opening.area.zustapp.locationV2.models.ApartmentListingModelResponse
+import `in`.opening.area.zustapp.refer.data.UserReferralDetailResponse
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.flow.flow
@@ -125,11 +127,11 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    fun getHomePageDataWithFlow(lat: Double, lng: Double, pinCode: String?) = flow {
-        emit(getHomePageDataFromServer(lat, lng, pinCode))
+    fun getHomePageDataWithFlow(lat: Double, lng: Double, pinCode: String?, isNonRapid: Boolean) = flow {
+        emit(getHomePageDataFromServer(lat, lng, pinCode,isNonRapid))
     }
 
-    private suspend fun getHomePageDataFromServer(lat: Double, lng: Double, pinCode: String?) =
+    private suspend fun getHomePageDataFromServer(lat: Double, lng: Double, pinCode: String?, isNonRapid: Boolean) =
         universalApiRequestManager {
             val token = sharedPrefManager.getUserAuthToken()
             val value = ktorHttpClient.get<HomePageApiResponse>(NetworkUtility.HOME_PAGE) {
@@ -139,19 +141,21 @@ class ApiRequestManager @Inject constructor() {
                 parameter("latitude", lat)
                 parameter("longitude", lng)
                 parameter("pincode", pinCode)
+                parameter("is_high_priority",isNonRapid)
             }
             value
         }
 
-    suspend fun getTrendingProductsWithFlow(lat: Double?, lng: Double?, pinCode: String?) = flow {
-        emit(getTrendingProducts(lat, lng, pinCode))
+    suspend fun getTrendingProductsWithFlow(lat: Double?, lng: Double?, pinCode: String?, isNonRapid: Boolean) = flow {
+        emit(getTrendingProducts(lat, lng, pinCode,isNonRapid))
     }
 
-    private suspend fun getTrendingProducts(lat: Double?, lng: Double?, pinCode: String?) = universalApiRequestManager {
+    private suspend fun getTrendingProducts(lat: Double?, lng: Double?, pinCode: String?, isNonRapid: Boolean) = universalApiRequestManager {
         val value = ktorHttpClient.get<ProductApiResponse>(NetworkUtility.TRENDING_PRODUCTS) {
             parameter("lat", lat ?: 0.0)
             parameter("lng", lng ?: 0.0)
             parameter("pincode", pinCode ?: "000000")
+            parameter("is_high_priority", isNonRapid)
         }
         value
     }
@@ -223,11 +227,12 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun getPaymentMethods() = universalApiRequestManager {
+    suspend fun getPaymentMethods(apartment: Boolean?) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<PaymentMethodResponseModel>(NetworkUtility.PAYMENT_METHOD) {
             headers {
                 this.append(Authorization, "Bearer $authToken")
+                parameter("is_high_priority", apartment ?: false)
             }
         }
     }
@@ -327,12 +332,13 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun checkIsServiceAvail(lat: Double?, lng: Double?, postalCode: String?) =
+    suspend fun checkIsServiceAvail(lat: Double?, lng: Double?, postalCode: String?, is_high_priority: Boolean?) =
         universalApiRequestManager {
             ktorHttpClient.get<String>(NetworkUtility.VERIFY_DELIVERABLE_ADDRESS) {
                 parameter("latitude", lat)
                 parameter("longitude", lng)
                 parameter("pincode", postalCode)
+                parameter("is_high_priority", is_high_priority ?: false)
             }
         }
 
@@ -700,7 +706,7 @@ class ApiRequestManager @Inject constructor() {
         }
     }
 
-    suspend fun getAllAvailableService(pinCode: String, lat: Double?, lng: Double?) = universalApiRequestManager {
+    suspend fun getAllAvailableService(pinCode: String, lat: Double?, lng: Double?, apartment: Boolean?) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<ZustAvailableServiceResult>(NetworkUtility.GET_SERVICE_LIST) {
             headers {
@@ -709,10 +715,11 @@ class ApiRequestManager @Inject constructor() {
             parameter("pincode", pinCode)
             parameter("lat", lat)
             parameter("lng", lng)
+            parameter("is_high_priority", apartment ?: false)
         }
     }
 
-    suspend fun getServicePageData(pinCode: String, lat: Double?, lng: Double?) = universalApiRequestManager {
+    suspend fun getServicePageData(pinCode: String, lat: Double?, lng: Double?, apartment: Boolean?) = universalApiRequestManager {
         val authToken = sharedPrefManager.getUserAuthToken()
         ktorHttpClient.get<ZustServicePageResponseReceiver>(NetworkUtility.GET_SERVICE_PAGE_DATA) {
             headers {
@@ -721,6 +728,7 @@ class ApiRequestManager @Inject constructor() {
             parameter("pincode", pinCode)
             parameter("lat", lat)
             parameter("lng", lng)
+            parameter("is_high_priority", apartment ?: false)
         }
     }
 
@@ -762,4 +770,28 @@ class ApiRequestManager @Inject constructor() {
             }
         }
     }
+
+    suspend fun getUserReferralDetails() = universalApiRequestManager {
+        try {
+            val authToken = sharedPrefManager.getUserAuthToken()
+            val response = ktorHttpClient.get<UserReferralDetailResponse>(NetworkUtility.ZUST_USER_REFERRAL_DETAILS) {
+                headers {
+                    this.append(Authorization, "Bearer $authToken")
+                }
+            }
+            response
+        } catch (e: Exception) {
+            throw Throwable(e)
+        }
+    }
+
+    suspend fun getAppApartmentListing() = universalApiRequestManager {
+        val authToken = sharedPrefManager.getUserAuthToken()
+        ktorHttpClient.get<ApartmentListingModelResponse>(NetworkUtility.ZUST_APARTMENT_LISTING) {
+            headers {
+                this.append(Authorization, "Bearer $authToken")
+            }
+        }
+    }
 }
+

@@ -1,29 +1,27 @@
 package `in`.opening.area.zustapp.viewmodels
 
-import android.app.ActivityManager
-import android.content.Context
-import android.graphics.Canvas
-import android.widget.LinearLayout
-import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
-import `in`.opening.area.zustapp.network.ApiRequestManager
-import `in`.opening.area.zustapp.network.ResultWrapper
-import `in`.opening.area.zustapp.payment.models.*
-import `in`.opening.area.zustapp.repository.DbAddToCartRepository
-import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
-import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
-import `in`.opening.area.zustapp.uiModels.*
-import `in`.opening.area.zustapp.utility.AppUtility
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phonepe.intent.sdk.api.UPIApplicationInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import `in`.opening.area.zustapp.ui.theme.okraFontFamily
+import `in`.opening.area.zustapp.coupon.model.ApplyCouponReqBody
+import `in`.opening.area.zustapp.network.ApiRequestManager
+import `in`.opening.area.zustapp.network.ResultWrapper
+import `in`.opening.area.zustapp.payment.models.CreatePaymentReqBodyModel
+import `in`.opening.area.zustapp.payment.models.Payment
+import `in`.opening.area.zustapp.payment.models.PaymentActivityReqData
+import `in`.opening.area.zustapp.payment.models.PaymentData
+import `in`.opening.area.zustapp.payment.models.PaymentMethod
+import `in`.opening.area.zustapp.repository.DbAddToCartRepository
+import `in`.opening.area.zustapp.storage.datastore.DataStoreManager
+import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
+import `in`.opening.area.zustapp.uiModels.CreatePaymentUi
+import `in`.opening.area.zustapp.uiModels.PaymentMethodUi
+import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
+import `in`.opening.area.zustapp.uiModels.ValidateCouponUi
+import `in`.opening.area.zustapp.utility.AppUtility
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -54,7 +52,8 @@ class PaymentActivityViewModel @Inject constructor(private val apiRequestManager
 
     internal fun getPaymentMethodsFromServer(upiApps: List<UPIApplicationInfo>) = viewModelScope.launch(Dispatchers.IO) {
         paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
-        when (val response = apiRequestManager.getPaymentMethods()) {
+        val address = sharedPrefManager.getUserAddress()
+        when (val response = apiRequestManager.getPaymentMethods(address?.is_high_priority)) {
             is ResultWrapper.Success -> {
                 if (response.value.data == null) {
                     paymentMethodUiState.update {

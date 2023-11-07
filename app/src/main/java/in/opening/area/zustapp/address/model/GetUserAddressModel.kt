@@ -31,6 +31,7 @@ data class AddressItem(
     val latitude: Double?,
     val longitude: Double?,
     val pinCode: String?,
+    val is_high_priority: Boolean? = false,
 ) {
     fun convertToAddress(): ZustAddress {
         return ZustAddress(addressLevel,
@@ -38,7 +39,7 @@ data class AddressItem(
             description,
             houseNumberAndFloor,
             id, landmark, latitude, longitude,
-            pinCode=pinCode)
+            pinCode = pinCode, is_high_priority = is_high_priority)
     }
 }
 

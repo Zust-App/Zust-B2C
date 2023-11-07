@@ -202,35 +202,3 @@ fun GroceryPaymentPageMainUi(paddingValues: PaddingValues, paymentViewModel: Pay
 }
 
 
-suspend fun fetchIdsFromApi(): List<Int> {
-    return arrayListOf()
-}
-
-var x = arrayListOf<Any>()
-
-// Function to fetch details for a single ID from the API
-suspend fun fetchDetailsByIdFromApi(id: Int): String {
-    val y = x.remove {
-
-    }
-    fetchDetailsForIds().collectLatest {
-
-    }
-    return ""
-}
-
-
-fun fetchDetailsForIds(): Flow<List<String>> = flow {
-    val ids = fetchIdsFromApi()
-    val x = ids
-        .map { id ->
-            val details = fetchDetailsByIdFromApi(id)
-            details
-        }
-    emit(x)
-}
-
-
-fun <T, R> List<T>.remove(filter: T.() -> R): List<T> {
-    return arrayListOf<T>()
-}

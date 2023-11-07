@@ -184,7 +184,7 @@ class OrderSummaryViewModel @Inject constructor(
     private fun checkServiceAvailBasedOnLatLng(zustAddress: ZustAddress?, orderId: Int) = viewModelScope.launch {
         supervisorScope {
             if (((zustAddress?.latitude != null && zustAddress.longitude != null) && (zustAddress.latitude != 0.0 && zustAddress.longitude != 0.0)) || !zustAddress?.pinCode.isNullOrEmpty()) {
-                when (val response = productRepo.apiRequestManager.checkIsServiceAvail(zustAddress?.latitude, zustAddress?.longitude, zustAddress?.pinCode)) {
+                when (val response = productRepo.apiRequestManager.checkIsServiceAvail(zustAddress?.latitude, zustAddress?.longitude, zustAddress?.pinCode,zustAddress?.is_high_priority)) {
                     is ResultWrapper.Success -> {
                         val jsonObject = JSONObject(response.value)
                         if (jsonObject.has("data")) {

@@ -18,12 +18,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.BaseActivityWithLocation
 import zustbase.ZustLandingActivity
 import `in`.opening.area.zustapp.address.AddNewAddressActivity
+import `in`.opening.area.zustapp.address.AddNewAddressActivity.Companion.ADDRESS_KEY
 import `in`.opening.area.zustapp.address.AddressSearchActivity
 import `in`.opening.area.zustapp.address.GoogleMapsAddressActivity
 import `in`.opening.area.zustapp.address.compose.AlreadyAddedAddressListUi
 import `in`.opening.area.zustapp.databinding.ActivityLocationPermissionBinding
 import `in`.opening.area.zustapp.helpline.HelplineBtmSheet
 import `in`.opening.area.zustapp.locationV2.dialog.LocationFetchingProgressDialog
+import `in`.opening.area.zustapp.locationV2.models.ApartmentData
+import `in`.opening.area.zustapp.locationV2.models.convertToAddressModel
 import `in`.opening.area.zustapp.locationV2.viewModel.LocationPermissionViewModel
 import `in`.opening.area.zustapp.uiModels.locations.CheckDeliverableAddressUiState
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -31,7 +34,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LocationPermissionActivity : BaseActivityWithLocation() {
+class LocationPermissionActivity : BaseActivityWithLocation(), ApartmentListingBtmSheet.ApartmentListingBtmSheetCallback {
     private val locationPermissionViewModel: LocationPermissionViewModel by viewModels()
     private var binding: ActivityLocationPermissionBinding? = null
 
@@ -39,6 +42,17 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
     private var locationFetchingProgressDialog: LocationFetchingProgressDialog = LocationFetchingProgressDialog()
 
     private val startAddNewAddressActivity = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedAddressId = result.data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+            if (selectedAddressId != null && selectedAddressId != -1) {
+                moveToHomeActivity()
+            }
+        }
+    }
+
+    private val apartmentAddNewAddressActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -72,11 +86,19 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
         binding?.helpAndSupportIcon?.setOnClickListener {
             openHelplineBtmSheet()
         }
+        binding?.selectApartmentTv?.setOnClickListener {
+            openApartmentBtmSheet()
+        }
     }
 
     private fun openHelplineBtmSheet() {
         val helpAndSupportBtmSheet: HelplineBtmSheet = HelplineBtmSheet.newInstance()
         helpAndSupportBtmSheet.show(supportFragmentManager, "help_support")
+    }
+
+    private fun openApartmentBtmSheet() {
+        val apartmentListingBtmSheet: ApartmentListingBtmSheet = ApartmentListingBtmSheet.newInstance()
+        apartmentListingBtmSheet.show(supportFragmentManager, "apart_listing")
     }
 
     private fun loadAlreadySavedFragment() {
@@ -201,6 +223,12 @@ class LocationPermissionActivity : BaseActivityWithLocation() {
             binding?.currentLocationPgBar?.visibility = View.GONE
             hideProgressBar()
         }
+    }
+
+    override fun didTapOnListedApartment(apartmentData: ApartmentData) {
+        val intent = Intent(this, AddNewAddressActivity::class.java)
+        intent.putExtra(AddNewAddressActivity.ADDRESS_EDIT_KEY, apartmentData.convertToAddressModel())
+        apartmentAddNewAddressActivity.launch(intent)
     }
 
 }

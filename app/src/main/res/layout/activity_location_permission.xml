@@ -7,10 +7,28 @@
     android:background="@color/white"
     tools:context=".locationV2.LocationPermissionActivity">
 
+    <TextView
+        android:id="@+id/searchLocationManuallyBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_gray_border_8dp"
+        android:drawableEnd="@drawable/new_search_icon"
+        android:fontFamily="@font/bui_booking_regular"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="12dp"
+        android:text="@string/search_location_manually"
+        android:textColor="@color/black_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectApartmentTv" />
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/location"
         android:src="@drawable/custom_location_icon"
@@ -19,46 +37,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/helpAndSupportIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:id="@+id/helpAndSupportIcon"
         android:fontFamily="@font/bui_booking_regular"
         android:text="@string/need_help"
         android:textColor="@color/new_hint_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/locationNotEnableTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/bui_booking_bold"
-        android:text="@string/we_don_t_have_your_location_yet"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
         android:id="@+id/subTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/bui_booking_medium"
         android:text="@string/we_need_your_location_to_find_nearest_store_provide_you_a_seamless_delivery_experience"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationNotEnableTitleText" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/currentLocationViewGroup"
@@ -114,20 +117,21 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/searchLocationManuallyBtn"
+        android:id="@+id/selectApartmentTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_gray_border_8dp"
-        android:drawableEnd="@drawable/new_search_icon"
-        android:fontFamily="@font/bui_booking_regular"
+        android:drawableEnd="@drawable/outline_apartment_24"
+        android:fontFamily="@font/bui_booking_medium"
         android:paddingHorizontal="12dp"
         android:paddingVertical="12dp"
-        android:text="@string/search_location_manually"
+        android:text="Choose Apartment"
         android:textColor="@color/black_2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentLocationViewGroup" />
 
@@ -138,7 +142,8 @@
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchLocationManuallyBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/searchLocationManuallyBtn">
+
+    </androidx.compose.ui.platform.ComposeView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.address.model.SearchAddressModel
 
 @Composable
 fun AddNewAddressUi(
@@ -199,23 +200,7 @@ fun AddNewAddressUi(
 
             Spacer(modifier = modifier.height(16.dp))
 
-            Text(text = "Alternate Mobile number",
-                style = ZustTypography.bodySmall,
-                color = colorResource(id = R.color.black_3))
-            Spacer(modifier = modifier.height(6.dp))
-
-            TextField(value = alternateMobileNumber,
-                textStyle = ZustTypography.bodyMedium,
-                onValueChange = {
-                    alternateMobileNumber = it
-                }, modifier = modifier
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(8.dp)),
-                colors = getTextFieldColors(), maxLines = 1)
-
-            Spacer(modifier = modifier.height(16.dp))
-
-            Text(text = "Enter Complete Address*",
+            Text(text = "Enter complete address*",
                 style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
 
@@ -229,6 +214,22 @@ fun AddNewAddressUi(
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(8.dp)),
                 colors = getTextFieldColors(), maxLines = 3)
+
+            Spacer(modifier = modifier.height(16.dp))
+
+            Text(text = "Alternate Mobile number",
+                style = ZustTypography.bodySmall,
+                color = colorResource(id = R.color.black_3))
+            Spacer(modifier = modifier.height(6.dp))
+
+            TextField(value = alternateMobileNumber,
+                textStyle = ZustTypography.bodyMedium,
+                onValueChange = {
+                    alternateMobileNumber = it
+                }, modifier = modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(8.dp)),
+                colors = getTextFieldColors(), maxLines = 1)
 
             Spacer(modifier = modifier.height(24.dp))
 
@@ -332,6 +333,7 @@ fun getTextFieldColors(): TextFieldColors {
 @Composable
 fun AddNewAddressUiV2(
     modifier: Modifier, viewModel: AddressViewModel,
+    addressModel: SearchAddressModel?,
     searchAddressModel: CustomLocationModel,
     callback: (Any) -> Unit,
 ) {
@@ -466,6 +468,25 @@ fun AddNewAddressUiV2(
 
             Spacer(modifier = modifier.height(16.dp))
 
+            Text(text = if (addressModel?.apartmentData != null) {
+                "Enter Floor Number*"
+            } else {
+                "Enter Complete Address*"
+            },
+                style = ZustTypography.bodySmall,
+                color = colorResource(id = R.color.black_3))
+            Spacer(modifier = modifier.height(6.dp))
+            TextField(value = houseAndFloor,
+                textStyle = ZustTypography.bodyMedium,
+                onValueChange = {
+                    houseAndFloor = it
+                }, modifier = modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(8.dp)),
+                colors = getTextFieldColors(), maxLines = 3)
+
+            Spacer(modifier = modifier.height(16.dp))
+
             Text(text = "Alternate Mobile number",
                 style = ZustTypography.bodySmall,
                 color = colorResource(id = R.color.black_3))
@@ -479,21 +500,6 @@ fun AddNewAddressUiV2(
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(8.dp)),
                 colors = getTextFieldColors(), maxLines = 1)
-
-            Spacer(modifier = modifier.height(16.dp))
-
-            Text(text = "Enter Complete Address*",
-                style = ZustTypography.bodySmall,
-                color = colorResource(id = R.color.black_3))
-            Spacer(modifier = modifier.height(6.dp))
-            TextField(value = houseAndFloor,
-                textStyle = ZustTypography.bodyMedium,
-                onValueChange = {
-                    houseAndFloor = it
-                }, modifier = modifier
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(8.dp)),
-                colors = getTextFieldColors(), maxLines = 3)
 
             Spacer(modifier = modifier.height(24.dp))
 
@@ -520,6 +526,7 @@ fun AddNewAddressUiV2(
                                 longitude = customLocationModel.lng
                             }
                             optionalMobileNumber = alternateMobileNumber
+                            is_high_priority = addressModel?.apartmentData != null
                         }
                         viewModel.checkAndSaveAddressWithServer()
                     } else {

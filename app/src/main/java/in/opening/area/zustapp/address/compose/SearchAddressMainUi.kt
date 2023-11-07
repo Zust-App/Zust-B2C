@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.address.compose
 
+import androidx.compose.foundation.clickable
 import `in`.opening.area.zustapp.address.model.SearchPlacesDataModel
 import `in`.opening.area.zustapp.compose.CustomAnimatedProgressBar
 import `in`.opening.area.zustapp.ui.theme.ZustTypography
@@ -11,19 +12,24 @@ import `in`.opening.area.zustapp.viewmodels.AddressViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import `in`.opening.area.zustapp.R as R1
 
 
 @Composable
 fun SearchAddressMainUi(
     viewModel: AddressViewModel, modifier: Modifier, callback: (SearchPlacesDataModel) -> Unit,
-    currentLocationClick: (Any?) -> Unit,
+    currentLocationClick: (Any?) -> Unit, apartmentListingCallback: () -> Unit,
 ) {
     val response by viewModel.searchPlacesUiState.collectAsState(initial = SearchPlacesUi.InitialUi("",
         false))
@@ -43,10 +49,12 @@ fun SearchAddressMainUi(
         is SearchPlacesUi.SearchPlaceResult -> {
             canShowProgressBar = response.isLoading
         }
+
         is SearchPlacesUi.ErrorUi -> {
             canShowProgressBar = response.isLoading
             AppUtility.showToast(context, response.errorMessage)
         }
+
         is SearchPlacesUi.InitialUi -> {
             canShowProgressBar = response.isLoading
         }
@@ -57,6 +65,7 @@ fun SearchAddressMainUi(
             canShowProgressBar1 = currentLocation.isLoading
             currentLocationClick.invoke((currentLocation as LocationAddressUi.Success).data)
         }
+
         is LocationAddressUi.ErrorUi -> {
             canShowProgressBar1 = currentLocation.isLoading
             (currentLocation as LocationAddressUi.ErrorUi).message?.let {
@@ -81,13 +90,16 @@ fun SearchAddressMainUi(
                 end.linkTo(parent.end)
                 width = Dimension.fillToConstraints
             }
-            .wrapContentHeight(), Modifier, viewModel) {
+            .wrapContentHeight(), Modifier, viewModel, {
             if (!viewModel.searchedAddress.value.isLoading) {
                 currentLocationClick.invoke(null)
             } else {
                 AppUtility.showToast(context, "Please wait...")
             }
+        }) {
+            apartmentListingCallback.invoke()
         }
+
 
         LazyColumn(modifier = Modifier.constrainAs(searchResult) {
             top.linkTo(searchBar.bottom, dp_8)

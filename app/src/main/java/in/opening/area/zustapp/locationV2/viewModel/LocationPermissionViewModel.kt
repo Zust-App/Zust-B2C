@@ -67,7 +67,7 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
     }
 
     internal fun verifyDeliverableAddress(savedAddress: AddressItem?) = viewModelScope.launch {
-        when (val response = apiRequestManager.getAllAvailableService(savedAddress?.pinCode?:"000000", savedAddress?.latitude, savedAddress?.longitude)) {
+        when (val response = apiRequestManager.getAllAvailableService(savedAddress?.pinCode?:"000000", savedAddress?.latitude, savedAddress?.longitude, savedAddress?.is_high_priority)) {
             is ResultWrapper.Success -> {
                 response.value.data?.serviceList?.let { data ->
                     val checkAnyServiceAvailable = data.any { it.enable }
@@ -124,5 +124,7 @@ class LocationPermissionViewModel @Inject constructor(private val apiRequestMana
             }
         }
     }
+
+
 
 }

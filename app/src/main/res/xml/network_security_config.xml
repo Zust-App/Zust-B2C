@@ -5,5 +5,6 @@
         <domain includeSubdomains="true">gcapi.grinzy.in</domain>
         <domain includeSubdomains="true">zcapi.zutapp.com</domain>
         <domain includeSubdomains="true">zcapi.zustapp.com</domain>
+        <domain includeSubdomains="true">zustapp.com</domain>
     </domain-config>
 </network-security-config>

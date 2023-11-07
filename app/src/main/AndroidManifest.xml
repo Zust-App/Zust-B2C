@@ -339,25 +339,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/key_geo" />
 
-        <meta-data
-            android:name="com.phonepe.android.sdk.isUAT"
-            android:value="true"/>
-        <meta-data
-            android:name="com.phonepe.android.sdk.isSimulator"
-            android:value="true"/>
 
-        <meta-data
-            android:name="com.phonepe.android.sdk.MerchantId"
-            android:value="@string/pg_merchant_stage" />
-
-<!--        <meta-data-->
-<!--            android:name="com.phonepe.android.sdk.MerchantId"-->
-<!--            android:value="@string/pg_merchant_prod"/>-->
-
-
-        <meta-data
-            android:name="com.phonepe.android.sdk.AppId"
-            android:value="@string/pg_app_id" />
+        <meta-data android:name="com.phonepe.android.sdk.isUAT" android:value="false"/>
+        <meta-data android:name="com.phonepe.android.sdk.isSimulator" android:value="false"/>
+        <meta-data android:name="com.phonepe.android.sdk.MerchantId" android:value="@string/pg_merchant_prod"/>
+        <meta-data android:name="com.phonepe.android.sdk.AppId" android:value="@string/app_id"/>
 
     </application>
 

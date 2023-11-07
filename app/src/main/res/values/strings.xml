@@ -88,7 +88,7 @@
     <string name="copied">Successfully Copied to clipboard</string>
     <string name="key_geo">AIzaSyB8PVG4R7uQ_m4Kh_Ixr_PPkn3Uxv2rQOQ</string>
     <string name="proceed">Proceed</string>
-    <string name="search_location_manually">Search location manually</string>
+    <string name="search_location_manually">Search location manually...</string>
     <string name="we_don_t_have_your_location_yet">We don\'t have your location, yet!</string>
     <string name="we_need_your_location_to_find_nearest_store_provide_you_a_seamless_delivery_experience"><![CDATA[We need your location to find nearest store & provide you a seamless delivery experience]]></string>
     <string name="enable_device_location">Enable device location</string>
@@ -101,7 +101,7 @@
 
     <string name="pg_merchant_stage" translatable="false">PGTESTPAYUAT</string>
     <string name="pg_merchant_prod" translatable="false">M1O8N18KU2RP</string>
-    <string name="pg_app_id" translatable="false">e2a24a0e-bd26-4ab6-b529-ab25eda6bfb5</string>
-
+    <string name="pg_salt_key" translatable="false">e2a24a0e-bd26-4ab6-b529-ab25eda6bfb5</string>
+   <string name="app_id" translatable="false">7VIqIuw45subuvYNsBnGfFzIaVs=</string>
 
 </resources>

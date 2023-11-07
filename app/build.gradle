@@ -17,8 +17,8 @@ android {
         applicationId "in.opening.area.zustapp"
         minSdk 23
         targetSdk 34
-        versionCode 33
-        versionName "2023.10.15.12:30"
+        versionCode 38
+        versionName "2023.11.3.5:30"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -39,14 +39,16 @@ android {
             buildConfigField "String", "PROD_BASE_URL", "\"https://zcapi.zustapp.com/greenboys-api/api/v1\""
             buildConfigField "String", "DEV_BASE_URL", "\"https://gcapi.grinzy.in/greenboys-api/api/v1\""
             buildConfigField "String", "PAYMENT_TOKEN", "\"Basic e7rc0cb7ffdbYlHQlvgUAw==\""
+            buildConfigField "String", "NEW_PROD_KTOR_BASE_URL", "\"https://ktor.zustapp.com\""
         }
         debug {
-            minifyEnabled true
-            shrinkResources true
+//            minifyEnabled true
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "PROD_BASE_URL", "\"https://zcapi.zustapp.com/greenboys-api/api/v1\""
             buildConfigField "String", "DEV_BASE_URL", "\"https://gcapi.grinzy.in/greenboys-api/api/v1\""
             buildConfigField "String", "PAYMENT_TOKEN", "\"Basic e7rc0cb7ffdbYlHQlvgUAw==\""
+            buildConfigField "String", "NEW_PROD_KTOR_BASE_URL", "\"https://ktor.zustapp.com\""
         }
     }
     compileOptions {
@@ -177,6 +179,6 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltCompilerVersion"
-    implementation "phonepe.intentsdk.android.release:IntentSDK:2.0.1"
+    implementation "phonepe.intentsdk.android.release:IntentSDK:2.3.0"
 
 }

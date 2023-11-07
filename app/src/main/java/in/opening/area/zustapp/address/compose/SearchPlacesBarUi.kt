@@ -43,7 +43,7 @@ const val SEARCH_PLACES_THRESHOLD = 2
 @Composable
 fun SearchPlacesBarUi(
     modifier: Modifier, modifier1: Modifier,
-    viewModel: AddressViewModel, currentLocationClick: () -> Unit,
+    viewModel: AddressViewModel, currentLocationClick: () -> Unit, apartmentListingCallback: () -> Unit,
 ) {
     var searchInput by rememberSaveable {
         mutableStateOf("")
@@ -56,7 +56,7 @@ fun SearchPlacesBarUi(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 12.dp,
-                vertical = 16.dp)
+                vertical = 8.dp)
             .background(color = colorResource(id = R.color.white),
                 shape = RoundedCornerShape(8.dp))
             .border(width = 1.dp, shape = RoundedCornerShape(8.dp),
@@ -148,6 +148,22 @@ fun SearchPlacesBarUi(
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_my_location_24), contentDescription = "current location",
                     tint = colorResource(id = R.color.white))
             }
+        }
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                apartmentListingCallback.invoke()
+            }
+            .padding(horizontal = 12.dp, vertical = dp_8)
+            .background(color = colorResource(id = R.color.white),
+                shape = RoundedCornerShape(8.dp))
+            .border(width = 1.dp, shape = RoundedCornerShape(8.dp),
+                color = colorResource(id = R.color.new_hint_color))
+            .padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Text(text = "Select Apartment", style = ZustTypography.bodyMedium,
+                color = colorResource(id = R.color.app_black))
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(painter = painterResource(id = R.drawable.outline_apartment_24), contentDescription = "apartment")
         }
     }
 

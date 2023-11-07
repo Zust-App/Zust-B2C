@@ -38,6 +38,7 @@ class ReferAndEarnActivity : AppCompatActivity() {
                         finish()
                     })
             }) {
+                viewModel.getUserReferralDetails()
                 ReferAndEarnMainUi(viewModel, it)
             }
         }

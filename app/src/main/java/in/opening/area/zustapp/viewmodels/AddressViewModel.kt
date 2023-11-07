@@ -65,7 +65,7 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
     //first check deliverable area and then save address
     internal fun checkAndSaveAddressWithServer() {
         if (!userAddressInputCache.pinCode.isNullOrEmpty()) {
-            checkIsDeliverablePinCodeOrNot(userAddressInputCache.pinCode!!,userAddressInputCache.latitude,userAddressInputCache.longitude)
+            checkIsDeliverablePinCodeOrNot(userAddressInputCache.pinCode!!,userAddressInputCache.latitude,userAddressInputCache.longitude,userAddressInputCache.is_high_priority)
         } else {
             //
         }
@@ -75,9 +75,9 @@ class AddressViewModel @Inject constructor(private val apiRequestManager: ApiReq
         return saveUserAddressUiState.value.isLoading
     }
 
-    private fun checkIsDeliverablePinCodeOrNot(inputPinCode: String, latitude: Double?, longitude: Double?) = viewModelScope.launch {
+    private fun checkIsDeliverablePinCodeOrNot(inputPinCode: String, latitude: Double?, longitude: Double?, apartment: Boolean) = viewModelScope.launch {
         saveUserAddressUiState.update { SaveUserAddressUi.InitialUi(true) }
-        when (val response = apiRequestManager.getAllAvailableService(inputPinCode,latitude,longitude)) {
+        when (val response = apiRequestManager.getAllAvailableService(inputPinCode, latitude, longitude, apartment)) {
             is ResultWrapper.Success -> {
                 val isAnyServiceAvailable=response.value.data?.serviceList?.any { it.enable }
                 if (isAnyServiceAvailable == true) {

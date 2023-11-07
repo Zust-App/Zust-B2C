@@ -20,6 +20,7 @@ import com.phonepe.intent.sdk.api.B2BPGRequest
 import com.phonepe.intent.sdk.api.PhonePe
 import com.phonepe.intent.sdk.api.PhonePeInitException
 import com.phonepe.intent.sdk.api.UPIApplicationInfo
+import com.phonepe.intent.sdk.api.models.PhonePeEnvironment
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.opening.area.zustapp.OrderConfirmationIntermediateActivity
 import `in`.opening.area.zustapp.R
@@ -33,9 +34,12 @@ import `in`.opening.area.zustapp.payment.ui.GroceryPaymentPageMainUi
 import `in`.opening.area.zustapp.payment.utils.PG_ApiEndPoint
 import `in`.opening.area.zustapp.payment.utils.PG_saltIndex
 import `in`.opening.area.zustapp.payment.utils.PG_saltKey
+import `in`.opening.area.zustapp.payment.utils.appId
 import `in`.opening.area.zustapp.payment.utils.createB2BPaymentReq
 import `in`.opening.area.zustapp.payment.utils.createPaymentRequestEncoded
+import `in`.opening.area.zustapp.payment.utils.pg_merchant_key
 import `in`.opening.area.zustapp.payment.utils.sha256
+import `in`.opening.area.zustapp.payment.utils.simulatorPackage
 import `in`.opening.area.zustapp.rapidwallet.RapidWalletActivity
 import `in`.opening.area.zustapp.rapidwallet.model.RapidWalletResult
 import `in`.opening.area.zustapp.uiModels.PaymentVerificationUi
@@ -58,8 +62,7 @@ class PaymentActivity : AppCompatActivity() {
 
 
     private val txnId = System.currentTimeMillis().toString()
-    private val merchantId by lazy { getString(R.string.pg_merchant_stage) }
-    private var targetApp = ""
+    private var targetApp: PaymentMethod? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +93,8 @@ class PaymentActivity : AppCompatActivity() {
             })
         }
 
-        PhonePe.init(this)
+        PhonePe.init(this, PhonePeEnvironment.RELEASE, pg_merchant_key, appId)
+
         try {
             PhonePe.setFlowId(paymentViewModel.getUserId())
             val upiApps: List<UPIApplicationInfo> = PhonePe.getUpiApps()
@@ -143,11 +147,15 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun setUpPaymentProcess() {
         val callbackUrl = "https://webhook.site/callback-url"
-        targetApp = paymentViewModel.paymentMethod?.key ?: ""
-        val base64Body = createPaymentRequestEncoded(txnId, merchantId, paymentViewModel.getUserId(), callbackUrl, "UPI_INTENT", "com.phonepe.simulator")
+        targetApp = paymentViewModel.paymentMethod
+        if (targetApp?.packageName == null) {
+            return
+        }
+        val base64Body = createPaymentRequestEncoded(txnId, pg_merchant_key, paymentViewModel.getUserId(), callbackUrl, "UPI_INTENT", targetApp!!.packageName!!,
+            paymentViewModel.paymentActivityReqData?.totalAmount ?: 0.0)
         val checksum = sha256(base64Body + PG_ApiEndPoint + PG_saltKey) + "###$PG_saltIndex";
         val b2BPGRequest = createB2BPaymentReq(base64Body, checksum = checksum)
-        startPhonePeTransaction(this, b2BPGRequest, "com.phonepe.simulator")
+        startPhonePeTransaction(this, b2BPGRequest, packageName = targetApp!!.packageName!!)
     }
 
     private fun startPhonePeTransaction(context: Context, b2BPGRequest: B2BPGRequest, packageName: String) {
@@ -188,6 +196,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private suspend fun parsePaymentValidation(response: PaymentVerificationUi) {
+
         when (response) {
             is PaymentVerificationUi.PaymentSuccess -> {
                 checkPaymentCapturedStatus(response.data)

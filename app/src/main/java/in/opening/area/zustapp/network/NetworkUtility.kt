@@ -92,9 +92,15 @@ class NetworkUtility {
         val SEND_SUBSCRIPTION_DETAILS = "$baseUrl/zust_subscription/form"
 
         //zust pay
-        val ZUST_PAY_AMOUNT = "$zustPayBaseUrl/zust_pay/wallet-amount"
         val ZUST_PAY_CREDIT_DETAILS = "$zustPayBaseUrl/zust_pay/credit_details"
         val ZUST_PAY_TRANSACTION_DETAIL = "$zustPayBaseUrl/zust_pay/credit_details"
 
+        //referral details
+        private const val ktorNewBaseUrl=BuildConfig.NEW_PROD_KTOR_BASE_URL
+        const val ZUST_USER_REFERRAL_DETAILS = "$ktorNewBaseUrl/api/referral/details"
+        const val ZUST_PAY_AMOUNT = "$ktorNewBaseUrl/api/zustpay/wallet"
+
+        //address
+        const val ZUST_APARTMENT_LISTING="$ktorNewBaseUrl/api/address/registered_apartment"
     }
 }

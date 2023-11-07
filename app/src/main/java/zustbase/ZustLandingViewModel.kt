@@ -8,6 +8,7 @@ import `in`.opening.area.zustapp.locationManager.UserLocationDetails
 import `in`.opening.area.zustapp.network.ApiRequestManager
 import `in`.opening.area.zustapp.network.ResultWrapper
 import `in`.opening.area.zustapp.rapidwallet.model.ZustServiceType
+import `in`.opening.area.zustapp.refer.data.UserReferralDetail
 import `in`.opening.area.zustapp.repository.DbAddToCartRepository
 import `in`.opening.area.zustapp.storage.datastore.SharedPrefManager
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,7 @@ class ZustLandingViewModel @Inject constructor(
 
     private val _zustPayUiModel = MutableStateFlow<ZustPayUiState>(ZustPayUiState.Initial(false))
     internal val zustPayUiModel: StateFlow<ZustPayUiState> get() = _zustPayUiModel
+
     internal fun getListOfServiceableItem() = viewModelScope.launch(Dispatchers.IO) {
         val address = sharedPrefManager.getUserAddress()
         updateAddressItem(address)
@@ -56,8 +58,8 @@ class ZustLandingViewModel @Inject constructor(
         val localAddress = address?.takeIf { !it.pinCode.isNullOrEmpty() && (it.latitude ?: 0.0) > 0.0 && (it.longitude ?: 0.0) > 0.0 }
         localAddress?.let {
             val combinedResult = awaitAll(
-                async { apiRequestManager.getAllAvailableService(it.pinCode!!, it.latitude!!, it.longitude!!) },
-                async { apiRequestManager.getServicePageData(it.pinCode!!, it.latitude!!, it.longitude!!) }
+                async { apiRequestManager.getAllAvailableService(it.pinCode!!, it.latitude!!, it.longitude!!,it.is_high_priority) },
+                async { apiRequestManager.getServicePageData(it.pinCode!!, it.latitude!!, it.longitude!!,it.is_high_priority) }
             )
 
             var zustServiceData: ZustServiceData? = null
@@ -161,12 +163,32 @@ class ZustLandingViewModel @Inject constructor(
     }
 
     internal fun retrieveZustPayWallet() = viewModelScope.launch(Dispatchers.IO) {
-        when (val response = apiRequestManager.getZustPayAmount()) {
+        _zustPayUiModel.update { ZustPayUiState.Initial(true) }
+        val zustPayResponse = async { apiRequestManager.getZustPayAmount() }
+        val userReferralDetails = async { apiRequestManager.getUserReferralDetails() }
+        awaitAll(zustPayResponse, userReferralDetails)
+        when (val response = zustPayResponse.await()) {
             is ResultWrapper.Success -> {
                 if (response.value.data == null) {
                     _zustPayUiModel.update { ZustPayUiState.Error(response.value.errorMsg, false) }
                 } else {
-                    _zustPayUiModel.update { ZustPayUiState.Success(data = response.value.data, false) }
+                    when (val userReferralData = userReferralDetails.await()) {
+                        is ResultWrapper.Success -> {
+                            val data = userReferralData.value.data
+                            data?.userReferralDetails?.let { referralData ->
+                                val referralLevelMap: Map<Int, List<UserReferralDetail>> = referralData.groupBy { it.level }
+                                _zustPayUiModel.update {
+                                    ZustPayUiState.Success(response.value.data, false, referralLevelMap, data.totalReferralIncome, data.message)
+                                }
+                            } ?: run {
+                                _zustPayUiModel.update { ZustPayUiState.Error("Something went wrong Please try again", false) }
+                            }
+                        }
+
+                        else -> {
+                            _zustPayUiModel.update { ZustPayUiState.Error("Something went wrong Please try again", false) }
+                        }
+                    }
                 }
             }
 
@@ -182,12 +204,10 @@ class ZustLandingViewModel @Inject constructor(
             is ResultWrapper.NetworkError -> {
                 _zustPayUiModel.update { ZustPayUiState.Error("Something went wrong Please try again", false) }
             }
-
-            else -> {
-
-            }
         }
     }
+
+
 
     internal fun getAffiliatePartnerLink(): String {
         return sharedPrefManager.getAffiliatePartnerLink()

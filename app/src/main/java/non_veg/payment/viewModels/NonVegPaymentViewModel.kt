@@ -39,7 +39,8 @@ class NonVegPaymentViewModel @Inject constructor(private val apiRequestManager: 
 
     internal fun getPaymentMethodsFromServer() = viewModelScope.launch(Dispatchers.IO) {
         _paymentMethodUiState.update { PaymentMethodUi.InitialUi(true) }
-        when (val response = apiRequestManager.getPaymentMethods()) {
+        val address=sharedPrefManager.getUserAddress()
+        when (val response = apiRequestManager.getPaymentMethods(address?.is_high_priority)) {
             is ResultWrapper.Success -> {
 //                if (response.value.data?.paymentMethods == null) {
 //                    _paymentMethodUiState.update {

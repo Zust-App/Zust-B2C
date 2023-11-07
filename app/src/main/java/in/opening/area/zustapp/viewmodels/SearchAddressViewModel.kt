@@ -14,7 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,7 +61,7 @@ open class SearchAddressViewModel @Inject constructor(private val apiRequestMana
     internal fun checkServiceAvailBasedOnLatLng(lat: Double?, lng: Double?, postalCode: String?) =
         viewModelScope.launch {
             validLatLngUiState.update { AddressValidationUi.InitialUi(true, "") }
-            when (val response = apiRequestManager.getAllAvailableService(postalCode?:"000000", lat, lng)) {
+            when (val response = apiRequestManager.getAllAvailableService(postalCode ?: "000000", lat, lng, false)) {
                 is ResultWrapper.Success -> {
                     response.value.data?.serviceList?.let { zustServices ->
                         val isAnyServiceAvailable = zustServices.any { it.enable }

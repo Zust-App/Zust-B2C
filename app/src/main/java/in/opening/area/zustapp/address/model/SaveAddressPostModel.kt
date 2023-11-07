@@ -1,10 +1,11 @@
 package `in`.opening.area.zustapp.address.model
 
-import zustbase.orderDetail.models.ZustAddress
-import `in`.opening.area.zustapp.utility.UserCustomError
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.errorprone.annotations.Keep
+import `in`.opening.area.zustapp.locationV2.models.ApartmentData
+import `in`.opening.area.zustapp.utility.UserCustomError
+import zustbase.orderDetail.models.ZustAddress
 
 @Keep
 data class SaveAddressPostModel(
@@ -16,6 +17,7 @@ data class SaveAddressPostModel(
     var longitude: Double? = 0.0,
     var addressType: String? = "HOME",
     var optionalMobileNumber: String? = "",
+    var is_high_priority: Boolean = false,
 )
 
 
@@ -28,7 +30,7 @@ data class CustomAddress(
     var latitude: Double? = null,
     var longitude: Double? = null,
     var pinCode: String? = null,
-    var id: Int? = -1,
+    var id: Int? = -1, val is_high_priority: Boolean? = false,
 ) {
 
     fun convertToAddressItem(): ZustAddress {
@@ -38,7 +40,7 @@ data class CustomAddress(
             id ?: -1,
             landmark,
             latitude,
-            longitude, pinCode = pinCode)
+            longitude, pinCode = pinCode, is_high_priority = is_high_priority)
     }
 
 }
@@ -57,18 +59,23 @@ data class SearchAddressModel(
     val lat: Double? = null,
     val longitude: Double? = null,
     val addressDesc: String? = null, val postalCode: String? = null,
+    val apartmentData: ApartmentData? = null,
+    val is_high_priority: Boolean? = false,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readString(),
-        parcel.readString())
+        parcel.readString(),
+        parcel.readParcelable(ApartmentData::class.java.classLoader))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(lat)
         parcel.writeValue(longitude)
         parcel.writeString(addressDesc)
         parcel.writeString(postalCode)
+        parcel.writeParcelable(apartmentData, flags)
+        parcel.writeValue(is_high_priority)
     }
 
     override fun describeContents(): Int {
@@ -84,6 +91,4 @@ data class SearchAddressModel(
             return arrayOfNulls(size)
         }
     }
-
-
 }

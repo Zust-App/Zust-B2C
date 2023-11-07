@@ -1,26 +1,6 @@
 package `in`.opening.area.zustapp.address.v2
 
-import `in`.opening.area.zustapp.R
-import `in`.opening.area.zustapp.address.compose.SearchAddressMainUi
 import `in`.opening.area.zustapp.address.model.AddressItem
-import `in`.opening.area.zustapp.address.model.SearchPlacesDataModel
-import `in`.opening.area.zustapp.address.utils.AddressUtils
-import `in`.opening.area.zustapp.uiModels.LocationAddressUi
-import `in`.opening.area.zustapp.viewmodels.AddressViewModel
-import android.content.Context
-import android.location.Address
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.colorResource
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.update
 
 
 //@AndroidEntryPoint

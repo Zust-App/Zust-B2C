@@ -1,5 +1,6 @@
 package `in`.opening.area.zustapp.address
 
+import android.app.Activity
 import `in`.opening.area.zustapp.BaseActivityWithLocation
 import `in`.opening.area.zustapp.R
 import `in`.opening.area.zustapp.address.AddNewAddressActivity.Companion.ADDRESS_KEY
@@ -16,6 +17,8 @@ import android.location.Location
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,6 +32,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.opening.area.zustapp.locationV2.ApartmentListingBtmSheet
+import `in`.opening.area.zustapp.locationV2.models.ApartmentData
+import `in`.opening.area.zustapp.locationV2.models.convertToAddressModel
 import `in`.opening.area.zustapp.ui.theme.dp_4
 import `in`.opening.area.zustapp.ui.theme.dp_8
 import `in`.opening.area.zustapp.utility.AppUtility
@@ -38,10 +44,21 @@ import ui.colorWhite
 
 
 @AndroidEntryPoint
-class AddressSearchActivity : BaseActivityWithLocation() {
+class AddressSearchActivity : BaseActivityWithLocation(), ApartmentListingBtmSheet.ApartmentListingBtmSheetCallback {
 
     private val addressViewModel: AddressViewModel by viewModels()
     private val coder by lazy { Geocoder(this) }
+
+    private val apartmentAddNewAddressActivity = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedAddressId = result.data?.getIntExtra(AddNewAddressActivity.KEY_SELECTED_ADDRESS_ID, -1)
+            if (selectedAddressId != null && selectedAddressId != -1) {
+                finish()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,14 +85,20 @@ class AddressSearchActivity : BaseActivityWithLocation() {
                         .padding(padding)
                         .background(color = colorResource(id = R.color.white)), {
                         processSelectedSearchAddress(it)
+                    }, {
+                        handleCurrentLocationClick(it)
                     }) {
-                    handleCurrentLocationClick(it)
+                    openApartmentBtmSheet()
                 }
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
+    private fun openApartmentBtmSheet() {
+        val apartmentListingBtmSheet: ApartmentListingBtmSheet = ApartmentListingBtmSheet.newInstance()
+        apartmentListingBtmSheet.show(supportFragmentManager, "apart_listing")
+    }
 
     override fun didReceiveError(error: String?) {
         super.didReceiveError(error)
@@ -150,5 +173,11 @@ class AddressSearchActivity : BaseActivityWithLocation() {
             return
         }
         startAddressInputActivity(address)
+    }
+
+    override fun didTapOnListedApartment(apartmentData: ApartmentData) {
+        val intent = Intent(this, AddNewAddressActivity::class.java)
+        intent.putExtra(AddNewAddressActivity.ADDRESS_EDIT_KEY, apartmentData.convertToAddressModel())
+        apartmentAddNewAddressActivity.launch(intent)
     }
 }

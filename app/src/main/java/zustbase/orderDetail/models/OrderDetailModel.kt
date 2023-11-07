@@ -66,6 +66,7 @@ data class ZustAddress(
     val latitude: Double? = 0.0,
     val longitude: Double? = 0.0,
     val pinCode: String? = null,
+    val is_high_priority:Boolean?=false
 )
 
 
